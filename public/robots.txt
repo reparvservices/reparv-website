@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Allow important SEO pages
+Allow: /properties
+Allow: /property-info/
+Allow: /blogs/
+Allow: /news/
+Allow: /trusted-builders
+Allow: /rera-properties
+Allow: /verify-7/12
+Allow: /emi-calculator
+Allow: /cost-calculator
+
+# Block private and duplicate areas
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /login/
+Disallow: /register/
+Disallow: /api/
+Disallow: /search
+Disallow: /*?*
+
+# Sitemap
+Sitemap: https://www.reparv.in/sitemap.xml

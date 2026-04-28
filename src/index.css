@@ -1,0 +1,369 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+
+  font-family:
+    "Segoe UI",
+    "Segoe UI Variable",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+.font-segoe {
+  font-family:
+    "Segoe UI",
+    "Segoe UI Variable",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+}
+
+/* Styling for pagination bullets */
+.custom-pagination span {
+  width: 20px; /* Width of the bullet */
+  height: 5px; /* Height of the bullet */
+  background-color: #ffffff; /* Tailwind gray-300 */
+  border-radius: 60px; /* Make the bullets rounded */
+  transition: all 0.3s ease; /* Smooth transitions */
+  opacity: 1;
+}
+
+.custom-pagination2 span {
+  width: 20px; /* Width of the bullet */
+  height: 5px; /* Height of the bullet */
+  background-color: #00000066; /* Tailwind gray-300 */
+  border-radius: 60px; /* Make the bullets rounded */
+  transition: all 0.3s ease; /* Smooth transitions */
+  opacity: 1;
+}
+
+/* Active bullet */
+.custom-pagination .swiper-pagination-bullet-active {
+  background-color: #8a38f5; /* Active color: green */
+}
+
+.custom-pagination2 .swiper-pagination-bullet-active {
+  background-color: #8a38f5; /* Active color: green */
+}
+
+/* Make pagination dots black */
+.swiper-pagination-custom .swiper-pagination-bullet {
+  background-color: #c6c6c6 !important;
+  opacity: 1 !important;
+}
+
+/* Active dot darker or larger if you want */
+.swiper-pagination-custom .swiper-pagination-bullet-active {
+  background-color: #000 !important;
+  transform: scale(1.3);
+}
+
+/* scrollbar hide */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Webkit (Chrome, Safari) */
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 6px solid #8a38f5;
+  cursor: pointer;
+  margin-top: -2px; /* center thumb */
+  box-shadow: 0 2px 6px rgba(138, 56, 245, 0.3);
+}
+
+/* Firefox */
+.range-slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 6px solid #8a38f5;
+  cursor: pointer;
+}
+
+/* Track for Firefox */
+.range-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #e4ceff;
+}
+
+/*Swipper Clases*/
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  display: none;
+}
+
+.swiper-pagination-bullet.custom-bullet {
+  width: 8px;
+  height: 8px;
+  background-color: #9ca3af; /* gray-400 */
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active.custom-bullet {
+  width: 12px;
+  height: 12px;
+  background-color: #15803d;
+}
+
+/* Read More Button Styling */
+.shine-layer {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: shineMove 2.5s infinite;
+}
+
+@keyframes shineMove {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+/* Brochure Download Button Styling */
+@keyframes blink {
+  0%,
+  100% {
+    color: white;
+  }
+  50% {
+    color: #c5c5c5;
+  }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}
+
+/* ===============================
+   Blog Content Base Styling
+   =============================== */
+
+.blog-content {
+  font-family: "Poppins", system-ui, sans-serif;
+  color: #374151; /* Gray-700 */
+}
+
+/* ===============================
+   Paragraphs
+   =============================== */
+
+.blog-content p {
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+  margin-bottom: 16px !important;
+  color: #374151;
+}
+
+/* ===============================
+   Headings (NO BOLD)
+   =============================== */
+
+.blog-content h1 {
+  font-size: 38px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  color: #111827; /* Gray-900 */
+  margin-bottom: 24px !important;
+}
+
+.blog-content h2 {
+  font-size: 24px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  color: #111827;
+  margin-top: 40px !important;
+  margin-bottom: 16px !important;
+  border-bottom: 1px solid #d1d5db; /* Gray-300 */
+  padding-bottom: 6px;
+}
+
+.blog-content h3 {
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  color: #111827;
+  margin-top: 24px !important;
+  margin-bottom: 12px !important;
+}
+
+.blog-content h4 {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  line-height: 1.3 !important;
+  color: #111827;
+}
+
+/* ===============================
+   Links (Anchor Tags)
+   =============================== */
+
+.blog-content a {
+  color: #8a38f5; /* Primary Purple */
+  font-weight: 500;
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+/* Subtle underline effect */
+.blog-content a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1.5px;
+  background-color: #8a38f5;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+/* Hover */
+.blog-content a:hover {
+  color: #6d28d9; /* slightly darker purple */
+}
+
+.blog-content a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Active / Click */
+.blog-content a:active {
+  color: #5b21b6;
+}
+
+/* ===============================
+   Lists (Windows & macOS Fix)
+   =============================== */
+
+.blog-content ul,
+.blog-content ol {
+  list-style-position: outside !important;
+  padding-left: 1.5rem !important;
+  margin-bottom: 16px !important;
+}
+
+.blog-content ul {
+  list-style-type: disc !important;
+}
+
+.blog-content ol {
+  list-style-type: decimal !important;
+}
+
+.blog-content li {
+  display: list-item !important;
+  margin-bottom: 6px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ===============================
+   Blockquote
+   =============================== */
+
+.blog-content blockquote {
+  border-left: 4px solid #111827;
+  padding-left: 16px;
+  margin: 16px 0;
+  color: #4b5563; /* Gray-600 */
+  font-style: italic;
+}
+
+/* ===============================
+   Tables (Clean Editorial Style)
+   =============================== */
+
+.blog-content table {
+  border-collapse: collapse !important;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.blog-content table,
+.blog-content th,
+.blog-content td {
+  border: 1px solid #d1d5db !important; /* Gray-300 */
+}
+
+.blog-content th,
+.blog-content td {
+  padding: 10px !important;
+  font-size: 14px;
+}
+
+.blog-content th {
+  background-color: #f9fafb; /* Gray-50 */
+  font-weight: 500;
+  text-align: left;
+}
+
+.blog-content .table {
+  border: 1px solid #d1d5db !important;
+}
+
+.blog-content .table td,
+.blog-content .table th {
+  border: 1px solid #d1d5db !important;
+}
+
+/* Soft bounce & pulse animation */
+@keyframes contactBounce {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+.animate-contact-bounce {
+  animation: contactBounce 4s ease-in-out infinite;
+}
