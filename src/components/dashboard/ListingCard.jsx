@@ -1,3 +1,6 @@
+"use client"
+
+import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { FiMoreVertical, FiEdit2, FiShare2, FiTrash2 } from "react-icons/fi";
 import { TiLocationOutline } from "react-icons/ti";
@@ -9,11 +12,9 @@ import { RiBuildingLine } from "react-icons/ri";
 import { useAuth } from "../../store/auth";
 import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { getImageURI } from "../../utils/helper";
-import { useNavigate } from "react-router-dom";
-
 export default function ListingCard({ property, delProperty }) {
   const { URI, setShowSharePopup, setPropertySlug } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const imageURI = import.meta.env.VITE_S3_IMAGE_URL;
 
   const [openMenu, setOpenMenu] = useState(false);

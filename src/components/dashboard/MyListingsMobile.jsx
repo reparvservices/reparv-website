@@ -1,5 +1,7 @@
+"use client"
+
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth.jsx";
 import {
   HiArrowLeft,
@@ -39,7 +41,7 @@ const dummyRawChartData = [
 ];
 
 export default function MyListingsMobile() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, setLoading, setShowAlert } = useAuth();
 
   const [countData, setCountData] = useState({});
@@ -154,7 +156,7 @@ export default function MyListingsMobile() {
 
   useEffect(() => {
     if (window.innerWidth >= 768) {
-      navigate("/dashboard");
+      router.push("/dashboard");
     }
   }, []);
 
@@ -163,14 +165,14 @@ export default function MyListingsMobile() {
       {/* ===== HEADER ===== */}
       <div className="flex items-center justify-between px-4 py-4 bg-white border-b border-b-[#D9D9D9] ">
         <HiArrowLeft
-          onClick={() => navigate(-1)}
+          onClick={() => router.back()}
           className="w-6 h-6 cursor-pointer"
         />
 
         <h1 className="text-lg font-bold">My Listings</h1>
 
         <button
-          onClick={() => navigate("/sell-properties")}
+          onClick={() => router.push("/sell-properties")}
           className="w-9 h-9 bg-[#8A38F5] rounded-xl flex items-center justify-center text-white"
         >
           <LuCirclePlus />

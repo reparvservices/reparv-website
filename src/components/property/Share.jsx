@@ -1,6 +1,6 @@
+import { useParams } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import {
   FaWhatsapp,

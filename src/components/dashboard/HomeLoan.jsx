@@ -1,5 +1,7 @@
+"use client"
+
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth";
 import {
   FaPlus,
@@ -50,7 +52,7 @@ const loanApplications = [
 ];
 
 export default function HomeLoan() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -225,14 +227,14 @@ export default function HomeLoan() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        navigate("/dashboard");
+        router.push("/dashboard");
       }
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [navigate]);
+  }, [router]);
 
   return (
     <div className="w-full min-h-screen md:bg-white p-4 md:p-6">
@@ -241,12 +243,12 @@ export default function HomeLoan() {
         <IoArrowBack
           size={22}
           onClick={() => {
-            navigate(-1);
+            router.back();
           }}
           className="cursor-pointer"
         />
         <h2 className="text-base font-bold">Home Loan</h2>
-        <div onClick={()=> navigate("/home-loan-application")} className="px-4 py-2 text-xs bg-[#7C3AED] text-white rounded-lg shadow-md font-semibold cursor-pointer active:scale-98">
+        <div onClick={()=> router.push("/home-loan-application")} className="px-4 py-2 text-xs bg-[#7C3AED] text-white rounded-lg shadow-md font-semibold cursor-pointer active:scale-98">
           Apply
         </div>
       </div>
@@ -260,11 +262,11 @@ export default function HomeLoan() {
         </div>
 
         <div className="flex gap-4">
-          <button type="button" onClick={()=> navigate("/emi-calculator")} className="flex items-center gap-2 bg-[#5323DC] text-white p-2 xl:px-6 xl:py-3 rounded-lg shadow-md font-semibold text-sm cursor-pointer active:scale-98">
+          <button type="button" onClick={()=> router.push("/emi-calculator")} className="flex items-center gap-2 bg-[#5323DC] text-white p-2 xl:px-6 xl:py-3 rounded-lg shadow-md font-semibold text-sm cursor-pointer active:scale-98">
           <FaCalculator size={20} /> <span className="hidden xl:block">EMI Calculator</span>
         </button>
         
-        <button type="button" onClick={()=> navigate("/home-loan-application")} className="flex items-center gap-2 bg-[#7C3AED] text-white px-6 py-3 rounded-lg shadow-md font-semibold text-sm cursor-pointer active:scale-98">
+        <button type="button" onClick={()=> router.push("/home-loan-application")} className="flex items-center gap-2 bg-[#7C3AED] text-white px-6 py-3 rounded-lg shadow-md font-semibold text-sm cursor-pointer active:scale-98">
           <FaPlus /> Apply for Home Loan
         </button>
         </div>

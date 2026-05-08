@@ -1,6 +1,5 @@
+import Link from "next/link";
 import React from "react";
-import { Link } from "react-router-dom";
-
 const FeaturedNewsCard = ({
   image,
   category = "Market Trends",
@@ -32,7 +31,7 @@ const FeaturedNewsCard = ({
     rounded-tr-[16px]
   "
       >
-        <Link to={`/news/${seoSlug}`}><img src={image} alt={title} loading="lazy" className="w-full object-cover" /></Link>
+        <Link href={`/news/${seoSlug}`}><img src={image} alt={title} loading="lazy" className="w-full object-cover" /></Link>
       </div>
 
       {/* CONTENT */}
@@ -86,7 +85,7 @@ const FeaturedNewsCard = ({
           </div>
 
           <Link
-            to={`/news/${seoSlug}`}
+            href={`/news/${seoSlug}`}
             className="text-purple-600 font-semibold text-sm hover:underline"
           >
             Read More →

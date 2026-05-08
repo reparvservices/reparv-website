@@ -1,5 +1,7 @@
+"use client"
+
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { LuGitCompareArrows } from "react-icons/lu";
@@ -32,7 +34,7 @@ const PURPLE = "#8A38F5";
 const GRAY = "#868686";
 
 function SellProperty() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, setLoading } = useAuth();
   const [step, setStep] = useState(1);
   const [propertyTab, setPropertyTab] = useState("rent");
@@ -408,7 +410,7 @@ function SellProperty() {
       <div className="md:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-3 sm:my-4 rounded-lg bg-white">
         <FaArrowLeft
           onClick={() => {
-            navigate(-1);
+            router.back();
           }}
           className="w-5 h-5"
         />

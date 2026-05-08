@@ -1,22 +1,24 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./index.css";
-import App from "./App.jsx";
-import { AuthProvider } from "./store/auth.jsx";
-import { PropertyFilterProvider } from "./store/propertyFilter.jsx";
-import { HelmetProvider } from "react-helmet-async";
+
+/**
+ * Primary dev server: `npm run dev` (Next.js App Router).
+ * This entry is only for optional Vite workflows.
+ */
+function Root() {
+  return (
+    <div style={{ padding: 24, fontFamily: "system-ui" }}>
+      <p>
+        This app is served with <strong>Next.js</strong>. Run{" "}
+        <code>npm run dev</code> for local development.
+      </p>
+    </div>
+  );
+}
 
 createRoot(document.getElementById("root")).render(
-  <HelmetProvider>
-    <AuthProvider>
-      <PropertyFilterProvider>
-        <StrictMode>
-          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-             <App />
-          </GoogleOAuthProvider>
-        </StrictMode>
-      </PropertyFilterProvider>
-    </AuthProvider>
-  </HelmetProvider>
+  <StrictMode>
+    <Root />
+  </StrictMode>,
 );

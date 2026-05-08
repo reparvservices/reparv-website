@@ -1,6 +1,8 @@
-import { useState, lazy, Suspense } from "react";
-import { Outlet } from "react-router-dom";
+"use client";
+
+import { useState, useMemo, lazy, Suspense } from "react";
 import { useAuth } from "../store/auth";
+import { LayoutScrollContext } from "../context/LayoutScrollContext";
 import { useInView } from "react-intersection-observer";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -21,7 +23,7 @@ import AlertMessage from "../components/AlertMessage";
 // lazy load
 const CitySelector = lazy(() => import("../components/CitySelector"));
 
-function Layout() {
+export default function SiteLayout({ children }) {
   const {
     showSuccess,
     URI,
@@ -64,22 +66,24 @@ function Layout() {
   const isIntersecting = footerInView || videoInView;
   const isScrolling = footerInView || otherPropertiesInView;
 
-  return (
-    <div className="layout w-full flex flex-col bg-white overflow-hidden ">
-      {/* Desktop Navbar And Mobile SideBar */}
-      <Navbar />
+  const scrollContext = useMemo(
+    () => ({
+      setVideoInView,
+      isIntersecting,
+      setOtherPropertiesInView,
+      isScrolling,
+    }),
+    [isIntersecting, isScrolling],
+  );
 
-      {/* container */}
-      <div className="w-full pt-15 sm:pt-22 sm:bg-[#fafafa]">
-        <Outlet
-          context={{
-            setVideoInView,
-            isIntersecting,
-            setOtherPropertiesInView,
-            isScrolling,
-          }}
-        />
-      </div>
+  return (
+    <LayoutScrollContext.Provider value={scrollContext}>
+      <div className="layout w-full flex flex-col bg-white overflow-hidden ">
+        {/* Desktop Navbar And Mobile SideBar */}
+        <Navbar />
+
+        {/* container */}
+        <div className="w-full pt-15 sm:pt-22 sm:bg-[#fafafa]">{children}</div>
 
       {/* footer */}
       <Footer footerRef={footerRef} />
@@ -199,8 +203,7 @@ function Layout() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </LayoutScrollContext.Provider>
   );
 }
-
-export default Layout;

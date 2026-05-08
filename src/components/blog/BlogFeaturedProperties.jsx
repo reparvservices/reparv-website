@@ -1,11 +1,11 @@
+import { useRouter } from "next/navigation";
 // NewsSection.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth";
 import PropertyCard from "../property/PropertyCard";
 
 function BlogFeatureProperties() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity } = useAuth();
 
   const [properties, setProperties] = useState([]);

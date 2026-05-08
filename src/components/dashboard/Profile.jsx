@@ -1,7 +1,9 @@
+"use client"
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth";
 import UserIcon from "../../assets/user/UserIcon.svg";
 import { FaChevronRight } from "react-icons/fa6";
@@ -19,7 +21,7 @@ import { MdPolicy } from "react-icons/md";
 import { getImageURI } from "../../utils/helper";
 
 const Profile = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { delTokenInCookie, URI, user } = useAuth();
   const ImageUri = import.meta.env.VITE_S3_IMAGE_URL;
 
@@ -54,7 +56,7 @@ const Profile = () => {
       delTokenInCookie(); // optional if backend already clears
 
       // Navigate first
-      navigate("/", { replace: true });
+      router.replace("/");
 
       // Reload after navigation (guaranteed clean state)
       setTimeout(() => {
@@ -73,14 +75,14 @@ const Profile = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        navigate("/dashboard");
+        router.push("/dashboard");
       }
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [navigate]);
+  }, [router]);
 
   return (
     <div className="w-full md:hidden bg-[#FAF8FF] px-4 py-5 pb-10">
@@ -89,7 +91,7 @@ const Profile = () => {
         <IoArrowBack
           size={22}
           onClick={() => {
-            navigate(-1);
+            router.back();
           }}
           className="cursor-pointer"
         />
@@ -114,7 +116,7 @@ const Profile = () => {
         </div>
         <button
           onClick={() => {
-            navigate("/profile-edit");
+            router.push("/profile-edit");
           }}
           className="flex gap-2 items-center bg-[#5323DC] px-4 py-2 rounded-full text-white"
         >
@@ -149,36 +151,36 @@ const Profile = () => {
         <MenuItem
           icon={<HiOutlineClipboardList />}
           label="My Listings"
-          to="/my-listings"
+          href="/my-listings"
         />
         <MenuItem
           icon={<FaHome />}
           label="Sell Property"
-          to="/sell-properties"
+          href="/sell-properties"
         />
-        <MenuItem icon={<FaHome />} label="Home loans" to="/home-loan" />
-        <MenuItem icon={<MdArticle />} label="Blogs" to="/blogs" />
+        <MenuItem icon={<FaHome />} label="Home loans" href="/home-loan" />
+        <MenuItem icon={<MdArticle />} label="Blogs" href="/blogs" />
         {/*
         <MenuItem
           icon={<MdPrivacyTip />}
           label="Privacy Settings"
-          to="/my-listings"
+          href="/my-listings"
         />
         <MenuItem
           icon={<RiCustomerService2Line />}
           label="Help Center"
-          to="/help-center"
+          href="/help-center"
         />
          */}
         <MenuItem
           icon={<BsFileEarmarkText />}
           label="Terms & Conditions"
-          to="/terms-and-conditions"
+          href="/terms-and-conditions"
         />
         <MenuItem
           icon={<MdPolicy />}
           label="Privacy Policy"
-          to="/privacy-policy"
+          href="/privacy-policy"
         />
       </div>
 
@@ -208,8 +210,8 @@ const Stat = ({ icon, label, value }) => (
   </div>
 );
 
-const MenuItem = ({ icon, label, to }) => (
-  <Link to={to} className="flex items-center justify-between cursor-pointer">
+const MenuItem = ({ icon, label, href }) => (
+  <Link href={href} className="flex items-center justify-between cursor-pointer">
     <div className="flex items-center gap-3 text-[#5323DC]">
       <div className="text-2xl">{icon}</div>
       <span className="text-black text-xs font-bold">{label}</span>

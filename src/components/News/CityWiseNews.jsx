@@ -1,9 +1,8 @@
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import testImage from "../../assets/test.png";
 import { getImageURI } from "../../utils/helper";
 import { useAuth } from "../../store/auth";
-import { Link } from "react-router-dom";
-
 export default function CityWiseNews() {
   const { URI } = useAuth();
 
@@ -109,7 +108,7 @@ export default function CityWiseNews() {
                 "
               >
                 {/* IMAGE */}
-                <Link to={`/news/${item?.seoSlug}`}>
+                <Link href={`/news/${item?.seoSlug}`}>
                   <img
                     src={getImageURI(item.image) || testImage}
                     alt={item.title}
@@ -160,7 +159,7 @@ export default function CityWiseNews() {
 
                   {/* LINK */}
                   <Link
-                    to={`/news/${item?.seoSlug}`}
+                    href={`/news/${item?.seoSlug}`}
                     className="
                       mt-auto
                       text-[#5E23DC]

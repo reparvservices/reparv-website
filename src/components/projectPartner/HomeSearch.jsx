@@ -1,15 +1,14 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 import { IoSearchSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
-
 const HomeSearch = ({ propertySearch, setPropertySearch }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleFocus = () => {
     // Store a flag to tell the properties page to focus its search bar
     sessionStorage.setItem("focusPropertySearch", "true");
     // Redirect to /properties
-    navigate("/properties");
+    router.push("/properties");
   };
 
   return (

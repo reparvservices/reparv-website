@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaPhoneAlt, FaCheckCircle, FaMapMarkerAlt } from "react-icons/fa";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
@@ -8,12 +9,11 @@ import directionIcon from "../../assets/property/directionIcon.svg";
 import { useAuth } from "../../store/auth";
 import FormatPrice from "../FormatPrice";
 import { IoMdDoneAll } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
 import { addVisitor } from "../../utils/analytics";
 import { PiMapPinAreaBold } from "react-icons/pi";
 
 const PropertyBookingCard = ({ propertyInfo }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     user,
@@ -202,7 +202,7 @@ Enquiry via Reparv – www.reparv.in`;
             <button
               onClick={() => {
                 if (user?.id) {
-                  navigate("/home-loan-application");
+                  router.push("/home-loan-application");
                 } else {
                   setShowLogin(true);
                 }

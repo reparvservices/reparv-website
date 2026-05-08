@@ -1,7 +1,7 @@
+import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../../store/auth";
-import { useParams } from "react-router-dom";
 import { getImageURI } from "../../utils/helper";
 
 export default function EnquiryPopup({ projectPartner }) {

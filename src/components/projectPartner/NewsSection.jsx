@@ -1,13 +1,13 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 // NewsSection.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import propertyImg from "../../assets/projectPartner/property1.png";
 import { useAuth } from "../../store/auth";
-import { Link } from "react-router-dom";
 import { getImageURI } from "../../utils/helper";
 
 function NewsSection() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity } = useAuth();
 
   const [articles, setArticles] = useState([]);
@@ -63,7 +63,7 @@ function NewsSection() {
         {(articles.length ? articles : []).map((item) => (
           <article
             key={item.id}
-            onClick={() => navigate(`/blog/${item.seoSlug}`)}
+            onClick={() => router.push(`/blog/${item.seoSlug}`)}
             className="
               bg-white 
               rounded-2xl 
@@ -112,7 +112,7 @@ function NewsSection() {
 
               <div className="mt-4 flex items-center justify-between">
                 <Link
-                  to={`/blog/${item.seoSlug}`}
+                  href={`/blog/${item.seoSlug}`}
                   className="text-[#5E23DC] text-base font-medium flex items-center gap-1"
                 >
                   Read More

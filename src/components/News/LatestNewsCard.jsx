@@ -1,6 +1,5 @@
+import Link from "next/link";
 import React from "react";
-import { Link } from "react-router-dom";
-
 export default function LatestNewsCard({
   image,
   category = "Market Trends",
@@ -15,7 +14,7 @@ export default function LatestNewsCard({
     <>
       {/* MOBILE CARD (NEW)  */}
       <Link
-        to={`/news/${seoSlug}`}
+        href={`/news/${seoSlug}`}
         className="
           md:hidden
           w-full
@@ -67,7 +66,7 @@ export default function LatestNewsCard({
         "
       >
         {/* IMAGE */}
-        <Link to={`/news/${seoSlug}`}>
+        <Link href={`/news/${seoSlug}`}>
           <img
             src={image}
             alt="news image"
@@ -119,7 +118,7 @@ export default function LatestNewsCard({
             </span>
 
             <Link
-              to={`/news/${seoSlug}`}
+              href={`/news/${seoSlug}`}
               className="text-purple-600 text-sm font-medium"
             >
               Read More →

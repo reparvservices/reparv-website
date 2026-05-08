@@ -1,3 +1,6 @@
+"use client"
+
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FiMoreVertical } from "react-icons/fi";
 import { FaEdit, FaHeart } from "react-icons/fa";
@@ -9,12 +12,10 @@ import { RiBuildingLine } from "react-icons/ri";
 import { useAuth } from "../../store/auth";
 import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { getImageURI } from "../../utils/helper";
-import { useNavigate } from "react-router-dom";
-
 export default function ListingCardMobile({ property, delProperty }) {
   const { URI } = useAuth();
   const ImageUri = import.meta.env.VITE_S3_IMAGE_URL;
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const statusColor = {
     Active: "text-green-600",

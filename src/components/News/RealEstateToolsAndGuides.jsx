@@ -1,5 +1,5 @@
+import Link from "next/link";
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   ShieldCheck,
   Calculator,
@@ -126,7 +126,7 @@ export default function RealEstateToolsAndGuides() {
                 {tool.description}
               </p>
               <Link
-                to={"https://www.reparv.in" + tool.to}
+                href={"https://www.reparv.in" + tool.to}
                 className="mt-auto text-[16px] font-bold leading-[100%] text-center text-[#6D28D9] hover:underline"
               >
                 {tool.cta}

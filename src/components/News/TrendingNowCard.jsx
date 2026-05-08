@@ -1,6 +1,5 @@
+import Link from "next/link";
 import React, { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-
 export default function TrendingNowCard({ news = [] }) {
   const [page, setPage] = useState(0);
   const pageSize = 5;
@@ -64,7 +63,7 @@ export default function TrendingNowCard({ news = [] }) {
       <div>
         {paginatedNews?.map((item, i) => (
           <div key={item?.id || i}>
-            <Link to={`/news/${item?.seoSlug}`} className="flex gap-4 py-3">
+            <Link href={`/news/${item?.seoSlug}`} className="flex gap-4 py-3">
               {/* NUMBER */}
               <span className="text-[18px] sm:text-[20px] md:text-[24px] font-bold text-[#8A38F5] leading-tight sm:leading-8 w-[14px] sm:w-[18px]">
                 {page * pageSize + i + 1}

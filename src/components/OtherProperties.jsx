@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
 import { MdOutlineKingBed } from "react-icons/md";
@@ -10,14 +12,12 @@ import { MdOutlinePlayCircleOutline } from "react-icons/md";
 import propertyPicture from "../assets/property/propertyPicture.svg";
 import cardAssuredTag from "../assets/property/cardAssuredTag.svg";
 import populerTag from "../assets/property/populerTag.svg";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import FormatPrice from "./FormatPrice";
 import { useAuth } from "../store/auth";
 import { FaFire } from "react-icons/fa6";
 
 function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     setPriceSummery,
@@ -78,7 +78,7 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
             <span className="text-white text-xs font-semibold">Hot Deal</span>
           </div>
           <img
-            onClick={() => navigate(`/property-info/${property.seoSlug}`)}
+            onClick={() => router.push(`/property-info/${property.seoSlug}`)}
             src={(() => {
               try {
                 const images = JSON.parse(property.frontView || "[]");
@@ -106,7 +106,7 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
 
             {/* Read More ... */}
             <div
-              onClick={() => navigate(`/property-info/${property.seoSlug}`)}
+              onClick={() => router.push(`/property-info/${property.seoSlug}`)}
               className="overflow-hidden absolute top-[-30px] right-[0px] flex items-center justify-center px-4 py-1 h-[30px] bg-[#076300] text-white text-sm rounded-tl-xl shadow cursor-pointer hover:font-medium border-t-2 border-l-[1.5px] "
             >
               <span>Read More...</span>

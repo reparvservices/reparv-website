@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 import { TiLocationOutline } from "react-icons/ti";
 import { PiUserCircleFill } from "react-icons/pi";
@@ -8,7 +9,6 @@ import "swiper/css";
 import { useState, useEffect } from "react";
 import propertyPicture from "../../assets/property/propertyPicture.svg";
 import populerTag from "../../assets/property/populerTag.svg";
-import { useNavigate } from "react-router-dom";
 import FormatPrice from "../FormatPrice";
 import { useAuth } from "../../store/auth";
 import { FaFire } from "react-icons/fa6";
@@ -20,7 +20,7 @@ function SimilarProperties({
   propertyPrice,
   propertyId,
 }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI } = useAuth();
   const [properties, setProperties] = useState([]);
 

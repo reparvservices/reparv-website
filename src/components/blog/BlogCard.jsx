@@ -1,12 +1,13 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../../store/auth";
 import BlogImage from "../../assets/blog/BlogImage.webp";
 import { getImageURI } from "../../utils/helper";
 
 function BlogCard({ blogData }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   if (!blogData) return null;
 
   const { URI } = useAuth();
@@ -35,7 +36,7 @@ function BlogCard({ blogData }) {
       className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow"
     >
       {/* Image */}
-      <Link to={`/blog/${seoSlug}`}>
+      <Link href={`/blog/${seoSlug}`}>
       <div
         
         className="max-h-[240px] w-full overflow-hidden bg-gray-50 cursor-pointer"
@@ -82,7 +83,7 @@ function BlogCard({ blogData }) {
 
         <div className="mt-4 flex items-center justify-end">
           <Link
-            to={`/blog/${seoSlug}`}
+            href={`/blog/${seoSlug}`}
             className="inline-flex text-xs items-center gap-2 bg-[#5323DC] text-white px-5 py-2 rounded-lg font-medium hover:scale-105 transition-transform"
           >
             Read More

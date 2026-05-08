@@ -1,6 +1,6 @@
+import { useParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../store/auth";
-import { useParams } from "react-router-dom";
 import {
   FacebookShareButton,
   LinkedinShareButton,

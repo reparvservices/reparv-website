@@ -1,10 +1,9 @@
+import { useParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import { useAuth } from "../../store/auth";
 import ContactForm from "./ContactForm";
 import ScheduleForm from "./ScheduleForm";
-import { useParams } from "react-router-dom";
-
 export default function FaqSection() {
   const { blogId } = useParams();
   const { URI, setLoading } = useAuth();

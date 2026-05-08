@@ -1,5 +1,9 @@
+"use client";
+
 import { Helmet } from "react-helmet-async";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation";
+
+const siteUrl = "https://www.reparv.in";
 
 const SEO = ({
   title,
@@ -9,28 +13,24 @@ const SEO = ({
   image,
   type = "website",
 }) => {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
 
-  // Normalize trailing slash
   const cleanPath =
     pathname !== "/" && pathname.endsWith("/")
       ? pathname.slice(0, -1)
       : pathname;
 
-  const defaultCanonical = `https://www.reparv.in${cleanPath}`;
+  const defaultCanonical = `${siteUrl}${cleanPath}`;
   const finalCanonical = canonical || defaultCanonical;
 
   return (
     <Helmet>
-      {/* Basic SEO */}
       {title && <title>{title}</title>}
       {description && <meta name="description" content={description} />}
       {keywords && <meta name="keywords" content={keywords} />}
 
-      {/* Canonical */}
       <link rel="canonical" href={finalCanonical} />
 
-      {/* Open Graph (WhatsApp / Facebook / LinkedIn) */}
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content="Reparv" />
 
@@ -40,7 +40,6 @@ const SEO = ({
 
       <meta property="og:url" content={finalCanonical} />
 
-      {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
 
       {title && <meta name="twitter:title" content={title} />}

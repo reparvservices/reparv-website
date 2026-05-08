@@ -1,16 +1,13 @@
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import localPropertyImage from "../../assets/property/propertyPicture.svg";
 import reparvLogo from "../../assets/reparvLogo.svg";
 import { useAuth } from "../../store/auth";
 import Loader from "../Loader";
-import { useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import OtpSection from "../OTPSection";
-import { useNavigate } from "react-router-dom";
-
 export default function SiteVisitPopup() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     user,
@@ -24,7 +21,7 @@ export default function SiteVisitPopup() {
     setSuccessScreen,
   } = useAuth();
 
-  const location = useLocation();
+  const pathname = usePathname();
   const [property, setProperty] = useState({});
   const [minBudget, setMinBudget] = useState(null);
   const [maxBudget, setMaxBudget] = useState(null);
@@ -208,7 +205,7 @@ export default function SiteVisitPopup() {
       if (!response.ok) {
         throw new Error(data?.message || "Failed to submit enquiry");
       }
-      navigate("/thank-you");
+      router.push("/thank-you");
       setSuccessScreen({
         show: true,
         label: "Thank You For Registering!",

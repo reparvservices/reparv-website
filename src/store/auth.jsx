@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
@@ -22,9 +24,7 @@ export const AuthProvider = ({ children }) => {
 
   /* ===================== USER ===================== */
 
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("guestUser"))
-  );
+  const [user, setUser] = useState(null);
 
   /* ===================== UI / APP STATES ===================== */
 
@@ -75,6 +75,15 @@ export const AuthProvider = ({ children }) => {
   const [showEMIPopup, setShowEMIPopup] = useState(false);
 
   /* ===================== EFFECTS ===================== */
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("guestUser");
+      if (raw) setUser(JSON.parse(raw));
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {

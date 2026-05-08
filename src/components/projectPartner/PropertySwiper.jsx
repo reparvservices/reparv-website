@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
@@ -16,13 +17,12 @@ import propertyImage from "../../assets/projectPartner/property1.png";
 import propertyImage2 from "../../assets/projectPartner/property2.png";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
-import { useNavigate } from "react-router-dom";
 import FormatPrice from "../FormatPrice";
 import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { getImageURI } from "../../utils/helper";
 
 export default function PropertySwiper({ projectPartner }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity, setEnquirySource } = useAuth();
   const { selectedType } = usePropertyFilter();
 
@@ -141,7 +141,7 @@ export default function PropertySwiper({ projectPartner }) {
               <article
                 onClick={() => {
                   setEnquirySource("Landing Page");
-                  navigate(`/property-info/${property.seoSlug} `);
+                  router.push(`/property-info/${property.seoSlug} `);
                 }}
                 className="bg-white rounded-xl shadow-sm border border-[#E6E6E6] overflow-hidden flex flex-col h-full"
               >
@@ -149,7 +149,7 @@ export default function PropertySwiper({ projectPartner }) {
                 <div
                   onClick={() => {
                     setEnquirySource("Landing Page");
-                    navigate(`/property-info/${property.seoSlug} `);
+                    router.push(`/property-info/${property.seoSlug} `);
                   }}
                   className="w-full h-[220px] sm:h-[260px] md:h-[260px] lg:h-[300px] cursor-pointer"
                 >

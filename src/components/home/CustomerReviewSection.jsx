@@ -1,7 +1,7 @@
+import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useAuth } from "../../store/auth";
-import { Link } from "react-router-dom";
 import { FaPlay } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import "swiper/css";
@@ -125,9 +125,9 @@ const CustomerReviewSection = () => {
           >
             {reviews.map((review) => (
               <SwiperSlide key={review.id}>
-                <Link to={review.url} target="_blank">
+                <Link href={review.url} target="_blank">
                   <div
-                    to={review.url}
+                    href={review.url}
                     target="_blank"
                     className="
                     relative 

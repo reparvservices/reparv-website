@@ -1,6 +1,6 @@
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FiSearch, FiChevronDown } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
 import PropertySearch from "./PropertySearch";
@@ -13,7 +13,7 @@ export default function FilterNavbar({
   type = "new",
   properties = [],
 }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { propertySearch, setPropertySearch, propertyType, setPropertyType } =
     useAuth();
 
@@ -160,7 +160,7 @@ export default function FilterNavbar({
       {/* Rent / Buy Toggle */}
       <div className="hidden sm:flex p-[5px] border-1 border-[#D9D9D9] rounded-xl bg-white/20">
         <button
-          onClick={() => {setActiveButton("new"); navigate("/properties/type/new");}}
+          onClick={() => {setActiveButton("new"); router.push("/properties/type/new");}}
           className={`px-5 py-2 rounded-xl text-sm text-black ${
             activeButton === "new" ? "bg-white font-medium shadow-sm" : ""
           }`}
@@ -169,7 +169,7 @@ export default function FilterNavbar({
         </button>
 
         <button
-          onClick={() => {setActiveButton("rental"); navigate("/properties/type/rental");}}
+          onClick={() => {setActiveButton("rental"); router.push("/properties/type/rental");}}
           className={`px-5 py-2 rounded-xl text-sm text-black ${
             activeButton === "rental" ? "bg-white font-medium shadow-sm" : ""
           }`}
@@ -178,7 +178,7 @@ export default function FilterNavbar({
         </button>
 
         <button
-          onClick={() => {setActiveButton("resale"); navigate("/properties/type/resale");}}
+          onClick={() => {setActiveButton("resale"); router.push("/properties/type/resale");}}
           className={`px-5 py-2 rounded-xl text-sm text-black ${
             activeButton === "resale" ? "bg-white font-medium shadow-sm" : ""
           }`}
@@ -296,7 +296,7 @@ export default function FilterNavbar({
           if (minBudget) setMinBudget(minBudget);
           if (maxBudget) setMaxBudget(maxBudget);
 
-          navigate(`/properties`);
+          router.push(`/properties`);
         }}
         className="hidden sm:block px-6 py-3 bg-[#8A38F5] text-white font-semibold text-sm rounded-xl active:scale-95"
       >

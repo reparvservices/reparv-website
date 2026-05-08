@@ -1,10 +1,10 @@
+import { useRouter } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../store/auth";
 
 function LogoutButton() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { delTokenInCookie, URI } = useAuth();
   const userLogout = async () => {
     try {
@@ -15,7 +15,7 @@ function LogoutButton() {
       );
       delTokenInCookie();
       localStorage.removeItem("guestUser");
-      navigate("/", { replace: true });
+      router.replace("/");
       window.location.reload();
     } catch (error) {
       console.log("Logout failed:", error);

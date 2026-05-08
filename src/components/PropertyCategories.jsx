@@ -1,8 +1,8 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useAuth } from "../store/auth";
 import { usePropertyFilter } from "../store/propertyFilter";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 
 const categories = [
@@ -81,7 +81,7 @@ const categories = [
 ];
 
 const PropertyCategories = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { setPropertyType } = useAuth();
   const { setSelectedType } = usePropertyFilter();
 

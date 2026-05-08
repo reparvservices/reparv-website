@@ -1,17 +1,16 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "../../store/auth";
 import propertyPicture from "../../assets/property/propertyPicture.svg";
 import populerTag from "../../assets/property/populerTag.svg";
-import { useNavigate } from "react-router-dom";
 import { TiLocationOutline } from "react-icons/ti";
 import { RiBuildingLine } from "react-icons/ri";
 import { FaFire, FaHeart } from "react-icons/fa6";
 import FormatPrice from "../FormatPrice";
 import { getImageURI } from "../../utils/helper";
-import { Link } from "react-router-dom";
-
 function PropertyCard({ property, top = false }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, user, setShowLogin, setShowAlert } = useAuth();
 
   const addLike = async () => {
@@ -100,10 +99,10 @@ function PropertyCard({ property, top = false }) {
   /* -------------------- JSX (UNCHANGED UI) -------------------- */
 
   return (
-    <Link to={`/property-info/${property?.seoSlug}`}>
+    <Link href={`/property-info/${property?.seoSlug}`}>
       <div
         key={property?.seoSlug}
-        //onClick={() => navigate(`/property-info/${property?.seoSlug}`)}
+        //onClick={() => router.push(`/property-info/${property?.seoSlug}`)}
         className={`${
           top ? "w-full min-w-[350px]" : "w-auto"
         } relative border border-[#00000033] rounded-2xl shadow-md bg-white overflow-hidden`}

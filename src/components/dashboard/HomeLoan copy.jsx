@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+"use client"
 
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import {
   FaPlus,
   FaFileAlt,
@@ -48,19 +49,19 @@ const loanApplications = [
 ];
 
 export default function HomeLoan() {
-  const navigate = useNavigate();
+  const router = useRouter();
   // Redirect to dashboard on md and above
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        navigate("/dashboard");
+        router.push("/dashboard");
       }
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [navigate]);
+  }, [router]);
   return (
     <div className="w-full min-h-screen md:bg-white p-4 md:p-6">
       {/* ================= HEADER ================= */}
@@ -68,7 +69,7 @@ export default function HomeLoan() {
         <IoArrowBack
           size={22}
           onClick={() => {
-            navigate(-1);
+            router.back();
           }}
           className="cursor-pointer"
         />

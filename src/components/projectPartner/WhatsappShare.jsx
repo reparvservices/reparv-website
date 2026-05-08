@@ -1,5 +1,5 @@
+import { useParams } from "next/navigation";
 import React from "react";
-import { useParams } from "react-router-dom";
 import whatsappIcon from "../../assets/projectPartner/whatsapp.png";
 import { useAuth } from "../../store/auth";
 

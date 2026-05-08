@@ -1,12 +1,12 @@
+import { useRouter } from "next/navigation";
 import React from "react";
 import { TbArrowRightDashed } from "react-icons/tb";
 import NewFlatIcon from "../assets/home/propertyType/NewFlat.svg";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import { usePropertyFilter } from "../store/propertyFilter";
 
 function NavCard({ cardData }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { setPropertyType } = useAuth();
   const { setSelectedType } = usePropertyFilter();
   return (
@@ -14,7 +14,7 @@ function NavCard({ cardData }) {
       onClick={() => {
         setPropertyType(cardData?.type || "NewFlat");
         setSelectedType(cardData?.type || "NewFlat");
-        navigate(cardData?.to || "/properties");
+        router.push(cardData?.to || "/properties");
       }}
       className="NavCard relative w-full min-w-[160px] flex flex-col gap-2 justify-between md:gap-4 p-4 md:p-6 lg:p-8 bg-white rounded-lg sm:rounded-2xl shadow-[0px_2px_6px_0px_#00000014] md:shadow-[0_3px_11px_3px_#2E154C26] hover:scale-103 duration-500 transition-all cursor-pointer"
     >

@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
 import { MdOutlineKingBed } from "react-icons/md";
@@ -11,8 +13,6 @@ import propertyPicture from "../../assets/property/propertyPicture.svg";
 import cardAssuredTag from "../../assets/projectPartner/cardAssuredTag.svg";
 import locationIcon from "../../assets/projectPartner/location.svg";
 import populerTag from "../../assets/property/populerTag.svg";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import FormatPrice from "../FormatPrice";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
@@ -21,7 +21,7 @@ import { getImageURI } from "../../utils/helper";
 import PropertyCard from "../property/PropertyCard";
 
 function PropertySection({ projectPartner }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     propertyType,
@@ -132,7 +132,7 @@ function PropertySection({ projectPartner }) {
             <img
               onClick={() => {
                 setEnquirySource("Landing Page");
-                navigate(`/property-info/${property.seoSlug} `);
+                router.push(`/property-info/${property.seoSlug} `);
               }}
               src={(() => {
                 try {
@@ -165,7 +165,7 @@ function PropertySection({ projectPartner }) {
               <div
                 onClick={() => {
                   setEnquirySource("Landing Page");
-                  navigate(`/property-info/${property.seoSlug}`);
+                  router.push(`/property-info/${property.seoSlug}`);
                 }}
                 className="overflow-hidden absolute top-[-40px] right-[10px] flex items-center justify-center px-4 py-1 h-[30px] bg-[#5e23dc] text-white text-sm rounded-lg shadow cursor-pointer hover:font-medium border-2"
               >

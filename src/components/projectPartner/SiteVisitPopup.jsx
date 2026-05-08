@@ -1,17 +1,15 @@
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import localPropertyImage from "../../assets/property/propertyPicture.svg";
 import reparvLogo from "../../assets/reparvLogo.svg";
 import { useAuth } from "../../store/auth";
-import { useNavigate } from "react-router-dom";
 import Loader from "../Loader";
-import { useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { getImageURI } from "../../utils/helper";
 import OtpSection from "../OTPSection";
 
 export default function SiteVisitPopup({ projectPartner }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     user,
@@ -24,7 +22,7 @@ export default function SiteVisitPopup({ projectPartner }) {
     setSuccessScreen,
   } = useAuth();
   //const { id } = useParams();
-  const location = useLocation();
+  const pathname = usePathname();
   const [property, setProperty] = useState({});
   const [minBudget, setMinBudget] = useState(null);
   const [maxBudget, setMaxBudget] = useState(null);
@@ -190,7 +188,7 @@ export default function SiteVisitPopup({ projectPartner }) {
       if (!response.ok) {
         throw new Error(`Failed to save property. Status: ${response.status}`);
       } else {
-        navigate("/thank-you");
+        router.push("/thank-you");
         setSuccessScreen({
           show: true,
           label: "Thank You!",

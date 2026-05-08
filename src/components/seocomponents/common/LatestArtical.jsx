@@ -1,11 +1,11 @@
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../store/auth";
 import { TbArrowRightDashed } from "react-icons/tb";
 import { getImageURI } from "../../../utils/helper";
 
 function LatestArtical() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity } = useAuth();
 
   const [articles, setArticles] = useState([]);
@@ -63,7 +63,7 @@ function LatestArtical() {
         {(articles.length ? articles : []).map((item) => (
           <article
             key={item.id}
-            onClick={() => navigate(`/blog/${item.seoSlug}`)}
+            onClick={() => router.push(`/blog/${item.seoSlug}`)}
             className="
               rounded-2xl 
               overflow-hidden 
@@ -108,7 +108,7 @@ function LatestArtical() {
         ))}
       </div>
       <div
-        onClick={() => navigate(`/blogs`)}
+        onClick={() => router.push(`/blogs`)}
         className="max-w-[300px] flex gap-2 items-center justify-center mx-auto px-6 py-2 text-sm sm:text-base text-white font-semibold bg-[#5E23DC] rounded-lg hover:scale-102 active:scale-99 cursor-pointer"
       >
         Read More Articles{" "}

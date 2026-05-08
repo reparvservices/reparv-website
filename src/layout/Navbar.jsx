@@ -1,13 +1,14 @@
+"use client";
+
+import Link from "next/link";
+import NavLink from "../components/NavLinkNext.jsx";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
 import reparvLogo from "../assets/reparvLogo.svg";
 import footerLogo from "../assets/footerLogo.svg";
-import { NavLink } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { IoMdMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../store/auth";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import UserIcon from "../assets/user/UserIcon.svg";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { PiMapPinAreaBold } from "react-icons/pi";
@@ -36,12 +37,12 @@ function Navbar() {
     setShowCitySelector,
   } = useAuth();
 
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const [showSidebar, setShowSidebar] = useState(false);
   const getNavLinkClass = (path) => {
-    return location.pathname === path ? "font-bold text-[#5E23DC]" : "";
+    return pathname === path ? "font-bold text-[#5E23DC]" : "";
   };
 
   return (
@@ -75,7 +76,7 @@ function Navbar() {
                   }}
                   className="relative div w-full flex flex-col gap-2 items-center justify-center h-22 px-8 border-b"
                 >
-                  <Link to="/">
+                  <Link href="/">
                     <img
                       src={footerLogo}
                       alt="reparv logo"
@@ -109,7 +110,7 @@ function Navbar() {
                         transition={{ delay: index * 0.08 }}
                       >
                         <NavLink
-                          to={item.to}
+                          href={item.to}
                           onClick={() => setShowSidebar(false)}
                           className="w-full flex gap-2 items-center justify-between"
                         >
@@ -191,7 +192,7 @@ function Navbar() {
         {/* Bottom Navbar */}
         <div className="w-full h-[70px] fixed md:hidden bottom-0 left-0 z-[9] bg-white flex items-center justify-evenly shadow-[3px_3px_3px_5px_#00000026]">
           <NavLink
-            to="/"
+            href="/"
             className={({ isActive }) =>
               `relative w-full h-full flex flex-col gap-1 items-center justify-center text-xs 
              ${isActive ? "text-[#5E23DC]" : "text-[#868686]"}
@@ -217,7 +218,7 @@ function Navbar() {
           </NavLink>
 
           {/* <NavLink 
-            to="/trends"
+            href="/trends"
             className={({ isActive }) =>
               `relative w-full h-full flex flex-col gap-1 items-center justify-center text-xs 
              ${isActive ? "text-[#5E23DC]" : "text-[#868686]"}
@@ -243,13 +244,13 @@ function Navbar() {
           </NavLink> */}
 
           <NavLink
-            to="/activities"
+            href="/activities"
             onClick={(e) => {
               if (!user) {
                 e.preventDefault();
                 setShowLogin(true);
               } else {
-                navigate("/activities");
+                router.push("/activities");
               }
             }}
             className={({ isActive }) =>
@@ -277,7 +278,7 @@ function Navbar() {
           </NavLink>
 
           <NavLink
-            to="/emi-calculator"
+            href="/emi-calculator"
             className={({ isActive }) =>
               `relative w-full h-full flex flex-col gap-1 items-center justify-center text-xs 
              ${isActive ? "text-[#5E23DC]" : "text-[#868686]"}
@@ -303,13 +304,13 @@ function Navbar() {
           </NavLink>
 
           <NavLink
-            to="/profile"
+            href="/profile"
             onClick={(e) => {
               if (!user) {
                 e.preventDefault();
                 setShowLogin(true);
               } else {
-                navigate("/profile");
+                router.push("/profile");
               }
             }}
             className={({ isActive }) =>
@@ -339,7 +340,7 @@ function Navbar() {
 
         {/* Desktop Navbar */}
         <div className="flex items-center justify-end">
-          <Link to="/">
+          <Link href="/">
             <img
               src={reparvLogo}
               alt="reparv logo"
@@ -352,7 +353,7 @@ function Navbar() {
         <div
           onClick={() => {
             setShowCitySelector(true);
-            //navigate("/properties");
+            //router.push("/properties");
           }}
           className={`selectCity min-w-[50px] max-w-[210px] relative py-2 rounded-lg px-4 cursor-pointer`}
         >
@@ -379,25 +380,25 @@ function Navbar() {
         </div>
 
         <div className="navlink hidden md:flex items-center justify-start gap-5 lg:gap-6 xl:gap-9 2xl:gap-12 text-md font-semibold xl:text-base leading-[30px] tracking-[1px] lg:tracking-[0.1em] text-[#110229]">
-          <NavLink to="/" className={`${getNavLinkClass("/")}`}>
+          <NavLink href="/" className={`${getNavLinkClass("/")}`}>
             Home
           </NavLink>
           <NavLink
-            to="/properties"
+            href="/properties"
             className={`${getNavLinkClass("/properties")} flex gap-1`}
           >
             Properties
           </NavLink>
 
           <NavLink
-            to="/about-us"
+            href="/about-us"
             className={`${getNavLinkClass("/about-us")} hidden xl:flex gap-1 `}
           >
             About Us
           </NavLink>
 
           <NavLink
-            to="/contact-us"
+            href="/contact-us"
             className={`${getNavLinkClass(
               "/contact-us",
             )} hidden xl:flex gap-1 `}

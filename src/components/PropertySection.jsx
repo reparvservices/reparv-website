@@ -1,14 +1,14 @@
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import PropertyCard from "./property/PropertyCard";
 import { motion } from "framer-motion";
 
 const PropertySection = ({ category }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity } = useAuth();
   const [properties, setProperties] = useState([]);
 

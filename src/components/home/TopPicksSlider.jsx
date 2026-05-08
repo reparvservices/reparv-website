@@ -1,5 +1,5 @@
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth";
 import { FiChevronRight } from "react-icons/fi";
 import FormatPrice from "../FormatPrice";
@@ -10,7 +10,7 @@ import { getImageURI } from "../../utils/helper";
 import { motion, AnimatePresence } from "framer-motion";
 
 const TopPicksSlider = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity } = useAuth();
 
   const [properties, setProperties] = useState([]);
@@ -136,14 +136,14 @@ const TopPicksSlider = () => {
                     {item.projectBy || "Reparv"}
                   </p>
                   <button
-                    onClick={() => navigate(`/property-info/${item?.seoSlug}`)}
+                    onClick={() => router.push(`/property-info/${item?.seoSlug}`)}
                     className="hidden lg:block text-[#8A38F5] underline text-sm font-bold"
                   >
                     View Project
                   </button>
                   {/* CTA */}
                   <button
-                    onClick={() => navigate(`/property-info/${item?.seoSlug}`)}
+                    onClick={() => router.push(`/property-info/${item?.seoSlug}`)}
                     className="block lg:hidden w-[200px] bg-[#8A38F5] text-white px-6 py-[10px] rounded-lg
                            font-bold active:scale-[0.98] transition"
                   >
@@ -154,7 +154,7 @@ const TopPicksSlider = () => {
 
               {/* CTA */}
               <button
-                onClick={() => navigate(`/property-info/${item?.seoSlug}`)}
+                onClick={() => router.push(`/property-info/${item?.seoSlug}`)}
                 className="hidden lg:block w-[200px] mt-10 bg-[#8A38F5] text-white px-8 py-4 rounded-xl
                            font-bold active:scale-[0.98] transition"
               >
@@ -184,7 +184,7 @@ const TopPicksSlider = () => {
             {/* Main Card */}
             <div
               onClick={() => {
-                navigate(`/property-info/${item?.seoSlug}`);
+                router.push(`/property-info/${item?.seoSlug}`);
               }}
               className="relative z-10 border-t border-t-[#C8C8C8] rounded-[28px] overflow-hidden"
             >

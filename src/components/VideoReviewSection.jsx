@@ -1,6 +1,6 @@
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../store/auth";
-import { Link, Navigate } from "react-router-dom";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import image from "../assets/home/formImage.svg";
 import cardShadow from "../assets/home/cardShadow.svg";
@@ -59,7 +59,7 @@ const VideoReviewSection = () => {
           //const videoId = extractYouTubeId(review.url);
           return (
             <Link 
-              to={review.url} target="_blank"
+              href={review.url} target="_blank"
               key={review.id}
               style={{background:`url(${review.clientimage ? URI+review.clientimage : image})`, backgroundSize:"cover"}}
               className="group bg-cover relative overflow-hidden w-[237px] h-100 rounded-xl border border-[#00000033] "

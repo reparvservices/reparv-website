@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -9,7 +10,6 @@ import PropertyNavbar from "./PropertyNavbarOld.jsx";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoSearchSharp } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Navbar from "./Navbar";
 import { getImageURI } from "../../utils/helper.js";
@@ -24,7 +24,7 @@ export default function ImageSlider() {
     showCitySelector,
     setShowCitySelector
   } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [sliderImages, setSliderImages] = useState([]);
   const [mobileImage, setMobileImage] = useState([]);
   const [cities, setCities] = useState([]);
@@ -32,7 +32,7 @@ export default function ImageSlider() {
       // Store a flag to tell the properties page to focus its search bar
       sessionStorage.setItem("focusPropertySearch", "true");
       // Redirect to /properties
-      navigate("/properties");
+      router.push("/properties");
     };
 
   // *Fetch Data from API*
@@ -102,10 +102,10 @@ export default function ImageSlider() {
         <div
           onClick={() => {
             setShowCitySelector(true);
-            navigate("/properties");
+            router.push("/properties");
           }}
           className={`selectCity ${
-            location.pathname !== "/check-eligibility"
+            pathname !== "/check-eligibility"
               ? "sm:inline-block"
               : "hidden"
           } inline-block min-w-[100px] max-w-[250px] relative py-2 rounded-lg px-4 cursor-pointer`}

@@ -1,7 +1,7 @@
+import NavLink from "../NavLinkNext.jsx";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useAuth } from "../../store/auth";
-import { useNavigate } from "react-router-dom";
-import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import HomeBack from "../../assets/home/HomeBack.webp";
@@ -11,7 +11,7 @@ import HomeBuyResalePropertyIcon from "../../assets/home/HomeBuyResalePropertyIc
 import HomeBuyNewPropertyIcon from "../../assets/home/HomeBuyNewPropertyIcon.svg";
 
 export default function HomeImage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user, setShowLogin } = useAuth();
 
   user;
@@ -60,13 +60,13 @@ export default function HomeImage() {
         ].map((card, index) => (
           <NavLink
             key={index}
-            to={card.to}
+            href={card.to === "no" ? "#" : card.to}
             onClick={(e) => {
               e.preventDefault();
               if (card.to === "no") {
                 setShowLogin(true);
               } else {
-                navigate(card.to);
+                router.push(card.to);
               }
             }}
           >

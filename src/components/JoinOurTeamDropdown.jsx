@@ -1,28 +1,29 @@
+"use client";
+
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
-import { useLocation } from "react-router-dom";
 
 const JoinOurTeamDropdown = ({ textColour }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("Join Our Team");
-  const location = useLocation();
 
   const handleSelect = (value) => {
     setIsOpen(false);
     switch (value) {
       case "Sales Partner":
         //window.open("https://reparv.com/", "_blank");
-        navigate("sales-partner");
+        router.push("/sales-partner");
         setSelected("Sales Partner");
         break;
       case "Territory Partner":
-        navigate("territory-partner");
+        router.push("/territory-partner");
         setSelected("Territory Partner");
         break;
       case "Project Partner":
-        navigate("project-partner");
+        router.push("/project-partner");
         setSelected("Project Partner");
         break;
       default:
@@ -36,11 +37,11 @@ const JoinOurTeamDropdown = ({ textColour }) => {
         onClick={() => setIsOpen(!isOpen)}
         className={`${textColour && "text-white"} ${
           (selected !== "Join Our Team" &&
-            location.pathname === "/sales-partner") ||
+            pathname === "/sales-partner") ||
           (selected !== "Join Our Team" &&
-            location.pathname === "/territory-partner") ||
+            pathname === "/territory-partner") ||
           (selected !== "Join Our Team" &&
-            location.pathname === "/project-partner")
+            pathname === "/project-partner")
             ? "text-[#0BB501]"
             : "text-gray-800"
         } flex gap-1 items-center justify-center font-medium hover:text-[#8A38F5] hover:font-semibold focus:outline-none`}

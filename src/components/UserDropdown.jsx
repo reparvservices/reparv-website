@@ -1,6 +1,6 @@
+import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { IoMdMenu } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { MdLogin, MdLogout } from "react-icons/md";
 import UserIcon from "../assets/user/UserIcon.svg";
@@ -10,7 +10,7 @@ function UserDropdown() {
   const { URI, user, setShowLogin, delTokenInCookie } = useAuth();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const userLogout = async () => {
     try {
@@ -25,7 +25,7 @@ function UserDropdown() {
       setOpen(false);
 
       // Navigate first
-      navigate("/", { replace: true });
+      router.replace("/");
 
       // Reload after navigation (guaranteed clean state)
       setTimeout(() => {
@@ -73,7 +73,7 @@ function UserDropdown() {
         <div className="absolute right-0 mt-3 p-4 bg-white rounded-xl shadow-[1px_4px_12px_4px_#00000026] overflow-hidden">
           <button
             onClick={() => {
-              navigate("/dashboard");
+              router.push("/dashboard");
               setOpen(false);
             }}
             className="w-full flex items-center justify-start gap-2 text-left px-4 py-3 text-base font-bold rounded-lg text-[#7c17ff] hover:bg-[#F4EDFF]"

@@ -1,15 +1,15 @@
+import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { FaArrowRight } from "react-icons/fa6";
 import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
-import { useNavigate } from "react-router-dom";
 import FormatPrice from "../FormatPrice";
 import { getImageURI } from "../../utils/helper";
 
 export default function PropertySlider({ projectPartner }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     setPropertyId,
@@ -203,7 +203,7 @@ export default function PropertySlider({ projectPartner }) {
                       <div
                         onClick={() => {
                           setEnquirySource("Landing Page");
-                          navigate(`/property-info/${p.seoSlug} `);
+                          router.push(`/property-info/${p.seoSlug} `);
                         }}
                         className="w-full h-[200px] md:h-[250px] lg:h-[300px] rounded-xl overflow-hidden shadow-lg"
                       >
@@ -333,7 +333,7 @@ export default function PropertySlider({ projectPartner }) {
                       <div
                         onClick={() => {
                           setEnquirySource("Landing Page");
-                          navigate(`/property-info/${p.seoSlug} `);
+                          router.push(`/property-info/${p.seoSlug} `);
                         }}
                         className="w-[62%] md:w-[70%] lg:w-[75%] max-h-[300px] rounded-xl overflow-hidden shadow-lg cursor-pointer"
                       >

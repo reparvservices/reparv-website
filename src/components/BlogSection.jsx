@@ -1,12 +1,12 @@
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import { TbArrowRightDashed } from "react-icons/tb";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { getImageURI } from "../utils/helper";
 
 function BlogSection({ heading, blogs }) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity } = useAuth();
 
   const [articles, setArticles] = useState([]);
@@ -99,7 +99,7 @@ function BlogSection({ heading, blogs }) {
         {(articles.length ? articles : []).map((item) => (
           <article
             key={item.id}
-            onClick={() => navigate(`/blog/${item.seoSlug}`)}
+            onClick={() => router.push(`/blog/${item.seoSlug}`)}
             className="
               rounded-2xl 
               bg-white

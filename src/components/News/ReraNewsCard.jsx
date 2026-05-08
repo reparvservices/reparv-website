@@ -1,7 +1,6 @@
+import Link from "next/link";
 import React from "react";
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
-
 const ReraNewsCard = ({
   image,
   category = "RERA Updates",
@@ -24,7 +23,7 @@ const ReraNewsCard = ({
   "
     >
       {/* IMAGE */}
-      <Link to={`/news/${seoSlug}`} className="w-full overflow-hidden">
+      <Link href={`/news/${seoSlug}`} className="w-full overflow-hidden">
         <img src={image} alt={title} loading="lazy" className="w-full object-cover" />
       </Link>
 
@@ -67,7 +66,7 @@ const ReraNewsCard = ({
           </p>
 
           <Link
-            to={`/news/${seoSlug}`}
+            href={`/news/${seoSlug}`}
             className="flex items-center gap-2 text-purple-600 font-semibold hover:gap-3 transition-all"
           >
             Read More

@@ -1,6 +1,6 @@
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useAuth } from "../../store/auth.jsx";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { usePropertyFilter } from "../../store/propertyFilter.jsx";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
@@ -8,7 +8,6 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";
 import { RiMobileDownloadLine } from "react-icons/ri";
 import { WiStars } from "react-icons/wi";
-import { useParams } from "react-router-dom";
 import background from "../../assets/projectPartner/background.svg";
 import searchIcon from "../../assets/projectPartner/search.svg";
 import TypeWriter from "../property/TypeWriter.jsx";
@@ -17,7 +16,7 @@ import { useRef } from "react";
 export default function PropertyNavbar({ projectPartner }) {
   const { contact } = useParams();
   const scrollRef = useRef(null);
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     selectedCity,
@@ -231,7 +230,7 @@ export default function PropertyNavbar({ projectPartner }) {
                     setPropertyType(type.type);
 
                     if (!isUnique) {
-                      navigate("/properties");
+                      router.push("/properties");
                     }
                   }}
                   className={`cursor-pointer text-[10px] sm:text-xs md:text-sm font-semibold whitespace-nowrap pb-2 border-b-2 ${
@@ -310,7 +309,7 @@ export default function PropertyNavbar({ projectPartner }) {
               key={i}
               onClick={() => {
                 setEnquirySource("Landing Page");
-                navigate(`/property-info/${loc.seoSlug}`);
+                router.push(`/property-info/${loc.seoSlug}`);
               }}
               className="cursor-pointer text-xs md:text-sm flex items-center gap-1 px-4 py-2 rounded-md bg-[#FFFFFF1A] border border-transparent hover:border-white transition whitespace-nowrap"
             >

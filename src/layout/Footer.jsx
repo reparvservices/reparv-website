@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import footerLogo from "../assets/footerLogo.svg";
 import {
@@ -7,8 +8,6 @@ import {
   FaYoutube,
   FaRegCopyright,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
 function Footer({ footerRef }) {
   const usefulLinks = [
     { title: "EMI Calculator", url: "https://www.reparv.in/emi-calculator" },
@@ -31,7 +30,7 @@ function Footer({ footerRef }) {
       <div ref={footerRef} className="w-full md:block hidden bg-[#5E23DC]">
         <div className="w-full max-w-[1380px] mx-auto flex flex-col gap-6 bg-[#5E23DC] text-white py-8 px-8 lg:px-10">
           <div className="flex items-center justify-start">
-            <Link to="/">
+            <Link href="/">
               <img src={footerLogo} alt="Reparv Logo" className="w-[160px]" />
             </Link>
           </div>
@@ -40,19 +39,19 @@ function Footer({ footerRef }) {
             {/* 1. Company */}
             <div className="flex flex-col gap-2 text-sm lg:text-base">
               <h3 className="text-lg lg:text-xl font-semibold">Company</h3>
-              <Link to="/" className="hover:underline">
+              <Link href="/" className="hover:underline">
                 Home
               </Link>
-              <Link to="/blogs" className="hover:underline">
+              <Link href="/blogs" className="hover:underline">
                 Blogs
               </Link>
-              <Link to="/news" className="hover:underline">
+              <Link href="/news" className="hover:underline">
                 News
               </Link>
-              <Link to="/about-us" className="hover:underline">
+              <Link href="/about-us" className="hover:underline">
                 About Us
               </Link>
-              <Link to="/contact-us" className="hover:underline">
+              <Link href="/contact-us" className="hover:underline">
                 Contact Us
               </Link>
             </div>
@@ -107,7 +106,7 @@ function Footer({ footerRef }) {
                 <Link
                   key={index}
                   className="cursor-pointer hover:underline"
-                  to={link.url}
+                  href={link.url}
                 >
                   {link.title}
                 </Link>
@@ -119,7 +118,7 @@ function Footer({ footerRef }) {
               <h3 className="text-lg lg:text-xl font-semibold">Social Link</h3>
               <div className="flex items-center gap-3 lg:gap-5 text-xl lg:text-2xl">
                 <Link
-                  to="https://www.facebook.com/reparv/"
+                  href="https://www.facebook.com/reparv/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
@@ -127,7 +126,7 @@ function Footer({ footerRef }) {
                   <FaFacebookF />
                 </Link>
                 <Link
-                  to="https://www.linkedin.com/company/105339179"
+                  href="https://www.linkedin.com/company/105339179"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
@@ -135,7 +134,7 @@ function Footer({ footerRef }) {
                   <FaLinkedin />
                 </Link>
                 <Link
-                  to="https://www.instagram.com/reparv_/"
+                  href="https://www.instagram.com/reparv_/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
@@ -143,7 +142,7 @@ function Footer({ footerRef }) {
                   <FaInstagram />
                 </Link>
                 <Link
-                  to="https://www.youtube.com/@reparv"
+                  href="https://www.youtube.com/@reparv"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
@@ -161,13 +160,13 @@ function Footer({ footerRef }) {
               <FaRegCopyright /> {new Date().getFullYear()} reparv.in All Rights
               Reserved
             </span>
-            <Link to="/terms-and-conditions" className="hover:underline">
+            <Link href="/terms-and-conditions" className="hover:underline">
               Terms & Conditions
             </Link>
-            <Link to="/privacy-policy" className="hover:underline">
+            <Link href="/privacy-policy" className="hover:underline">
               Privacy Policy
             </Link>
-            <Link to="/cancellation-policy" className="hover:underline">
+            <Link href="/cancellation-policy" className="hover:underline">
               Cancellation Policy
             </Link>
           </div>
@@ -178,7 +177,7 @@ function Footer({ footerRef }) {
       <div className="md:hidden w-full bg-[#5E23DC] text-white py-8 px-5 mb-[70px]">
         <div className="flex flex-col gap-5 max-w-md mx-auto">
           <div className="flex justify-start">
-            <Link to="/">
+            <Link href="/">
               <img src={footerLogo} alt="reparv logo" className="w-[140px]" />
             </Link>
           </div>
@@ -186,23 +185,23 @@ function Footer({ footerRef }) {
           <div>
             <h3 className="text-lg font-semibold mb-2">Company</h3>
             <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
-              <Link to="/" className="hover:underline">
+              <Link href="/" className="hover:underline">
                 Home
               </Link>{" "}
               |
-              <Link to="/blogs" className="hover:underline">
+              <Link href="/blogs" className="hover:underline">
                 Blogs
               </Link>{" "}
               |
-              <Link to="/news" className="hover:underline">
+              <Link href="/news" className="hover:underline">
                 News
               </Link>{" "}
               |
-              <Link to="/about-us" className="hover:underline">
+              <Link href="/about-us" className="hover:underline">
                 About Us
               </Link>{" "}
               |
-              <Link to="/contact-us" className="hover:underline">
+              <Link href="/contact-us" className="hover:underline">
                 Contact Us
               </Link>
             </div>
@@ -254,7 +253,7 @@ function Footer({ footerRef }) {
                 <React.Fragment key={index}>
                   <Link
                     className="cursor-pointer hover:underline"
-                    to={link.url}
+                    href={link.url}
                   >
                     {link.title}
                   </Link>
@@ -268,7 +267,7 @@ function Footer({ footerRef }) {
             <h3 className="text-lg font-semibold">Social Link</h3>
             <div className="flex items-center gap-4 text-xl">
               <Link
-                to="https://www.facebook.com/reparv/"
+                href="https://www.facebook.com/reparv/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
@@ -276,7 +275,7 @@ function Footer({ footerRef }) {
                 <FaFacebookF />
               </Link>
               <Link
-                to="https://www.linkedin.com/company/105339179"
+                href="https://www.linkedin.com/company/105339179"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
@@ -284,7 +283,7 @@ function Footer({ footerRef }) {
                 <FaLinkedin />
               </Link>
               <Link
-                to="https://www.instagram.com/reparv_/"
+                href="https://www.instagram.com/reparv_/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
@@ -292,7 +291,7 @@ function Footer({ footerRef }) {
                 <FaInstagram />
               </Link>
               <Link
-                to="https://www.youtube.com/@reparv"
+                href="https://www.youtube.com/@reparv"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
@@ -310,13 +309,13 @@ function Footer({ footerRef }) {
               Reserved
             </span>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/terms-and-conditions" className="hover:underline">
+              <Link href="/terms-and-conditions" className="hover:underline">
                 Terms & Conditions
               </Link>
-              <Link to="/privacy-policy" className="hover:underline">
+              <Link href="/privacy-policy" className="hover:underline">
                 Privacy Policy
               </Link>
-              <Link to="/cancellation-policy" className="hover:underline">
+              <Link href="/cancellation-policy" className="hover:underline">
                 Cancellation Policy
               </Link>
             </div>

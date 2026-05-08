@@ -1,5 +1,7 @@
+"use client"
+
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../store/auth";
 import { FiSearch } from "react-icons/fi";
 import { LuCirclePlus } from "react-icons/lu";
@@ -24,7 +26,7 @@ import Enquiries from "./Enquiries";
 import { RiH2 } from "react-icons/ri";
 
 export default function MyListings() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, setLoading, setShowAlert, setPropertyId } = useAuth();
   const imageURI = import.meta.env.VITE_S3_IMAGE_URL;
   const [timeRange, setTimeRange] = useState("month");
@@ -175,7 +177,7 @@ export default function MyListings() {
 
         <button
           onClick={() => {
-            navigate("/sell-properties");
+            router.push("/sell-properties");
           }}
           className="flex items-center gap-2 bg-[#8A38F5] text-white px-4 lg:px-5 py-2 lg:py-3 rounded-lg shadow-[0px_4px_11px_2px_#8A38F540] hover:opacity-96 font-bold text-sm sm:text-base"
         >

@@ -1,15 +1,15 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 // NewsSection.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import propertyImg from "../../assets/projectPartner/property1.png";
 import { useAuth } from "../../store/auth";
-import { Link } from "react-router-dom";
 import { SlCalender } from "react-icons/sl";
 import { IoTimeOutline } from "react-icons/io5";
 import { getImageURI } from "../../utils/helper";
 
 function BlogSection() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { URI, selectedCity } = useAuth();
 
   const [articles, setArticles] = useState([]);
@@ -42,7 +42,7 @@ function BlogSection() {
       {/* Grid Scroll — 1 Column, 3 Rows */}
       <div className="w-full grid place-items-center grid-cols-1 grid-rows-3 gap-6 pb-4">
         {(articles.length ? articles.slice(0, 3) : []).map((item) => (
-          <Link to={`/blog/${item.seoSlug}`} className="w-full">
+          <Link href={`/blog/${item.seoSlug}`} className="w-full">
             <article
               key={item.id}
               className="w-full max-w-[400px] min-h-[330px] bg-white rounded-2xl border border-[#E6E6E6] shadow-sm overflow-hidden cursor-pointer "
@@ -74,7 +74,7 @@ function BlogSection() {
 
                 <div className="mt-4 flex items-center justify-between">
                   <Link
-                    to={`/blog/${item.seoSlug}`}
+                    href={`/blog/${item.seoSlug}`}
                     className="text-[#00A63E] text-base font-medium flex items-center gap-1"
                   >
                     Read More

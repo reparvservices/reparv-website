@@ -1,8 +1,7 @@
+import { useRouter } from "next/navigation";
 import { FaSearch, FaDownload } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-
 export default function DreamHomeCTA() {
-  const navigate = useNavigate();
+  const router = useRouter();
   return (
     <section className="w-full max-[1380px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
       <div
@@ -31,7 +30,7 @@ export default function DreamHomeCTA() {
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 justify-center items-center">
             <button
               onClick={() => {
-                navigate("/properties");
+                router.push("/properties");
               }}
               className="flex items-center gap-3 bg-white text-[#5B2EEA] font-semibold px-6 py-3 rounded-lg shadow-md hover:scale-105 transition"
             >

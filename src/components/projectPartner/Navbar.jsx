@@ -1,12 +1,13 @@
+"use client";
+
+import Link from "next/link";
+import NavLink from "../NavLinkNext.jsx";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
 import reparvLogo from "../../assets/reparvLogo.svg";
-import { NavLink } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { IoMdMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../../store/auth";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";
 import { RiMobileDownloadLine } from "react-icons/ri";
@@ -17,12 +18,12 @@ import { getImageURI } from "../../utils/helper";
 function Navbar({ projectPartner }) {
   const { URI, selectedCity, setSelectedCity, setIsContactOpen } = useAuth();
 
-  const navigate = useNavigate();
-  const location = useLocation();
+  const router = useRouter();
+  const pathname = usePathname();
   const [cities, setCities] = useState([]);
   const [showSidebar, setShowSidebar] = useState(false);
   const getNavLinkClass = (path) => {
-    return location.pathname === path ? "font-bold text-[#0BB501]" : "";
+    return pathname === path ? "font-bold text-[#0BB501]" : "";
   };
 
   const fetchCities = async () => {
@@ -60,7 +61,7 @@ function Navbar({ projectPartner }) {
         <div className="sidebar w-full fixed md:hidden top-0 right-0 z-10 bg-white flex flex-col items-end gap-5 pb-8 shadow-[0px_1px_3px_1px_#00000026]">
           <div className="div w-full flex items-center justify-between h-15 sm:h-22 shadow-[0px_1px_3px_1px_#00000026] px-8">
             <div className="flex items-center justify-center ">
-              <Link to="/">
+              <Link href="/">
                 <div className="flex flex-col gap-2">
                   <img
                     src={
@@ -87,7 +88,7 @@ function Navbar({ projectPartner }) {
 
           <div className="w-full flex flex-col gap-3 px-10 font-medium text-[#110229]">
             <NavLink
-              to="https://play.google.com/store/apps/details?id=com.reparvcustomer"
+              href="https://play.google.com/store/apps/details?id=com.reparvcustomer"
               onClick={() => {
                 setShowSidebar(false);
               }}
@@ -121,7 +122,7 @@ function Navbar({ projectPartner }) {
               onClick={() => {
                 setShowSidebar(false);
               }}
-              to="/project-partner"
+              href="/project-partner"
               className={`${getNavLinkClass(
                 "/contact-us",
               )} flex gap-2 items-center justify-center`}
@@ -135,7 +136,7 @@ function Navbar({ projectPartner }) {
 
       {/* Navbar */}
       <div className="flex items-center justify-end">
-        <Link to="/">
+        <Link href="/">
           <div className="flex flex-col">
             <img
               src={

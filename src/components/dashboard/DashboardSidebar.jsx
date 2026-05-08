@@ -1,3 +1,5 @@
+"use client"
+
 import { MdDashboard } from "react-icons/md";
 import { IoChevronForward } from "react-icons/io5";
 

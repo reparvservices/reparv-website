@@ -1,15 +1,15 @@
+import { useRouter } from "next/navigation";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import HomeLoanCard from "../../assets/home/HomeLoanCard.svg";
 import { useAuth } from "../../store/auth";
 
 const LoanSection = () => {
   const { user, setShowLogin } = useAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const handleClick = () => {
     if (user?.id) {
-      navigate("/home-loan-application");
+      router.push("/home-loan-application");
     } else {
       setShowLogin(true);
     }

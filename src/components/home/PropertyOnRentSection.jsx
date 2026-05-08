@@ -1,10 +1,9 @@
+import Link from "next/link";
 import React from "react";
 import HomePropertiesOnRentSection from "../../assets/home/HomePropertiesOnRentCard.svg";
-import {Link} from "react-router-dom"
-
 const PropertyOnRentSection = () => {
   return (
-    <Link to={"/rental-property"} className="flex flex-col items-center p-4 md:p-8 gap-6 md:pb-15">
+    <Link href={"/rental-property"} className="flex flex-col items-center p-4 md:p-8 gap-6 md:pb-15">
       <img
         src={HomePropertiesOnRentSection}
         alt="Get Property In Three Steps"

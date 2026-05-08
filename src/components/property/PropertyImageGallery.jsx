@@ -1,7 +1,7 @@
+import Link from "next/link";
 import React, { useState, useRef } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useAuth } from "../../store/auth";
-import { Link } from "react-router-dom";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { IoShareSocial } from "react-icons/io5";
