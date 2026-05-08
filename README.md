@@ -14,3 +14,4 @@ Currently, two official plugins are available:
 # reparv-website
 # reparv-website
 # reparv-website
+# reparv-next-website
