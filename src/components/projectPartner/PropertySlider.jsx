@@ -149,9 +149,9 @@ export default function PropertySlider({ projectPartner }) {
                       const images = JSON.parse(p.frontView || "[]");
                       return images.length > 0
                         ? `${getImageURI(images[0])}`
-                        : `${propertyPicture}`;
+                        : `/assets/property/propertyPicture.svg`;
                     } catch {
-                      return `${propertyPicture}`;
+                      return `/assets/property/propertyPicture.svg`;
                     }
                   })()}
                   alt={p.propertyName}
@@ -213,9 +213,9 @@ export default function PropertySlider({ projectPartner }) {
                               const images = JSON.parse(p.frontView || "[]");
                               return images.length > 0
                                 ? `${getImageURI(images[0])}`
-                                : `${propertyPicture}`;
+                                : `/assets/property/propertyPicture.svg`;
                             } catch {
-                              return `${propertyPicture}`;
+                              return `/assets/property/propertyPicture.svg`;
                             }
                           })()}
                           alt={p.propertyName}
@@ -343,9 +343,9 @@ export default function PropertySlider({ projectPartner }) {
                               const images = JSON.parse(p.frontView || "[]");
                               return images.length > 0
                                 ? `${getImageURI(images[0])}`
-                                : `${propertyPicture}`;
+                                : `/assets/property/propertyPicture.svg`;
                             } catch {
-                              return `${propertyPicture}`;
+                              return `/assets/property/propertyPicture.svg`;
                             }
                           })()}
                           alt={p.propertyName}

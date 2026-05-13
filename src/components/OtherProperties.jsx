@@ -2,16 +2,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
-import { MdOutlineKingBed } from "react-icons/md";
-import { BiBath } from "react-icons/bi";
-import { FaDiamond } from "react-icons/fa6";
 import { IoMdDoneAll } from "react-icons/io";
 import { CiLocationOn } from "react-icons/ci";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { MdOutlinePlayCircleOutline } from "react-icons/md";
-import propertyPicture from "../assets/property/propertyPicture.svg";
-import cardAssuredTag from "../assets/property/cardAssuredTag.svg";
-import populerTag from "../assets/property/populerTag.svg";
 import FormatPrice from "./FormatPrice";
 import { useAuth } from "../store/auth";
 import { FaFire } from "react-icons/fa6";
@@ -84,22 +78,22 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
                 const images = JSON.parse(property.frontView || "[]");
                 return images.length > 0
                   ? `${ImageUri}${images[0]}`
-                  : `${propertyPicture}`;
+                  : `"/assets/property/PropertyPicture.svg"`;
               } catch {
-                return `${propertyPicture}`;
+                return `/assets/property/PropertyPicture.svg`;
               }
             })()}
             alt={property.name}
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = `${propertyPicture}`;
+              e.target.src = `/assets/property/PropertyPicture.svg`;
             }}
             className="object-cover h-[200px] w-full bg-[#00000020]"
           />
           <div className="relative flex flex-col gap-2">
             {property.likes > 500 && (
               <img
-                src={populerTag}
+                src="/assets/property/populerTag.svg"
                 className="absolute top-[-15px] left-[-8px]"
               ></img>
             )}
@@ -200,7 +194,7 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
 
             <hr className="text-[#F0EFFB] my-2 " />
             <div className="w-full flex px-4 justify-between mb-1">
-              <img src={cardAssuredTag} alt="" className="w-40" />
+              <img src="/assets/property/assuredTag.svg" alt="" className="w-40" />
               <div className={`flex gap-[8px] items-center justidy-center`}>
                 <div
                   onClick={() => {

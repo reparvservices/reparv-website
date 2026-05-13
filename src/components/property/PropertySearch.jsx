@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import Fuse from "fuse.js";
 import { useAuth } from "../../store/auth";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { getImageURI } from "../../utils/helper";
 
 const PropertySearch = ({
@@ -38,9 +37,9 @@ const PropertySearch = ({
   const getFrontImage = (frontView) => {
     try {
       const images = JSON.parse(frontView || "[]");
-      return images?.[0] ? getImageURI(images[0]) : propertyPicture;
+      return images?.[0] ? getImageURI(images[0]) : "/assets/property/propertyPicture.svg";
     } catch {
-      return propertyPicture;
+      return "/assets/property/propertyPicture.svg";
     }
   };
 

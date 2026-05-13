@@ -2,23 +2,15 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
-import { MdOutlineKingBed } from "react-icons/md";
-import { BiBath } from "react-icons/bi";
-import { FaDiamond } from "react-icons/fa6";
 import { IoMdDoneAll } from "react-icons/io";
-import { CiLocationOn } from "react-icons/ci";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { MdOutlinePlayCircleOutline } from "react-icons/md";
 import propertyPicture from "../../assets/property/propertyPicture.svg";
-import cardAssuredTag from "../../assets/projectPartner/cardAssuredTag.svg";
-import locationIcon from "../../assets/projectPartner/location.svg";
-import populerTag from "../../assets/property/populerTag.svg";
 import FormatPrice from "../FormatPrice";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
 import { FaFire } from "react-icons/fa6";
 import { getImageURI } from "../../utils/helper";
-import PropertyCard from "../property/PropertyCard";
 
 function PropertySection({ projectPartner }) {
   const router = useRouter();
@@ -139,15 +131,15 @@ function PropertySection({ projectPartner }) {
                   const images = JSON.parse(property.frontView || "[]");
                   return images.length > 0
                     ? `${getImageURI(images[0])}`
-                    : `${propertyPicture}`;
+                    : `/assets/property/propertyPicture.svg`;
                 } catch {
-                  return `${propertyPicture}`;
+                  return `/assets/property/propertyPicture.svg`;
                 }
               })()}
               alt={property.name}
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src = `${propertyPicture}`;
+                e.target.src = `/assets/property/propertyPicture.svg`;
               }}
               loading="lazy"
               className="object-cover h-[250px] w-full bg-[#00000020]"
@@ -155,7 +147,7 @@ function PropertySection({ projectPartner }) {
             <div className="relative flex flex-col gap-2">
               {Number(property?.likes) > 500 && (
                 <img
-                  src={populerTag}
+                  src="/assets/projectPartner/popular-tag.png"
                   loading="lazy"
                   className="absolute top-[-15px] left-[-8px]"
                 ></img>
@@ -271,7 +263,7 @@ function PropertySection({ projectPartner }) {
 
               <hr className="text-[#F0EFFB]" />
               <div className="w-full flex px-4 justify-between">
-                <img src={cardAssuredTag} alt="" className="w-30" />
+                <img src="/assets/projectPartner/assured-tag.png" alt="" className="w-30" />
                 <div className={`flex gap-[8px] items-center justify-center`}>
                   <div
                     onClick={() => {
@@ -310,7 +302,7 @@ function PropertySection({ projectPartner }) {
               </div>
 
               <div className="w-full flex flex-wrap gap-2 items-center justify-start py-1 pb-4 px-3 rounded-bl-lg rounded-br-lg address text-[10px] md:text-xs font-normal text-[#808080] group-hover:text-[#e2e2e2] border-t-1 border-[#F0EFFB]">
-                <img src={locationIcon} alt="location" />
+                <img src="/assets/projectPartner/location-icon.png" alt="location" />
                 <div className="flex flex-col items-start">
                   <p className="text-[#808080] ">
                     {property?.location?.length > 25

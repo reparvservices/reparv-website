@@ -1,5 +1,3 @@
-import badgeIcon from "../../../assets/seopageassets/verify712/badge.svg";
-import docImage from "../../../assets/seopageassets/verify712/banner-image.svg";
 
 export default function Verify712Hero() {
   return (
@@ -26,7 +24,7 @@ export default function Verify712Hero() {
             {["Official Records", "Instant Verification", "100% Secure"].map(
               (item) => (
                 <div key={item} className="flex items-center gap-2">
-                  <img src={badgeIcon} alt="" className="w-4 h-4" />
+                  <img src="/assets/seopageassets/verify712/badge.svg" alt="" className="w-4 h-4" />
                   <span className="font-semibold">{item}</span>
                 </div>
               ),
@@ -36,7 +34,7 @@ export default function Verify712Hero() {
 
         {/* RIGHT IMAGE — DESKTOP ONLY */}
         <div className="hidden lg:flex justify-end">
-          <img src={docImage} alt="7/12 Document" className="w-full max-w-md" />
+          <img src="/assets/seopageassets/verify712/banner-image.svg" alt="7/12 Document" className="w-full max-w-md" />
         </div>
       </div>
     </section>

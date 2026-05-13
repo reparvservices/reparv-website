@@ -83,7 +83,7 @@ export default function SiteLayout({ children }) {
         <Navbar />
 
         {/* container */}
-        <div className="w-full pt-15 sm:pt-22 sm:bg-[#fafafa]">{children}</div>
+        <div className="w-full !pt-[60px] !sm:pt-[84px] sm:bg-[#fafafa]">{children}</div>
 
       {/* footer */}
       <Footer footerRef={footerRef} />

@@ -1,6 +1,4 @@
 import React from "react";
-import MobileAppDownload from "../../assets/home/MobileAppDownload.svg";
-import HomeAppDownload from "../../assets/home/HomeAppDownload.svg";
 
 const AppDownloadSection = () => {
   return (
@@ -15,14 +13,14 @@ const AppDownloadSection = () => {
     >
       {/* Mobile */}
       <img
-        src={MobileAppDownload}
+        src="/assets/home/MobileAppDownload.svg"
         alt="Get Property In Three Steps"
         loading="lazy"
         className="block md:hidden w-full  max-w-[1380px] hover:scale-102 duration-500 transition-all cursor-pointer"
       />
       {/* Desktop */}
       <img
-        src={HomeAppDownload}
+        src="/assets/home/HomeAppDownload.svg"
         alt="Get Property In Three Steps"
         loading="lazy"
         className="hidden md:block w-full max-w-[1380px] hover:scale-102 duration-500 transition-all cursor-pointer"

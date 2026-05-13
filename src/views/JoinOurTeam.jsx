@@ -1,55 +1,45 @@
 "use client"
 
 import React from "react";
-import image from "../assets/joinOurTeam/image.svg";
-import responsiveImage from "../assets/joinOurTeam/responsiveImage.svg";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAuth } from "../store/auth";
-import Loader from "../components/Loader";
 
-import icon1 from "../assets/joinOurTeam/icon1.svg";
-import icon2 from "../assets/joinOurTeam/icon2.svg";
-import icon3 from "../assets/joinOurTeam/icon3.svg";
-import icon4 from "../assets/joinOurTeam/icon4.svg";
-import icon5 from "../assets/joinOurTeam/icon5.svg";
-import icon6 from "../assets/joinOurTeam/icon6.svg";
-import formImage from "../assets/joinOurTeam/formImage.svg";
 import { Element, Link } from "react-scroll";
 
 const benefits = [
   {
-    icon: icon1,
+    icon: "/assets/joinOurTeam/icon1.svg",
     title: "Lucrative Commission",
     description:
       "Earn what you deserve with our competitive commission structure.",
   },
   {
-    icon: icon2,
+    icon: "/assets/joinOurTeam/icon2.svg",
     title: "Become a free promoter",
     description:
       "Showcase your skills and build your personal brand with freedom to shine.",
   },
   {
-    icon: icon3,
+    icon: "/assets/joinOurTeam/icon3.svg",
     title: "Fresh Inquiries",
     description:
       "Access to a constant stream of potential clients to fuel your success.",
   },
   {
-    icon: icon4,
+    icon: "/assets/joinOurTeam/icon4.svg",
     title: "Be Your Own Boss",
     description:
       "Take charge of your career and unlock endless opportunities in the real estate world.",
   },
   {
-    icon: icon5,
+    icon: "/assets/joinOurTeam/icon5.svg",
     title: "Verified Properties",
     description:
       "Explore properties that are thoroughly vetted for authenticity and quality.",
   },
   {
-    icon: icon6,
+    icon: "/assets/joinOurTeam/icon6.svg",
     title: "Sales Support & Training",
     description:
       "Boost your skills with expert training and round-the-clock support for success.",
@@ -101,7 +91,7 @@ function JoinOurTeam() {
     <div className="joinOurTeam w-full max-w-7xl mx-auto p-4 sm:p-6">
       <div className="w-full my-4 gap-6 flex items-center justify-center">
         <div className="image hidden sm:flex w-[45%]">
-          <img src={image} alt="" className="w-full object-cover" />
+          <img src="/assets/joinOurTeam/image.svg" alt="" className="w-full object-cover" />
         </div>
 
         <div className="w-full sm:w-[55%] sm:p-4 sm:px-6 flex flex-col md:gap-6 gap-2">
@@ -114,7 +104,7 @@ function JoinOurTeam() {
             rewarding growth!
           </p>
           <img
-            src={responsiveImage}
+            src="/assets/joinOurTeam/responsiveImage.svg"
             alt=""
             className="w-full sm:hidden block object-cover"
           />
@@ -165,7 +155,7 @@ function JoinOurTeam() {
         <div className="max-w-7xl mx-auto mt-4 md:mt-12 flex flex-col lg:flex-row items-center justify-center md:gap-15">
           <div className="sm:w-[50%] xl:block hidden md:block lg:hidden lg:w-[340px] lg:h-[497px] h-full">
             <img
-              src={formImage}
+              src="/assets/joinOurTeam/formImage.svg"
               alt="Professional Person"
               className="w-full xl:w-[340px] xl:h-[490px] rounded-lg shadow-md object-cover"
             />

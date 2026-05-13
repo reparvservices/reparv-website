@@ -1,33 +1,25 @@
-// HERO IMAGE
-import heroImage from "../../../assets/seopageassets/turstedbuilder/banner-image.svg";
-
-// STATS ICONS
-import projectsIcon from "../../../assets/seopageassets/turstedbuilder/projects.svg";
-import buildersIcon from "../../../assets/seopageassets/turstedbuilder/builders.svg";
-import panIndiaIcon from "../../../assets/seopageassets/turstedbuilder/pan-india.svg";
-import verifiedIcon from "../../../assets/seopageassets/turstedbuilder/verified.svg";
 
 export default function TrustedBuilderHero() {
   const stats = [
     {
       value: "500+",
       label: "Verified Projects",
-      icon: projectsIcon,
+      icon: "/assets/seopageassets/turstedbuilder/projects.svg",
     },
     {
       value: "200+",
       label: "Trusted Builders",
-      icon: buildersIcon,
+      icon: "/assets/seopageassets/turstedbuilder/builders.svg",
     },
     {
       value: "Pan-India",
       label: "Presence",
-      icon: panIndiaIcon,
+      icon: "/assets/seopageassets/turstedbuilder/pan-india.svg",
     },
     {
       value: "100%",
       label: "Legal & Title Verified",
-      icon: verifiedIcon,
+      icon: "/assets/seopageassets/turstedbuilder/verified.svg",
     },
   ];
 
@@ -63,7 +55,7 @@ export default function TrustedBuilderHero() {
           {/* RIGHT IMAGE (DESKTOP ONLY) */}
           <div className="hidden lg:flex justify-end">
             <img
-              src={heroImage}
+              src="/assets/seopageassets/turstedbuilder/banner-image.svg"
               alt="Trusted builders across India"
               className="w-full max-w-lg"
             />

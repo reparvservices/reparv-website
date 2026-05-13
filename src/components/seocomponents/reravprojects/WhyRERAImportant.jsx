@@ -1,8 +1,3 @@
-import shieldOff from "../../../assets/seopageassets/reparvproperties/fake.svg";
-import documentCheck from "../../../assets/seopageassets/reparvproperties/legal.svg";
-import timeline from "../../../assets/seopageassets/reparvproperties/transprancy.svg";
-import accountability from "../../../assets/seopageassets/reparvproperties/builder.svg";
-import checkIcon from "../../../assets/seopageassets/reparvproperties/right.svg";
 
 export default function WhyRERAImportant() {
   return (
@@ -21,25 +16,25 @@ export default function WhyRERAImportant() {
         {/* INFO CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-14">
           <InfoCard
-            icon={shieldOff}
+            icon="/assets/seopageassets/reparvproperties/shield-off.svg"
             title="Avoid Fake Projects"
             description="Verify authenticity of projects and builders through official government records. Protect yourself from fraudulent schemes and unauthorized developments."
           />
 
           <InfoCard
-            icon={documentCheck}
+            icon="/assets/seopageassets/reparvproperties/document-check.svg"
             title="Confirm Legal Compliance"
             description="Ensure the project meets all legal requirements and has obtained necessary approvals from relevant authorities before making any investment."
           />
 
           <InfoCard
-            icon={timeline}
+            icon="/assets/seopageassets/reparvproperties/timeline.svg"
             title="Transparency in Timelines"
             description="Access verified project timelines and completion dates. Make informed decisions based on actual project status and developer track record."
           />
 
           <InfoCard
-            icon={accountability}
+            icon="/assets/seopageassets/reparvproperties/accountability.svg"
             title="Builder Accountability"
             description="Hold builders accountable for commitments. RERA registration ensures builders follow regulations and maintain quality standards throughout construction."
           />
@@ -56,25 +51,25 @@ export default function WhyRERAImportant() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <CheckItem
-              icon={checkIcon}
+              icon="/assets/seopageassets/reparvproperties/right.svg"
               title="Verified Listings Only"
               text="Every property listed on Reparv is cross-verified with official RERA databases to ensure authenticity and legal compliance."
             />
 
             <CheckItem
-              icon={checkIcon}
+              icon="/assets/seopageassets/reparvproperties/right.svg" 
               title="Manual + System Checks"
               text="We combine automated verification systems with manual review by experts to ensure accuracy and catch discrepancies."
             />
 
             <CheckItem
-              icon={checkIcon}
+              icon="/assets/seopageassets/reparvproperties/right.svg"
               title="Partner Validation"
               text="All builder partners undergo rigorous background checks and must maintain active RERA registration."
             />
 
             <CheckItem
-              icon={checkIcon}
+              icon="/assets/seopageassets/reparvproperties/right.svg"
               title="Ongoing Project Tracking"
               text="We continuously monitor project status and RERA compliance, alerting you to any updates in real time."
             />

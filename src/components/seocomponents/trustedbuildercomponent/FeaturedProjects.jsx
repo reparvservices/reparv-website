@@ -1,6 +1,3 @@
-import projectImg from "../../../assets/seopageassets/turstedbuilder/property-image.jpg";
-import locationIcon from "../../../assets/seopageassets/turstedbuilder/location.svg";
-import heartIcon from "../../../assets/seopageassets/turstedbuilder/heart.svg";
 
 export default function FeaturedProjects() {
   const projects = [
@@ -9,21 +6,21 @@ export default function FeaturedProjects() {
       title: "Prestige Lakeside Habitat",
       builder: "Prestige Group",
       location: "City, state",
-      image: projectImg,
+      image: "/assets/seopageassets/turstedbuilder/property-image.jpg",
     },
     {
       id: 2,
       title: "Prestige Lakeside Habitat",
       builder: "Prestige Group",
       location: "City, state",
-      image: projectImg,
+      image: "/assets/seopageassets/turstedbuilder/property-image.jpg",
     },
     {
       id: 3,
       title: "Prestige Lakeside Habitat",
       builder: "Prestige Group",
       location: "City, state",
-      image: projectImg,
+      image: "/assets/seopageassets/turstedbuilder/property-image.jpg",
     },
   ];
 
@@ -58,7 +55,7 @@ export default function FeaturedProjects() {
 
                 {/* HEART ICON */}
                 <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full shadow flex items-center justify-center">
-                  <img src={heartIcon} alt="wishlist" className="w-4 h-4" />
+                  <img src="/assets/seopageassets/turstedbuilder/heart.svg" alt="wishlist" className="w-4 h-4" />
                 </button>
               </div>
 
@@ -71,7 +68,7 @@ export default function FeaturedProjects() {
                 </p>
 
                 <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
-                  <img src={locationIcon} alt="location" className="w-4 h-4" />
+                  <img src="/assets/seopageassets/turstedbuilder/location.svg" alt="location" className="w-4 h-4" />
                   {project.location}
                 </div>
 

@@ -1,4 +1,3 @@
-import InfoIcon from "../../../assets/seopageassets/verify712/info-icon.svg";
 
 export default function VerifyLandRecord() {
   return (
@@ -38,7 +37,7 @@ export default function VerifyLandRecord() {
           {/* ================= WARNING ================= */}
           <div className="mt-6">
             <WarningBanner
-              icon={InfoIcon}
+              icon="/assets/seopageassets/verify712/info-icon.svg"
               text="Ensure all details are accurate. Incorrect information may result in failed verification."
             />
           </div>

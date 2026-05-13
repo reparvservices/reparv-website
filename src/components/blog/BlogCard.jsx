@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "../../store/auth";
-import BlogImage from "../../assets/blog/BlogImage.webp";
 import { getImageURI } from "../../utils/helper";
 
 function BlogCard({ blogData }) {
@@ -42,7 +41,7 @@ function BlogCard({ blogData }) {
         className="max-h-[240px] w-full overflow-hidden bg-gray-50 cursor-pointer"
       >
         <motion.img
-          src={image ? getImageURI(image) : BlogImage}
+          src={image ? getImageURI(image) : "/assets/blog/BlogImage.webp"}
           alt={tittle}
           loading="lazy"
           decoding="async"
@@ -53,7 +52,7 @@ function BlogCard({ blogData }) {
           transition={{ duration: 0.35, ease: "easeOut" }}
           onError={(e) => {
             e.currentTarget.onerror = null;
-            e.currentTarget.src = BlogImage;
+            e.currentTarget.src = "/assets/blog/BlogImage.webp";
           }}
         />
       </div>

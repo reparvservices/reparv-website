@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 // NewsSection.jsx
 import React, { useState, useEffect } from "react";
-import propertyImg from "../../assets/projectPartner/property1.png";
 import { useAuth } from "../../store/auth";
 import { SlCalender } from "react-icons/sl";
 import { IoTimeOutline } from "react-icons/io5";

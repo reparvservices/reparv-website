@@ -4,19 +4,13 @@ import Link from "next/link";
 import NavLink from "../components/NavLinkNext.jsx";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
-import reparvLogo from "../assets/reparvLogo.svg";
-import footerLogo from "../assets/footerLogo.svg";
 import { IoMdMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../store/auth";
-import UserIcon from "../assets/user/UserIcon.svg";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { PiMapPinAreaBold } from "react-icons/pi";
-import ButtonWrap from "../assets/home/ButtonBack.svg";
 import { TbArrowNarrowRightDashed } from "react-icons/tb";
 import { FaChevronRight } from "react-icons/fa6";
-import playStore from "../assets/playStore.png";
-import appQR from "../assets/appQR.jpeg";
 import { FaAppStoreIos } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { FaArrowTrendUp } from "react-icons/fa6";
@@ -78,7 +72,7 @@ function Navbar() {
                 >
                   <Link href="/">
                     <img
-                      src={footerLogo}
+                      src="/assets/reparvLogo.svg"
                       alt="reparv logo"
                       className="w-[120px]"
                     />
@@ -151,7 +145,7 @@ function Navbar() {
                         }
                         className="flex gap-2 p-1 rounded-lg border cursor-pointer hover:scale-[1.02] transition"
                       >
-                        <img src={playStore} alt="Play Store" className="h-8" />
+                        <img src="/public/assets/playStore.png" alt="Play Store" className="h-8" />
                         <div className="flex flex-col justify-center pr-1">
                           <span className="text-[8px] text-gray-600">
                             Get it on
@@ -177,7 +171,7 @@ function Navbar() {
 
                     <div className="w-[130px] h-[130px] rounded-xl">
                       <img
-                        src={appQR}
+                        src="/assets/appQR.jpeg"
                         alt="App QR Code"
                         className="w-full object-cover"
                       />
@@ -342,7 +336,7 @@ function Navbar() {
         <div className="flex items-center justify-end">
           <Link href="/">
             <img
-              src={reparvLogo}
+              src="/assets/reparvLogo.svg"
               alt="reparv logo"
               className="w-[90px] md:w-[120px] lg:w-[135px]"
             />
@@ -407,7 +401,7 @@ function Navbar() {
           </NavLink>
 
           <div className="relative min-w-45 flex items-center justify-center p-4">
-            <img src={ButtonWrap} alt="Button" className="absolute w-full" />
+            <img src="/assets/home/ButtonBack.svg" alt="Button" className="absolute w-full" />
             <div
               onClick={() => {
                 window.open(

@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react";
 import { IoMdMenu } from "react-icons/io";
 import { MdDashboard } from "react-icons/md";
 import { MdLogin, MdLogout } from "react-icons/md";
-import UserIcon from "../assets/user/UserIcon.svg";
 import { useAuth } from "../store/auth";
 import axios from "axios";
 function UserDropdown() {
@@ -61,7 +60,7 @@ function UserDropdown() {
         className="w-[95px] h-[45px] flex items-center justify-center gap-2 border border-[#5E23DC] rounded-full cursor-pointer active:scale-95"
       >
         <img
-          src={UserIcon}
+          src="/assets/user/UserIcon.svg"
           alt="User Icon"
           className="w-7 h-7 pointer-events-none"
         />

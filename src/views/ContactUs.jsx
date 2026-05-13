@@ -2,14 +2,7 @@
 
 import React, {useState, useEffect} from "react";
 import { useAuth } from "../store/auth";
-import ContactBack from "../assets/contactUs/ContactUsBackImage.webp";
-import ContactUsLeftImage from "../assets/contactUs/ContactUsLeftImage.svg";
 import SEO from "../components/SEO";
-import Icon1 from "../assets/contactUs/Icon1.svg";
-import Icon2 from "../assets/contactUs/Icon2.svg";
-import Icon3 from "../assets/contactUs/Icon3.svg";
-import Icon4 from "../assets/contactUs/Icon4.svg";
-import Icon5 from "../assets/contactUs/Icon5.svg";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlinePhoneInTalk } from "react-icons/md";
 import { IoMail } from "react-icons/io5";
@@ -134,25 +127,25 @@ const ContactUs = () => {
       title: "Location",
       activity: "Visit at Us",
       desc: "Nagpur, Chandrapur",
-      icon: <img src={Icon1} alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img src="/assets/contactUs/Icon1.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
     {
       title: "24*7 Service",
       activity: "Call Us on",
       desc: "+91 801 0881 965",
-      icon: <img src={Icon2} alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img src="/assets/contactUs/Icon2.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
     {
       title: "Drop a line",
       activity: "Email Us on",
       desc: "contact@reparv.in",
-      icon: <img src={Icon3} alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img src="/assets/contactUs/Icon3.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
     {
       title: "Office Hours",
       activity: "Opening Time",
       desc: "Mon-Fri:  9AM-6PM",
-      icon: <img src={Icon4} alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img src="/assets/contactUs/Icon4.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
   ];
 
@@ -185,7 +178,7 @@ const ContactUs = () => {
       <div className="relative w-full mx-auto max-w-[1440px] flex flex-col items-center justify-center">
         <div className="w-full relative lg:mb-5">
           <motion.img
-            src={ContactBack}
+            src="/assets/contactUs/ContactUsBackImage.webp"
             alt="Contact Reparv"
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -263,7 +256,7 @@ const ContactUs = () => {
               >
                 <div className="flex items-center gap-3 mb-4 md:mb-6">
                   <img
-                    src={Icon5}
+                    src="/assets/contactUs/Icon5.svg"
                     alt="Icon"
                     className="w-5 md:w-8 object-cover"
                   />
@@ -304,7 +297,7 @@ const ContactUs = () => {
 
               {/* PERSON IMAGE */}
               <img
-                src={ContactUsLeftImage}
+                src="/assets/contactUs/ContactUsLeftImage.webp"
                 alt="Customer Support Reparv"
                 className="absolute pointer-events-none bottom-[-24px] lg:bottom-[-40px] right-0 sm:right-[20%] lg:right-1/2 w-[70%] sm:w-[60%] md:w-[60%] lg:w-[450px]"
               />

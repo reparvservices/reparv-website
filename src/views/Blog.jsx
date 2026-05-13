@@ -4,9 +4,6 @@ import Link from "next/link";
 import React, { useState, useEffect, useMemo } from "react";
 import { IoSearch } from "react-icons/io5";
 import { useAuth } from "../store/auth";
-import BlogBack from "../assets/blog/BlogBack.svg";
-import BlogImage from "../assets/blog/BlogImage.webp";
-import { IoMdTrendingUp } from "react-icons/io";
 import BlogCard from "../components/blog/BlogCard";
 import NewsLetterBanner from "../components/blog/NewsLetterBanner";
 import { getImageURI } from "../utils/helper";
@@ -123,7 +120,7 @@ export default function NewBlogs() {
         <section className="relative w-full h-[250px] sm:h-[300px] md:h-[450px] lg:h-[500px] overflow-hidden">
           {/* Background Image */}
           <img
-            src={BlogBack}
+            src="/assets/blog/BlogBack.webp"
             alt="Blog Hero"
             className="absolute inset-0 w-full h-full object-cover rounded-bl-4xl rounded-br-4xl sm:rounded-bl-none sm:rounded-br-none"
           />
@@ -208,7 +205,7 @@ export default function NewBlogs() {
                   {/* LEFT BIG CARD */}
                   <article className="lg:col-span-2 bg-white rounded-2xl shadow hover:shadow-xl overflow-hidden">
                     <img
-                      src={getImageURI(blogs[0]?.image) || BlogImage}
+                      src={getImageURI(blogs[0]?.image) || "/assets/blog/BlogImage.webp"}
                       alt={blogs[0]?.tittle}
                       loading="lazy"
                       className="w-full max-h-[500px] object-cover"
@@ -249,7 +246,7 @@ export default function NewBlogs() {
                       >
                         <div className="w-full max-h-[230px] overflow-hidden bg-gray-50">
                           <img
-                            src={getImageURI(b?.image) || BlogImage}
+                            src={getImageURI(b?.image) || "/assets/blog/BlogImage.webp"}
                             alt={b?.tittle || "Blog Image"}
                             loading="lazy"
                             className="w-full h-full object-cover"

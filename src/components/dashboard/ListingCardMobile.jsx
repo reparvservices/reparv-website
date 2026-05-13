@@ -10,8 +10,8 @@ import { HiOutlineMail } from "react-icons/hi";
 import { BiArea } from "react-icons/bi";
 import { RiBuildingLine } from "react-icons/ri";
 import { useAuth } from "../../store/auth";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { getImageURI } from "../../utils/helper";
+
 export default function ListingCardMobile({ property, delProperty }) {
   const { URI } = useAuth();
   const ImageUri = import.meta.env.VITE_S3_IMAGE_URL;

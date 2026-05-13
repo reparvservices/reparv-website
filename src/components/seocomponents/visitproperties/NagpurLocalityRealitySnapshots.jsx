@@ -1,9 +1,3 @@
-// IMAGES
-import snapshotImage from "../../../assets/seopageassets/visitproperties/property-image.jpg";
-
-// ICONS
-import userIcon from "../../../assets/seopageassets/visitproperties/profile.svg";
-import clockIcon from "../../../assets/seopageassets/visitproperties/clock.svg";
 
 export default function NagpurLocalityRealitySnapshots() {
   const snapshots = Array.from({ length: 6 }).map(() => ({
@@ -12,7 +6,7 @@ export default function NagpurLocalityRealitySnapshots() {
       "Established area with excellent connectivity but weekend traffic near commercial zones can add 20+ minutes to commutes.",
     idealFor: "Working professionals",
     bestTime: "Saturday 8–10 AM",
-    image: snapshotImage,
+    image: "/assets/seopageassets/visitproperties/dharampeth.jpg",
   }));
 
   return (
@@ -56,14 +50,14 @@ export default function NagpurLocalityRealitySnapshots() {
                 {/* META */}
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2 text-[#4B3CC4]">
-                    <img src={userIcon} alt="" className="w-4 h-4" />
+                    <img src="/assets/seopageassets/visitproperties/profile.svg" alt="" className="w-4 h-4" />
                     <span>
                       <strong>Ideal for:</strong> {item.idealFor}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2 text-[#4B3CC4]">
-                    <img src={clockIcon} alt="" className="w-4 h-4" />
+                    <img src="/assets/seopageassets/visitproperties/clock.svg" alt="" className="w-4 h-4" />
                     <span>
                       <strong>Best visit:</strong> {item.bestTime}
                     </span>

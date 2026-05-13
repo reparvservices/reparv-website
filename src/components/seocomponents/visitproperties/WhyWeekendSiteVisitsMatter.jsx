@@ -1,9 +1,3 @@
-import trafficImg from "../../../assets/seopageassets/visitproperties/visit1.svg";
-import waterImg from "../../../assets/seopageassets/visitproperties/visit2.svg";
-import neighborhoodImg from "../../../assets/seopageassets/visitproperties/visit3.svg";
-import commuteImg from "../../../assets/seopageassets/visitproperties/visit4.svg";
-
-import checkIcon from "../../../assets/seopageassets/visitproperties/check.svg";
 
 export default function WhyWeekendSiteVisitsMatter() {
   const checks = [
@@ -13,7 +7,7 @@ export default function WhyWeekendSiteVisitsMatter() {
       description:
         "That 15-minute weekday commute? It becomes 45 minutes on Saturday mornings when everyone's out shopping, visiting relatives, or running errands. Experience the actual travel time before you commit.",
       note: "Weekend traffic patterns are 3x more congested in key Nagpur corridors.",
-      image: trafficImg,
+      image: "/assets/seopageassets/visitproperties/visit1.svg",
     },
     {
       badge: "Reality Check #2",
@@ -21,7 +15,7 @@ export default function WhyWeekendSiteVisitsMatter() {
       description:
         "Water pressure drops on weekends when all residents are home. Neighborhood noise peaks when families are around. Visit during actual living hours to understand daily comfort levels.",
       note: "Check water supply during peak usage hours (7–9 AM, 6–8 PM).",
-      image: waterImg,
+      image: "/assets/seopageassets/visitproperties/visit2.svg",
     },
     {
       badge: "Reality Check #3",
@@ -29,7 +23,7 @@ export default function WhyWeekendSiteVisitsMatter() {
       description:
         "See the real community. Are shops open? Are parks crowded? Is there parking available? Weekend visits show you the actual neighborhood energy and social fabric you'll be living in.",
       note: "Observe community vibe, amenities accessibility, and local culture.",
-      image: neighborhoodImg,
+      image: "/assets/seopageassets/visitproperties/visit3.svg",
     },
     {
       badge: "Reality Check #4",
@@ -37,7 +31,7 @@ export default function WhyWeekendSiteVisitsMatter() {
       description:
         "Experience the evening return journey. How does it feel after a tiring day? Is public transport available? Are roads well-lit? These factors determine your quality of life.",
       note: "Test evening commute scenarios and safety perception.",
-      image: commuteImg,
+      image: "/assets/seopageassets/visitproperties/visit4.svg",
     },
   ];
 
@@ -95,7 +89,7 @@ export default function WhyWeekendSiteVisitsMatter() {
                   {/* CHECK NOTE */}
                   <div className="flex items-start gap-3 bg-[#F6F2FF] rounded-lg px-4 py-3">
                     <div className="w-6 h-6 rounded-full  flex items-center justify-center mt-0.5">
-                      <img src={checkIcon} alt="" className="w-5 h-5" />
+                      <img src="/assets/seopageassets/visitproperties/check.svg" alt="" className="w-5 h-5" />
                     </div>
                     <p className="text-xs sm:text-sm font-medium text-[#3F2D62]">
                       {item.note}

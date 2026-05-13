@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import UserIcon from "../../assets/user/UserIcon.svg";
 import { useAuth } from "../../store/auth";
 import { FaChevronDown } from "react-icons/fa";
 import { getImageURI } from "../../utils/helper";
@@ -185,7 +184,7 @@ export default function EditProfile() {
         className="w-full flex gap-10 pb-5 lg:pb-3 lg:border-b border-b-[#D9D9D9] mb-6"
       >
         <div className="w-15 h-15 rounded-full flex lg:hidden items-center justify-center">
-          <img src={getImageURI(user?.userimage) || UserIcon} alt="user" className="w-full h-full" />
+          <img src={getImageURI(user?.userimage) || "/assets/user/UserIcon.svg"} alt="user" className="w-full h-full" />
         </div>
 
         <div>
@@ -198,7 +197,7 @@ export default function EditProfile() {
 
       <div className="flex gap-8 items-start">
         <div className="hidden lg:flex w-20 h-20 rounded-full items-center justify-center">
-          <img src={getImageURI(user?.userimage) || UserIcon} alt="user" className="w-full h-full" />
+          <img src={getImageURI(user?.userimage) || "/assets/user/UserIcon.svg"} alt="user" className="w-full h-full" />
         </div>
 
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6">

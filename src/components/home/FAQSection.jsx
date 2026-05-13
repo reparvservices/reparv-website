@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import FAQLeftImage from "../../assets/home/FAQLeftImage.svg";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { FiPlusCircle, FiMinusCircle } from "react-icons/fi";
 import { useEffect } from "react";
@@ -72,7 +71,7 @@ function FAQSection() {
         {/* LEFT SIDE ILLUSTRATION */}
         <div className="hidden md:flex items-center ">
           <img
-            src={FAQLeftImage}
+            src="/assets/home/FAQLeftImage.svg"
             alt="FAQ Image"
             className="w-full object-cover"
           />

@@ -1,46 +1,36 @@
 import { useState } from "react";
 
-// ICONS
-import trafficIcon from "../../../assets/seopageassets/visitproperties/traffic.svg";
-import waterIcon from "../../../assets/seopageassets/visitproperties/water.svg";
-import noiseIcon from "../../../assets/seopageassets/visitproperties/noise.svg";
-import dailyIcon from "../../../assets/seopageassets/visitproperties/daily.svg";
-import safetyIcon from "../../../assets/seopageassets/visitproperties/safety.svg";
-
-// ILLUSTRATION
-import localityIllustration from "../../../assets/seopageassets/visitproperties/framwork-image.jpg";
-
 export default function LocalityRealityCheckFramework() {
   const [openIndex, setOpenIndex] = useState(0);
 
   const items = [
     {
       title: "Traffic & Connectivity",
-      icon: trafficIcon,
+      icon: "/assets/seopageassets/visitproperties/traffic.svg",
       content:
         "We analyze real-world traffic congestion, peak-hour delays, public transport access, and last-mile connectivity during weekends.",
     },
     {
       title: "Water & Utilities",
-      icon: waterIcon,
+      icon: "/assets/seopageassets/visitproperties/water.svg",
       content:
         "Weekend water pressure, electricity reliability, power backup availability, and drainage conditions are carefully checked.",
     },
     {
       title: "Noise & Pollution",
-      icon: noiseIcon,
+      icon: "/assets/seopageassets/visitproperties/noise.svg",
       content:
         "Noise levels, air quality, nearby construction, traffic pollution, and disturbance sources are evaluated during actual living hours.",
     },
     {
       title: "Daily Convenience",
-      icon: dailyIcon,
+      icon: "/assets/seopageassets/visitproperties/daily.svg",
       content:
         "Access to groceries, hospitals, schools, public services, and daily essentials within walking or short driving distance.",
     },
     {
       title: "Safety & Security",
-      icon: safetyIcon,
+      icon: "/assets/seopageassets/visitproperties/safety.svg",
       content:
         "Street lighting, police presence, CCTV coverage, neighborhood safety perception, and emergency access are reviewed.",
     },
@@ -111,7 +101,7 @@ export default function LocalityRealityCheckFramework() {
           {/* RIGHT – ILLUSTRATION */}
           <div className="flex justify-center lg:justify-end">
             <img
-              src={localityIllustration}
+              src="/assets/seopageassets/visitproperties/locality-illustration.svg"
               alt="Locality Reality Check Illustration"
               className="w-full max-w-md lg:max-w-lg"
             />

@@ -1,8 +1,4 @@
 import React from "react";
-import HomeGetPropertyInThreeSteps from "../../assets/home/HomeGetPropertyInThreeSteps.png";
-import Step1 from "../../assets/home/Step1.svg";
-import Step2 from "../../assets/home/Step2.svg";
-import Step3 from "../../assets/home/Step3.svg";
 
 const StepsSection = () => {
   return (
@@ -16,26 +12,26 @@ const StepsSection = () => {
         <div className="w-full flex-1 h-[3px] rounded-tl-md rounded-bl-md bg-gradient-to-r from-[#5E23DC] to-[#FAF8FF] " />
       </div>
       <img
-        src={HomeGetPropertyInThreeSteps}
+        src="/assets/home/HomeGetPropertyInThreeSteps.png"
         alt="Get Property In Three Steps"
         loading="lazy"
         className="hidden sm:block w-full max-w-[1380px] hover:scale-102 duration-500 transition-all"
       />
       <div className="flex sm:hidden flex-col gap-6">
         <img
-          src={Step1}
+          src="/assets/home/Step1.svg"
           alt="Get Property In Three Steps"
           loading="lazy"
           className="w-[220px] object-cover hover:scale-102 duration-500 transition-all"
         />
         <img
-          src={Step2}
+          src="/assets/home/Step2.svg"  
           alt="Get Property In Three Steps"
           loading="lazy"
           className="w-[200px] object-cover hover:scale-102 duration-500 transition-all"
         />
         <img
-          src={Step3}
+          src="/assets/home/Step3.svg"
           alt="Get Property In Three Steps"
           loading="lazy"
           className="w-[220px] object-cover hover:scale-102 duration-500 transition-all"

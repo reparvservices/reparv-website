@@ -3,13 +3,11 @@
 import { useRouter } from "next/navigation";
 import React, {useState, useEffect} from "react";
 import { useAuth } from "../store/auth";
-import BackImage from "../assets/seopageassets/emicalculator/Back.svg";
 import { MdDone } from "react-icons/md";
 import EMICalculator from "../components/seocomponents/emicomponents/EMICalculator";
 import LatestArtical from "../components/seocomponents/common/LatestArtical";
 import HowToUseEmiCalculator from "../components/seocomponents/emicomponents/HowToUseEmiCalculator";
 import SEO from "../components/SEO";
-import LoanEMIImage from "../assets/LoanEMIImage.svg";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 const EmiCalculator = () => {
@@ -122,7 +120,7 @@ const EmiCalculator = () => {
             {/* RIGHT IMAGE */}
             <div className="hidden lg:flex justify-center lg:justify-end">
               <img
-                src={BackImage}
+                src="/assets/seopageassets/emicalculator/Back.svg"
                 alt="EMI Calculator Illustration"
                 className="relative w-full object-cover"
               />
@@ -133,7 +131,7 @@ const EmiCalculator = () => {
             <EMICalculator />
             <div className="hidden md:block pb-15">
               <img
-                src={LoanEMIImage}
+                src="/assets/seopageassets/emicalculator/LoanEMIImage.svg"
                 alt="Image"
                 className="w-full object-cover"
               />

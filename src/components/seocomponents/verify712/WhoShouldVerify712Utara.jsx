@@ -1,53 +1,40 @@
-import buyerIcon from "../../../assets/seopageassets/verify712/land-buyer.svg";
-import farmerIcon from "../../../assets/seopageassets/verify712/farmers.svg";
-import investorIcon from "../../../assets/seopageassets/verify712/investors.svg";
-import builderIcon from "../../../assets/seopageassets/verify712/builders.svg";
-import loanIcon from "../../../assets/seopageassets/verify712/loan-application.svg";
-import legalIcon from "../../../assets/seopageassets/verify712/legal-cunsultants.svg";
-
-import extractIcon from "../../../assets/seopageassets/verify712/file.svg";
-import mutationIcon from "../../../assets/seopageassets/verify712/file.svg";
-import saleIcon from "../../../assets/seopageassets/verify712/sale-deed.svg";
-import naIcon from "../../../assets/seopageassets/verify712/na-order.svg";
-import propertyIcon from "../../../assets/seopageassets/verify712/property-card.svg";
-import authorityIcon from "../../../assets/seopageassets/verify712/authority-approval.svg";
 
 export default function WhoShouldVerify712Utara() {
   const stakeholders = [
     {
       title: "Land Buyers",
       desc: "Verify ownership, encumbrances, and legal status before purchasing agricultural or non-agricultural land",
-      icon: buyerIcon,
+      icon: "/assets/seopageassets/verify712/land-buyer.svg",
       bg: "bg-[#F3EDFF]",
     },
     {
       title: "Farmers",
       desc: "Check cultivation rights, land records, and eligibility for government schemes and subsidies",
-      icon: farmerIcon,
+      icon: "/assets/seopageassets/verify712/farmers.svg",
       bg: "bg-[#E8FFE9]",
     },
     {
       title: "Investors",
       desc: "Validate land authenticity, ownership history, and potential legal issues before investment",
-      icon: investorIcon,
+      icon: "/assets/seopageassets/verify712/investors.svg",
       bg: "bg-[#EAF4FF]",
     },
     {
       title: "Builders",
       desc: "Confirm land ownership and legal clearances before starting construction projects",
-      icon: builderIcon,
+      icon: "/assets/seopageassets/verify712/builders.svg",
       bg: "bg-[#FFF1E6]",
     },
     {
       title: "Loan Applicants",
       desc: "Banks require verified 7/12 extract for processing agricultural and land loans",
-      icon: loanIcon,
+      icon: "/assets/seopageassets/verify712/loan-application.svg",
       bg: "bg-[#FFF6DD]",
     },
     {
       title: "Legal Consultants",
       desc: "Perform due diligence and verify land records for property transaction advisory",
-      icon: legalIcon,
+      icon: "/assets/seopageassets/verify712/legal-cunsultants.svg",
       bg: "bg-[#F4EDFF]",
     },
   ];
@@ -56,32 +43,32 @@ export default function WhoShouldVerify712Utara() {
     {
       title: "8A Extract",
       subtitle: "Land ownership record",
-      icon: extractIcon,
+      icon: "/assets/seopageassets/verify712/file.svg",
     },
     {
       title: "Mutation Register",
       subtitle: "Ownership transfer record",
-      icon: mutationIcon,
+      icon: "/assets/seopageassets/verify712/file.svg",
     },
     {
       title: "Sale Deed",
       subtitle: "Legal sale document",
-      icon: saleIcon,
+      icon: "/assets/seopageassets/verify712/sale-deed.svg",
     },
     {
       title: "NA Order",
       subtitle: "Non-agricultural conversion",
-      icon: naIcon,
+      icon: "/assets/seopageassets/verify712/na-order.svg",
     },
     {
       title: "Property Card",
       subtitle: "Urban property record",
-      icon: propertyIcon,
+      icon: "/assets/seopageassets/verify712/property-card.svg",
     },
     {
       title: "Authority Approvals",
       subtitle: "Local body clearances",
-      icon: authorityIcon,
+      icon: "/assets/seopageassets/verify712/authority-approval.svg",
     },
   ];
 

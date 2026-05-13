@@ -1,9 +1,3 @@
-// TIMELINE ICONS
-import timelineIcon1 from "../../../assets/seopageassets/visitproperties/timeline1.svg";
-import timelineIcon2 from "../../../assets/seopageassets/visitproperties/timeline2.svg";
-import timelineIcon3 from "../../../assets/seopageassets/visitproperties/timeline3.svg";
-import timelineIcon4 from "../../../assets/seopageassets/visitproperties/timeline4.svg";
-import timelineIcon5 from "../../../assets/seopageassets/visitproperties/timeline5.svg";
 
 export default function WeekendVisitZigZagTimeline() {
   const steps = [
@@ -13,7 +7,7 @@ export default function WeekendVisitZigZagTimeline() {
       description:
         "Share your shortlisted properties with us. Our local experts review location, amenities, and builder reputation. We create a custom weekend visit plan based on your priorities.",
       timeline: "24 hours before visit",
-      icon: timelineIcon1,
+      icon: "/assets/seopageassets/visitproperties/timeline1.svg",
     },
     {
       id: 2,
@@ -21,7 +15,7 @@ export default function WeekendVisitZigZagTimeline() {
       description:
         "We start early (8–10 AM) to test morning commute patterns. Experience real traffic to key destinations like offices, schools, or markets.",
       timeline: "Saturday/Sunday 8–10 AM",
-      icon: timelineIcon2,
+      icon: "/assets/seopageassets/visitproperties/timeline2.svg",
     },
     {
       id: 3,
@@ -29,7 +23,7 @@ export default function WeekendVisitZigZagTimeline() {
       description:
         "Detailed walkthrough of the property and complex. Check water pressure, noise levels, natural light, ventilation.",
       timeline: "10 AM – 1 PM",
-      icon: timelineIcon3,
+      icon: "/assets/seopageassets/visitproperties/timeline3.svg",
     },
     {
       id: 4,
@@ -37,7 +31,7 @@ export default function WeekendVisitZigZagTimeline() {
       description:
         "Walk the neighborhood to check proximity to shops, medical facilities, parks and assess overall livability.",
       timeline: "Afternoon",
-      icon: timelineIcon4,
+      icon: "/assets/seopageassets/visitproperties/timeline4.svg",
     },
     {
       id: 5,
@@ -45,7 +39,7 @@ export default function WeekendVisitZigZagTimeline() {
       description:
         "Test the return journey during evening hours and receive a detailed report within 24 hours.",
       timeline: "24 hours after visit",
-      icon: timelineIcon5,
+      icon: "/assets/seopageassets/visitproperties/timeline5.svg",
     },
   ];
 

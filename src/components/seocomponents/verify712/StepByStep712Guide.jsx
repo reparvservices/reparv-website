@@ -1,7 +1,3 @@
-import step1 from "../../../assets/seopageassets/verify712/step1.svg";
-import step2 from "../../../assets/seopageassets/verify712/step2.svg";
-import step3 from "../../../assets/seopageassets/verify712/step3.svg";
-import step4 from "../../../assets/seopageassets/verify712/step4.svg";
 
 // 👉 replace this path with your actual right icon
 import rightIcon from "../../../assets/seopageassets/verify712/right-icon.svg";
@@ -15,7 +11,7 @@ export default function StepByStep712Guide() {
       noteType: "note",
       noteText:
         "Make sure you select the correct administrative division to access accurate records.",
-      image: step1,
+      image: "/assets/seopageassets/verify712/step1.svg",
     },
     {
       title: "Choose Village",
@@ -24,7 +20,7 @@ export default function StepByStep712Guide() {
       noteType: "helpful",
       noteText:
         "If unsure about the village name, check your property documents or contact local authorities.",
-      image: step2,
+      image: "/assets/seopageassets/verify712/step2.svg",
     },
     {
       title: "Enter Search Details",
@@ -33,7 +29,7 @@ export default function StepByStep712Guide() {
       noteType: "important",
       noteText:
         "Enter exact details as per your property documents to get accurate results.",
-      image: step3,
+      image: "/assets/seopageassets/verify712/step3.svg",
     },
     {
       title: "View & Verify Details",
@@ -42,7 +38,7 @@ export default function StepByStep712Guide() {
       noteType: "critical",
       noteText:
         "Look for discrepancies in ownership, pending dues, or legal notices mentioned in the document.",
-      image: step4,
+      image: "/assets/seopageassets/verify712/step4.svg",
     },
   ];
 

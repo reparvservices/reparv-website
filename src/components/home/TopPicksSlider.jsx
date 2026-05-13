@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../store/auth";
 import { FiChevronRight } from "react-icons/fi";
 import FormatPrice from "../FormatPrice";
-import reparvIcon from "../../assets/reparvIcon.png";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
-import buildingImage from "../../assets/home/buildingImage.svg";
 import { getImageURI } from "../../utils/helper";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -110,7 +107,7 @@ const TopPicksSlider = () => {
               <div className="flex gap-4 lg:flex-col">
                 <div className="w-[120px] overflow-hidden">
                   <img
-                    src={buildingImage}
+                    src={"/assets/home/buildingimage.svg"}
                     alt="building"
                     loading="lazy"
                     className="w-full object-cover"
@@ -125,7 +122,7 @@ const TopPicksSlider = () => {
               <div className="flex items-center gap-4 mt-8">
                 <div className="w-20 h-20 lg:w-16 lg:h-16 bg-white p-[4px] rounded-xl flex items-center justify-center text-gray-400 font-bold shadow overflow-hidden">
                   <img
-                    src={getImageURI(item?.businessLogo) || reparvIcon}
+                    src={getImageURI(item?.businessLogo) || "/assets/reparvIcon.png"}
                     alt="Logo"
                     loading="lazy"
                     className="w-full h-full object-cover rounded-lg"
@@ -191,7 +188,7 @@ const TopPicksSlider = () => {
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentIndex}
-                  src={item?.topPicksBanner || propertyPicture}
+                  src={item?.topPicksBanner || "/assets/home/PropertyPicture.png"}
                   alt={item.propertyName}
                   variants={slideVariants}
                   initial="initial"

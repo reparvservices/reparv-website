@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
-import { useAuth } from "../../store/auth";
-import reparvLogo from "../../assets/reparvLogo.svg";
+import { useAuth } from "../../store/auth";;
 import { addVisitor } from "../../utils/analytics";
 
 export default function WhatsappEnquiryPopup({ property }) {
@@ -114,7 +113,7 @@ export default function WhatsappEnquiryPopup({ property }) {
       <div className="w-full flex flex-col gap-3 justify-center p-6 relative">
         {/* Close Button */}
         <div className={`w-full flex items-center justify-between mb-2`}>
-          <img src={reparvLogo} alt={"reparv logo"} className={`h-10`} />
+          <img src="/assets/property/reparvLogo.svg" alt={"reparv logo"} className={`h-10`} />
           <RxCross2
             onClick={() => {
               setShowWhatsappEnquiryPopup(false);

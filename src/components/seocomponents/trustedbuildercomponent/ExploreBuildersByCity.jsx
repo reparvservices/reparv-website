@@ -1,14 +1,10 @@
-import mumbaiIcon from "../../../assets/seopageassets/turstedbuilder/mumbai-icon.svg";
-import delhiIcon from "../../../assets/seopageassets/turstedbuilder/delhi-icon.svg";
-import bangaloreIcon from "../../../assets/seopageassets/turstedbuilder/bangalore-icon.svg";
-import puneIcon from "../../../assets/seopageassets/turstedbuilder/pune-icon.svg";
 
 export default function ExploreBuildersByCity() {
   const cities = [
-    { name: "Mumbai", icon: mumbaiIcon },
-    { name: "Delhi", icon: delhiIcon },
-    { name: "Bangalore", icon: bangaloreIcon },
-    { name: "Pune", icon: puneIcon },
+    { name: "Mumbai", icon: "/assets/seopageassets/turstedbuilder/mumbai-icon.svg" },
+    { name: "Delhi", icon: "/assets/seopageassets/turstedbuilder/delhi-icon.svg" },
+    { name: "Bangalore", icon: "/assets/seopageassets/turstedbuilder/bangalore-icon.svg" },
+    { name: "Pune", icon: "/assets/seopageassets/turstedbuilder/pune-icon.svg" },
   ];
 
   return (

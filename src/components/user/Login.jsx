@@ -3,7 +3,6 @@ import { IoClose } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 import { FaWhatsapp } from "react-icons/fa";
 import { useAuth } from "../../store/auth";
-import Loader from "../Loader";
 import GoogleLoginButton from "../../utils/GoogleLoginButton";
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL;

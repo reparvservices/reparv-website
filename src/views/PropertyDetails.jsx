@@ -23,7 +23,6 @@ import PropertyTab from "../components/property/PropertyTab";
 import PropertyHighlights from "../components/property/PropertyHighlights";
 import FilterNavbar from "../components/property/FilterNavbar";
 import { getImageURI } from "../utils/helper";
-import propertyPicture from "../assets/property/propertyPicture.svg";
 import AdvertisementCard from "../components/AdvertisementCard";
 // Lazy-loaded components
 const PropertyImageGallery = lazy(
@@ -72,9 +71,9 @@ function PropertyDetails() {
         return getImageURI(images[0]); // should return full URL
       }
 
-      return propertyPicture;
+      return "/assets/property/propertyPicture.svg";
     } catch (error) {
-      return propertyPicture;
+      return "/assets/property/propertyPicture.svg";
     }
   }, [propertyInfo?.frontView]);
 

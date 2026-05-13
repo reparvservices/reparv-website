@@ -1,8 +1,3 @@
-// Import icons (replace with your actual SVG paths)
-import disputeIcon from "../../../assets/seopageassets/verify712/risk-dispute.svg";
-import govtIcon from "../../../assets/seopageassets/verify712/risk-government.svg";
-import loanIcon from "../../../assets/seopageassets/verify712/risk-loan.svg";
-import naIcon from "../../../assets/seopageassets/verify712/risk-na.svg";
 
 export default function RiskWithout712Verification() {
   const risks = [
@@ -10,25 +5,25 @@ export default function RiskWithout712Verification() {
       title: "Ownership Disputes",
       description:
         "Multiple claimants may emerge after purchase. Without verified 7/12, you cannot prove clear title. Legal battles can last years and cost lakhs in fees while your investment remains stuck.",
-      icon: disputeIcon,
+      icon: "/assets/seopageassets/verify712/risk-dispute.svg",
     },
     {
       title: "Government Acquisition",
       description:
         "Land marked for government projects, forest land, or public utilities can be acquired. 7/12 reveals such restrictions. You'll lose your investment with minimal compensation if acquired.",
-      icon: govtIcon,
+      icon: "/assets/seopageassets/verify712/risk-government.svg",
     },
     {
       title: "Loan Rejection",
       description:
         "Banks and NBFCs require verified 7/12 for any land-related loan. Without proper documentation, you cannot get financing for construction or agriculture. Your plans will remain on paper.",
-      icon: loanIcon,
+      icon: "/assets/seopageassets/verify712/risk-loan.svg",
     },
     {
       title: "NA Conversion Block",
       description:
         "Cannot convert agricultural land to non-agricultural use without clear 7/12. Your construction plans, resale, or commercial development will be legally blocked indefinitely.",
-      icon: naIcon,
+      icon: "/assets/seopageassets/verify712/risk-na.svg",
     },
   ];
 

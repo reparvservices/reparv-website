@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -8,23 +7,15 @@ import { IoSearch } from "react-icons/io5";
 import { IoMdEye } from "react-icons/io";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { BiLike } from "react-icons/bi";
-//import HomePropertySection from "../components/homeOld/HomePropertySection";
 import { useAuth } from "../store/auth";
-import { FaFacebook, FaLinkedin } from "react-icons/fa6";
 import SEO from "../components/SEO";
 import SocialShare from "../components/SocialShare";
-import { FaArrowLeft } from "react-icons/fa6";
-import { SlCalender } from "react-icons/sl";
-import { IoTimeOutline } from "react-icons/io5";
-import BlogSection from "../components/blog/BlogSection";
 import BlogFeatureProperties from "../components/blog/BlogFeaturedProperties";
 import BlogFeedback from "../components/blog/BlogFeedback";
-import FaqSection from "../components/blog/FaqSection";
 import DreamHomeCTA from "../components/blog/DreamHomeCTA";
 import { getImageURI } from "../utils/helper";
 import { addBlogVisitor } from "../utils/analytics";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
-import BlogImage from "../assets/blog/BlogImage.webp";
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 
@@ -145,7 +136,7 @@ function BlogDetails() {
               <img
                 src={
                   getImageURI(blog?.image) ||
-                  BlogImage
+                  "/assets/blog/BlogImage.webp"
                 }
                 alt={blog?.tittle}
                 loading="lazy"

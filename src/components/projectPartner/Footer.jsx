@@ -1,8 +1,4 @@
 import { useState } from "react";
-import bannerImg from "../../assets/projectPartner/footer-banner.png";
-import appStoreImg from "../../assets/projectPartner/app-store.png";
-import playStoreImg from "../../assets/projectPartner/play-store.png";
-import qrImg from "../../assets/projectPartner/qrcode.png";
 
 const tabs = [
   {
@@ -170,7 +166,7 @@ export default function Footer() {
       {/* MOBILE: Banner First + Full Width */}
       <div className="lg:hidden px-4 py-8 border-t border-[#333333]">
         <img
-          src={bannerImg}
+          src="/assets/projectPartner/footer-banner.png"
           alt="Come home to Greatness"
           className="w-full rounded-md shadow-lg"
         />
@@ -199,14 +195,14 @@ export default function Footer() {
               Experience Housing App on Mobile
             </h4>
             <div className="flex gap-4">
-              <img src={appStoreImg} alt="App Store" className="h-10" />
-              <img src={playStoreImg} alt="Google Play" className="h-10" />
+              <img src="/assets/app-store.png" alt="App Store" className="h-10" />
+              <img src="/assets/google-play.png" alt="Google Play" className="h-10" />
             </div>
           </div>
           <div className="flex gap-5 items-start">
             <div className="w-16 h-16 bg-white p-1 rounded flex-shrink-0">
               <img
-                src={qrImg}
+                src="/assets/projectPartner/qrcode.png"
                 alt="QR Code"
                 className="w-full h-full object-contain"
               />
@@ -237,7 +233,7 @@ export default function Footer() {
             {/* Banner - ~30% width */}
             <div className="col-span-4">
               <img
-                src={bannerImg}
+                src="/assets/projectPartner/footer-banner.png"
                 alt="Come home to Greatness"
                 className="w-full rounded-md shadow-lg"
               />
@@ -314,9 +310,9 @@ export default function Footer() {
                     Experience Housing App on Mobile
                   </h4>
                   <div className="flex gap-4">
-                    <img src={appStoreImg} alt="App Store" className="h-10" />
+                    <img src="/assets/app-store.png" alt="App Store" className="h-10" />
                     <img
-                      src={playStoreImg}
+                      src="/assets/google-play.png"
                       alt="Google Play"
                       className="h-10"
                     />
@@ -325,7 +321,7 @@ export default function Footer() {
                 <div className="flex gap-5 items-start">
                   <div className="w-16 h-16 bg-white p-1 rounded flex-shrink-0">
                     <img
-                      src={qrImg}
+                      src="/assets/projectPartner/qrcode.png"
                       alt="QR Code"
                       className="w-full h-full object-contain"
                     />

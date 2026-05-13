@@ -1,4 +1,3 @@
-import bgImage from "../../../assets/seopageassets/verify712/rectangle-bg.svg";
 
 export default function VerifyBeforeYouBuyCTA({ onAction }) {
   return (
@@ -11,7 +10,7 @@ export default function VerifyBeforeYouBuyCTA({ onAction }) {
               135deg,
               rgba(49, 16, 133, 0.9),
               rgba(124, 58, 237, 0.9)
-            ), url(${bgImage})`,
+            ), url("/assets/seopageassets/verify712/rectangle-bg.svg")`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

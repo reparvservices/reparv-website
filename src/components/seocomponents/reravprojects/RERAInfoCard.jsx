@@ -1,6 +1,3 @@
-import whatIsRera from "../../../assets/seopageassets/reparvproperties/book-bold.svg";
-import whyRera from "../../../assets/seopageassets/reparvproperties/idea.svg";
-import reraProtection from "../../../assets/seopageassets/reparvproperties/protection.svg";
 
 export default function RERAInfoCards() {
   return (
@@ -8,19 +5,19 @@ export default function RERAInfoCards() {
       <div className="max-w-full mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           <InfoCard
-            icon={whatIsRera}
+            icon="/assets/seopageassets/reparvproperties/book-bold.svg"
             title="What is RERA?"
             description="The Real Estate (Regulation and Development) Act, 2016 is a comprehensive law that regulates the real estate sector in India. It aims to protect homebuyers and boost investments in the sector."
           />
 
           <InfoCard
-            icon={whyRera}
+            icon="/assets/seopageassets/reparvproperties/idea.svg"
             title="Why RERA Was Introduced?"
             description="RERA was introduced to bring transparency and accountability in the real estate sector, protect consumer interests, and establish a regulatory mechanism for timely project completion."
           />
 
           <InfoCard
-            icon={reraProtection}
+            icon="/assets/seopageassets/reparvproperties/protection.svg"
             title="How RERA Protects Buyers?"
             description="RERA mandates project registration, ensures transparent disclosure of project details, protects buyer payments in escrow accounts, and provides a fast-track dispute resolution mechanism."
           />

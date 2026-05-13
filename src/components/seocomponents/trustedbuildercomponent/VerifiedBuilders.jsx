@@ -1,10 +1,4 @@
-import locationIcon from "../../../assets/seopageassets/turstedbuilder/location.svg";
-import yearsIcon from "../../../assets/seopageassets/turstedbuilder/calender.svg";
-import projectsIcon from "../../../assets/seopageassets/turstedbuilder/building.svg";
-import verifiedIcon from "../../../assets/seopageassets/turstedbuilder/verified-badge.svg";
-import heartIcon from "../../../assets/seopageassets/turstedbuilder/heart.svg";
 
-import propertyImg from "../../../assets/seopageassets/turstedbuilder/property-image.jpg";
 
 export default function VerifiedBuilders() {
   const builders = Array.from({ length: 8 }).map((_, i) => ({
@@ -13,7 +7,7 @@ export default function VerifiedBuilders() {
     location: "Property Location (5KM)",
     years: "35+ Years",
     projects: "280 Projects",
-    image: propertyImg,
+    image: "/assets/seopageassets/turstedbuilder/property-image.jpg",
   }));
 
   return (
@@ -56,20 +50,20 @@ export default function VerifiedBuilders() {
 
                 {/* VERIFIED BADGE */}
                 <div className="absolute top-3 left-3 bg-[#7C3AED] text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
-                  <img src={verifiedIcon} className="w-3 h-3" />
+                  <img src="/assets/seopageassets/turstedbuilder/verified-badge.svg" className="w-3 h-3" />
                   Verified
                 </div>
 
                 {/* HEART */}
                 <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow">
-                  <img src={heartIcon} className="w-4 h-4" />
+                  <img src="/assets/seopageassets/turstedbuilder/heart.svg" className="w-4 h-4" />
                 </button>
               </div>
 
               {/* CONTENT */}
               <div className="p-4 flex flex-col flex-1">
                 <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                  <img src={locationIcon} className="w-4 h-4" />
+                  <img src="/assets/seopageassets/turstedbuilder/location.svg" className="w-4 h-4" />
                   {builder.location}
                 </div>
 
@@ -77,11 +71,11 @@ export default function VerifiedBuilders() {
 
                 <div className="flex justify-between text-xs text-[#7C3AED] mb-4">
                   <div className="flex items-center gap-1">
-                    <img src={yearsIcon} className="w-4 h-4" />
+                    <img src="/assets/seopageassets/turstedbuilder/calender.svg" className="w-4 h-4" />
                     {builder.years}
                   </div>
                   <div className="flex items-center gap-1">
-                    <img src={projectsIcon} className="w-4 h-4" />
+                    <img src="/assets/seopageassets/turstedbuilder/projects.svg" className="w-4 h-4" />
                     {builder.projects}
                   </div>
                 </div>

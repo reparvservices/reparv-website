@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import React from "react";
-import HomeLoanCard from "../../assets/home/HomeLoanCard.svg";
 import { useAuth } from "../../store/auth";
 
 const LoanSection = () => {
@@ -21,7 +20,7 @@ const LoanSection = () => {
       className="flex flex-col items-center p-4 md:p-8 gap-6 md:pb-15 cursor-pointer"
     >
       <img
-        src={HomeLoanCard}
+        src="/assets/home/HomeLoanCard.svg"
         alt="Get Property In Three Steps"
         loading="lazy"
         className="w-full max-w-[1380px] hover:scale-102 duration-500 transition-all"

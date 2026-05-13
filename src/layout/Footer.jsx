@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import footerLogo from "../assets/footerLogo.svg";
 import {
   FaFacebookF,
   FaLinkedin,
@@ -31,7 +30,7 @@ function Footer({ footerRef }) {
         <div className="w-full max-w-[1380px] mx-auto flex flex-col gap-6 bg-[#5E23DC] text-white py-8 px-8 lg:px-10">
           <div className="flex items-center justify-start">
             <Link href="/">
-              <img src={footerLogo} alt="Reparv Logo" className="w-[160px]" />
+              <img src="/assets/footerLogo.svg"alt="Reparv Logo" className="w-[160px]" />
             </Link>
           </div>
 
@@ -178,7 +177,7 @@ function Footer({ footerRef }) {
         <div className="flex flex-col gap-5 max-w-md mx-auto">
           <div className="flex justify-start">
             <Link href="/">
-              <img src={footerLogo} alt="reparv logo" className="w-[140px]" />
+              <img src="/assets/footerLogo.svg" alt="reparv logo" className="w-[140px]" />
             </Link>
           </div>
 

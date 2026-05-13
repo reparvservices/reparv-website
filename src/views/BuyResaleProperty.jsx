@@ -5,17 +5,7 @@ import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useAuth } from "../store/auth";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
-import cityView from "../assets/property/cityView.svg";
 import NavCard from "../components/NavCard";
-import ResaleFlatIcon from "../assets/property/resale/ResaleFlat.svg";
-import ResaleShopIcon from "../assets/property/resale/ResaleShop.svg";
-import ResaleRowHouseIcon from "../assets/property/resale/ResaleRowHouse.svg";
-import ResaleHouseIcon from "../assets/property/resale/ResaleHouse.svg";
-import ResaleFarmLandIcon from "../assets/property/resale/ResaleFarm.svg";
-import ResaleBunglowIcon from "../assets/property/resale/ResaleBunglow.svg";
-import ResaleGodownIcon from "../assets/property/resale/ResaleGodown.svg";
-import ResaleOfficeIcon from "../assets/property/resale/ResaleOffice.svg";
-import ResalePlotIcon from "../assets/home/propertyType/OpenLand.svg";
 import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
@@ -30,63 +20,63 @@ const propertyTypes = [
     to: "/properties/type/resale",
     //type: "ResaleFlat",
     type: "Resale",
-    image: ResaleFlatIcon,
+    image: "/assets/property/resale/ResaleFlat.svg",
   },
   {
     title: "Buy Resale Plot",
     to: "/properties/type/resale",
     //type: "ResalePlot",
     type: "Resale",
-    image: ResalePlotIcon,
+    image: "/assets/property/resale/ResalePlot.svg",
   },
   {
     title: "Resale House",
     to: "/properties/type/resale",
     //type: "ResaleHouse",
     type: "Resale",
-    image: ResaleHouseIcon,
+    image: "/assets/property/resale/ResaleHouse.svg",
   },
   {
     title: "Resale Row House",
     to: "/properties/type/resale",
     //type: "ResaleRowHouse",
     type: "Resale",
-    image: ResaleRowHouseIcon,
+    image: "/assets/property/resale/ResaleRowHouse.svg",
   },
   {
     title: "Resale Farm Land",
     to: "/properties/type/resale",
     //type: "ResaleFarmLand",
     type: "Resale",
-    image: ResaleFarmLandIcon,
+    image: "/assets/property/resale/ResaleFarm.svg",
   },
   {
     title: "Resale Godown",
     to: "/properties/type/resale",
     //type: "ResaleGodown",
     type: "Resale",
-    image: ResaleGodownIcon,
+    image: "/assets/property/resale/ResaleGodown.svg",
   },
   {
     title: "Resale Office",
     to: "/properties/type/resale",
     //type: "ResaleOffice",
     type: "Resale",
-    image: ResaleOfficeIcon,
+    image: "/assets/property/resale/ResaleOffice.svg",
   },
   {
     title: "Resale Bunglow",
     to: "/properties/type/resale",
     //type: "ResaleBunglow",
     type: "Resale",
-    image: ResaleBunglowIcon,
+    image: "/assets/property/resale/ResaleBunglow.svg",
   },
   {
     title: "Resale Shop",
     to: "/properties/type/resale",
     //type: "ResaleShop",
     type: "Resale",
-    image: ResaleShopIcon,
+    image: "/assets/property/resale/ResaleShop.svg",
   },
 ];
 
@@ -189,7 +179,7 @@ const BuyResaleProperty = () => {
           <div className="relative col-span-2 flex justify-center lg:justify-end">
             <div className="flex items-center justify-center">
               <img
-                src={cityView}
+                src="/asserts/property/cityView.svg"
                 alt="City Illustration"
                 className="max-w-full max-h-full object-cover"
               />

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../store/auth";
-import UserIcon from "../../assets/user/UserIcon.svg";
 import { FaChevronRight } from "react-icons/fa6";
 import {
   IoArrowBack,
@@ -15,7 +14,6 @@ import {
 import { FaEdit, FaHeart, FaPhoneAlt, FaHome } from "react-icons/fa";
 import { MdApartment, MdArticle, MdPrivacyTip } from "react-icons/md";
 import { HiOutlineClipboardList } from "react-icons/hi";
-import { RiCustomerService2Line } from "react-icons/ri";
 import { BsFileEarmarkText } from "react-icons/bs";
 import { MdPolicy } from "react-icons/md";
 import { getImageURI } from "../../utils/helper";
@@ -102,7 +100,7 @@ const Profile = () => {
       {/* User Info */}
       <div className="w-full flex items-center gap-4 my-4">
         <img
-          src={user?.userimage ? getImageURI(user?.userimage) : UserIcon}
+          src={user?.userimage ? getImageURI(user?.userimage) : "/assets/user/UserIcon.svg"}
           alt="user"
           className="w-16 h-16 rounded-full border-2 border-[#5323DC] "
         />

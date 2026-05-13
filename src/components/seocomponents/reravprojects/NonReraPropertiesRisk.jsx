@@ -1,7 +1,3 @@
-import warningIcon from "../../../assets/seopageassets/reparvproperties/stop.svg";
-import clockIcon from "../../../assets/seopageassets/reparvproperties/clock-filled.svg";
-import noEyeIcon from "../../../assets/seopageassets/reparvproperties/view-off.svg";
-import moneyIcon from "../../../assets/seopageassets/reparvproperties/money.svg";
 
 export default function NonRERARisks() {
   return (
@@ -20,25 +16,25 @@ export default function NonRERARisks() {
         {/* CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
           <RiskCard
-            icon={warningIcon}
+            icon="/assets/seopageassets/reparvproperties/stop.svg"
             title="No Legal Protection"
             description="Without RERA registration, you have limited legal recourse if the builder fails to deliver. Your investment remains unprotected and vulnerable to fraud."
           />
 
           <RiskCard
-            icon={clockIcon}
+            icon="/assets/seopageassets/reparvproperties/clock-filled.svg"  
             title="High Risk of Project Delays"
             description="Non-registered projects have no accountability for timelines. Delays can extend indefinitely with no compensation or recourse available to buyers."
           />
 
           <RiskCard
-            icon={noEyeIcon}
+            icon="/assets/seopageassets/reparvproperties/view-off.svg"
             title="Absence of Regulatory Oversight"
             description="Without regulatory oversight, builders can make false promises, alter plans, or compromise on quality without facing consequences or penalties."
           />
 
           <RiskCard
-            icon={moneyIcon}
+            icon="/assets/seopageassets/reparvproperties/money.svg"
             title="Potential Financial Loss"
             description="Your entire investment is at risk. Non-RERA projects can be abandoned mid-way, leaving you with neither property nor refund options."
           />

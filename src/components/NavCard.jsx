@@ -1,7 +1,6 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import { TbArrowRightDashed } from "react-icons/tb";
-import NewFlatIcon from "../assets/home/propertyType/NewFlat.svg";
 import { useAuth } from "../store/auth";
 import { usePropertyFilter } from "../store/propertyFilter";
 
@@ -30,7 +29,7 @@ function NavCard({ cardData }) {
       {/* Image Section */}
       <div className="w-full flex items-center justify-center overflow-hidden">
         <img
-          src={cardData?.image || NewFlatIcon}
+          src={cardData?.image || "/assets/home/propertyType/NewFlat.svg"}
           alt={cardData?.title}
           className="w-[100%] object-cover"
         />

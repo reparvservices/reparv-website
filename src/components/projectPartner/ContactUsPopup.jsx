@@ -1,10 +1,7 @@
 import { useParams, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
-import localPropertyImage from "../../assets/property/propertyPicture.svg";
-import reparvLogo from "../../assets/reparvLogo.svg";
 import { useAuth } from "../../store/auth";
-import Loader from "../Loader";
 import { getImageURI } from "../../utils/helper";
 export default function ContactUsPopup({ projectPartner }) {
   const {

@@ -5,18 +5,7 @@ import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useAuth } from "../store/auth";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
-import cityView from "../assets/property/cityView.svg";
 import NavCard from "../components/NavCard";
-import RentalFlatIcon from "../assets/home/propertyType/RentalFlat.svg";
-import RentalPlotIcon from "../assets/home/propertyType/OpenLand.svg";
-import RentalShopIcon from "../assets/home/propertyType/RentalShop.svg";
-import RentalHouseIcon from "../assets/home/propertyType/House.svg";
-import RentalOfficeIcon from "../assets/home/propertyType/RentalOffice.svg";
-import RentalOpenLandIcon from "../assets/home/propertyType/OpenLand.svg";
-import RentalShowroomIcon from "../assets/home/propertyType/ShowRoom.svg";
-import RentalVillaIcon from "../assets/home/propertyType/Villa.svg";
-import RentalGodownIcon from "../assets/home/propertyType/Godown.svg";
-import RentalPg from "../assets/property/RentalPg.svg";
 import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
@@ -30,55 +19,55 @@ const propertyTypes = [
     title: "Flat for Rent",
     to: "/properties/type/rental",
     type: "RentalFlat",
-    image: RentalFlatIcon,
+    image: "/assets/home/propertyType/RentalFlat.svg",
   },
   {
     title: "Plot for Rent",
     to: "/properties/type/rental",
     type: "RentalPlot",
-    image: RentalPlotIcon,
+    image: "/assets/home/propertyType/RentalPlot.svg",
   },
   {
     title: "Rental Shop",
     to: "/properties/type/rental",
     type: "RentalShop",
-    image: RentalShopIcon,
+    image: "/assets/home/propertyType/RentalShop.svg",
   },
   {
     title: "Rental House",
     to: "/properties/type/rental",
     type: "RentalHouse",
-    image: RentalHouseIcon,
+    image: "/assets/home/propertyType/RentalHouse.svg",
   },
   {
     title: "Rental Office",
     to: "/properties/type/rental",
     type: "RentalOffice",
-    image: RentalOfficeIcon,
+    image: "/assets/home/propertyType/RentalOffice.svg",
   },
   {
     title: "Rental Villa",
     to: "/properties/type/rental",
     type: "RentalVilla",
-    image: RentalVillaIcon,
+    image: "/assets/home/propertyType/RentalVilla.svg",
   },
   {
     title: "Rental Godown",
     to: "/properties/type/rental",
     type: "RentalGodown",
-    image: RentalGodownIcon,
+    image: "/assets/home/propertyType/RentalGodown.svg",
   },
   {
     title: "Rental Open Land",
     to: "/properties/type/rental",
     type: "RentalOpenLand",
-    image: RentalOpenLandIcon,
+    image: "/assets/home/propertyType/RentalOpenLand.svg",
   },
   {
     title: "Rental Showroom",
     to: "/properties/type/rental",
     type: "RentalShowroom",
-    image: RentalShowroomIcon,
+    image: "/assets/home/propertyType/RentalShowroom.svg",
   },
 ];
 
@@ -181,7 +170,7 @@ const RentalProperty = () => {
           <div className="relative col-span-2 flex justify-center lg:justify-end">
             <div className="flex items-center justify-center">
               <img
-                src={cityView}
+                src="/assets/property/cityView.svg"
                 alt="City Illustration"
                 className="max-w-full max-h-full object-cover"
               />
@@ -207,7 +196,7 @@ const RentalProperty = () => {
 
         <div className="mx-auto">
           <img
-            src={RentalPg}
+            src="/assets/property/RentalPg.svg"
             alt="Rental Pg Card"
             className="w-full mx-auto max-w-[1100px] object-cover hover:scale-102 duration-500 transition-all cursor-pointer "
           />

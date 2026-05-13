@@ -1,17 +1,10 @@
 import { useRouter } from "next/navigation";
 import React from "react";
-import { TiLocationOutline } from "react-icons/ti";
-import { PiUserCircleFill } from "react-icons/pi";
-import { BiSolidMessageDetail } from "react-icons/bi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import { useState, useEffect } from "react";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
-import populerTag from "../../assets/property/populerTag.svg";
-import FormatPrice from "../FormatPrice";
 import { useAuth } from "../../store/auth";
-import { FaFire } from "react-icons/fa6";
 import PropertyCard from "./PropertyCard";
 
 function SimilarProperties({

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { IoPlayCircleOutline } from "react-icons/io5";
-import videoThumb from "../assets/joinOurTeam/salesPartner/videoThumb.svg";
 import { useAuth } from "../store/auth";
 
 const VideoSection = ({videoFor = "reparv"}) => {
@@ -8,7 +7,7 @@ const VideoSection = ({videoFor = "reparv"}) => {
   const [showVideo, setShowVideo] = useState(false);
   const [videoLink, setVideoLink] = useState("");
   
-  const [thumbnail, setThumbnail] = useState(videoThumb);
+  const [thumbnail, setThumbnail] = useState("/assets/joinOurTeam/salesPartner/videoThumb.svg");
 
   const formatYouTubeEmbedUrl = (url) => {
     const regex =
@@ -65,7 +64,7 @@ const VideoSection = ({videoFor = "reparv"}) => {
         {/* Thumbnail */}
         {!showVideo && (
           <img
-            src={videoThumb}
+            src="/assets/joinOurTeam/salesPartner/videoThumb.svg"
             alt="Video Thumbnail"
             className="w-full h-full object-cover"
           />

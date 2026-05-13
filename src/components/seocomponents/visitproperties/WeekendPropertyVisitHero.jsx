@@ -1,5 +1,3 @@
-import heroIllustration from "../../../assets/seopageassets/visitproperties/banner-image.svg";
-import checkIcon from "../../../assets/seopageassets/visitproperties/check.svg";
 
 export default function WeekendPropertyVisitHero() {
   return (
@@ -35,7 +33,7 @@ export default function WeekendPropertyVisitHero() {
               {["RERA Verified", "Local Team", "No Pressure"].map((item) => (
                 <div key={item} className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0">
-                    <img src={checkIcon} alt="" className="w-4 h-4" />
+                    <img src="/assets/seopageassets/visitproperties/check.svg" alt="" className="w-4 h-4" />
                   </div>
                   <span className="font-medium text-black">{item}</span>
                 </div>
@@ -46,7 +44,7 @@ export default function WeekendPropertyVisitHero() {
           {/* ================= RIGHT IMAGE (DESKTOP ONLY) ================= */}
           <div className="hidden lg:flex justify-end">
             <img
-              src={heroIllustration}
+              src="/assets/seopageassets/visitproperties/banner-image.svg"
               alt="Weekend Property Visit"
               className="w-full max-w-lg"
             />

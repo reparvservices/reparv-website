@@ -1,13 +1,3 @@
-import verifyIcon from "../../../assets/seopageassets/turstedbuilder/verification.svg";
-import legalIcon from "../../../assets/seopageassets/turstedbuilder/complience.svg";
-import docsIcon from "../../../assets/seopageassets/turstedbuilder/documentation.svg";
-import monitorIcon from "../../../assets/seopageassets/turstedbuilder/monitoring.svg";
-import reviewIcon from "../../../assets/seopageassets/turstedbuilder/review.svg";
-import protectIcon from "../../../assets/seopageassets/turstedbuilder/protection.svg";
-
-import qualityIcon from "../../../assets/seopageassets/turstedbuilder/quality.svg";
-import expertIcon from "../../../assets/seopageassets/turstedbuilder/support.svg";
-import secureIcon from "../../../assets/seopageassets/turstedbuilder/transaction.svg";
 
 export default function BuilderTrustFlow() {
   return (
@@ -25,32 +15,32 @@ export default function BuilderTrustFlow() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             <TrustCard
-              icon={verifyIcon}
+              icon="/assets/seopageassets/turstedbuilder/verification.svg"
               title="Rigorous Verification"
               text="Multi-level verification including background checks, financial stability, and project track record"
             />
             <TrustCard
-              icon={legalIcon}
+              icon="/assets/seopageassets/turstedbuilder/complience.svg"
               title="Legal Compliance"
               text="All builders are verified for RERA registration, tax compliance, and legal documentation"
             />
             <TrustCard
-              icon={docsIcon}
+              icon="/assets/seopageassets/turstedbuilder/documentation.svg"
               title="Transparent Documentation"
               text="Complete access to builder credentials, past projects, customer reviews, and legal documents"
             />
             <TrustCard
-              icon={monitorIcon}
+              icon="/assets/seopageassets/turstedbuilder/monitoring.svg"
               title="Ongoing Monitoring"
               text="Continuous tracking of builder performance, project delivery timelines, and customer satisfaction"
             />
             <TrustCard
-              icon={reviewIcon}
+              icon="/assets/seopageassets/turstedbuilder/review.svg"
               title="Customer Reviews"
               text="Authentic reviews from verified buyers to help you make informed decisions"
             />
             <TrustCard
-              icon={protectIcon}
+              icon="/assets/seopageassets/turstedbuilder/protection.svg"
               title="Buyer Protection"
               text="Dedicated support team and dispute resolution mechanism to safeguard your interests"
             />
@@ -115,17 +105,17 @@ export default function BuilderTrustFlow() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
             <BottomCard
-              icon={qualityIcon}
+              icon="/assets/seopageassets/turstedbuilder/quality.svg"
               title="Verified Quality"
               text="Every builder meets our stringent quality standards and industry best practices"
             />
             <BottomCard
-              icon={expertIcon}
+              icon="/assets/seopageassets/turstedbuilder/expert.svg"
               title="Expert Support"
               text="Dedicated relationship managers to guide you through every step of your journey"
             />
             <BottomCard
-              icon={secureIcon}
+              icon="/assets/seopageassets/turstedbuilder/secure.svg"
               title="Secure Transactions"
               text="Protected communication channels and secure documentation process"
             />

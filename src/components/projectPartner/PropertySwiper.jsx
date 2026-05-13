@@ -13,12 +13,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
-import propertyImage from "../../assets/projectPartner/property1.png";
-import propertyImage2 from "../../assets/projectPartner/property2.png";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
 import FormatPrice from "../FormatPrice";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { getImageURI } from "../../utils/helper";
 
 export default function PropertySwiper({ projectPartner }) {
@@ -159,9 +156,9 @@ export default function PropertySwiper({ projectPartner }) {
                         const images = JSON.parse(property.frontView || "[]");
                         return images.length > 0
                           ? `${getImageURI(images[0])}`
-                          : `${propertyPicture}`;
+                          : `/assets/property/propertyPicture.svg`;
                       } catch {
-                        return `${propertyPicture}`;
+                        return `/assets/property/propertyPicture.svg`;
                       }
                     })()}
                     alt={property.propertyName}

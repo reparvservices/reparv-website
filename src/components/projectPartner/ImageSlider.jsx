@@ -6,7 +6,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useAuth } from "../../store/auth";
-import PropertyNavbar from "./PropertyNavbarOld.jsx";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { IoSearchSharp } from "react-icons/io5";
 import { CiLocationOn } from "react-icons/ci";

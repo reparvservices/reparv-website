@@ -8,8 +8,6 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiLocationOn } from "react-icons/ci";
 import { RiMobileDownloadLine } from "react-icons/ri";
 import { WiStars } from "react-icons/wi";
-import background from "../../assets/projectPartner/background.svg";
-import searchIcon from "../../assets/projectPartner/search.svg";
 import TypeWriter from "../property/TypeWriter.jsx";
 import { useRef } from "react";
 
@@ -166,7 +164,7 @@ export default function PropertyNavbar({ projectPartner }) {
   return (
     <div
       style={{
-        backgroundImage: `url(${background})`,
+        backgroundImage: `url("/assets/projectPartner/background.svg")`,
         fontFamily: "Rubik, Helvetica, sans-serif",
       }}
       className="relative w-full flex flex-col items-center bg-[#5E23DC] bg-cover bg-center bg-no-repeat text-white md:pt-16 pb-10 md:pb-28 px-4 sm:px-6 rounded-tr-[40px] rounded-tl-[40px] md:rounded-none pt-5 mt-4"
@@ -276,7 +274,7 @@ export default function PropertyNavbar({ projectPartner }) {
               className="md:hidden inline-flex items-center justify-center rounded-full p-2.5 cursor-pointer"
             >
               <img
-                src={searchIcon}
+                src="/assets/projectPartner/search-icon.png"
                 alt="Search"
                 loading="lazy"
                 className="w-4 h-4 object-contain"

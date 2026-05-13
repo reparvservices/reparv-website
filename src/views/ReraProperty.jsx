@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../store/auth";
-import BackImage from "../assets/seopageassets/reparvproperties/banner-image.svg";
 import { MdDone } from "react-icons/md";
 
 import NewsSection from "../components/home/NewsSection";
@@ -85,7 +84,7 @@ const RERAProperty = () => {
             {/* RIGHT IMAGE – DESKTOP ONLY */}
             <div className="hidden lg:flex justify-end">
               <img
-                src={BackImage}
+                src="/assets/seopageassets/reparvproperties/banner-image.svg"
                 alt="Reparv Property Illustration"
                 className="w-full max-w-md xl:max-w-lg object-contain"
               />

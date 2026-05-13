@@ -1,8 +1,3 @@
-import expertImg from "../../../assets/seopageassets/verify712/expert-image.svg";
-import auditIcon from "../../../assets/seopageassets/verify712/audit.svg";
-import historyIcon from "../../../assets/seopageassets/verify712/history.svg";
-import legalIcon from "../../../assets/seopageassets/verify712/hammer.svg";
-import headsetIcon from "../../../assets/seopageassets/verify712/headset.svg";
 
 export default function ExpertVerificationServices() {
   return (
@@ -24,19 +19,19 @@ export default function ExpertVerificationServices() {
             {/* FEATURES */}
             <div className="space-y-6 mt-8">
               <Feature
-                icon={auditIcon}
+                icon="/assets/seopageassets/verify712/audit.svg"
                 title="Manual 7/12 Audit"
                 text="Expert review of 7/12 extract for discrepancies, encumbrances, and legal issues"
               />
 
               <Feature
-                icon={historyIcon}
+                icon="/assets/seopageassets/verify712/history.svg"
                 title="Ownership History Verification"
                 text="Complete chain of title verification for past 30+ years to identify disputes"
               />
 
               <Feature
-                icon={legalIcon}
+                icon="/assets/seopageassets/verify712/hammer.svg"
                 title="NA Conversion & Legal Guidance"
                 text="Assistance with non-agricultural conversion process and legal documentation"
               />
@@ -45,7 +40,7 @@ export default function ExpertVerificationServices() {
             {/* CTA */}
             <div className="mt-10">
               <button className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white text-[#5B2DD8] font-semibold px-6 py-3 rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:opacity-95 transition">
-                <img src={headsetIcon} alt="" className="w-5 h-5" />
+                <img src="/assets/seopageassets/verify712/headset.svg" alt="" className="w-5 h-5" />
                 Request Expert Verification
               </button>
             </div>
@@ -54,7 +49,7 @@ export default function ExpertVerificationServices() {
           {/* RIGHT IMAGE (DESKTOP ONLY) */}
           <div className="hidden lg:flex justify-end">
             <img
-              src={expertImg}
+              src="/assets/seopageassets/verify712/expert-image.svg"
               alt="Expert Verification"
               className="max-w-[420px] w-full"
             />

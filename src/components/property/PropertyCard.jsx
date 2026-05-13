@@ -2,8 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "../../store/auth";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
-import populerTag from "../../assets/property/populerTag.svg";
 import { TiLocationOutline } from "react-icons/ti";
 import { RiBuildingLine } from "react-icons/ri";
 import { FaFire, FaHeart } from "react-icons/fa6";
@@ -74,9 +72,9 @@ function PropertyCard({ property, top = false }) {
   const frontImage = useMemo(() => {
     try {
       const images = JSON.parse(property?.frontView || "[]");
-      return images.length > 0 ? getImageURI(images[0]) : propertyPicture;
+      return images.length > 0 ? getImageURI(images[0]) : "/assets/property/propertyPicture.svg";
     } catch {
-      return propertyPicture;
+      return "/assets/property/propertyPicture.svg";
     }
   }, [property?.frontView]);
 
@@ -140,7 +138,7 @@ function PropertyCard({ property, top = false }) {
           alt={property?.seoSlug || property?.propertyName}
           onError={(e) => {
             e.currentTarget.onerror = null;
-            e.currentTarget.src = propertyPicture;
+            e.currentTarget.src = "/assets/property/propertyPicture.svg";
           }}
           loading="lazy"
           decoding="async"
@@ -151,7 +149,7 @@ function PropertyCard({ property, top = false }) {
           {/* Popular tag */}
           {property?.likes > 500 && (
             <img
-              src={populerTag}
+              src="/assets/projectPartner/popular.png"
               className="absolute top-[-15px] left-[-8px]"
               alt="Popular"
             />

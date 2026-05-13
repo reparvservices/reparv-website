@@ -2,12 +2,8 @@
 
 import React from "react";
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
-import { CiLocationOn } from "react-icons/ci";
 import { IoFilter } from "react-icons/io5";
-import { RiArrowDropDownLine } from "react-icons/ri";
-import { IoSearchSharp } from "react-icons/io5";
 import { useParams } from "next/navigation";
-import VideoReviewSection from "../components/VideoReviewSection";
 import { useLayoutScroll } from "../context/LayoutScrollContext";
 import { useAuth } from "../store/auth";
 import FilterSidebar from "../components/property/FilterSidebar";
@@ -15,7 +11,6 @@ import { useInView } from "react-intersection-observer";
 import { usePropertyFilter } from "../store/propertyFilter";
 import SEO from "../components/SEO";
 import PropertyCategories from "../components/PropertyCategories";
-import PropertySearch from "../components/property/PropertySearch";
 import FilterNavbar from "../components/property/FilterNavbar";
 import AdComponent from "../components/AdsForFeed";
 import AdvertisementCard from "../components/AdvertisementCard";

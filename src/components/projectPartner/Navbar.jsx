@@ -4,7 +4,6 @@ import Link from "next/link";
 import NavLink from "../NavLinkNext.jsx";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect, useRef } from "react";
-import reparvLogo from "../../assets/reparvLogo.svg";
 import { IoMdMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../../store/auth";
@@ -67,7 +66,7 @@ function Navbar({ projectPartner }) {
                     src={
                       projectPartner?.businessLogo
                         ? getImageURI(projectPartner?.businessLogo)
-                        : reparvLogo
+                        : "/assets/reparvLogo.svg"
                     }
                     alt="logo"
                     className="max-h-10 object-contain"
@@ -142,7 +141,7 @@ function Navbar({ projectPartner }) {
               src={
                 projectPartner?.businessLogo
                   ? getImageURI(projectPartner?.businessLogo)
-                  : reparvLogo
+                  : "/assets/reparvLogo.svg"
               }
               alt="reparv logo"
               className="max-h-12 object-contain"

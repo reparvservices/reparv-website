@@ -2,8 +2,7 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../store/auth";
 import { IoPlayCircleOutline } from "react-icons/io5";
-import image from "../assets/home/formImage.svg";
-import cardShadow from "../assets/home/cardShadow.svg";
+
 const VideoReviewSection = () => {
   const { URI } = useAuth();
   const [feedback, setFeedback] = useState([]);
@@ -61,7 +60,7 @@ const VideoReviewSection = () => {
             <Link 
               href={review.url} target="_blank"
               key={review.id}
-              style={{background:`url(${review.clientimage ? URI+review.clientimage : image})`, backgroundSize:"cover"}}
+              style={{background:`url(${review.clientimage ? URI+review.clientimage : "/assets/home/formImage.svg"})`, backgroundSize:"cover"}}
               className="group bg-cover relative overflow-hidden w-[237px] h-100 rounded-xl border border-[#00000033] "
             > {/*
               {videoId ? (
@@ -79,7 +78,7 @@ const VideoReviewSection = () => {
                 <p>Invalid video URL</p>
               )} */}
 
-              <img src={cardShadow} alt="" className="w-full h-full object-cover" />
+              <img src="/assets/home/cardShadow.svg" alt="image" className="w-full h-full object-cover" />
               <IoPlayCircleOutline className="absolute top-40 left-[84px] w-16 h-16 text-[#FAFAFB] group-hover:text-[#0BB501] group-active:scale-95"/>
               <div className="px-2 absolute bottom-8 left-6 border-l-3 text-white border-[#0BB501]">
                 <p className="font-medium">{review.client}</p>

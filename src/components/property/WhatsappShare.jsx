@@ -1,5 +1,4 @@
 import React from "react";
-import whatsappIcon from "../../assets/projectPartner/whatsapp.png";
 import { useAuth } from "../../store/auth";
 import { addVisitor } from "../../utils/analytics";
 
@@ -47,7 +46,7 @@ Enquiry via Reparv – www.reparv.in`;
       >
         {" "}
         <img
-          src={whatsappIcon}
+          src="/assets/property/whatsapp.png"
           alt="WhatsApp Chat"
           className="object-contain w-6 h-6 animate-pulse"
         />

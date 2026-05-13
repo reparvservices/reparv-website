@@ -2,18 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
-import { IoSpeedometerOutline } from "react-icons/io5";
-import Loader from "../components/Loader";
 import { useAuth } from "../store/auth";
 
-import { FiSearch } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
 import StepIndicator from "../components/homeLoanPage/StepIndicator";
 import Step1Personal from "../components/homeLoanPage/Step1Personal";
 import Step2Income from "../components/homeLoanPage/Step2Income";
 import Step3Documents from "../components/homeLoanPage/Step3Documents";
 import WhyWeNeedThis from "../components/homeLoanPage/WhyWeNeedThis";
-import leftImage from "../assets/homeLoan/leftImage.svg";
 import SEO from "../components/SEO";
 
 const BlogSection = lazy(() => import("../components/BlogSection"));
@@ -317,7 +313,7 @@ export default function HomeLoanForm() {
 
           {/* LEFT IMAGE */}
           <div className="relative z-10 w-full flex items-end justify-center pl-10">
-            <img src={leftImage} alt="image" className="w-[400px]" />
+            <img src="/assets/seopageassets/homeloanform/LeftImage.svg" alt="image" className="w-[400px]" />
           </div>
 
           {/* RIGHT CONTENT */}

@@ -1,10 +1,7 @@
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
-import localPropertyImage from "../../assets/property/propertyPicture.svg";
-import reparvLogo from "../../assets/reparvLogo.svg";
 import { useAuth } from "../../store/auth";
-import Loader from "../Loader";
 import OtpSection from "../OTPSection";
 export default function SiteVisitPopup() {
   const router = useRouter();
@@ -273,7 +270,7 @@ export default function SiteVisitPopup() {
     <div className="w-full md:max-w-[450px] relative flex flex-col md:flex-row bg-white rounded-tl-2xl rounded-tr-2xl md:rounded-2xl overflow-hidden shadow-xl ">
       <div className="w-full flex flex-col gap-3 justify-center p-6 relative">
         <div className="w-full flex items-center justify-between">
-          <img src={reparvLogo} alt="Reparv Logo" className="h-8" />
+          <img src="/assets/property/reparvLogo.svg" alt="Reparv Logo" className="h-8" />
           <RxCross2
             onClick={() => setShowSiteVisitPopup(false)}
             className="w-5 h-5 text-xl text-right rounded-full bg-[#FAFAFA] text-black cursor-pointer hover:text-[#076300] active:scale-95"

@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import React, {useState, useEffect} from "react";
 import { useAuth } from "../store/auth";
-import BackImage from "../assets/seopageassets/costcalculator/banner-image.svg";
 import { MdDone } from "react-icons/md";
 import HomeTotalCostCalculator from "../components/seocomponents/costcomponents/HomeTotalCostCalculator";
 import LatestArtical from "../components/seocomponents/common/LatestArtical";
@@ -125,7 +124,7 @@ const CostCalculator = () => {
             {/* RIGHT IMAGE */}
             <div className="hidden lg:flex justify-center lg:justify-end">
               <img
-                src={BackImage}
+                src="/assets/seopageassets/costcalculator/banner-image.svg"
                 alt="EMI Calculator Illustration"
                 className="w-full object-cover"
               />

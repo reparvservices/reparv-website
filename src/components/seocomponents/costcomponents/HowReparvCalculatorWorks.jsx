@@ -1,7 +1,3 @@
-import step1 from "../../../assets/seopageassets/costcalculator/step1.svg";
-import step2 from "../../../assets/seopageassets/costcalculator/step2.svg";
-import step3 from "../../../assets/seopageassets/costcalculator/step3.svg";
-import step4 from "../../../assets/seopageassets/costcalculator/step4.svg";
 
 export default function HowReparvCalculatorWorks() {
   return (
@@ -30,7 +26,7 @@ export default function HowReparvCalculatorWorks() {
               title="Agreement Value"
               subtitle="Input"
               description="The agreement value represents the mutually agreed price of the property between the buyer and seller. This value forms the base on which stamp duty, registration charges, and other applicable levies are calculated."
-              image={step1}
+              image="/assets/seopageassets/costcalculator/step1.svg"
             />
 
             <Step
@@ -38,7 +34,7 @@ export default function HowReparvCalculatorWorks() {
               title="GST (If Applicable)"
               subtitle="Conditional"
               description="Goods and Services Tax (GST) is applicable only for under-construction properties. Ready-to-move or completed properties are generally exempt from GST under prevailing tax regulations."
-              image={step3}
+              image="/assets/seopageassets/costcalculator/step3.svg"
             />
           </div>
 
@@ -54,7 +50,7 @@ export default function HowReparvCalculatorWorks() {
               title="Stamp Duty & Registration"
               subtitle="Government Charges"
               description="Stamp duty and registration fees are levied by the respective State Government. The calculator applies the percentage values and registration caps entered by the user in accordance with applicable state rules."
-              image={step2}
+              image="/assets/seopageassets/costcalculator/step2.svg"
               align="right"
             />
 
@@ -63,7 +59,7 @@ export default function HowReparvCalculatorWorks() {
               title="Total Estimated Cost"
               subtitle="Output"
               description="All applicable charges including agreement value, government levies, GST (if any), and legal charges are aggregated to display the total estimated cost. This figure is indicative and subject to final government notifications."
-              image={step4}
+              image="/assets/seopageassets/costcalculator/step4.svg"
               align="right"
             />
           </div>
@@ -76,7 +72,7 @@ export default function HowReparvCalculatorWorks() {
             title="Agreement Value"
             subtitle="Input"
             description="The agreement value represents the mutually agreed price of the property between the buyer and seller. This value forms the base on which stamp duty, registration charges, and other applicable levies are calculated."
-            image={step1}
+            image="/assets/seopageassets/costcalculator/step1.svg"
           />
 
           <MobileStep
@@ -84,7 +80,7 @@ export default function HowReparvCalculatorWorks() {
             title="Stamp Duty & Registration"
             subtitle="Government Charges"
             description="Stamp duty and registration fees are levied by the respective State Government. The calculator applies the percentage values and registration caps entered by the user in accordance with applicable state rules."
-            image={step2}
+            image="/assets/seopageassets/costcalculator/step2.svg"
           />
 
           <MobileStep
@@ -92,7 +88,7 @@ export default function HowReparvCalculatorWorks() {
             title="GST (If Applicable)"
             subtitle="Conditional"
             description="Goods and Services Tax (GST) is applicable only for under-construction properties. Ready-to-move or completed properties are generally exempt from GST under prevailing tax regulations."
-            image={step3}
+            image="/assets/seopageassets/costcalculator/step3.svg"
           />
 
           <MobileStep
@@ -100,7 +96,7 @@ export default function HowReparvCalculatorWorks() {
             title="Total Estimated Cost"
             subtitle="Output"
             description="All applicable charges including agreement value, government levies, GST (if any), and legal charges are aggregated to display the total estimated cost. This figure is indicative and subject to final government notifications."
-            image={step4}
+            image="/assets/seopageassets/costcalculator/step4.svg"
           />
         </div>
       </div>

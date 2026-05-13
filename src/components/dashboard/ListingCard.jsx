@@ -10,8 +10,8 @@ import { HiOutlineMail } from "react-icons/hi";
 import { FaHeart } from "react-icons/fa";
 import { RiBuildingLine } from "react-icons/ri";
 import { useAuth } from "../../store/auth";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { getImageURI } from "../../utils/helper";
+
 export default function ListingCard({ property, delProperty }) {
   const { URI, setShowSharePopup, setPropertySlug } = useAuth();
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function ListingCard({ property, delProperty }) {
         })()}
         alt={property?.seoSlug || property?.propertyName}
         onError={(e) => {
-          e.currentTarget.src = propertyPicture;
+          e.currentTarget.src = "/assets/property/propertyPicture.svg";
         }}
         className="w-40 h-28 object-cover rounded-lg"
       />

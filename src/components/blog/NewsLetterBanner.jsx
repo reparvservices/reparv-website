@@ -1,5 +1,4 @@
 import { FiLock, FiMail } from "react-icons/fi";
-import NewsletterBannerBack from "../../assets/blog/NewsletterBanner.svg";
 import { useAuth } from "../../store/auth";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -62,7 +61,7 @@ const NewsLetterBanner = () => {
       <div
         style={{
           backgroundImage: `
-            url(${NewsletterBannerBack}),
+            url("/assets/blog/NewsletterBanner.svg"),
             linear-gradient(90deg, #3A1C71 0%, #5E2B97 50%, #7C3AED 100%)
           `,
           backgroundRepeat: "no-repeat",

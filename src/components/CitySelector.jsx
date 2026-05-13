@@ -8,38 +8,22 @@ import { AiOutlineAim } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
 import { PiMapPinAreaBold } from "react-icons/pi";
 
-import delhiImage from "../assets/citySelector/delhi.jpeg";
-import mumbaiImage from "../assets/citySelector/mumbai.jpeg";
-import nagpurImage from "../assets/citySelector/nagpur.jpeg";
-import puneImage from "../assets/citySelector/pune.jpeg";
-import ahmedabadImage from "../assets/citySelector/ahmedabad.jpeg";
-import bangloreImage from "../assets/citySelector/banglore.jpeg";
-import kolkataImage from "../assets/citySelector/kolkata.jpeg";
-import hyderabadImage from "../assets/citySelector/hyderabad.jpeg";
-import chennaiImage from "../assets/citySelector/chennai.jpeg";
-import noidaImage from "../assets/citySelector/noida.jpeg";
-import lucknowImage from "../assets/citySelector/lucknow.jpeg";
-import nashikImage from "../assets/citySelector/nashik.jpeg";
-import jodhpurImage from "../assets/citySelector/jodhpur.jpeg";
-import jaipurImage from "../assets/citySelector/jaipur.jpeg";
-import chandigarhImage from "../assets/citySelector/chandigarh.jpeg";
-
 export const popularCities = [
-  { name: "Delhi", image: delhiImage },
-  { name: "Mumbai", image: mumbaiImage },
-  { name: "Bangalore", image: bangloreImage },
-  { name: "Nagpur", image: nagpurImage },
-  { name: "Pune", image: puneImage },
-  { name: "Lucknow", image: lucknowImage },
-  { name: "Hyderabad", image: hyderabadImage },
-  { name: "Ahmedabad", image: ahmedabadImage },
-  { name: "Noida", image: noidaImage },
-  { name: "Chennai", image: chennaiImage },
-  { name: "Nashik", image: nashikImage },
-  { name: "Jaipur", image: jaipurImage },
-  { name: "Jodhpur", image: jodhpurImage },
-  { name: "Kolkata", image: kolkataImage },
-  { name: "Chandigarh", image: chandigarhImage },
+  { name: "Delhi", image: "/assets/citySelector/delhi.jpeg" },
+  { name: "Mumbai", image: "/assets/citySelector/mumbai.jpeg" },
+  { name: "Bangalore", image: "/assets/citySelector/banglore.jpeg" },
+  { name: "Nagpur", image: "/assets/citySelector/nagpur.jpeg" },
+  { name: "Pune", image: "/assets/citySelector/pune.jpeg" },
+  { name: "Lucknow", image: "/assets/citySelector/lucknow.jpeg" },
+  { name: "Hyderabad", image: "/assets/citySelector/hyderabad.jpeg" },
+  { name: "Ahmedabad", image: "/assets/citySelector/ahmedabad.jpeg" },
+  { name: "Noida", image: "/assets/citySelector/noida.jpeg" },
+  { name: "Chennai", image: "/assets/citySelector/chennai.jpeg" },
+  { name: "Nashik", image: "/assets/citySelector/nashik.jpeg" },
+  { name: "Jaipur", image: "/assets/citySelector/jaipur.jpeg" },
+  { name: "Jodhpur", image: "/assets/citySelector/jodhpur.jpeg" },
+  { name: "Kolkata", image: "/assets/citySelector/kolkata.jpeg" },
+  { name: "Chandigarh", image: "/assets/citySelector/chandigarh.jpeg" },
 ];
 
 export default function CitySelector() {

@@ -1,6 +1,3 @@
-import propertyImg from "../../../assets/seopageassets/visitproperties/property-image.jpg";
-import locationIcon from "../../../assets/seopageassets/visitproperties/location.svg";
-import userIcon from "../../../assets/seopageassets/visitproperties/profile.svg";
 
 export default function VerifiedWeekendProperties() {
   const properties = Array.from({ length: 4 }).map((_, i) => ({
@@ -33,7 +30,7 @@ export default function VerifiedWeekendProperties() {
               {/* IMAGE */}
               <div className="relative">
                 <img
-                  src={propertyImg}
+                  src="/assets/seopageassets/visitproperties/property-image.jpg"
                   alt={item.title}
                   className="w-full h-[200px] object-cover"
                 />
@@ -53,7 +50,7 @@ export default function VerifiedWeekendProperties() {
               <div className="p-4 space-y-3">
                 {/* LOCATION */}
                 <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <img src={locationIcon} alt="" className="w-4 h-4" />
+                  <img src="/assets/seopageassets/visitproperties/location.svg" alt="" className="w-4 h-4" />
                   {item.location}
                 </div>
 
@@ -79,7 +76,7 @@ export default function VerifiedWeekendProperties() {
                 {/* FOOTER */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm">
-                    <img src={userIcon} alt="" className="w-5 h-5" />
+                    <img src="/assets/seopageassets/visitproperties/profile.svg" alt="" className="w-5 h-5" />
                     <div>
                       <p className="font-medium">{item.owner}</p>
                       <p className="text-xs text-gray-500">Owner</p>

@@ -1,8 +1,3 @@
-import docIcon from "../../../assets/seopageassets/verify712/list.svg";
-import starIcon from "../../../assets/seopageassets/verify712/star.svg";
-import purpleCheckIcon from "../../../assets/seopageassets/verify712/purple-check.svg";
-import blueCheckIcon from "../../../assets/seopageassets/verify712/blue-check.svg";
-import infoIcon from "../../../assets/seopageassets/verify712/info-icon.svg";
 
 export default function UtaraVsPropertyCard() {
   return (
@@ -21,11 +16,11 @@ export default function UtaraVsPropertyCard() {
         {/* TOP CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
           <UsageCard
-            icon={docIcon}
+            icon="/assets/seopageassets/verify712/list.svg"
             title="When 7/12 is Used?"
             bg="#FBF8FF"
             border="#4F8BFF"
-            listIcon={purpleCheckIcon}
+            listIcon="/assets/seopageassets/verify712/purple-check.svg"
             items={[
               "Agricultural land in rural areas",
               "Land outside municipal corporation limits",
@@ -35,11 +30,11 @@ export default function UtaraVsPropertyCard() {
           />
 
           <UsageCard
-            icon={starIcon}
+            icon="/assets/seopageassets/verify712/star.svg"
             title="When Property Card is Used?"
             bg="#F0F9FF"
             border="#4693B9"
-            listIcon={blueCheckIcon}
+            listIcon="/assets/seopageassets/verify712/blue-check.svg"
             items={[
               "Urban properties and buildings",
               "Land within municipal corporation",
@@ -95,7 +90,7 @@ export default function UtaraVsPropertyCard() {
 
         {/* IMPORTANT NOTE */}
         <div className="mt-10 bg-[#FFF7E0] border-l-4 border-[#FFC107] p-4 rounded-md flex gap-3">
-          <img src={infoIcon} alt="info" className="w-4 h-4 mt-1" />
+          <img src="/assets/seopageassets/verify712/info.svg" alt="info" className="w-4 h-4 mt-1" />
           <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
             <strong>Important Note:</strong> If land has been converted from
             agricultural to non-agricultural (NA conversion), you may need both

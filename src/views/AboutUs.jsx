@@ -1,17 +1,8 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../store/auth";
-import { FaStar } from "react-icons/fa";
-import AboutBack from "../assets/aboutUs/AboutUsBackImage.webp";
-import aboutImg from "../assets/aboutUs/AboutUsLeftImage.svg";
-import { IoMdStar } from "react-icons/io";
 import SEO from "../components/SEO";
 import { IoIosDoneAll } from "react-icons/io";
-import Icon1 from "../assets/aboutUs/Icon1.svg";
-import Icon2 from "../assets/aboutUs/Icon2.svg";
-import Icon3 from "../assets/aboutUs/Icon3.svg";
-import tag from "../assets/aboutUs/tag.svg";
 import { motion } from "framer-motion";
 import AdvertisementCard from "../components/AdvertisementCard";
 
@@ -45,7 +36,7 @@ const AboutUs = () => {
       title: "Truth",
       desc: "Real estate transactions are challenging, but the Reparv platform solves them with honesty and efficiency.",
       icon: (
-        <img src={Icon1} alt="icon" className="w-20 object-cover mr-10 mb-10" />
+        <img src="/assets/aboutUs/Icon1.svg" alt="icon" className="w-20 object-cover mr-10 mb-10" />
       ),
     },
     {
@@ -53,7 +44,7 @@ const AboutUs = () => {
       title: "Trust",
       desc: "Trust in real estate transactions is often uncertain, but Reparv has established a seamless process to solve this problem effortlessly.",
       icon: (
-        <img src={Icon2} alt="icon" className="h-20 object-cover mr-10 mb-10" />
+        <img src="/assets/aboutUs/Icon2.svg" alt="icon" className="h-20 object-cover mr-10 mb-10" />
       ),
     },
     {
@@ -61,7 +52,7 @@ const AboutUs = () => {
       title: "Transparency",
       desc: "The lack of a trackable, technology-driven system keeps most real estate processes manual, making understanding a major challenge.",
       icon: (
-        <img src={Icon3} alt="icon" className="h-20 object-cover mr-10 mb-10" />
+        <img src="/assets/aboutUs/Icon3.svg" alt="icon" className="h-20 object-cover mr-10 mb-10" />
       ),
     },
   ];
@@ -80,7 +71,7 @@ const AboutUs = () => {
       <div className="relative w-full mx-auto max-w-[1440px] flex flex-col items-center justify-center">
         <div className="w-full relative lg:mb-5">
           <motion.img
-            src={AboutBack}
+            src="/assets/aboutUs/AboutUsBackImage.webp"
             alt="About Reparv"
             initial={{ opacity: 0, scale: 1.05 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -101,7 +92,7 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-20 items-center my-10 lg:my-15">
             <div className="relative w-full flex items-center justify-center pl-[15%]">
               <motion.img
-                src={aboutImg}
+                src="/assets/aboutUs/AboutUsLeftImage.svg"
                 alt="Our Journey"
                 initial={{ opacity: 0, x: -60 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -110,7 +101,7 @@ const AboutUs = () => {
                 className="w-full object-cover"
               />
               <motion.img
-                src={tag}
+                src="/assets/aboutUs/VerifiedTag.svg"
                 alt="Verified Tag"
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}

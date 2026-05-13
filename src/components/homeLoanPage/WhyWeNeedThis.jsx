@@ -1,5 +1,4 @@
 import { FaShieldAlt, FaFileAlt, FaPhoneAlt, FaLock } from "react-icons/fa";
-import communicationImage from "../../assets/homeLoan/communication.svg";
 
 export default function WhyWeNeedThis() {
   return (
@@ -8,7 +7,7 @@ export default function WhyWeNeedThis() {
       <div className="bg-white rounded-xl p-4">
         <div className="flex justify-center">
           <img
-            src={communicationImage}
+            src="/assets/homeLoan/communication.svg"
             alt="Why we need this"
             loading="lazy"
             className="max-h-48 object-contain"

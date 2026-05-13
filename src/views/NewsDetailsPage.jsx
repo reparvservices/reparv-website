@@ -5,10 +5,6 @@ import React, { useEffect, useState } from "react";
 import AdvertisementCard from "../components/News/AdvertisementCard";
 import TrendingNowCard from "../components/News/TrendingNowCard";
 import CityQuickLinksCard from "../components/News/CityQuickLinksCard";
-import LatestNewsCard from "../components/News/LatestNewsCard";
-import CityWiseNews from "../components/News/CityWiseNews";
-import RealEstateToolsAndGuides from "../components/News/RealEstateToolsAndGuides";
-import NeverMissUpdates from "../components/News/NeverMissUpdates";
 import ReraNewsCard from "../components/News/ReraNewsCard";
 import { LuClock } from "react-icons/lu";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -17,12 +13,6 @@ import { IoShareSocialSharp } from "react-icons/io5";
 import { BiLike } from "react-icons/bi";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 
-import {
-  FaFacebookF,
-  FaLinkedinIn,
-  FaWhatsapp,
-  FaXTwitter,
-} from "react-icons/fa6";
 import { useAuth } from "../store/auth";
 import { getImageURI } from "../utils/helper";
 import SocialNewsShare from "../components/SocialNewsShare";

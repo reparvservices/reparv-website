@@ -7,17 +7,7 @@ import React, { useState, useEffect } from "react";
 
 import { FiSearch } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
-import cityView from "../assets/property/cityView.svg";
 import NavCard from "../components/NavCard";
-import NewFlatIcon from "../assets/home/propertyType/NewFlat.svg";
-import NewPlotIcon from "../assets/home/propertyType/OpenLand.svg";
-import NewShopIcon from "../assets/home/propertyType/NewShop.svg";
-import RowHouseIcon from "../assets/home/propertyType/RowHouse.svg";
-import NewFarmHouseIcon from "../assets/home/propertyType/FarmHouse.svg";
-import NewFarmLandIcon from "../assets/home/propertyType/FarmLand.svg";
-import NewCommercialFlatIcon from "../assets/home/propertyType/NewFlat.svg";
-import NewCommercialPlotIcon from "../assets/home/propertyType/OpenLand.svg";
-import IndustrialSpaceIcon from "../assets/home/propertyType/Office.svg";
 import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
@@ -31,55 +21,55 @@ const propertyTypes = [
     title: "Buy New Flat",
     to: "/properties/type/new",
     type: "NewFlat",
-    image: NewFlatIcon,
+    image: "/assets/home/propertyType/NewFlat.svg",
   },
   {
     title: "Buy New Plot",
     to: "/properties/type/new",
     type: "NewPlot",
-    image: NewPlotIcon,
+    image: "/assets/home/propertyType/OpenLand.svg",
   },
   {
     title: "Buy New Shop",
     to: "/properties/type/new",
     type: "NewShop",
-    image: NewShopIcon,
+    image: "/assets/home/propertyType/NewShop.svg",
   },
   {
     title: "Buy New Row House",
     to: "/properties/type/new",
     type: "RowHouse",
-    image: RowHouseIcon,
+    image: "/assets/home/propertyType/RowHouse.svg",
   },
   {
     title: "Buy New Farm Land",
     to: "/properties/type/new",
     type: "FarmLand",
-    image: NewFarmLandIcon,
+    image: "/assets/home/propertyType/FarmLand.svg",
   },
   {
     title: "Buy New Farm House",
     to: "/properties/type/new",
     type: "FarmHouse",
-    image: NewFarmHouseIcon,
+    image: "/assets/home/propertyType/FarmHouse.svg",
   },
   {
     title: "Buy New Commercial Flat",
     to: "/properties/type/new",
     type: "CommercialFlat",
-    image: NewCommercialFlatIcon,
+    image: "/assets/home/propertyType/NewFlat.svg",
   },
   {
     title: "Buy New Commercial Plot",
     to: "/properties/type/new",
     type: "CommercialPlot",
-    image: NewCommercialPlotIcon,
+    image: "/assets/home/propertyType/OpenLand.svg",
   },
   {
     title: "Buy New Industrial Space",
     to: "/properties/type/new",
     type: "IndustrialSpace",
-    image: IndustrialSpaceIcon,
+    image: "/assets/home/propertyType/Office.svg",
   },
 ];
 
@@ -182,7 +172,7 @@ const BuyNewProperty = () => {
           <div className="relative col-span-2 flex justify-center lg:justify-end">
             <div className="flex items-center justify-center">
               <img
-                src={cityView}
+                src="/assets/property/cityView.svg"
                 alt="City Illustration"
                 className="max-w-full max-h-full object-cover"
               />

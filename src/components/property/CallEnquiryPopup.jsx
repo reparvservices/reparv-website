@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../../store/auth";
-import reparvLogo from "../../assets/reparvLogo.svg";
 import { addVisitor } from "../../utils/analytics";
 
 export default function CallEnquiryPopup({ property }) {
@@ -98,7 +97,7 @@ export default function CallEnquiryPopup({ property }) {
       <div className="w-full flex flex-col gap-3 justify-center p-6 relative">
         {/* Close Button */}
         <div className={`w-full flex items-center justify-between mb-2`}>
-          <img src={reparvLogo} alt={"reparv logo"} loading="lazy" className={`h-10`} />
+          <img src="/assets/reparvLogo.svg" alt={"reparv logo"} loading="lazy" className={`h-10`} />
           <RxCross2
             onClick={() => {
               setShowCallEnquiryPopup(false);

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import testImage from "../../assets/test.png";
 import { getImageURI } from "../../utils/helper";
 import { useAuth } from "../../store/auth";
 export default function CityWiseNews() {
@@ -110,7 +109,7 @@ export default function CityWiseNews() {
                 {/* IMAGE */}
                 <Link href={`/news/${item?.seoSlug}`}>
                   <img
-                    src={getImageURI(item.image) || testImage}
+                    src={getImageURI(item.image) || "/assets/test.png"}
                     alt={item.title}
                     loading="lazy"
                     className="

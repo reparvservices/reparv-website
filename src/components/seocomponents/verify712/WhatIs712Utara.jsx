@@ -1,9 +1,3 @@
-import docIcon from "../../../assets/seopageassets/verify712/list.svg";
-import starIcon from "../../../assets/seopageassets/verify712/star.svg";
-
-// LIST ICONS (you provide these)
-import purpleCheckIcon from "../../../assets/seopageassets/verify712/purple-check.svg";
-import blueCheckIcon from "../../../assets/seopageassets/verify712/blue-check.svg";
 
 export default function WhatIs712Utara() {
   return (
@@ -23,11 +17,12 @@ export default function WhatIs712Utara() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* WHAT IT IS */}
           <InfoCard
-            icon={docIcon}
+            icon="assets/seopageassets/verify712/list.svg
+            "
             title="What It Is?"
             bg="#FBF8FF"
             border="#8A38F5"
-            listIcon={purpleCheckIcon}
+            listIcon="/assets/seopageassets/verify712/purple-check.svg"
             description="7/12 Utara (सातबारा उतारा) is an extract from the land register maintained by the revenue department of Maharashtra. It contains crucial details about agricultural land."
             items={[
               "Owner’s name and details",
@@ -39,11 +34,11 @@ export default function WhatIs712Utara() {
 
           {/* WHY IMPORTANT */}
           <InfoCard
-            icon={starIcon}
+            icon="/assets/seopageassets/verify712/star.svg"
             title="Why It’s Important?"
             bg="#F0F9FF"
             border="#4693B9"
-            listIcon={blueCheckIcon}
+            listIcon="/assets/seopageassets/verify712/blue-check.svg"
             description="This document is essential for various legal and financial transactions involving land."
             items={[
               "Property purchase verification",

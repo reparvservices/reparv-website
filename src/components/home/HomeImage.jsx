@@ -4,12 +4,6 @@ import React from "react";
 import { useAuth } from "../../store/auth";
 import { motion } from "framer-motion";
 
-import HomeBack from "../../assets/home/HomeBack.webp";
-import HomeSellOldPropertyIcon from "../../assets/home/HomeSellOldPropertyIcon.svg";
-import HomeRentPropertyIcon from "../../assets/home/HomeRentPropertyIcon.svg";
-import HomeBuyResalePropertyIcon from "../../assets/home/HomeBuyResalePropertyIcon.svg";
-import HomeBuyNewPropertyIcon from "../../assets/home/HomeBuyNewPropertyIcon.svg";
-
 export default function HomeImage() {
   const router = useRouter();
   const { user, setShowLogin } = useAuth();
@@ -20,7 +14,7 @@ export default function HomeImage() {
       {/* Background */}
 
       <motion.img
-        src={HomeBack}
+        src="/assets/home/HomeBack.webp"
         alt="Buy Properties in Pune | Reparv Real Estate"
         className="block w-full object-cover mb-[85vw] md:mb-30 lg:mb-40 xl:mb-50"
         loading="eager"
@@ -39,22 +33,22 @@ export default function HomeImage() {
         {[
           {
             to: user ? "/sell-old-property" : "no",
-            img: HomeSellOldPropertyIcon,
+            img: "/assets/home/HomeSellOldPropertyIcon.svg",
             alt: "Sell Old Property",
           },
           {
             to: user ? "/rent-property" : "no",
-            img: HomeRentPropertyIcon,
+            img: "/assets/home/HomeRentPropertyIcon.svg",
             alt: "Rent Property",
           },
           {
             to: "/buy-new-property",
-            img: HomeBuyNewPropertyIcon,
+            img: "/assets/home/HomeBuyNewPropertyIcon.svg",
             alt: "Buy New Property",
           },
           {
             to: "/buy-resale-property",
-            img: HomeBuyResalePropertyIcon,
+            img: "/assets/home/HomeBuyResalePropertyIcon.svg",
             alt: "Buy Resale Property",
           },
         ].map((card, index) => (
