@@ -4,7 +4,6 @@ import { FiSearch, FiChevronDown } from "react-icons/fi";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
 import PropertySearch from "./PropertySearch";
-import { useEffect } from "react";
 
 export default function FilterNavbar({
   searchInputRef,

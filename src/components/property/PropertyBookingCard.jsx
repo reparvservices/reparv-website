@@ -399,7 +399,7 @@ Enquiry via Reparv – www.reparv.in`;
         </div>
 
         {/* ── Pricing card ── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-violet-50 to-white border border-violet-100 rounded-xl p-4">
+        <div className="relative block shrink-0 overflow-hidden bg-gradient-to-br from-violet-50 to-white border border-violet-100 rounded-xl p-4">
           {/* glow blob */}
           <div className="absolute -right-4 -top-6 w-28 h-28 bg-violet-100 rounded-full blur-2xl opacity-50 pointer-events-none" />
 

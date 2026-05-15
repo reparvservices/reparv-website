@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   };
   const delTokenInCookie = () => {
     setAccessToken();
-    Cookies.remove("accessToken"); 
+    Cookies.remove("accessToken");
   };
 
   /* ===================== USER ===================== */
@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
   const [showCallEnquiryPopup, setShowCallEnquiryPopup] = useState(false);
   const [showWhatsappEnquiryPopup, setShowWhatsappEnquiryPopup] =
     useState(false);
+  const [showComingSoonModal, setShowComingSoonModal] = useState(true);
 
   const [showAgreement, setShowAgreement] = useState(false);
   const [showEMIPopup, setShowEMIPopup] = useState(false);
@@ -94,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   /* ===================== API BASE ===================== */
 
   //const URI = "https://api.reparv.in";
-  const URI = "https://aws-api.reparv.in"
+  const URI = "https://aws-api.reparv.in";
   //const URI = "http://localhost:3000";
 
   return (
@@ -179,6 +180,8 @@ export const AuthProvider = ({ children }) => {
         setShowWhatsappEnquiryPopup,
         showEMIPopup,
         setShowEMIPopup,
+        showComingSoonModal,
+        setShowComingSoonModal,
 
         URI,
       }}

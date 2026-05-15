@@ -185,13 +185,13 @@ function PropertyDetails() {
         canonical={`https://www.reparv.in/property-info/${propertyInfo?.seoSlug}`}
         image={frontImage}
       />
-      <div className="w-full max-w-[1380px] flex flex-col sm:p-4 mx-auto">
-        <div className="hidden lg:flex fixed top-15 sm:top-22 sm:bg-[#fafafa] left-0 w-full items-center justify-center z-20 pt-[20px]">
-          <div className="w-full max-w-[1340px] px-4 sm:pr-6">
+      <div className="w-full max-w-345 flex flex-col sm:p-4 mx-auto">
+        <div className="hidden lg:flex fixed top-15 sm:top-22 sm:bg-[#fafafa] left-0 w-full items-center justify-center z-20 pt-5">
+          <div className="w-full max-w-335 px-4 sm:pr-6">
             <FilterNavbar />
           </div>
         </div>
-        <div className="flex w-full lg:pt-[80px]">
+        <div className="flex w-full lg:pt-20">
           <div className="leftSection w-full md:w-[50%] lg:w-[60%] xl:w-[65%] flex flex-col gap-2 sm:gap-4">
             {propertyInfo?.pageTitle && (
               <h1 className="mx-4 sm:mx-6 mt-2 sm:mt-0 text-lg sm:text-2xl font-bold">
@@ -285,7 +285,7 @@ function PropertyDetails() {
           {/* Booking card */}
           <div
             className={`${
-              isScrolling ? "absolute " : "fixed"
+              isScrolling ? "absolute" : "fixed"
             } bookingSection hidden md:flex left-[50%] lg:left-[60%] xl:left-[65%] w-[50%] lg:w-[40%] xl:w-[35%] max-w-[450px] max-left-[1000px] px-6 pb-6 z-10`}
           >
             <PropertyBookingCard propertyInfo={propertyInfo} />

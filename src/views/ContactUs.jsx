@@ -297,7 +297,7 @@ const ContactUs = () => {
 
               {/* PERSON IMAGE */}
               <img
-                src="/assets/contactUs/ContactUsLeftImage.webp"
+                src="/assets/contactUs/ContactUsLeftImage.svg"
                 alt="Customer Support Reparv"
                 className="absolute pointer-events-none bottom-[-24px] lg:bottom-[-40px] right-0 sm:right-[20%] lg:right-1/2 w-[70%] sm:w-[60%] md:w-[60%] lg:w-[450px]"
               />

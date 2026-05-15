@@ -19,6 +19,7 @@ import PlayYoutubeVideo from "../components/property/PlayYoutubeVideo";
 import Login from "../components/user/Login";
 import Agreement from "../components/user/Agreement";
 import AlertMessage from "../components/AlertMessage";
+import ComingSoonModal from "@/components/ComingSoonModal";
 
 // lazy load
 const CitySelector = lazy(() => import("../components/CitySelector"));
@@ -55,6 +56,8 @@ export default function SiteLayout({ children }) {
     showSharePopup,
     setShowSharePopup,
     propertyInformation,
+    showComingSoonModal,
+    setShowComingSoonModal,
   } = useAuth();
 
   const { ref: footerRef, inView: footerInView } = useInView({
@@ -83,7 +86,7 @@ export default function SiteLayout({ children }) {
         <Navbar />
 
         {/* container */}
-        <div className="w-full !pt-[60px] !sm:pt-[84px] sm:bg-[#fafafa]">{children}</div>
+        <div className="w-full pt-15 sm:pt-21! sm:bg-[#fafafa]">{children}</div>
 
       {/* footer */}
       <Footer footerRef={footerRef} />
@@ -203,6 +206,11 @@ export default function SiteLayout({ children }) {
           </div>
         </div>
       )}
+
+      {/* Show Coming Soon Screen */}
+      {showComingSoonModal && <ComingSoonModal onClose={() => setShowComingSoonModal(false)} />}
+
+
       </div>
     </LayoutScrollContext.Provider>
   );
