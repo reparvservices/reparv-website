@@ -40,6 +40,7 @@ const pages = [
   ["join-our-team/page.jsx", "JoinOurTeam", "@/views/JoinOurTeam", "/join-our-team", "Join our team", "Partner and career opportunities at Reparv."],
   ["sales-partner/page.jsx", "JoinOurTeam", "@/views/JoinOurTeam", "/sales-partner", "Sales partner", "Become a sales partner with Reparv."],
   ["territory-partner/page.jsx", "JoinOurTeam", "@/views/JoinOurTeam", "/territory-partner", "Territory partner", "Territory partner program at Reparv."],
+  ["map-view/page.jsx", "MapView", "@/views/MapView", "/map-view", "Map view", "Explore properties on the map."],
 ];
 
 const tpl = (comp, importPath, metaPath, title, desc) => `import ${comp} from "${importPath}";

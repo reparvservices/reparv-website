@@ -150,7 +150,9 @@ export default function ComingSoonModal({ onClose }) {
         <div
           style={{
             backgroundImage:
-              window.innerWidth >= 768 ? "none" : `url("../assets/LeftSideMobileCinematic.svg")`,
+              typeof window !== "undefined" && window.innerWidth >= 768
+                ? "none"
+                : `url("/assets/LeftSideMobileCinematic.svg")`,
           }}
           className={`
     relative w-full overflow-scroll scrollbar-hide min-h-[80vh] md:min-h-auto max-h-[90vh]
