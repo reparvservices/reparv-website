@@ -227,16 +227,16 @@ const ContactUs = () => {
                   <div className="text-white">{item.icon}</div>
                   <div className="fle flex-col gap-2 md:gap-4">
                     {/* Title and Activity */}
-                    <h3 className="text-[10px] sm:text-xs md:text-xl md:mb-2">
+                    <h3 className="text-xs sm:text-sm md:text-xl font-bold sm:font-semibold md:mb-2">
                       {item.title}
                     </h3>
-                    <h3 className="text-[10px] sm:text-xs md:text-xl font-bold text-[#8A38F5]">
+                    <h3 className="text-xs sm:text-sm md:text-xl font-bold text-[#8A38F5]">
                       {item.activity}
                     </h3>
                   </div>
                 </div>
 
-                <p className="text-black text-[10px] sm:text-base md:text-xl font-bold leading-relaxed">
+                <p className="text-black ml-1 text-xs sm:text-base md:text-xl font-bold leading-relaxed">
                   {item.desc}
                 </p>
               </motion.div>
@@ -254,9 +254,9 @@ const ContactUs = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="bg-[#8A38F5] text-white rounded-2xl p-4 md:p-10 max-w-[450px]"
               >
-                <div className="flex items-center gap-3 mb-4 md:mb-6">
+                <div className="flex items-center gap-3 mb-2">
                   <img
-                    src="/assets/contactUs/Icon5.svg"
+                    src={Icon5}
                     alt="Icon"
                     className="w-5 md:w-8 object-cover"
                   />
@@ -265,9 +265,9 @@ const ContactUs = () => {
                   </h3>
                 </div>
 
-                <p className="text-base font-bold md:text-xl leading-relaxed mb-4 md:mb-6">
-                  In front of Shiv Mandir, sister colony Ram Nagar Chandrapur -
-                  442401
+                <p className="text-base font-bold md:text-lg leading-relaxed mb-4">REPARV SERVICES PRIVATE LIMITED</p>
+                <p className="text-sm font-bold md:text-base leading-relaxed mb-4">
+                  PLOT NO. 11, THIRD BUS, STOP, GORLE LAYOUT, Trimurti Nagar, Nagpur, Nagpur- 440022, Maharashtra
                 </p>
 
                 <div className="space-y-3 text-sm md:text-base font-bold">
@@ -283,7 +283,7 @@ const ContactUs = () => {
 
                   <div className="flex items-center gap-3">
                     <GrLocation size={20} />
-                    <span>Chandrapur</span>
+                    <span>Nagpur</span>
                   </div>
                 </div>
 

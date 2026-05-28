@@ -256,6 +256,8 @@ function BlogDetails() {
             <div className="min-h-[1350px] max-h-[2700px] w-full overflow-y-auto scrollbar-hide">
               <div><AdvertisementCard variant="sidebar" /></div>
               <div className="w-full"><BlogFeatureProperties /></div>
+              <div><AdvertisementCard variant="sidebar" /></div>
+              <div><AdvertisementCard variant="sidebar" /></div>
             </div>
           </div>
         </div>

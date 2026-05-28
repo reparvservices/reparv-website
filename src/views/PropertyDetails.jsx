@@ -259,7 +259,7 @@ function PropertyDetails() {
               <PropertyLocationMap property={propertyInfo} />
             )}
 
-            {/* Property Details */}
+            {/* Property Details 
             {propertyInfo?.propertyDescription && activeTab !== "About" && (
               <PropertyDescription propertyInfo={propertyInfo} />
             )}
@@ -275,6 +275,8 @@ function PropertyDetails() {
             {activeTab !== "Location" && (
               <PropertyLocationMap property={propertyInfo} />
             )}
+
+            */}
 
             {/* Hide EMI Calculator in Rentals 
             {!["RentalFlat", "RentalShop", "RentalOffice"].includes(
@@ -293,7 +295,7 @@ function PropertyDetails() {
         </div>
 
         {/* Book Site Visit Button (Mobile) */}
-        <div className="fixed z-30 w-full sm:w-auto right-0 bottom-0 sm:hidden p-4 rounded-2xl text-white text-md shadow-lg ">
+        <div className="fixed z-30 w-full sm:w-auto right-0 bottom-17.5 sm:hidden p-4 rounded-2xl text-white text-md shadow-lg">
           <button
             onClick={() => {
               setShowSiteVisitPopup(true);
@@ -326,7 +328,7 @@ function PropertyDetails() {
           </Suspense>
         </div>
 
-        <div className="max-w-[1380px] mx-auto my-5">
+        <div className="max-w-345 mx-auto my-5">
           <AdvertisementCard />
         </div>
 

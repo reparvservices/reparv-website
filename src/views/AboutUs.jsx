@@ -36,7 +36,7 @@ const AboutUs = () => {
       title: "Truth",
       desc: "Real estate transactions are challenging, but the Reparv platform solves them with honesty and efficiency.",
       icon: (
-        <img src="/assets/aboutUs/Icon1.svg" alt="icon" className="w-20 object-cover mr-10 mb-10" />
+        <img src="/assets/aboutUs/Icon1.svg" alt="icon" className="w-18 object-cover mr-14 mb-14" />
       ),
     },
     {
@@ -44,7 +44,7 @@ const AboutUs = () => {
       title: "Trust",
       desc: "Trust in real estate transactions is often uncertain, but Reparv has established a seamless process to solve this problem effortlessly.",
       icon: (
-        <img src="/assets/aboutUs/Icon2.svg" alt="icon" className="h-20 object-cover mr-10 mb-10" />
+        <img src="/assets/aboutUs/Icon2.svg" alt="icon" className="h-18 object-cover mr-14 mb-14" />
       ),
     },
     {
@@ -52,7 +52,7 @@ const AboutUs = () => {
       title: "Transparency",
       desc: "The lack of a trackable, technology-driven system keeps most real estate processes manual, making understanding a major challenge.",
       icon: (
-        <img src="/assets/aboutUs/Icon3.svg" alt="icon" className="h-20 object-cover mr-10 mb-10" />
+        <img src="/assets/aboutUs/Icon3.svg" alt="icon" className="h-18 object-cover mr-14 mb-14" />
       ),
     },
   ];
@@ -185,6 +185,11 @@ const AboutUs = () => {
                 key={item.id}
                 className="relative bg-white rounded-2xl p-8 pt-10 text-left shadow-[0px_3px_11px_0px_#00000026] overflow-hidden"
               >
+                {/* Purple Curve */}
+                <div className="absolute -bottom-20 -right-20 w-58 h-58 rounded-full bg-[#7E3FF2] flex items-center justify-center">
+                  <div className="text-white">{item.icon}</div>
+                </div>
+
                 {/* Number + Title */}
                 <h3 className="text-3xl font-bold mb-4">
                   {item.id}. {item.title}
@@ -194,10 +199,7 @@ const AboutUs = () => {
                   {item.desc}
                 </p>
 
-                {/* Purple Curve */}
-                <div className="absolute -bottom-20 -right-20 w-68 h-68 rounded-full bg-[#7E3FF2] flex items-center justify-center">
-                  <div className="text-white">{item.icon}</div>
-                </div>
+                
               </div>
             ))}
           </div>

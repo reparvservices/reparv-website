@@ -1,13 +1,13 @@
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../../store/auth";
 import PropertyCard from "../property/PropertyCard";
 import { motion } from "framer-motion";
 
-const PropertySection = () => {
+const TrendingPropertySection = () => {
   const router = useRouter();
   const { URI, selectedCity } = useAuth();
   const [properties, setProperties] = useState([]);
@@ -26,7 +26,7 @@ const PropertySection = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        `${URI}/frontend/all-properties/${selectedCity}`,
+        `${URI}/frontend/trending-properties/${selectedCity}`,
         {
           method: "GET",
           credentials: "include",
@@ -40,11 +40,7 @@ const PropertySection = () => {
 
       const data = await response.json();
 
-      const rentalProperties = data.filter((item) =>
-        item.propertyCategory?.startsWith("Rental"),
-      );
-
-      setProperties(rentalProperties);
+      setProperties(data);
     } catch (err) {
       console.error("Error fetching:", err);
     }
@@ -59,11 +55,10 @@ const PropertySection = () => {
       {/* Heading */}
       <div className="flex items-center justify-center gap-6 pb-4">
         <div className="flex-1 h-[3px] bg-gradient-to-l from-[#5E23DC] to-[#FAF8FF]" />
-        <h1 className="text-lg text-center sm:text-2xl md:text-4xl lg:text-5xl font-bold">
-          Verified <span className="text-[#8A38F5]">Rental</span> Properties in<p>{" "}
-          {selectedCity}
-          </p>
-        </h1>
+        <h2 className="text-lg text-center sm:text-2xl md:text-4xl lg:text-5xl font-bold">
+          Verified <span className="text-[#8A38F5]">Trending</span> Properties in
+        <p>{" "}
+          {selectedCity}</p></h2>
         <div className="flex-1 h-[3px] bg-gradient-to-r from-[#5E23DC] to-[#FAF8FF]" />
       </div>
 
@@ -126,4 +121,4 @@ const PropertySection = () => {
   );
 };
 
-export default PropertySection;
+export default TrendingPropertySection;

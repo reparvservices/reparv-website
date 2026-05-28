@@ -219,7 +219,7 @@ export default function NewsDetailsPage() {
           news?.seoDescription ||
           "Stay updated with the latest real estate news, property trends, and market insights on Reparv News. Read trusted updates and explore more today."
         }
-        canonical={`https://www.reparv.in/property-info/${newsId || news?.seoSlug}}`}
+        canonical={`https://www.reparv.in/property-info/${news?.seoSlug}}`}
       />
       <div className="w-full min-h-screen bg-[#F8F7FC] text-gray-800">
         {/* ================= ARTICLE SECTION ================= */}

@@ -8,10 +8,12 @@ import SectionSkeleton from "../components/SectionSkeleton";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useAuth } from "../store/auth";
-import AdvertisementCard from "../components/AdvertisementCard";
 
 const PropertyOnRentSection = lazy(
   () => import("../components/home/PropertyOnRentSection"),
+);
+const TrendingPropertySection = lazy(
+  () => import("../components/home/TrendingPropertySection"),
 );
 const PropertySection = lazy(
   () => import("../components/home/PropertySection"),
@@ -98,11 +100,9 @@ function Home() {
 
         <Suspense fallback={<SectionSkeleton height="320px" />}>
           <motion.div variants={item}>
-            <PropertySection />
+            <TrendingPropertySection />
           </motion.div>
         </Suspense>
-
-        <AdvertisementCard />
 
         <Suspense fallback={<SectionSkeleton height="240px" />}>
           <motion.div variants={item}>
@@ -110,7 +110,12 @@ function Home() {
           </motion.div>
         </Suspense>
 
-        <AdvertisementCard />
+        <Suspense fallback={<SectionSkeleton height="320px" />}>
+          <motion.div variants={item}>
+            <PropertySection />
+          </motion.div>
+        </Suspense>
+
 
         <Suspense fallback={<SectionSkeleton height="300px" />}>
           <motion.div variants={item}>
@@ -130,8 +135,6 @@ function Home() {
           </motion.div>
         </Suspense>
 
-        <AdvertisementCard />
-
         <Suspense fallback={<SectionSkeleton height="260px" />}>
           <motion.div variants={item}>
             <NewsSection />
@@ -143,8 +146,6 @@ function Home() {
             <FAQSection />
           </motion.div>
         </Suspense>
-
-        <AdvertisementCard />
 
         <Suspense fallback={<SectionSkeleton height="220px" />}>
           <motion.div variants={item}>

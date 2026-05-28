@@ -51,7 +51,7 @@ const PropertyOverview = ({ propertyInfo }) => {
   ].filter(Boolean);
   const Row = ({ label, value, isLast }) => (
     <div
-      className={`flex justify-between items-center py-4 border-b border-gray-200`}
+      className={`${value? "flex" : "hidden"} justify-between items-center py-4 border-b border-gray-200`}
     >
       <span className="text-gray-500 text-sm">{label}</span>
       <span className="text-black font-semibold text-sm">{value || "—"}</span>
@@ -71,7 +71,7 @@ const PropertyOverview = ({ propertyInfo }) => {
             <Row
               key={index}
               label={item.label}
-              value={item.value || "_"}
+              value={item?.value}
               isLast={index === leftColumn.length - 1}
             />
           ))}
@@ -83,7 +83,7 @@ const PropertyOverview = ({ propertyInfo }) => {
             <Row
               key={index}
               label={item.label}
-              value={item.value || "_"}
+              value={item?.value}
               isLast={index === rightColumn.length - 1}
             />
           ))}

@@ -282,7 +282,7 @@ export default function FilterSidebar() {
       </div>
 
       {/* Locations */}
-      <div>
+      {locations.length !== 0 && (<div>
         <div
           className="flex justify-between items-center cursor-pointer"
           onClick={() => setShowLocations(!showLocations)}
@@ -325,7 +325,7 @@ export default function FilterSidebar() {
             ))}
           </div>
         )}
-      </div>
+      </div>)}
 
       {/* Budget */}
       <div className="w-full">

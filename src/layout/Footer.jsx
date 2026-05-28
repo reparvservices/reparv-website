@@ -53,6 +53,9 @@ function Footer({ footerRef }) {
               <Link href="/contact-us" className="hover:underline">
                 Contact Us
               </Link>
+              <Link href="/support" className="hover:underline">
+                Support
+              </Link>
             </div>
 
             {/* 2. Become a Professional */}
@@ -75,7 +78,7 @@ function Footer({ footerRef }) {
             {/* 3. Download Link */}
             <div className="flex flex-col gap-2 text-sm lg:text-base">
               <h3 className="text-lg lg:text-xl font-semibold">
-                Download Link
+                Download Apps
               </h3>
 
               <a
@@ -203,6 +206,10 @@ function Footer({ footerRef }) {
               <Link href="/contact-us" className="hover:underline">
                 Contact Us
               </Link>
+              |
+              <Link href="/support" className="hover:underline">
+                Support
+              </Link>
             </div>
           </div>
 
@@ -223,7 +230,7 @@ function Footer({ footerRef }) {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-2">Download Link</h3>
+            <h3 className="text-lg font-semibold mb-2">Download Apps</h3>
             <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
               <a
                 href="https://play.google.com/store/apps/details?id=com.reparvcustomer"

@@ -418,7 +418,7 @@ function SellProperty() {
           Add Basic Details
         </span>
       </div>
-      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row gap-4 sm:gap-6">
+      <div className="max-w-[1400px] mx-auto flex flex-col-reverse md:flex-row gap-4 sm:gap-6">
         {/* LEFT PANEL */}
         <aside className="w-full md:w-[40%] lg:w-[35%] xl:w-[30%] bg-white rounded-2xl p-4 sm:p-6 py-6 h-fit lg:sticky lg:top-6 shadow sm:shadow-[0px_4px_8px_4px_#8A38F51F]">
           <div className="flex items-center gap-3 mb-5">

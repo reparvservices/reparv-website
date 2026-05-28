@@ -71,10 +71,10 @@ export default function TrendingNowCard({ news = [] }) {
 
               {/* CONTENT */}
               <div className="flex-1">
-                <p className="text-[10px] sm:text-[12px] md:text-[14px] font-bold text-black leading-4 sm:leading-5">
+                <p className="text-sm md:text-[14px] font-bold text-black leading-4 sm:leading-5">
                   {item?.title || "Untitled News"}
                 </p>
-                <p className="text-[10px] sm:text-[12px] md:text-[14px] text-[#868686] leading-4 sm:leading-5 mt-1">
+                <p className="text-sm md:text-[14px] text-[#868686] leading-4 sm:leading-5 mt-1">
                   {(item?.views || 0).toLocaleString()} views
                 </p>
               </div>

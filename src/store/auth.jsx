@@ -76,6 +76,19 @@ export const AuthProvider = ({ children }) => {
   const [showEMIPopup, setShowEMIPopup] = useState(false);
 
   /* ===================== EFFECTS ===================== */
+  useEffect(() => {
+    const modalClosed = localStorage.getItem("comingSoonModalClosed");
+
+    if (!modalClosed) {
+      setShowComingSoonModal(true);
+    }
+  }, []);
+
+  const handleCloseModal = () => {
+    setShowComingSoonModal(false);
+
+    localStorage.setItem("comingSoonModalClosed", "true");
+  };
 
   useEffect(() => {
     try {
@@ -182,6 +195,7 @@ export const AuthProvider = ({ children }) => {
         setShowEMIPopup,
         showComingSoonModal,
         setShowComingSoonModal,
+        handleCloseModal,
 
         URI,
       }}

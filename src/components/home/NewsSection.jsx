@@ -38,7 +38,7 @@ function NewsSection() {
       {/* Header */}
       <div className="flex items-center justify-center gap-6 pb-2 sm:pb-8">
         <div className="flex-1 h-[3px] bg-gradient-to-l from-[#5E23DC] to-[#FAF8FF]" />
-        <h2 className="text-base sm:text-2xl md:text-4xl lg:text-5xl font-bold">
+        <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-bold">
           Top <span className="text-[#8A38F5]"> Articles </span> on Real estate
         </h2>
         <div className="flex-1 h-[3px] bg-gradient-to-r from-[#5E23DC] to-[#FAF8FF]" />

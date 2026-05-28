@@ -87,7 +87,8 @@ const PropertyCategories = () => {
 
   return (
     <section className="px-2 sm:px-4 py-10 max-w-6xl mx-auto">
-      <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4">
+      <div className="flex flex-col bg-white sm:bg-transparent shadow-md sm:shadow-none p-5 sm:p-0 items-center justify-center rounded-xl sm:rounded-0 mb-4 sm:mb-6 transition duration-200 cursor-pointer">
+        <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-4">
         Discover Verified Properties with Reparv
       </h2>
       <p className=" text-gray-600 mb-6 sm:mb-8">
@@ -103,6 +104,7 @@ const PropertyCategories = () => {
         Explore a wide range of verified property types across Nagpur, Wardha,
         Amravati, and nearby cities.
       </p>
+      </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {categories.map((item, index) => (

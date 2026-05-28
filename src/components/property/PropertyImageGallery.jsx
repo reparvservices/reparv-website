@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import {
   ChevronLeft,
@@ -207,8 +208,8 @@ export default function PropertyImageGallery({ property }) {
     <div className="w-full mx-auto space-y-5 rounded-xl">
       {/* Main Image */}
       <div className="relative overflow-hidden">
-        <a
-          href={`https://www.reparv.in/property-info/${property?.seoSlug}`}
+        <Link
+          href={`/property-info/${property?.seoSlug}`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -224,7 +225,7 @@ export default function PropertyImageGallery({ property }) {
             loading="lazy"
             className="w-full h-[250px] sm:h-[390px] lg:h-[450px] xl:h-[500px] rounded-2xl object-contain bg-[#00000020]"
           />
-        </a>
+        </Link>
 
         {/* Back Button */}
         <button

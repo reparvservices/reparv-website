@@ -5,22 +5,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/store/auth";
 import FormatPrice from "@/components/FormatPrice";
 import { addVisitor } from "@/utils/analytics";
-
-// ── Inline SVG Icons ───────────────────────────────────────────────────────
-const PhoneIcon = () => (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 10.8 19.79 19.79 0 0 1 0 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L6.91 7.91a16 16 0 0 0 6.18 6.18l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-  </svg>
-);
+import { FaPhoneAlt } from "react-icons/fa";
+import { FaWhatsapp } from "react-icons/fa";
+// ── Inline SVG Icons ──────────────────────────────────────────────────────
 
 const ArrowRightIcon = () => (
   <svg
@@ -204,12 +191,6 @@ const GridIcon = () => (
   </svg>
 );
 
-const WhatsAppIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347" />
-  </svg>
-);
-
 // ── Helpers ────────────────────────────────────────────────────────────────
 const isRental = (cat) =>
   ["RentalFlat", "RentalShop", "RentalOffice"].includes(cat);
@@ -272,7 +253,7 @@ Enquiry via Reparv – www.reparv.in`;
 
     window.open(
       `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,
-      "_blank"
+      "_blank",
     );
   };
 
@@ -289,23 +270,20 @@ Enquiry via Reparv – www.reparv.in`;
 
   const showEMI =
     !isRental(propertyInfo?.propertyCategory) &&
-    propertyInfo?.loanAvailability !== "No";
+    propertyInfo?.loanAvailability !== "No" && propertyInfo?.emi !== 0;
 
   const showAvailability =
-    (propertyInfo?.availableCount > 0 ||
-      propertyInfo?.bookedCount > 0) &&
+    (propertyInfo?.availableCount > 0 || propertyInfo?.bookedCount > 0) &&
     isNewProperty(propertyInfo?.propertyCategory);
 
-  const address = propertyInfo?.address
-    ? `${propertyInfo.address}, `
-    : "";
+  const address = propertyInfo?.address ? `${propertyInfo.address}, ` : "";
 
   const fullAddress = `${address}${propertyInfo?.state || ""} ${
     propertyInfo?.pincode || ""
   }`.trim();
 
   const showRERA = ["NewFlat", "NewPlot"].includes(
-    propertyInfo?.propertyCategory
+    propertyInfo?.propertyCategory,
   );
 
   const showApproval =
@@ -313,8 +291,8 @@ Enquiry via Reparv – www.reparv.in`;
     propertyInfo?.propertyCategory !== "FarmLand";
 
   return (
-    <div className="relative w-full max-w-[460px] bg-white rounded-2xl p-4 sm:p-5 flex flex-col gap-3 font-sans max-h-[75vh]">
-      <div className="w-full max-h-[70vh] flex flex-col gap-3 overflow-scroll scrollbar-hide">
+    <div className="relative w-full max-w-[460px] bg-white rounded-2xl p-4 sm:p-5 flex flex-col gap-3 font-sans md:max-h-[75vh]">
+      <div className="w-full md:max-h-[70vh] flex flex-col gap-3 overflow-scroll scrollbar-hide">
         {/* ── Header ── */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
@@ -438,17 +416,17 @@ Enquiry via Reparv – www.reparv.in`;
         <div className="flex flex-col gap-4">
           {/* EMI card */}
           {showEMI && (
-            <div className="flex-1 flex items-center justify-between gap-2 border border-slate-100 rounded-xl p-3 shadow-sm">
+            <div className="flex-1 flex items-center justify-between gap-2 border border-slate-100 rounded-xl p-3">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 flex-shrink-0 rounded-xl bg-indigo-50 text-violet-600 flex items-center justify-center">
+                <div className="w-10 h-10 flex-shrink-0 rounded-xl bg-indigo-50 text-violet-600 flex items-center justify-center">
                   <CreditCardIcon />
                 </div>
                 <div>
-                  <p className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">
+                  <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wide">
                     EMI starts at
                   </p>
-                  <p className="text-sm font-extrabold text-slate-800 leading-tight">
-                    <FormatPrice price={propertyInfo?.emi} />
+                  <p className="text-base font-extrabold text-slate-800 leading-tight">
+                    <FormatPrice price={parseInt(propertyInfo?.emi)} />
                     <span className="text-[10px] text-gray-400 font-medium">
                       {" "}
                       /mo
@@ -470,19 +448,19 @@ Enquiry via Reparv – www.reparv.in`;
           )}
 
           {/* Total price card */}
-          <div className="flex-1 flex items-center justify-between gap-4 border border-slate-100 rounded-xl p-3 shadow-sm">
+          <div className="flex-1 flex items-center justify-between gap-4 border border-slate-100 rounded-xl p-3">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 flex-shrink-0 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+              <div className="w-10 h-10 flex-shrink-0 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
                 <BuildingIcon />
               </div>
               <div>
-                <p className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">
+                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wide">
                   Total Price
                 </p>
-                <p className="text-sm font-extrabold text-slate-800 leading-tight">
+                <p className="text-base font-extrabold text-slate-800 leading-tight">
                   <FormatPrice price={propertyInfo?.totalOfferPrice} />
                 </p>
-                <p className="text-[9px] text-gray-400 font-bold">
+                <p className="text-[10px] text-gray-400 font-bold">
                   + Other Charges
                 </p>
               </div>
@@ -498,7 +476,6 @@ Enquiry via Reparv – www.reparv.in`;
             </button>
           </div>
         </div>
-
         {/* ── Features strip ── */}
         <div className="flex items-center justify-center gap-x-3 gap-y-1.5 bg-gray-50 border border-dashed border-gray-200 rounded-xl px-3 py-2.5">
           <div className="flex items-center gap-1.5 text-[9px] font-bold text-gray-500">
@@ -520,22 +497,41 @@ Enquiry via Reparv – www.reparv.in`;
             </>
           )}
         </div>
+
+        {/* ── CTA ── */}
+        <div className="flex md:hidden flex-col gap-3 bg-white">
+          {/* ── Call / WhatsApp ── */}
+          <div className="flex gap-4">
+            <button
+              onClick={handleCall}
+              className="flex-1 flex items-center justify-center gap-1.5 border border-violet-400 text-violet-600 hover:bg-violet-50 transition-colors rounded-xl py-2.5 text-[13px] font-bold"
+            >
+              <FaPhoneAlt size={20} /> Call
+            </button>
+            <button
+              onClick={handleWhatsApp}
+              className="flex-1 flex items-center justify-center gap-1.5 border border-green-400 text-green-700 hover:bg-green-50 transition-colors rounded-xl py-2.5 text-[13px] font-bold"
+            >
+              <FaWhatsapp size={20} /> WhatsApp
+            </button>
+          </div>
+        </div>
       </div>
       {/* ── CTA ── */}
-      <div className="flex flex-col gap-3 bg-white">
+      <div className="hidden md:flex flex-col gap-3 bg-white">
         {/* ── Call / WhatsApp ── */}
         <div className="flex gap-4">
           <button
             onClick={handleCall}
             className="flex-1 flex items-center justify-center gap-1.5 border border-violet-400 text-violet-600 hover:bg-violet-50 transition-colors rounded-xl py-2.5 text-[13px] font-bold"
           >
-            <PhoneIcon /> Call
+            <FaPhoneAlt size={20} /> Call
           </button>
           <button
             onClick={handleWhatsApp}
             className="flex-1 flex items-center justify-center gap-1.5 border border-green-400 text-green-700 hover:bg-green-50 transition-colors rounded-xl py-2.5 text-[13px] font-bold"
           >
-            <WhatsAppIcon /> WhatsApp
+            <FaWhatsapp size={20} /> WhatsApp
           </button>
         </div>
 

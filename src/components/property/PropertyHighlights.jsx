@@ -11,58 +11,70 @@ import {
 } from "react-icons/fa";
 
 function PropertyHighlights({ property }) {
+  const isValid = (value) => {
+    return (
+      value !== null &&
+      value !== "null" &&
+      value !== undefined &&
+      value !== "" &&
+      value !== 0 &&
+      value !== "0" &&
+      value !== "[]" &&
+      !(Array.isArray(value) && value.length === 0)
+    );
+  };
+
   const highlights = [
     {
       icon: <FaBed />,
-      title: property?.bedroomView
-        ? `Bedrooms`
-        : "Bedrooms",
+      title: isValid(property?.bedroomView) ? "Bedrooms" : null,
       desc: "Spacious rooms",
     },
     {
       icon: <FaBath />,
-      title: property?.bathroomView
-        ? `Bathrooms`
-        : "Bathrooms",
+      title: isValid(property?.bathroomView) ? "Bathrooms" : null,
       desc: "Modern fixtures",
     },
     {
       icon: <FaRulerCombined />,
-      title: (property?.carpetArea+" Sq.ft") || "Area",
-      desc: property?.carpetArea && "Carpet Area",
+      title: isValid(property?.carpetArea)
+        ? `${property.carpetArea} Sq.ft`
+        : null,
+      desc: "Carpet Area",
     },
     {
       icon: <FaCar />,
-      title: property?.parkingAvailability || "Parking",
+      title: isValid(property?.parkingAvailability)
+        ? property.parkingAvailability
+        : null,
       desc: "Parking facility",
     },
     {
       icon: <FaCouch />,
-      title: property?.furnishing || "Furnishing",
+      title: isValid(property?.furnishing) ? property.furnishing : null,
       desc: "Interior status",
     },
     {
       icon: <FaBuilding />,
       title:
-        property?.floorNo && property?.totalFloors
+        isValid(property?.floorNo) && isValid(property?.totalFloors)
           ? `Floor ${property.floorNo}/${property.totalFloors}`
-          : "Floor Details",
+          : null,
       desc: "Floor information",
     },
     {
       icon: <FaCheckCircle />,
-      title: property?.propertyStatusFeature || "Property Status",
+      title: isValid(property?.propertyStatusFeature)
+        ? property.propertyStatusFeature
+        : null,
       desc: "Availability",
     },
     {
       icon: <FaCompass />,
-      title: property?.propertyFacing || "Facing",
+      title: isValid(property?.propertyFacing) ? property.propertyFacing : null,
       desc: "Direction",
     },
-  ].filter(
-    (item) =>
-      item.title && item.title !== "Bedrooms" && item.title !== "Bathrooms"
-  );
+  ].filter((item) => item.title);
 
   return (
     <div className="bg-white rounded-2xl p-4 sm:p-6">

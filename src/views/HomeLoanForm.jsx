@@ -1,22 +1,26 @@
-"use client"
-
-import { useRouter } from "next/navigation";
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
+import { IoSpeedometerOutline } from "react-icons/io5";
+import Loader from "../components/Loader";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
 
+import { FiSearch } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
+import { BiBriefcase, BiBuildings } from "react-icons/bi";
 import StepIndicator from "../components/homeLoanPage/StepIndicator";
 import Step1Personal from "../components/homeLoanPage/Step1Personal";
 import Step2Income from "../components/homeLoanPage/Step2Income";
 import Step3Documents from "../components/homeLoanPage/Step3Documents";
 import WhyWeNeedThis from "../components/homeLoanPage/WhyWeNeedThis";
+import leftImage from "../assets/homeLoan/leftImage.svg";
 import SEO from "../components/SEO";
+import AdvertisementCard from "../components/AdvertisementCard";
 
 const BlogSection = lazy(() => import("../components/BlogSection"));
 const FAQSection = lazy(() => import("../components/FAQSection"));
 
 export default function HomeLoanForm() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const {
     URI,
     user,
@@ -32,11 +36,9 @@ export default function HomeLoanForm() {
   const next = () => setStep((p) => Math.min(p + 1, 3));
   const back = () => setStep((p) => Math.max(p - 1, 1));
 
-  const [activeTab, setActiveTab] = useState("Job");
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
 
-  //EMI Form Data
   const [formData, setFormData] = useState({
     employmentType: incomeType,
     fullname: "",
@@ -98,19 +100,15 @@ export default function HomeLoanForm() {
       if (!formData[field]) {
         const el = fieldRefs.current[field];
 
-        // 🔔 Show custom alert
         setShowAlert({
           show: true,
-          type: "warning", // success | error | info | warning
+          type: "warning",
           title: "",
           message: `Please fill ${field.replace(/([A-Z])/g, " $1")}`,
         });
 
-        // 📍 Scroll to field
         if (el) {
           el.scrollIntoView({ behavior: "smooth", block: "center" });
-
-          // 🧠 Focus input (delay helps on mobile)
           setTimeout(() => {
             el.focus?.();
           }, 300);
@@ -124,37 +122,33 @@ export default function HomeLoanForm() {
   };
 
   const [seoData, setSeoData] = useState({});
-  
-    const fetchSeoData = async () => {
-      const page = "home-loan";
-      try {
-        const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-          method: "GET",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (!response.ok) throw new Error("Failed to fetch seo data.");
-        const data = await response.json();
-        console.log(data);
-        setSeoData(data);
-      } catch (err) {
-        console.error("Error fetching Seo Data:", err);
-      }
-    };
-  
-    useEffect(() => {
-      fetchSeoData();
-    }, []);
 
-  // **Fetch States from API**
+  const fetchSeoData = async () => {
+    const page = "home-loan";
+    try {
+      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) throw new Error("Failed to fetch seo data.");
+      const data = await response.json();
+      setSeoData(data);
+    } catch (err) {
+      console.error("Error fetching Seo Data:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSeoData();
+  }, []);
+
   const fetchStates = async () => {
     try {
       const response = await fetch(URI + "/admin/states", {
         method: "GET",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) throw new Error("Failed to fetch States.");
       const data = await response.json();
@@ -164,19 +158,15 @@ export default function HomeLoanForm() {
     }
   };
 
-  // **Fetch States from API**
   const fetchCities = async () => {
     try {
       const response = await fetch(`${URI}/admin/cities/${formData?.state}`, {
         method: "GET",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) throw new Error("Failed to fetch cities.");
       const data = await response.json();
-      console.log(data);
       setCities(data);
     } catch (err) {
       console.error("Error fetching :", err);
@@ -202,10 +192,8 @@ export default function HomeLoanForm() {
       setShowLogin(true);
     }
 
-    // 1 Validate all text / number fields
     for (const [key, value] of Object.entries(formData)) {
       if (skipKeys.includes(key)) continue;
-
       if (value === "" || value === null || value === undefined) {
         alert(`Please fill ${key.replace(/([A-Z])/g, " $1")}`);
         setLoading(false);
@@ -213,14 +201,12 @@ export default function HomeLoanForm() {
       }
     }
 
-    // 2 Validate PAN image
     if (!formData.panImage) {
       alert("PAN image is required");
       setLoading(false);
       return;
     }
 
-    // 3 Validate Aadhaar images
     if (!formData.aadhaarFrontImage || !formData.aadhaarBackImage) {
       alert("Both Aadhaar Front and Back images are required");
       setLoading(false);
@@ -229,8 +215,6 @@ export default function HomeLoanForm() {
 
     try {
       const data = new FormData();
-
-      // append normal fields
       Object.entries(formData).forEach(([key, value]) => {
         if (
           key !== "panImage" &&
@@ -240,8 +224,6 @@ export default function HomeLoanForm() {
           data.append(key, value);
         }
       });
-
-      // append images
       data.append("panImage", formData.panImage);
       data.append("aadhaarFrontImage", formData.aadhaarFrontImage);
       data.append("aadhaarBackImage", formData.aadhaarBackImage);
@@ -260,7 +242,7 @@ export default function HomeLoanForm() {
         description: "Our Representative will call you shortly",
       });
 
-      setTimeout(() => router.back(), 1000);
+      setTimeout(() => navigate(-1), 1000);
     } catch (err) {
       console.error("Submit error:", err);
     } finally {
@@ -273,7 +255,7 @@ export default function HomeLoanForm() {
   }, []);
 
   useEffect(() => {
-    if (formData.state != "") {
+    if (formData.state !== "") {
       fetchCities();
     }
   }, [formData.state]);
@@ -285,38 +267,21 @@ export default function HomeLoanForm() {
         description="Start your home loan application online with Reparv. Simple 3-step process, secure verification, fast approval support and complete transparency from start to finish."
       />
       <section className="min-h-screen bg-[#FAF8FF] lg:bg-white">
-        {/* Back Navigation Section */}
+        {/* Back Navigation */}
         <div className="lg:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-2 sm:my-4 rounded-lg bg-white">
-          <FaArrowLeft
-            onClick={() => {
-              router.back();
-            }}
-            className="w-5 h-5"
-          />
+          <FaArrowLeft onClick={() => navigate(-1)} className="w-5 h-5" />
           <span className="w-full text-base sm:text-lg font-bold text-center">
             Home Loan Application
           </span>
         </div>
-        {/* HERO */}
-        <div
-          className="hidden lg:grid w-full max-w-[1440px] h-[550px] pb-[50px] mx-auto relative lg:mb-5 grid-cols-2 overflow-hidden
-          rounded-br-4xl rounded-bl-4xl bg-gradient-to-br from-[#8A38F5] via-[#6B21D8] to-[#3B0764] text-white"
-        >
-          {/* Glow */}
-          <div
-            className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full 
-                bg-purple-500/30 blur-[120px]"
-          />
 
-          {/* Dark diagonal overlay */}
+        {/* HERO (desktop only) */}
+        <div className="hidden lg:grid w-full max-w-[1440px] h-[550px] pb-[50px] mx-auto relative lg:mb-5 grid-cols-2 overflow-hidden rounded-br-4xl rounded-bl-4xl bg-gradient-to-br from-[#8A38F5] via-[#6B21D8] to-[#3B0764] text-white">
+          <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-purple-500/30 blur-[120px]" />
           <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
-
-          {/* LEFT IMAGE */}
           <div className="relative z-10 w-full flex items-end justify-center pl-10">
-            <img src="/assets/seopageassets/homeloanform/LeftImage.svg" alt="image" className="w-[400px]" />
+            <img src={leftImage} alt="image" className="w-[400px]" />
           </div>
-
-          {/* RIGHT CONTENT */}
           <div className="relative z-10 w-full flex items-end justify-center pr-10 pb-10">
             <div className="w-full flex flex-col">
               <h1 className="text-6xl xl:text-7xl font-extrabold mb-4 leading-tight">
@@ -334,35 +299,45 @@ export default function HomeLoanForm() {
 
         {/* FORM */}
         <div className="max-w-[1380px] mx-auto sm:p-4 grid lg:grid-cols-2 gap-10 bg-[#FAF8FF] sm:bg-white mb-5 sm:mb-10">
-          {/* LEFT INFO (STATIC) */}
+          {/* LEFT INFO (desktop) */}
           <div className="hidden lg:block">
             <WhyWeNeedThis />
+            <div>
+              <AdvertisementCard variant="sidebar" />
+            </div>
           </div>
 
           {/* RIGHT FORM */}
           <div className="lg:col-span-1 bg-[#FAF8FF] rounded-3xl shadow-xl p-4 sm:p-6">
+            {/* Step Indicator */}
             <StepIndicator step={step} />
 
-            {/* Income Type */}
-            <div className="w-full flex items-center justify-center my-4 sm:my-8">
-              <div className="w-full max-w-[340px] flex items-center justify-center gap-4 p-2 bg-white rounded-xl">
-                {["Job", "Business"].map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => setIncomeType(type)}
-                    className={`max-w-[150px] flex-1 py-2 rounded-lg font-semibold
-                  ${
-                    incomeType === type
-                      ? "bg-[#8A38F5] text-white"
-                      : " text-black"
-                  }`}
-                  >
-                    {type === "Job" ? "Job" : "Business"}
-                  </button>
-                ))}
+            {/* Job / Business Tab — shown only on step 2 */}
+            {step === 2 && (
+              <div className="w-full flex items-center justify-center mb-4">
+                <div className="w-full flex items-center p-1.5 bg-white rounded-2xl border border-[#E8E8E8] shadow-sm gap-2">
+                  {[
+                    { key: "Job", label: "Job", Icon: BiBriefcase },
+                    { key: "Business", label: "Business", Icon: BiBuildings },
+                  ].map(({ key, label, Icon }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setIncomeType(key)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all
+                        ${
+                          incomeType === key
+                            ? "bg-[#8A38F5] text-white shadow-md"
+                            : "text-gray-500 hover:text-gray-700"
+                        }`}
+                    >
+                      <Icon size={18} />
+                      {label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* STEP CONTENT */}
             {step === 1 && (
@@ -380,6 +355,8 @@ export default function HomeLoanForm() {
                 formData={formData}
                 setFormData={setFormData}
                 fieldRefs={fieldRefs}
+                incomeType={incomeType}
+                setIncomeType={setIncomeType}
               />
             )}
 
@@ -391,40 +368,39 @@ export default function HomeLoanForm() {
               />
             )}
 
-            {/*incomeType === "Business" && (
-              <div className="h-40 flex items-center justify-center text-gray-400">
-                Business Flow – Empty (as requested)
-              </div>
-            )*/}
-
             {/* ACTIONS */}
-            <div className="flex justify-between my-5 mt-5 sm:mt-10">
+            <div className="flex justify-between my-5 mt-5 sm:mt-6 gap-3">
               <button
                 type="button"
                 onClick={back}
                 disabled={step === 1}
-                className="px-4 sm:px-6 py-2 text-sm sm:text-base border rounded-lg disabled:opacity-40"
+                className="px-4 sm:px-6 py-2.5 text-sm sm:text-base border border-gray-300 rounded-xl disabled:opacity-40 font-medium"
               >
                 ← Back
               </button>
 
               <button
                 type="button"
-                //disabled={!isStepValid()}
                 onClick={(e) => {
                   if (!validateStep()) return;
-
                   if (step === 3) {
                     handleSubmit(e);
                   } else {
                     next();
                   }
                 }}
-                className="min-w-[120px] px-4 sm:px-8 py-2 text-sm sm:text-base bg-[#8A38F5] text-white rounded-lg font-semibold active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex-1 px-4 sm:px-8 py-2.5 text-sm sm:text-base bg-[#8A38F5] text-white rounded-xl font-bold active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-purple-200"
               >
                 {step === 3 ? "Submit" : "Continue to next Step →"}
               </button>
             </div>
+
+            {/* Security note on mobile */}
+            {step !== 2 && (
+              <p className="text-center text-xs text-gray-400 mt-1 flex items-center justify-center gap-1">
+                <span>🔒</span> Your information is secure and encrypted
+              </p>
+            )}
           </div>
         </div>
 

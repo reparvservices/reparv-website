@@ -75,7 +75,7 @@ const CustomerReviewSection = () => {
         {/* Mobile Heading */}
         <div className="w-full flex lg:hidden items-center justify-center gap-4">
           <div className="flex-1 h-[2px] bg-gradient-to-l from-[#5E23DC] to-[#FAF8FF]" />
-          <h2 className="text-sm sm:text-xl font-bold text-center">
+          <h2 className="text-lg sm:text-xl font-bold text-center">
             See what <span className="text-[#8A38F5]"> Customers </span> are
             saying
           </h2>

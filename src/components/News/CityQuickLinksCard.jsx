@@ -87,7 +87,7 @@ export default function CityQuickLinksCard({ onCitySelect }) {
               className={`
                 px-4 sm:px-5
                 py-1.5
-                text-[10px] sm:text-[12px]
+                text-xs
                 font-medium
                 rounded-[12px]
                 transition

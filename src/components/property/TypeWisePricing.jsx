@@ -16,48 +16,69 @@ function TypeWisePricing({
   const [isActive, setIsActive] = useState(propertyType?.[0] || "");
   const [propertyData, setPropertyData] = useState({});
 
+  // add this helper above overviewData
+  const isValid = (value) => {
+    return (
+      value !== null &&
+      value !== undefined &&
+      value !== "" &&
+      value !== 0 &&
+      value !== "0"
+    );
+  };
+
   const overviewData = [
     {
       icon: FaVectorSquare,
       label: "Built-Up Area",
       value: propertyData?.builtuparea,
-      show: !["NewPlot", "CommercialPlot"].includes(propertyCategory),
+      show:
+        !["NewPlot", "CommercialPlot"].includes(propertyCategory) &&
+        isValid(propertyData?.builtuparea),
     },
     {
       icon: FaVectorSquare,
       label: "Super Built-Up Area",
       value: propertyData?.superbuiltuparea,
-      show: !["NewPlot", "CommercialPlot"].includes(propertyCategory),
+      show:
+        !["NewPlot", "CommercialPlot"].includes(propertyCategory) &&
+        isValid(propertyData?.superbuiltuparea),
     },
     {
       icon: FaVectorSquare,
       label: "Carpet Area",
       value: propertyData?.carpetarea,
-      show: !["NewPlot", "CommercialPlot"].includes(propertyCategory),
+      show:
+        !["NewPlot", "CommercialPlot"].includes(propertyCategory) &&
+        isValid(propertyData?.carpetarea),
     },
     {
       icon: FaVectorSquare,
       label: "Additional Area",
       value: propertyData?.additionalarea,
-      show: !["NewPlot", "CommercialPlot"].includes(propertyCategory),
+      show:
+        !["NewPlot", "CommercialPlot"].includes(propertyCategory) &&
+        isValid(propertyData?.additionalarea),
     },
     {
       icon: FaVectorSquare,
       label: "Plot Size",
       value: propertyData?.plotsize,
-      show: !["NewFlat", "CommercialFlat"].includes(propertyCategory),
+      show:
+        !["NewFlat", "CommercialFlat"].includes(propertyCategory) &&
+        isValid(propertyData?.plotsize),
     },
     {
       icon: FaVectorSquare,
       label: "Payable Area",
       value: propertyData?.payablearea,
-      show: true,
+      show: isValid(propertyData?.payablearea),
     },
     {
       icon: FaRupeeSign,
       label: "Total Price",
       value: <FormatPrice price={parseFloat(propertyData?.totalcost)} />,
-      show: true,
+      show: isValid(propertyData?.totalcost),
     },
   ];
 
@@ -67,13 +88,13 @@ function TypeWisePricing({
     try {
       const response = await fetch(
         `${URI}/frontend/properties/additionalinfo/data/get/${propertyId}?type=${encodeURIComponent(
-          isActive
+          isActive,
         )}`,
         {
           method: "GET",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       if (!response.ok) throw new Error("Failed to fetch Property Data.");
@@ -132,7 +153,7 @@ function TypeWisePricing({
                 <div>
                   <div className="text-[#00000066] text-xs">{label}</div>
                   <div className="font-normal text-black whitespace-pre-line">
-                    {value || "—"}
+                    {value}
                   </div>
                 </div>
               </div>

@@ -58,6 +58,7 @@ export default function SiteLayout({ children }) {
     propertyInformation,
     showComingSoonModal,
     setShowComingSoonModal,
+    handleCloseModal,
   } = useAuth();
 
   const { ref: footerRef, inView: footerInView } = useInView({
@@ -88,128 +89,127 @@ export default function SiteLayout({ children }) {
         {/* container */}
         <div className="w-full pt-15 sm:pt-21! sm:bg-[#fafafa]">{children}</div>
 
-      {/* footer */}
-      <Footer footerRef={footerRef} />
+        {/* footer */}
+        <Footer footerRef={footerRef} />
 
-      {/* Login Popup */}
-      {showLogin && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <div className="w-full flex flex-col items-center justify-end sm:justify-center h-[90vh] absolute bottom-0 sm:top-10">
-            <Suspense
-              fallback={
-                <div className="rounded-full bg-white px-15 py-4 text-2xl font-bold">
-                  Loading...
-                </div>
-              }
-            >
-              {" "}
-              <Login />
-            </Suspense>
+        {/* Login Popup */}
+        {showLogin && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <div className="w-full flex flex-col items-center justify-end sm:justify-center h-[90vh] absolute bottom-0 sm:top-10">
+              <Suspense
+                fallback={
+                  <div className="rounded-full bg-white px-15 py-4 text-2xl font-bold">
+                    Loading...
+                  </div>
+                }
+              >
+                {" "}
+                <Login />
+              </Suspense>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* City Selector Popup */}
-      {showCitySelector && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <div className="w-full flex flex-col items-center justify-end sm:justify-center h-[90vh] absolute bottom-0 sm:top-10">
-            <Suspense
-              fallback={
-                <div className="rounded-full bg-white px-15 py-4 text-2xl font-bold">
-                  Loading...
-                </div>
-              }
-            >
-              {" "}
-              <CitySelector />
-            </Suspense>
+        {/* City Selector Popup */}
+        {showCitySelector && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <div className="w-full flex flex-col items-center justify-end sm:justify-center h-[90vh] absolute bottom-0 sm:top-10">
+              <Suspense
+                fallback={
+                  <div className="rounded-full bg-white px-15 py-4 text-2xl font-bold">
+                    Loading...
+                  </div>
+                }
+              >
+                {" "}
+                <CitySelector />
+              </Suspense>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Show Book Site Form Screen */}
-      {showSiteVisitPopup && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <div className="w-full flex flex-col items-center justify-end md:justify-center h-[90vh] absolute bottom-0">
-            <SiteVisitPopup />
+        {/* Show Book Site Form Screen */}
+        {showSiteVisitPopup && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <div className="w-full flex flex-col items-center justify-end md:justify-center h-[90vh] absolute bottom-0">
+              <SiteVisitPopup />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Show Book Site Form Screen */}
-      {showAgreement && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-[1000] flex md:items-center md:justify-center">
-          <div className="w-full flex flex-col items-center justify-end md:justify-center h-[90vh] absolute bottom-0">
-            <Agreement />
+        {/* Show Book Site Form Screen */}
+        {showAgreement && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-[1000] flex md:items-center md:justify-center">
+            <div className="w-full flex flex-col items-center justify-end md:justify-center h-[90vh] absolute bottom-0">
+              <Agreement />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Show Success Screen */}
-      {showAlert?.show && <AlertMessage />}
+        {/* Show Success Screen */}
+        {showAlert?.show && <AlertMessage />}
 
-      {/* Show Success Screen */}
-      {successScreen?.show && <SuccessScreen />}
+        {/* Show Success Screen */}
+        {successScreen?.show && <SuccessScreen />}
 
-      {showPriceSummery && (
-        <div
-          onClick={() => {
-            setShowPriceSummery(false);
-          }}
-          className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center"
-        >
-          <PriceSummery />
-        </div>
-      )}
-
-      {showBenefitsPopup && (
-        <div
-          onClick={() => {
-            setShowBenefitsPopup(false);
-          }}
-          className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center"
-        >
-          <div className="w-full flex flex-col items-center justify-end sm:justify-center h-[90vh] absolute bottom-0">
-            <BenefitsPopup />
+        {showPriceSummery && (
+          <div
+            onClick={() => {
+              setShowPriceSummery(false);
+            }}
+            className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center"
+          >
+            <PriceSummery />
           </div>
-        </div>
-      )}
+        )}
 
-      {showPlayVideo && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <PlayYoutubeVideo />
-        </div>
-      )}
-
-      {showSharePopup && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <Share propertyData={propertyInformation} />
-        </div>
-      )}
-
-      {showWingInfoPopup && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <WingInfo />
-        </div>
-      )}
-
-      {showPlotInfoPopup && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <PlotInfo />
-        </div>
-      )}
-
-      {showFilterPopup && (
-        <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
-          <div className="w-full flex flex-col items-center justify-end h-[90vh] absolute bottom-0">
-            <FilterSidebar />
+        {showBenefitsPopup && (
+          <div
+            onClick={() => {
+              setShowBenefitsPopup(false);
+            }}
+            className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center"
+          >
+            <div className="w-full flex flex-col items-center justify-end sm:justify-center h-[90vh] absolute bottom-0">
+              <BenefitsPopup />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Show Coming Soon Screen */}
-      {showComingSoonModal && <ComingSoonModal onClose={() => setShowComingSoonModal(false)} />}
+        {showPlayVideo && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <PlayYoutubeVideo />
+          </div>
+        )}
 
+        {showSharePopup && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <Share propertyData={propertyInformation} />
+          </div>
+        )}
+
+        {showWingInfoPopup && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <WingInfo />
+          </div>
+        )}
+
+        {showPlotInfoPopup && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <PlotInfo />
+          </div>
+        )}
+
+        {showFilterPopup && (
+          <div className="Container w-full h-screen bg-[#000000a2] fixed z-50 flex md:items-center md:justify-center">
+            <div className="w-full flex flex-col items-center justify-end h-[90vh] absolute bottom-0">
+              <FilterSidebar />
+            </div>
+          </div>
+        )}
+
+        {/* Show Coming Soon Screen */}
+        {showComingSoonModal && <ComingSoonModal onClose={handleCloseModal} />}
 
       </div>
     </LayoutScrollContext.Provider>
