@@ -60,7 +60,7 @@ const PropertySection = () => {
       <div className="flex items-center justify-center gap-6 pb-4">
         <div className="flex-1 h-[3px] bg-gradient-to-l from-[#5E23DC] to-[#FAF8FF]" />
         <h1 className="text-lg text-center sm:text-2xl md:text-4xl lg:text-5xl font-bold">
-          Verified <span className="text-[#8A38F5]">Rental</span> Properties in<p>{" "}
+          Verified <span className="text-[#8A38F5]">Rental</span> Properties in <span className="hidden sm:block">{" "}{selectedCity}</span><p className="block sm:hidden">{" "}
           {selectedCity}
           </p>
         </h1>

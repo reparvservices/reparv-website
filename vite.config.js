@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import path from "path";
 
 export default defineConfig({
   plugins: [
@@ -8,11 +9,17 @@ export default defineConfig({
     react()
   ],
 
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+
   server: {
     historyApiFallback: true,
   },
 
-  base: "/", // Ensures correct base path for routing
+  base: "/",
 
   build: {
     outDir: "dist",
@@ -21,7 +28,7 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            return "vendor"; // Split vendor files
+            return "vendor";
           }
         },
       },
