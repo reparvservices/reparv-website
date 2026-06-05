@@ -1,6 +1,5 @@
 
-// 👉 replace this path with your actual right icon
-import rightIcon from "../../../assets/seopageassets/verify712/right-icon.svg";
+const rightIcon = "/assets/seopageassets/verify712/right-icon.svg";
 
 export default function StepByStep712Guide() {
   const steps = [

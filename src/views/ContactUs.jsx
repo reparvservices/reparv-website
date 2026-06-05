@@ -256,7 +256,7 @@ const ContactUs = () => {
               >
                 <div className="flex items-center gap-3 mb-2">
                   <img
-                    src={Icon5}
+                    src="/assets/contactUs/Icon5.svg"
                     alt="Icon"
                     className="w-5 md:w-8 object-cover"
                   />

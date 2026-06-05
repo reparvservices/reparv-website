@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { IoMdDoneAll } from "react-icons/io";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { MdOutlinePlayCircleOutline } from "react-icons/md";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
 import FormatPrice from "../FormatPrice";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";

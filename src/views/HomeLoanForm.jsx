@@ -1,7 +1,9 @@
+"use client";
+
 import { useState, useEffect, lazy, Suspense, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { IoSpeedometerOutline } from "react-icons/io5";
 import Loader from "../components/Loader";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
 
 import { FiSearch } from "react-icons/fi";
@@ -12,7 +14,7 @@ import Step1Personal from "../components/homeLoanPage/Step1Personal";
 import Step2Income from "../components/homeLoanPage/Step2Income";
 import Step3Documents from "../components/homeLoanPage/Step3Documents";
 import WhyWeNeedThis from "../components/homeLoanPage/WhyWeNeedThis";
-import leftImage from "../assets/homeLoan/leftImage.svg";
+const leftImage = "/assets/homeLoan/leftImage.svg";
 import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
@@ -20,7 +22,7 @@ const BlogSection = lazy(() => import("../components/BlogSection"));
 const FAQSection = lazy(() => import("../components/FAQSection"));
 
 export default function HomeLoanForm() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const {
     URI,
     user,
@@ -242,7 +244,7 @@ export default function HomeLoanForm() {
         description: "Our Representative will call you shortly",
       });
 
-      setTimeout(() => navigate(-1), 1000);
+      setTimeout(() => router.back(), 1000);
     } catch (err) {
       console.error("Submit error:", err);
     } finally {
@@ -269,7 +271,7 @@ export default function HomeLoanForm() {
       <section className="min-h-screen bg-[#FAF8FF] lg:bg-white">
         {/* Back Navigation */}
         <div className="lg:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-2 sm:my-4 rounded-lg bg-white">
-          <FaArrowLeft onClick={() => navigate(-1)} className="w-5 h-5" />
+          <FaArrowLeft onClick={() => router.back()} className="w-5 h-5" />
           <span className="w-full text-base sm:text-lg font-bold text-center">
             Home Loan Application
           </span>

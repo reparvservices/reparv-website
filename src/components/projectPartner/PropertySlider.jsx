@@ -2,7 +2,6 @@ import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { FaArrowRight } from "react-icons/fa6";
-import propertyPicture from "../../assets/property/propertyPicture.svg";
 import { useAuth } from "../../store/auth";
 import { usePropertyFilter } from "../../store/propertyFilter";
 import FormatPrice from "../FormatPrice";
