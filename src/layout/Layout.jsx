@@ -23,6 +23,7 @@ import ComingSoonModal from "@/components/ComingSoonModal";
 
 // lazy load
 const CitySelector = lazy(() => import("../components/CitySelector"));
+const AgentWidget = lazy(() => import("../components/agent/AgentWidget"));
 
 export default function SiteLayout({ children }) {
   const {
@@ -211,6 +212,10 @@ export default function SiteLayout({ children }) {
         {/* Show Coming Soon Screen */}
         {showComingSoonModal && <ComingSoonModal onClose={handleCloseModal} />}
 
+        {/* AI Agent Widget */}
+        <Suspense fallback={null}>
+          <AgentWidget />
+        </Suspense>
       </div>
     </LayoutScrollContext.Provider>
   );

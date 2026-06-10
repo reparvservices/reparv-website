@@ -27,6 +27,11 @@ const nextConfig = {
             process.env.VITE_S3_IMAGE_URL ||
             ""
         ),
+        "import.meta.env.VITE_AI_AGENT_PUBLIC_KEY": JSON.stringify(
+          process.env.NEXT_PUBLIC_AI_AGENT_PUBLIC_KEY ||
+            process.env.VITE_AI_AGENT_PUBLIC_KEY ||
+            ""
+        ),
       })
     );
     return config;

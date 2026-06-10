@@ -70,24 +70,37 @@ export const AuthProvider = ({ children }) => {
   const [showCallEnquiryPopup, setShowCallEnquiryPopup] = useState(false);
   const [showWhatsappEnquiryPopup, setShowWhatsappEnquiryPopup] =
     useState(false);
-  const [showComingSoonModal, setShowComingSoonModal] = useState(true);
+  const [showComingSoonModal, setShowComingSoonModal] = useState(false);
 
   const [showAgreement, setShowAgreement] = useState(false);
   const [showEMIPopup, setShowEMIPopup] = useState(false);
 
   /* ===================== EFFECTS ===================== */
-  useEffect(() => {
-    const modalClosed = localStorage.getItem("comingSoonModalClosed");
+  const COMING_SOON_MODAL_KEY = "comingSoonModalLastDismissedAt";
+  const COMING_SOON_MODAL_COOLDOWN_MS = 12 * 60 * 60 * 1000;
 
-    if (!modalClosed) {
+  useEffect(() => {
+    const legacyClosed = localStorage.getItem("comingSoonModalClosed");
+    const lastDismissedAt = localStorage.getItem(COMING_SOON_MODAL_KEY);
+
+    if (!lastDismissedAt && legacyClosed === "true") {
+      localStorage.setItem(COMING_SOON_MODAL_KEY, String(Date.now()));
+      localStorage.removeItem("comingSoonModalClosed");
+      return;
+    }
+
+    const shouldShow =
+      !lastDismissedAt ||
+      Date.now() - Number(lastDismissedAt) >= COMING_SOON_MODAL_COOLDOWN_MS;
+
+    if (shouldShow) {
       setShowComingSoonModal(true);
     }
   }, []);
 
   const handleCloseModal = () => {
     setShowComingSoonModal(false);
-
-    localStorage.setItem("comingSoonModalClosed", "true");
+    localStorage.setItem(COMING_SOON_MODAL_KEY, String(Date.now()));
   };
 
   useEffect(() => {
