@@ -404,20 +404,43 @@ function EditProperty() {
     }
   };
 
-  //fetch data on form
+  const ARRAY_FIELDS = [
+    "locationFeature",
+    "amenitiesFeature",
+    "smartHomeFeature",
+    "securityBenefit",
+    "primeLocationBenefit",
+    "rentalIncomeBenefit",
+    "qualityBenefit",
+    "capitalAppreciationBenefit",
+    "ecofriendlyBenefit",
+  ];
+
   const fetchData = async (id) => {
     try {
       const response = await fetch(URI + `/guest-user/properties/${id}`, {
         method: "GET",
-        credentials: "include", //  Ensures cookies are sent
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) throw new Error("Failed to fetch property.");
       const data = await response.json();
-      console.log(data);
-      setNewProperty((prev) => ({ ...prev, ...data }));
+
+      // Normalize: parse JSON strings and guard against null
+      const sanitized = { ...data };
+      ARRAY_FIELDS.forEach((field) => {
+        let val = sanitized[field];
+        if (typeof val === "string") {
+          try {
+            val = JSON.parse(val);
+          } catch {
+            val = [];
+          }
+        }
+        sanitized[field] = Array.isArray(val) ? val : [];
+      });
+
+      setNewProperty((prev) => ({ ...prev, ...sanitized }));
     } catch (err) {
       console.error("Error fetching :", err);
     }

@@ -131,17 +131,18 @@ export function PillSelect({ options, value, onChange }) {
 }
 
 /* ─── Pill button selector (multi) ────────────────────────────── */
-export function PillMultiSelect({ options, value = [], onChange }) {
+export function PillMultiSelect({ options, value, onChange }) {
+  const safeValue = Array.isArray(value) ? value : [];
   const toggle = (val) => {
-    if (value.includes(val)) onChange(value.filter((v) => v !== val));
-    else onChange([...value, val]);
+    if (safeValue.includes(val)) onChange(safeValue.filter((v) => v !== val));
+    else onChange([...safeValue, val]);
   };
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((opt) => {
         const val = typeof opt === "string" ? opt : opt.value;
         const label = typeof opt === "string" ? opt : opt.label;
-        const active = value.includes(val);
+        const active = safeValue.includes(val);
         return (
           <button
             key={val}
