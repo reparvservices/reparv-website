@@ -8,6 +8,7 @@ import SectionSkeleton from "../components/SectionSkeleton";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useAuth } from "../store/auth";
+import AssociatedWith from "@/components/home/AssociatedWith";
 
 const PropertyOnRentSection = lazy(
   () => import("../components/home/PropertyOnRentSection"),
@@ -152,7 +153,16 @@ function Home() {
             <AppDownloadSection />
           </motion.div>
         </Suspense>
+
+        <Suspense fallback={<SectionSkeleton height="220px" />}>
+          <motion.div variants={item}>
+            <AssociatedWith />
+          </motion.div>
+        </Suspense>
+
       </motion.div>
+
+
     </>
   );
 }
