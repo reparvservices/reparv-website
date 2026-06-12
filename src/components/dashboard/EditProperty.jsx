@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useParams, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -24,14 +24,63 @@ import {
   FaTree,
   FaCity,
   FaArrowLeft,
+  FaCar,
+  FaCompass,
+  FaWater,
+  FaBolt,
+  FaCouch,
+  FaShieldAlt,
+  FaLeaf,
+  FaCoins,
+  FaMapMarkedAlt,
+  FaCalendarAlt,
+  FaRulerCombined,
+  FaLayerGroup,
+  FaBuilding as FaBuildingIcon,
 } from "react-icons/fa";
-import { MdApartment } from "react-icons/md";
+import { MdApartment, MdSmartphone, MdElevator } from "react-icons/md";
 import { GiFarmTractor, GiFamilyHouse } from "react-icons/gi";
 import { uploadToS3 } from "../../utils/s3";
 import Loader from "../Loader";
+import {
+  SectionHeader,
+  FieldLabel,
+  FieldInput,
+  FieldTextarea,
+  FieldSelect,
+  PillSelect,
+  PillMultiSelect,
+  Divider,
+  Grid2,
+  Grid3,
+} from "./FormUI";
 
 const PURPLE = "#8A38F5";
 const GRAY = "#868686";
+
+const EMPTY_IMAGES = {
+  frontView: [],
+  sideView: [],
+  kitchenView: [],
+  hallView: [],
+  bedroomView: [],
+  bathroomView: [],
+  balconyView: [],
+  nearestLandmark: [],
+  developedAmenities: [],
+};
+
+const IMAGE_CATEGORIES = [
+  { key: "frontView", label: "Front View" },
+  { key: "sideView", label: "Side View" },
+  { key: "kitchenView", label: "Kitchen View" },
+  { key: "hallView", label: "Hall View" },
+  { key: "bedroomView", label: "Bedroom View" },
+  { key: "bathroomView", label: "Bathroom View" },
+  { key: "balconyView", label: "Balcony View" },
+  { key: "nearestLandmark", label: "Nearest Landmark" },
+  { key: "developedAmenities", label: "Developed Amenities" },
+];
 
 function EditProperty() {
   const router = useRouter();
@@ -87,17 +136,7 @@ function EditProperty() {
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
-  const [imageFiles, setImageFiles] = useState({
-    frontView: [],
-    sideView: [],
-    kitchenView: [],
-    hallView: [],
-    bedroomView: [],
-    bathroomView: [],
-    balconyView: [],
-    nearestLandmark: [],
-    developedAmenities: [],
-  });
+  const [imageFiles, setImageFiles] = useState(EMPTY_IMAGES);
 
   const [newProperty, setNewProperty] = useState({
     propertyCategory: "",
@@ -111,6 +150,56 @@ function EditProperty() {
     projectBy: "",
     contact: "",
     email: "",
+
+    // Location / extra basic
+    pincode: "",
+    location: "",
+    distanceFromCityCenter: "",
+    latitude: "",
+    longitude: "",
+
+    // Pricing breakdown
+    stampDuty: "",
+    registrationFee: "",
+    gst: "",
+    advocateFee: "",
+    msebWater: "",
+    maintenance: "",
+    other: "",
+    tags: "",
+
+    // Specs
+    possessionDate: "",
+    builtYear: "",
+    ownershipType: "",
+    builtUpArea: "",
+    parkingAvailability: "",
+    totalFloors: "",
+    floorNo: "",
+    loanAvailability: "",
+    propertyFacing: "",
+    reraRegistered: "",
+    furnishing: "",
+    waterSupply: "",
+    powerBackup: "",
+
+    // Feature highlights
+    locationFeature: [],
+    sizeAreaFeature: "",
+    parkingFeature: "",
+    terraceFeature: "",
+    ageOfPropertyFeature: "",
+    amenitiesFeature: [],
+    propertyStatusFeature: "",
+    smartHomeFeature: [],
+
+    // Benefits
+    securityBenefit: [],
+    primeLocationBenefit: [],
+    rentalIncomeBenefit: [],
+    qualityBenefit: [],
+    capitalAppreciationBenefit: [],
+    ecofriendlyBenefit: [],
   });
 
   const rentalTypes = [
@@ -137,6 +226,110 @@ function EditProperty() {
     { label: "Resale Godown", value: "ResaleGodown", icon: FaCity },
     { label: "Resale Bunglow", value: "ResaleBunglow", icon: FaBuilding },
     { label: "Resale ShowRoom", value: "ResaleShowroom", icon: FaIndustry },
+  ];
+
+  /* ── Option lists for pills / selects ── */
+  const ownershipOptions = [
+    "Freehold",
+    "Leasehold",
+    "Co-operative Society",
+    "Power of Attorney",
+  ];
+  const facingOptions = [
+    "East",
+    "West",
+    "North",
+    "South",
+    "North-East",
+    "North-West",
+    "South-East",
+    "South-West",
+  ];
+  const furnishingOptions = [
+    "Unfurnished",
+    "Semi-Furnished",
+    "Fully-Furnished",
+  ];
+  const yesNoOptions = ["Yes", "No"];
+  const parkingOptions = ["None", "Two Wheeler", "Four Wheeler", "Both"];
+  const waterSupplyOptions = [
+    "24/7",
+    "Limited Hours",
+    "Tanker Supply",
+    "Borewell",
+  ];
+  const powerBackupOptions = ["Full", "Partial", "None"];
+
+  const locationFeatureOptions = [
+    "Near School",
+    "Near Hospital",
+    "Near Market",
+    "Near Railway Station",
+    "Near Bus Stop",
+    "Near Airport",
+    "Near Mall",
+    "Near Park",
+  ];
+  const amenitiesFeatureOptions = [
+    "Gym",
+    "Swimming Pool",
+    "Clubhouse",
+    "Children's Play Area",
+    "Garden",
+    "Lift",
+    "Power Backup",
+    "Security",
+    "Indoor Games",
+    "Jogging Track",
+    "Community Hall",
+    "CCTV",
+  ];
+  const smartHomeFeatureOptions = [
+    "Smart Locks",
+    "Smart Lighting",
+    "Video Door Phone",
+    "Home Automation",
+    "Smart Thermostat",
+  ];
+  const propertyStatusFeatureOptions = [
+    "Ready to Move",
+    "Under Construction",
+    "New Launch",
+    "Resale",
+  ];
+
+  const securityBenefitOptions = [
+    "24x7 Security Guard",
+    "CCTV Surveillance",
+    "Gated Community",
+    "Fire Safety",
+  ];
+  const primeLocationBenefitOptions = [
+    "Prime Location",
+    "Well Connected",
+    "Close to IT Hub",
+    "Close to Highway",
+  ];
+  const rentalIncomeBenefitOptions = [
+    "High Rental Demand",
+    "Good Rental Yield",
+    "Furnished for Rent",
+  ];
+  const qualityBenefitOptions = [
+    "Premium Construction",
+    "Branded Fittings",
+    "Earthquake Resistant",
+  ];
+  const capitalAppreciationBenefitOptions = [
+    "High Growth Area",
+    "Upcoming Infrastructure",
+    "Investment Hotspot",
+  ];
+  const ecofriendlyBenefitOptions = [
+    "Solar Panels",
+    "Rainwater Harvesting",
+    "Green Building",
+    "EV Charging",
   ];
 
   const [states, setStates] = useState([]);
@@ -189,7 +382,7 @@ function EditProperty() {
     }
   };
 
-  // **Fetch States from API**
+  // **Fetch Cities from API**
   const fetchCities = async () => {
     try {
       const response = await fetch(
@@ -200,7 +393,7 @@ function EditProperty() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
       if (!response.ok) throw new Error("Failed to fetch cities.");
       const data = await response.json();
@@ -224,7 +417,7 @@ function EditProperty() {
       if (!response.ok) throw new Error("Failed to fetch property.");
       const data = await response.json();
       console.log(data);
-      setNewProperty(data);
+      setNewProperty((prev) => ({ ...prev, ...data }));
     } catch (err) {
       console.error("Error fetching :", err);
     }
@@ -238,17 +431,7 @@ function EditProperty() {
       // 1 Prepare a copy of property data
       const payload = { ...newProperty };
 
-      const imageFields = [
-        "frontView",
-        "sideView",
-        "kitchenView",
-        "hallView",
-        "bedroomView",
-        "bathroomView",
-        "balconyView",
-        "nearestLandmark",
-        "developedAmenities",
-      ];
+      const imageFields = Object.keys(EMPTY_IMAGES);
 
       // 2 Upload images directly to S3
       for (const field of imageFields) {
@@ -262,7 +445,7 @@ function EditProperty() {
 
           payload[field] = urls;
         } else {
-          payload[field] = [];
+          payload[field] = payload[field] || [];
         }
       }
 
@@ -500,7 +683,7 @@ function EditProperty() {
                           {item.label}
                         </button>
                       );
-                    }
+                    },
                   )}
                 </div>
 
@@ -620,7 +803,89 @@ function EditProperty() {
                       <FaChevronDown className="absolute right-4 top-[38px] pointer-events-none text-sm" />
                     </div>
                   </div>
+
+                  {/* Locality / Pincode / Distance */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                    <div className="w-full">
+                      <FieldLabel>Locality / Area</FieldLabel>
+                      <FieldInput
+                        placeholder="e.g. Civil Lines"
+                        value={newProperty.location}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            location: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="w-full">
+                      <FieldLabel>Pincode</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="e.g. 440001"
+                        value={newProperty.pincode}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            pincode: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="w-full">
+                      <FieldLabel>Distance From City Center (km)</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="e.g. 5"
+                        value={newProperty.distanceFromCityCenter}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            distanceFromCityCenter: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {/* Latitude / Longitude */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div className="w-full">
+                      <FieldLabel>Latitude</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        step="any"
+                        icon={<FaMapMarkedAlt />}
+                        placeholder="e.g. 21.1458"
+                        value={newProperty.latitude}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            latitude: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="w-full">
+                      <FieldLabel>Longitude</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        step="any"
+                        icon={<FaMapMarkedAlt />}
+                        placeholder="e.g. 79.0882"
+                        value={newProperty.longitude}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            longitude: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
                 </div>
+
                 {/* Property Area */}
                 <div className="mb-8 max-w-[400px]">
                   <h3 className="flex items-center gap-2 text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-black">
@@ -631,7 +896,7 @@ function EditProperty() {
                   <div className="flex gap-3 text-black">
                     <input
                       type="number"
-                      placeholder="Enter area"
+                      placeholder="Enter carpet area"
                       value={newProperty?.carpetArea}
                       onChange={(e) => {
                         setNewProperty({
@@ -653,6 +918,23 @@ function EditProperty() {
                   <p className="text-xs mt-2 ml-1" style={{ color: GRAY }}>
                     Enter the total carpet area
                   </p>
+                </div>
+
+                {/* Built Up Area */}
+                <div className="mb-8 max-w-[400px]">
+                  <FieldLabel>Built Up Area (sq.ft)</FieldLabel>
+                  <FieldInput
+                    type="number"
+                    icon={<FaRulerCombined />}
+                    placeholder="Enter built up area"
+                    value={newProperty.builtUpArea}
+                    onChange={(e) =>
+                      setNewProperty({
+                        ...newProperty,
+                        builtUpArea: e.target.value,
+                      })
+                    }
+                  />
                 </div>
 
                 {/* PRICING */}
@@ -706,6 +988,490 @@ function EditProperty() {
                       </p>
                     </div>
                   </div>
+
+                  {/* Additional pricing breakdown */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                    <div>
+                      <FieldLabel>Stamp Duty</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="₹ 00"
+                        value={newProperty.stampDuty}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            stampDuty: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Registration Fee</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="₹ 00"
+                        value={newProperty.registrationFee}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            registrationFee: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>GST</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="₹ 00"
+                        value={newProperty.gst}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            gst: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Advocate Fee</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="₹ 00"
+                        value={newProperty.advocateFee}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            advocateFee: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>MSEB / Water Charges</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="₹ 00"
+                        value={newProperty.msebWater}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            msebWater: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Maintenance</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="₹ 00"
+                        value={newProperty.maintenance}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            maintenance: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Other Charges</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        placeholder="₹ 00"
+                        value={newProperty.other}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            other: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <FieldLabel>Tags (comma separated)</FieldLabel>
+                      <FieldInput
+                        placeholder="e.g. spacious, well-lit, corner-plot"
+                        value={newProperty.tags}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            tags: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* PROPERTY SPECIFICATIONS */}
+                <div className="mb-8">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4 text-black">
+                    <FaBuildingIcon color={PURPLE} /> Property Specifications
+                  </h3>
+
+                  <Grid2>
+                    <div>
+                      <FieldLabel>Possession Date</FieldLabel>
+                      <FieldInput
+                        type="date"
+                        icon={<FaCalendarAlt />}
+                        value={newProperty.possessionDate}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            possessionDate: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Built Year</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        icon={<FaCalendarAlt />}
+                        placeholder="e.g. 2015"
+                        value={newProperty.builtYear}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            builtYear: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Total Floors</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        icon={<FaLayerGroup />}
+                        placeholder="e.g. 10"
+                        value={newProperty.totalFloors}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            totalFloors: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Floor No.</FieldLabel>
+                      <FieldInput
+                        type="number"
+                        icon={<FaLayerGroup />}
+                        placeholder="e.g. 3"
+                        value={newProperty.floorNo}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            floorNo: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </Grid2>
+
+                  <div className="mt-4">
+                    <FieldLabel>Ownership Type</FieldLabel>
+                    <PillSelect
+                      options={ownershipOptions}
+                      value={newProperty.ownershipType}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, ownershipType: val })
+                      }
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldLabel>Property Facing</FieldLabel>
+                    <PillSelect
+                      options={facingOptions}
+                      value={newProperty.propertyFacing}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, propertyFacing: val })
+                      }
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldLabel>Furnishing</FieldLabel>
+                    <PillSelect
+                      options={furnishingOptions}
+                      value={newProperty.furnishing}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, furnishing: val })
+                      }
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldLabel>Parking Availability</FieldLabel>
+                    <PillSelect
+                      options={parkingOptions}
+                      value={newProperty.parkingAvailability}
+                      onChange={(val) =>
+                        setNewProperty({
+                          ...newProperty,
+                          parkingAvailability: val,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldLabel>Water Supply</FieldLabel>
+                    <PillSelect
+                      options={waterSupplyOptions}
+                      value={newProperty.waterSupply}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, waterSupply: val })
+                      }
+                    />
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldLabel>Power Backup</FieldLabel>
+                    <PillSelect
+                      options={powerBackupOptions}
+                      value={newProperty.powerBackup}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, powerBackup: val })
+                      }
+                    />
+                  </div>
+
+                  <Grid2>
+                    <div className="mt-4">
+                      <FieldLabel>RERA Registered</FieldLabel>
+                      <PillSelect
+                        options={yesNoOptions}
+                        value={newProperty.reraRegistered}
+                        onChange={(val) =>
+                          setNewProperty({
+                            ...newProperty,
+                            reraRegistered: val,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="mt-4">
+                      <FieldLabel>Loan Availability</FieldLabel>
+                      <PillSelect
+                        options={yesNoOptions}
+                        value={newProperty.loanAvailability}
+                        onChange={(val) =>
+                          setNewProperty({
+                            ...newProperty,
+                            loanAvailability: val,
+                          })
+                        }
+                      />
+                    </div>
+                  </Grid2>
+                </div>
+
+                {/* FEATURE HIGHLIGHTS */}
+                <div className="mb-8">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4 text-black">
+                    <FaCouch color={PURPLE} /> Feature Highlights
+                  </h3>
+
+                  <div className="mb-4">
+                    <FieldLabel>Location Features</FieldLabel>
+                    <PillMultiSelect
+                      options={locationFeatureOptions}
+                      value={newProperty.locationFeature}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, locationFeature: val })
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <FieldLabel>Amenities</FieldLabel>
+                    <PillMultiSelect
+                      options={amenitiesFeatureOptions}
+                      value={newProperty.amenitiesFeature}
+                      onChange={(val) =>
+                        setNewProperty({
+                          ...newProperty,
+                          amenitiesFeature: val,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <FieldLabel>Smart Home Features</FieldLabel>
+                    <PillMultiSelect
+                      options={smartHomeFeatureOptions}
+                      value={newProperty.smartHomeFeature}
+                      onChange={(val) =>
+                        setNewProperty({
+                          ...newProperty,
+                          smartHomeFeature: val,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <Grid3>
+                    <div>
+                      <FieldLabel>Size / Area Highlight</FieldLabel>
+                      <FieldInput
+                        placeholder="e.g. Spacious 3BHK"
+                        value={newProperty.sizeAreaFeature}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            sizeAreaFeature: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Parking Highlight</FieldLabel>
+                      <FieldInput
+                        placeholder="e.g. Covered Parking"
+                        value={newProperty.parkingFeature}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            parkingFeature: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Terrace Highlight</FieldLabel>
+                      <FieldInput
+                        placeholder="e.g. Private Terrace"
+                        value={newProperty.terraceFeature}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            terraceFeature: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </Grid3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <FieldLabel>Age of Property</FieldLabel>
+                      <FieldInput
+                        placeholder="e.g. 5 years old"
+                        value={newProperty.ageOfPropertyFeature}
+                        onChange={(e) =>
+                          setNewProperty({
+                            ...newProperty,
+                            ageOfPropertyFeature: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <FieldLabel>Property Status</FieldLabel>
+                      <PillSelect
+                        options={propertyStatusFeatureOptions}
+                        value={newProperty.propertyStatusFeature}
+                        onChange={(val) =>
+                          setNewProperty({
+                            ...newProperty,
+                            propertyStatusFeature: val,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* BENEFITS */}
+                <div className="mb-8">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4 text-black">
+                    <FaShieldAlt color={PURPLE} /> Benefits & Highlights
+                  </h3>
+
+                  <div className="mb-4">
+                    <FieldLabel>Security</FieldLabel>
+                    <PillMultiSelect
+                      options={securityBenefitOptions}
+                      value={newProperty.securityBenefit}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, securityBenefit: val })
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <FieldLabel>Prime Location</FieldLabel>
+                    <PillMultiSelect
+                      options={primeLocationBenefitOptions}
+                      value={newProperty.primeLocationBenefit}
+                      onChange={(val) =>
+                        setNewProperty({
+                          ...newProperty,
+                          primeLocationBenefit: val,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <FieldLabel>Rental Income</FieldLabel>
+                    <PillMultiSelect
+                      options={rentalIncomeBenefitOptions}
+                      value={newProperty.rentalIncomeBenefit}
+                      onChange={(val) =>
+                        setNewProperty({
+                          ...newProperty,
+                          rentalIncomeBenefit: val,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <FieldLabel>Quality</FieldLabel>
+                    <PillMultiSelect
+                      options={qualityBenefitOptions}
+                      value={newProperty.qualityBenefit}
+                      onChange={(val) =>
+                        setNewProperty({ ...newProperty, qualityBenefit: val })
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <FieldLabel>Capital Appreciation</FieldLabel>
+                    <PillMultiSelect
+                      options={capitalAppreciationBenefitOptions}
+                      value={newProperty.capitalAppreciationBenefit}
+                      onChange={(val) =>
+                        setNewProperty({
+                          ...newProperty,
+                          capitalAppreciationBenefit: val,
+                        })
+                      }
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <FieldLabel>Eco-Friendly</FieldLabel>
+                    <PillMultiSelect
+                      options={ecofriendlyBenefitOptions}
+                      value={newProperty.ecofriendlyBenefit}
+                      onChange={(val) =>
+                        setNewProperty({
+                          ...newProperty,
+                          ecofriendlyBenefit: val,
+                        })
+                      }
+                    />
+                  </div>
                 </div>
 
                 {/* CONTACT */}
@@ -725,7 +1491,7 @@ function EditProperty() {
                         onChange={(e) => {
                           const value = e.target.value.replace(
                             /[^A-Za-z\s]/g,
-                            ""
+                            "",
                           );
                           setNewProperty({ ...newProperty, projectBy: value });
                           validateField("projectBy", value);
@@ -843,56 +1609,63 @@ function EditProperty() {
                   </h3>
 
                   <p className="text-sm mb-4" style={{ color: GRAY }}>
-                    Add clear images to attract more buyers (Maximum 3 images)
+                    Add clear images to attract more buyers (Maximum 3 images
+                    per category)
                   </p>
 
-                  {/* Upload Box */}
-                  <label className="cursor-pointer block border-2 border-dashed border-[#8A38F5] rounded-xl p-6 text-center bg-[#F7F3FF] sm:bg-[white] hover:bg-[#F7F3FF] transition">
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={(e) => {
-                        handleImageChange(e, "frontView");
-                      }}
-                      className="hidden"
-                    />
-                    <div className="flex flex-col items-center gap-2 sm:gap-4">
-                      <IoMdImages size={30} color={PURPLE} />
-                      <p className="font-semibold text-black">
-                        Click to upload Images
-                      </p>
-                      <span className="text-xs" style={{ color: GRAY }}>
-                        JPG, PNG | Max Size 500kb
-                      </span>
-                    </div>
-                  </label>
+                  {IMAGE_CATEGORIES.map(({ key, label }) => (
+                    <div key={key} className="mb-8">
+                      <h4 className="font-semibold text-black mb-2">{label}</h4>
 
-                  {/* Preview Grid */}
-                  {imageFiles.frontView.length > 0 && (
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                      {imageFiles.frontView.map((img, index) => (
-                        <div
-                          key={index}
-                          className="relative rounded-lg overflow-hidden border border-[#D9D9D9]"
-                        >
-                          <img
-                            src={URL.createObjectURL(img)}
-                            alt="property"
-                            className="w-full lg:max-h-[140px] xl:max-h-[180px] object-cover"
-                          />
-
-                          <button
-                            type="button"
-                            onClick={() => removeImage("frontView", index)}
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 shadow"
-                          >
-                            <RxCross2 />
-                          </button>
+                      {/* Upload Box */}
+                      <label className="cursor-pointer block border-2 border-dashed border-[#8A38F5] rounded-xl p-6 text-center bg-[#F7F3FF] sm:bg-[white] hover:bg-[#F7F3FF] transition">
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={(e) => {
+                            handleImageChange(e, key);
+                          }}
+                          className="hidden"
+                        />
+                        <div className="flex flex-col items-center gap-2 sm:gap-4">
+                          <IoMdImages size={30} color={PURPLE} />
+                          <p className="font-semibold text-black">
+                            Click to upload {label}
+                          </p>
+                          <span className="text-xs" style={{ color: GRAY }}>
+                            JPG, PNG | Max Size 500kb | Max 3 images
+                          </span>
                         </div>
-                      ))}
+                      </label>
+
+                      {/* Preview Grid */}
+                      {imageFiles[key]?.length > 0 && (
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                          {imageFiles[key].map((img, index) => (
+                            <div
+                              key={index}
+                              className="relative rounded-lg overflow-hidden border border-[#D9D9D9]"
+                            >
+                              <img
+                                src={URL.createObjectURL(img)}
+                                alt="property"
+                                className="w-full lg:max-h-[140px] xl:max-h-[180px] object-cover"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={() => removeImage(key, index)}
+                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 shadow"
+                              >
+                                <RxCross2 />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  )}
+                  ))}
                 </div>
 
                 {/* STEP ACTIONS */}
