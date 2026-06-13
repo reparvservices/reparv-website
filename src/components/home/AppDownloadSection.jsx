@@ -14,14 +14,14 @@ const AppDownloadSection = () => {
       {/* Mobile */}
       <img
         src="/assets/home/MobileAppDownload.svg"
-        alt="Get Property In Three Steps"
+        alt="App Download Section"
         loading="lazy"
         className="block md:hidden w-full  max-w-[1380px] hover:scale-102 duration-500 transition-all cursor-pointer"
       />
       {/* Desktop */}
       <img
         src="/assets/home/HomeAppDownload.svg"
-        alt="Get Property In Three Steps"
+        alt="App Download Section"
         loading="lazy"
         className="hidden md:block w-full max-w-[1380px] hover:scale-102 duration-500 transition-all cursor-pointer"
       />

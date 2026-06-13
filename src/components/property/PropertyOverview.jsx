@@ -1,12 +1,22 @@
 import React from "react";
 
 const PropertyOverview = ({ propertyInfo }) => {
+  const formatArrayValue = (value) => {
+  if (Array.isArray(value)) {
+    return value.filter(Boolean).join(", ");
+  }
+  return value;
+};
+
   const hideExtraDetails = ["NewPlot", "CommercialPlot", "RentalLand"].includes(
     propertyInfo?.propertyCategory,
   );
 
   const leftColumn = [
-    { label: "Property Type", value: propertyInfo.propertyType },
+    {
+  label: "Property Type",
+  value: formatArrayValue(propertyInfo?.propertyType),
+},
 
     // Furnishing hidden for plots/land
     !hideExtraDetails && {
@@ -49,6 +59,7 @@ const PropertyOverview = ({ propertyInfo }) => {
     { label: "Loan Availability", value: propertyInfo.loanAvailability },
     { label: "Power Backup", value: propertyInfo.powerBackup },
   ].filter(Boolean);
+
   const Row = ({ label, value, isLast }) => (
     <div
       className={`${value? "flex" : "hidden"} justify-between items-center py-4 border-b border-gray-200`}

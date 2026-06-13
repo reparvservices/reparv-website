@@ -21,7 +21,7 @@ const LoanSection = () => {
     >
       <img
         src="/assets/home/HomeLoanCard.svg"
-        alt="Get Property In Three Steps"
+        alt="Home Loan Section"
         loading="lazy"
         className="w-full max-w-[1380px] hover:scale-102 duration-500 transition-all"
       />

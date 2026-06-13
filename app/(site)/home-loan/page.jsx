@@ -1,11 +1,17 @@
 import HomeLoan from "@/components/dashboard/HomeLoan";
 import { buildPageMetadata } from "@/lib/seo";
+import { getSeoData } from "@/lib/getSeoData";
 
-export const metadata = buildPageMetadata({
-  title: "Home loan",
-  description: "Home loan tools and guidance from Reparv.",
-  path: "/home-loan",
-});
+export async function generateMetadata() {
+  const seo = await getSeoData("home-loan");
+
+  return buildPageMetadata({
+    title: seo?.metaTitle,
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    path: "/home-loan",
+  });
+}
 
 export default function Page() {
   return <HomeLoan />;

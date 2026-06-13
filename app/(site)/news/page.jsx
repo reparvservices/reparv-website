@@ -1,12 +1,12 @@
-import NewsPage from "@/views/NewsSection";
-import { buildPageMetadata } from "@/lib/seo";
+import { getSeoData } from "@/lib/getSeoData";
 
-export const metadata = buildPageMetadata({
-  title: "News",
-  description: "Latest real estate news and updates.",
-  path: "/news",
-});
+export async function generateMetadata() {
+  const seo = await getSeoData("news");
 
-export default function Page() {
-  return <NewsPage />;
+  return buildPageMetadata({
+    title: seo?.metaTitle || "News",
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    path: "/news",
+  });
 }

@@ -20,19 +20,19 @@ const StepsSection = () => {
       <div className="flex sm:hidden flex-col gap-6">
         <img
           src="/assets/home/Step1.svg"
-          alt="Get Property In Three Steps"
+          alt="Get Property Step 1"
           loading="lazy"
           className="w-[220px] object-cover hover:scale-102 duration-500 transition-all"
         />
         <img
           src="/assets/home/Step2.svg"  
-          alt="Get Property In Three Steps"
+          alt="Get Property Step 2"
           loading="lazy"
           className="w-[200px] object-cover hover:scale-102 duration-500 transition-all"
         />
         <img
           src="/assets/home/Step3.svg"
-          alt="Get Property In Three Steps"
+          alt="Get Property Step 3"
           loading="lazy"
           className="w-[220px] object-cover hover:scale-102 duration-500 transition-all"
         />
