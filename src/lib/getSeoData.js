@@ -2,7 +2,7 @@
 export async function getSeoData(page) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/frontend/seo-data/${page}`,
+      `${process.env.VITE_BACKEND_URL}/frontend/seo-data/${page}`,
       {
         next: { revalidate: 3600 },
       },

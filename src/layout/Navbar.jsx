@@ -8,7 +8,7 @@ import { IoMdMenu } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../store/auth";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { PiMapPinAreaBold } from "react-icons/pi";
+import { PiBuildingOfficeFill, PiMapPinAreaBold } from "react-icons/pi";
 import { TbArrowNarrowRightDashed } from "react-icons/tb";
 import { FaChevronRight } from "react-icons/fa6";
 import { FaAppStoreIos } from "react-icons/fa";
@@ -145,7 +145,11 @@ function Navbar() {
                         }
                         className="flex gap-2 p-1 rounded-lg border cursor-pointer hover:scale-[1.02] transition"
                       >
-                        <img src="/public/assets/playStore.png" alt="Play Store" className="h-8" />
+                        <img
+                          src="/public/assets/playStore.png"
+                          alt="Play Store"
+                          className="h-8"
+                        />
                         <div className="flex flex-col justify-center pr-1">
                           <span className="text-[8px] text-gray-600">
                             Get it on
@@ -260,6 +264,32 @@ function Navbar() {
                   className={isActive ? "text-[#5E23DC]" : "text-[#868686]"}
                 />
                 <span>{isActive ? "Activities" : "Activities"}</span>
+                {/* Active indicator */}
+                <div
+                  className={`absolute bottom-0 w-[30px] h-[5px] rounded-tl-[6px] rounded-tr-[6px]
+                   transition-all duration-300
+                   ${isActive ? "bg-[#5E23DC] opacity-100" : "opacity-0"}
+                  `}
+                />
+              </>
+            )}
+          </NavLink>
+
+          <NavLink
+            to="/properties"
+            className={({ isActive }) =>
+              `relative w-full h-full flex flex-col gap-1 items-center justify-center text-xs 
+             ${isActive ? "text-[#5E23DC]" : "text-[#868686]"}
+            `
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <PiBuildingOfficeFill
+                  size={26}
+                  className={isActive ? "text-[#5E23DC]" : "text-[#868686]"}
+                />
+                <span>{isActive ? "Properties" : "Properties"}</span>
                 {/* Active indicator */}
                 <div
                   className={`absolute bottom-0 w-[30px] h-[5px] rounded-tl-[6px] rounded-tr-[6px]
@@ -401,7 +431,11 @@ function Navbar() {
           </NavLink>
 
           <div className="relative min-w-45 flex items-center justify-center p-4">
-            <img src="/assets/home/ButtonBack.svg" alt="Button" className="absolute w-full" />
+            <img
+              src="/assets/home/ButtonBack.svg"
+              alt="Button"
+              className="absolute w-full"
+            />
             <div
               onClick={() => {
                 window.open(
