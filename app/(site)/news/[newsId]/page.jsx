@@ -4,7 +4,7 @@ import { buildPageMetadata } from "@/lib/seo";
 async function getNewsDetails(newsId) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/frontend/news/details/${newsId}`,
+      `${process.env.VITE_BACKEND_URL}/frontend/news/details/${newsId}`,
       {
         next: { revalidate: 3600 },
       }

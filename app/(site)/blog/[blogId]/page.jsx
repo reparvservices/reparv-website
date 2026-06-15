@@ -4,7 +4,7 @@ import { buildPageMetadata } from "@/lib/seo";
 async function getBlogDetails(blogId) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/frontend/blog/details/${blogId}`,
+      `${process.env.VITE_BACKEND_URL}/frontend/blog/details/${blogId}`,
       {
         next: { revalidate: 3600 },
       },

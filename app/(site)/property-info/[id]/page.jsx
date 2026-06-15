@@ -4,7 +4,7 @@ import { buildPageMetadata } from "@/lib/seo";
 async function getPropertyDetails(id) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/frontend/propertyinfo/${id}`,
+      `${process.env.VITE_BACKEND_URL}/frontend/propertyinfo/${id}`,
       {
         next: { revalidate: 3600 },
       }

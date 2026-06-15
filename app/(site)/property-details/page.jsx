@@ -4,7 +4,7 @@ import { buildPageMetadata } from "@/lib/seo";
 async function getPropertyDetails(id) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/frontend/propertyinfo/${id}`,
+      `${process.env.VITE_BACKEND_URL}/frontend/propertyinfo/${id}`,
       {
         next: { revalidate: 3600 },
       },
@@ -47,6 +47,8 @@ export async function generateMetadata({ params }) {
     });
   }
 
+  console.log("Property Metadata:", property);
+
   return buildPageMetadata({
     title:
       property?.seoTittle ||
@@ -54,14 +56,9 @@ export async function generateMetadata({ params }) {
       property?.projectName ||
       "Property Details",
 
-    description:
-      property?.seoDescription ||
-      "View photos, pricing and location for this listing on Reparv.",
-
+    description: property?.seoDescription,
     keywords: property?.tags || "Property",
-
     image: getPropertyImage(property),
-
     type: "article",
 
     path: `/property-info/${property?.seoSlug || params.id}`,
