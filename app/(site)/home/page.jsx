@@ -9,7 +9,7 @@ export async function generateMetadata() {
     title: seo?.title,
     description: seo?.description,
     keywords: seo?.keywords,
-    path: "/",
+    path: "/home",
   });
 }
 
