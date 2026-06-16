@@ -10,7 +10,7 @@ export const metadata = {
 
   title: {
     default: "Reparv — Buy, Rent & Sell Verified Property in India",
-    template: "%s | Reparv",
+    //template: "%s | Reparv",
   },
 
   description:
