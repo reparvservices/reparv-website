@@ -11,46 +11,13 @@ import RERAInfoCards from "../components/seocomponents/reravprojects/RERAInfoCar
 import WhyRERAImportant from "../components/seocomponents/reravprojects/WhyRERAImportant";
 import RERAVerificationResult from "../components/seocomponents/reravprojects/ReraVerificationResult";
 import NonRERARisks from "../components/seocomponents/reravprojects/NonReraPropertiesRisk";
-import SEO from "../components/SEO";
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 const RERAProperty = () => {
-  const router = useRouter();
-  const { URI } = useAuth();
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "rera-properties";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
+  
   return (
     <>
-      <SEO
-        title={
-          "RERA Property & Builder Verification - Check RERA Details | Reparv"
-        }
-        description={
-          "Check RERA approved properties and verify builders online. Use Reparv to access trusted project details and invest safely in verified real estate."
-        }
-        canonical="https://www.reparv.in/rera-properties"
-      />
       <section className="w-full bg-white">
         {/* ================= HERO SECTION ================= */}
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-10 sm:py-14">

@@ -1,12 +1,11 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { useAuth } from "../store/auth";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
 import NavCard from "../components/NavCard";
-import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 // lazy load heavy components
@@ -83,41 +82,9 @@ const propertyTypes = [
 const BuyResaleProperty = () => {
   const router = useRouter();
   const { URI, propertySearch, setPropertySearch } = useAuth();
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "buy-resale-property";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
 
   return (
     <>
-      <SEO
-        title={
-          seoData?.title ||
-          "Buy Resale Property in India | Resale Flats, Plots & Houses | Reparv"
-        }
-        description={
-          seoData?.description ||
-          "Browse resale flats, plots, houses, shops & commercial property across India. Compare prices, locations & verified resale listings on Reparv."
-        }
-      />
       <section className="w-full max-w-[1380px] mx-auto px-4 md:px-8 py-6 lg:py-15 pt-0 md:pt-15">
         {/* Back Navigation Section */}
         <div className="md:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-2 sm:my-4 rounded-lg bg-white">

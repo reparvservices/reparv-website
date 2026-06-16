@@ -1,11 +1,17 @@
 import Home from "@/views/Home";
 import { buildPageMetadata } from "@/lib/seo";
+import { getSeoData } from "@/lib/getSeoData";
 
-export const metadata = buildPageMetadata({
-  title: "Buy, Rent & Sell Verified Property in India",
-  description: "Find verified homes, flats, plots and commercial listings across India on Reparv.",
-  path: "/",
-});
+export async function generateMetadata() {
+  const seo = await getSeoData("home");
+
+  return buildPageMetadata({
+    title: seo?.metaTitle,
+    description: seo?.metaDescription,
+    keywords: seo?.metaKeywords,
+    path: "/",
+  });
+}
 
 export default function Page() {
   return <Home />;

@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
 import Link from "next/link";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { IoSearch } from "react-icons/io5";
 import { useAuth } from "../store/auth";
 import BlogCard from "../components/blog/BlogCard";
 import NewsLetterBanner from "../components/blog/NewsLetterBanner";
 import { getImageURI } from "../utils/helper";
-import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 import AdComponent from "../components/AdsForFeed";
 
@@ -33,24 +32,6 @@ export default function NewBlogs() {
 
   const { URI } = useAuth();
   const [blogs, setBlogs] = useState([]);
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "blog";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
 
   // Fetch Property Info
   const fetchData = async () => {
@@ -71,7 +52,6 @@ export default function NewBlogs() {
 
   useEffect(() => {
     fetchData();
-    fetchSeoData();
   }, []);
 
   const filtered = blogs?.filter((b) => {
@@ -101,17 +81,6 @@ export default function NewBlogs() {
 
   return (
     <>
-      <SEO
-        title={
-          seoData?.title ||
-          "Reparv Insights | Smart Real Estate Knowledge for Confident Property Decisions"
-        }
-        description={
-          seoData?.description ||
-          "Read 100+ expert real estate insights, buying guides, and investment tips on Reparv Insights. Make smarter property decisions. Start reading today"
-        }
-        canonical="https://www.reparv.in/blogs"
-      />
       <div
         className="w-full max-w-[1440px] mx-auto min-h-screen"
         style={{ background: BODY_BG }}
@@ -205,7 +174,10 @@ export default function NewBlogs() {
                   {/* LEFT BIG CARD */}
                   <article className="lg:col-span-2 bg-white rounded-2xl shadow hover:shadow-xl overflow-hidden">
                     <img
-                      src={getImageURI(blogs[0]?.image) || "/assets/blog/BlogImage.webp"}
+                      src={
+                        getImageURI(blogs[0]?.image) ||
+                        "/assets/blog/BlogImage.webp"
+                      }
                       alt={blogs[0]?.tittle}
                       loading="lazy"
                       className="w-full max-h-[500px] object-cover"
@@ -246,7 +218,10 @@ export default function NewBlogs() {
                       >
                         <div className="w-full max-h-[230px] overflow-hidden bg-gray-50">
                           <img
-                            src={getImageURI(b?.image) || "/assets/blog/BlogImage.webp"}
+                            src={
+                              getImageURI(b?.image) ||
+                              "/assets/blog/BlogImage.webp"
+                            }
                             alt={b?.tittle || "Blog Image"}
                             loading="lazy"
                             className="w-full h-full object-cover"

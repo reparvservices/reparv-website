@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { useAuth } from "../store/auth";
 import { MdDone } from "react-icons/md";
 import HomeTotalCostCalculator from "../components/seocomponents/costcomponents/HomeTotalCostCalculator";
@@ -9,47 +9,14 @@ import LatestArtical from "../components/seocomponents/common/LatestArtical";
 import HowReparvCalculatorWorks from "../components/seocomponents/costcomponents/HowReparvCalculatorWorks";
 //import FrequentlyAskedQuestions from "../components/seocomponents/costcomponents/FrequentlyAskedQuestions";
 import FAQSection from "../components/FAQSection";
-import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 
 const CostCalculator = () => {
   const router = useRouter();
-  const { URI } = useAuth();
-
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "cost-calculator";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
+  
   return (
     <>
-      <SEO
-        title={
-          "Property Cost Calculator - Calculate Total Property Cost | Reparv"
-        }
-        description={
-          "Calculate total property cost including stamp duty, registration, and other charges using Reparv's Property Cost Calculator. Plan your real estate budget easily."
-        }
-        canonical="https://www.reparv.in/cost-calculator"
-      />
       <section className="w-full bg-white">
         <div className="max-w-[1380px] mx-auto px-1 py-6 sm:px-6 sm:py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-center">

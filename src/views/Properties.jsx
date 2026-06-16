@@ -9,7 +9,6 @@ import { useAuth } from "../store/auth";
 import FilterSidebar from "../components/property/FilterSidebar";
 import { useInView } from "react-intersection-observer";
 import { usePropertyFilter } from "../store/propertyFilter";
-import SEO from "../components/SEO";
 import PropertyCategories from "../components/PropertyCategories";
 import FilterNavbar from "../components/property/FilterNavbar";
 import AdComponent from "../components/AdsForFeed";
@@ -137,29 +136,6 @@ export default function Properties() {
   const [visibleCount, setVisibleCount] = useState(12);
   const visible = filteredData?.slice(0, visibleCount);
 
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "properties";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
-
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -254,43 +230,10 @@ export default function Properties() {
     }
   }, []);
 
-  // Build canonical URL for Properties page
-  const canonicalUrl = React.useMemo(() => {
-    const base = "https://www.reparv.in";
-
-    if (bhkType && propertyCategory && selectedCity) {
-      const bhk = bhkType.toLowerCase().replace(/\s+/g, "-");
-      const category = propertyCategory.toLowerCase().replace(/\s+/g, "-");
-      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, "-");
-
-      return `${base}/${bhk}/${category}/in/${citySlug}`;
-    }
-
-    if (selectedCity) {
-      const citySlug = selectedCity.toLowerCase().replace(/\s+/g, "-");
-      return `${base}/properties/in/${citySlug}`;
-    }
-
-    return `${base}/properties`;
-  }, [bhkType, propertyCategory, selectedCity]);
+  
 
   return (
     <>
-      <SEO
-        title={
-          seoData?.title ||
-          "All Types of Properties in India | Verified Listings – Reparv"
-        }
-        description={
-          seoData?.description ||
-          "Explore all types of properties in India. Browse flats, plots, villas, and homes with verified listings and genuine property options on Reparv."
-        }
-        keywords={
-          seoData?.keywords ||
-          "buy property in India, rent property in India, sell property in India, flats for rent in Nagpur, flats for sale in Nagpur, property in Pune, rental property in Pune, property in Chandrapur, property for rent in Kolkata, property listings in Mumbai, verified real estate listings India, residential and commercial property India"
-        }
-        canonical={canonicalUrl}
-      />
 
       <div className="properties w-full max-w-[1400px] flex flex-col p-4 sm:py-4 sm:px-0 mx-auto bg-[#f8f3fb]">
         <div className="w-full flex flex-wrap gap-3 justify-between sm:justify-end sm:py-2 sm:px-5">

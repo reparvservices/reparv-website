@@ -1,35 +1,10 @@
 "use client"
-
-import React, { useState, useEffect } from "react";
-import SEO from "../components/SEO";
+import React from "react";
 import { IoIosDoneAll } from "react-icons/io";
 import { motion } from "framer-motion";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 const AboutUs = () => {
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "about-us";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
-
   const values = [
     {
       id: 1,
@@ -59,15 +34,6 @@ const AboutUs = () => {
 
   return (
     <>
-      <SEO
-        title={ seoData?.title ||
-          "About Reparv | India's Trusted Ecosystem for Verified Real Estate"
-        }
-        description={ seoData?.description ||
-          "Learn how Reparv is transforming real estate in India with verified properties, complete transparency, and expert support. Discover our mission and vision today."
-        }
-        canonical="https://www.reparv.in/about-us"
-      />
       <div className="relative w-full mx-auto max-w-[1440px] flex flex-col items-center justify-center">
         <div className="w-full relative lg:mb-5">
           <motion.img

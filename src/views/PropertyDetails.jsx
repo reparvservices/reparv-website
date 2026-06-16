@@ -7,13 +7,10 @@ import { useAuth } from "../store/auth";
 import PropertyBookingCard from "../components/property/PropertyBookingCard";
 import PropertyOverview from "../components/property/PropertyOverview";
 import PropertyFeatures from "../components/property/PropertyFeatures";
-import EMICalculator from "../components/property/EMICalculator";
 import { useInView } from "react-intersection-observer";
-import SEO from "../components/SEO";
 import WingData from "../components/property/WingData";
 import PlotData from "../components/property/PlotData";
 import TypeWisePricing from "../components/property/TypeWisePricing";
-import WhatsappShare from "../components/property/WhatsappShare";
 import { addVisitor } from "../utils/analytics";
 import CallEnquiryPopup from "../components/property/CallEnquiryPopup";
 import WhatsappEnquiryPopup from "../components/property/WhatsappEnquiryPopup";
@@ -178,13 +175,6 @@ function PropertyDetails() {
 
   return (
     <>
-      <SEO
-        title={`${propertyInfo.seoTittle || ""}`}
-        description={propertyInfo.seoDescription || ""}
-        keywords={propertyInfo.tags || "Property"}
-        canonical={`https://www.reparv.in/property-info/${propertyInfo?.seoSlug}`}
-        image={frontImage}
-      />
       <div className="w-full max-w-345 flex flex-col sm:p-4 mx-auto">
         <div className="hidden lg:flex fixed top-15 sm:top-22 sm:bg-[#fafafa] left-0 w-full items-center justify-center z-20 pt-5">
           <div className="w-full max-w-335 px-4 sm:pr-6">

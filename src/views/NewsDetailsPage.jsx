@@ -17,7 +17,6 @@ import { useAuth } from "../store/auth";
 import { getImageURI } from "../utils/helper";
 import SocialNewsShare from "../components/SocialNewsShare";
 import { addNewsVisitor } from "../utils/analytics";
-import SEO from "../components/SEO";
 
 export default function NewsDetailsPage() {
   const { newsId } = useParams();
@@ -210,17 +209,6 @@ export default function NewsDetailsPage() {
 
   return (
     <>
-      <SEO
-        title={
-          news?.seoTitle ||
-          "Reparv News | Latest Real Estate News, Updates & Market Trends India"
-        }
-        description={
-          news?.seoDescription ||
-          "Stay updated with the latest real estate news, property trends, and market insights on Reparv News. Read trusted updates and explore more today."
-        }
-        canonical={`https://www.reparv.in/property-info/${news?.seoSlug}}`}
-      />
       <div className="w-full min-h-screen bg-[#F8F7FC] text-gray-800">
         {/* ================= ARTICLE SECTION ================= */}
         <section className="w-full py-6">

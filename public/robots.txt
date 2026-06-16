@@ -1,25 +1,109 @@
-User-agent: *
-Allow: /
+# robots.txt for reparv.in
+# Last Updated: June 2026
 
-# Allow important SEO pages
+# SECTION 1: ALL BOTS — GLOBAL RULES
+
+User-agent: *
+
+# Allow core public pages
+Allow: /
+Allow: /about/
+Allow: /contact/
 Allow: /properties
 Allow: /property-info/
 Allow: /blogs/
 Allow: /news/
 Allow: /trusted-builders
 Allow: /rera-properties
-Allow: /verify-7/12
+Allow: /verify-7-12
 Allow: /emi-calculator
 Allow: /cost-calculator
 
-# Block private and duplicate areas
+
+# Disallow admin & backend
 Disallow: /admin/
+Disallow: /wp-admin/
 Disallow: /dashboard/
 Disallow: /login/
+Disallow: /logout/
 Disallow: /register/
-Disallow: /api/
-Disallow: /search
-Disallow: /*?*
+Disallow: /account/
 
-# Sitemap
+# Disallow API endpoints
+Disallow: /api/
+
+# Disallow payment & utility pages
+Disallow: /checkout/
+Disallow: /payment/
+Disallow: /payment-success/
+Disallow: /payment-failed/
+Disallow: /thank-you/
+
+# Disallow URL parameters (prevents duplicate content)
+Disallow: /*?sort=
+Disallow: /*?page=
+Disallow: /*?utm_source=
+Disallow: /*?utm_medium=
+Disallow: /*?utm_campaign=
+Disallow: /*?fbclid=
+Disallow: /*?gclid=
+Disallow: /*?ref=
+
+# Disallow system/internal folders
+Disallow: /private/
+Disallow: /temp/
+Disallow: /cache/
+Disallow: /config/
+
+
+# SECTION 2: AI CRAWLERS — ALLOW (Important for AIO & GEO)
+
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+
+
+# SECTION 3: BLOCK ONLY GENUINE SPAM/SCRAPER BOTS
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: scrapy
+Disallow: /
+
+User-agent: python-requests
+Disallow: /
+
+
+# SECTION 4: SITEMAPS
+
 Sitemap: https://www.reparv.in/sitemap.xml
+

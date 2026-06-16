@@ -2,7 +2,6 @@
 
 import React, {useState, useEffect} from "react";
 import { useAuth } from "../store/auth";
-import SEO from "../components/SEO";
 import { GrLocation } from "react-icons/gr";
 import { MdOutlinePhoneInTalk } from "react-icons/md";
 import { IoMail } from "react-icons/io5";
@@ -22,28 +21,6 @@ const ContactUs = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [seoData, setSeoData] = useState({});
-  
-  const fetchSeoData = async () => {
-    const page = "contact-us";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -166,15 +143,7 @@ const ContactUs = () => {
 
   return (
     <>
-      <SEO
-        title={ seoData?.title ||
-          "Contact Reparv | Trusted Real Estate Support and Property Assistance"
-        }
-        description={ seoData?.description ||
-          "Reach out to Reparv for expert guidance on verified properties. Buy, sell, rent, or invest with confidence. Call +91 8010881965 today."
-        }
-        canonical="https://www.reparv.in/contact-us"
-      />
+      
       <div className="relative w-full mx-auto max-w-[1440px] flex flex-col items-center justify-center">
         <div className="w-full relative lg:mb-5">
           <motion.img

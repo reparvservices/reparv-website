@@ -1,52 +1,18 @@
 "use client"
 
 import { useRouter } from "next/navigation";
-import React, {useState, useEffect} from "react";
-import { useAuth } from "../store/auth";
+import React from "react";
 import { MdDone } from "react-icons/md";
 import EMICalculator from "../components/seocomponents/emicomponents/EMICalculator";
 import LatestArtical from "../components/seocomponents/common/LatestArtical";
 import HowToUseEmiCalculator from "../components/seocomponents/emicomponents/HowToUseEmiCalculator";
-import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 const EmiCalculator = () => {
   const router = useRouter();
-  const { URI } = useAuth();
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "emi-calculator";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
 
   return (
     <>
-      <SEO
-        title={
-          "Home Loan EMI Calculator – Calculate EMI Online Instantly | Reparv"
-        }
-        description={
-          "Free Home Loan EMI Calculator by Reparv helps you calculate monthly EMI, interest amount, and repayment schedule to make smart and confident property decisions."
-        }
-        canonical="https://www.reparv.in/emi-calculator"
-      />
       <section className="w-full bg-white">
         <div className="max-w-[1380px] mx-auto px-4 py-6 sm:px-6 sm:py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-center">

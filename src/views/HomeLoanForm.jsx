@@ -123,28 +123,6 @@ export default function HomeLoanForm() {
     return true;
   };
 
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "home-loan";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
-
   const fetchStates = async () => {
     try {
       const response = await fetch(URI + "/admin/states", {
@@ -264,10 +242,6 @@ export default function HomeLoanForm() {
 
   return (
     <>
-      <SEO
-        title="Apply for Home Loan Online in India | Secure Process by Reparv"
-        description="Start your home loan application online with Reparv. Simple 3-step process, secure verification, fast approval support and complete transparency from start to finish."
-      />
       <section className="min-h-screen bg-[#FAF8FF] lg:bg-white">
         {/* Back Navigation */}
         <div className="lg:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-2 sm:my-4 rounded-lg bg-white">

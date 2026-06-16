@@ -12,7 +12,6 @@ import RealEstateToolsAndGuides from "../components/News/RealEstateToolsAndGuide
 import NeverMissUpdates from "../components/News/NeverMissUpdates";
 import { useAuth } from "../store/auth";
 import { getImageURI } from "../utils/helper";
-import SEO from "../components/SEO";
 import AdComponent from "../components/AdsForFeed";
 import AdsForNewsFeed from "../components/News/AdsForNewsFeed";
 
@@ -26,29 +25,7 @@ export default function NewsPage() {
     "All",
     ...new Set(news.map((item) => item.type).filter((type) => type !== "All")),
   ];
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "news";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
-
+  
   // Fetch Property Info
   const fetchData = async () => {
     try {
@@ -129,17 +106,6 @@ export default function NewsPage() {
 
   return (
     <>
-      <SEO
-        title={
-          seoData?.title ||
-          "Reparv News | Latest Real Estate News, Updates & Market Trends India"
-        }
-        description={
-          seoData?.description ||
-          "Stay updated with the latest real estate news, property trends, and market insights on Reparv News. Read trusted updates and explore more today."
-        }
-        canonical="https://www.reparv.in/news"
-      />
       <div className="w-full max-w-[1440px] mx-auto min-h-screen bg-[#F8F7FC] text-gray-800">
         {/* NEWS TABS */}
         <div className="w-full bg-[#F8F7FC] py-6">

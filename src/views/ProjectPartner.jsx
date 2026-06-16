@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import React, { lazy, Suspense, useEffect, useState } from "react";
 import { useAuth } from "../store/auth.jsx";
 import { usePropertyFilter } from "../store/propertyFilter.jsx";
-import SEO from "../components/SEO.jsx";
 import Navbar from "../components/projectPartner/Navbar.jsx";
 // import Footer from "../components/projectPartner/Footer.jsx";
 import Footer from "../layout/Footer.jsx";

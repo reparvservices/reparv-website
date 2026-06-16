@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useAuth } from "../store/auth";
-import SEO from "../components/SEO";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import AdvertisementCard from "../components/AdvertisementCard";
 import GetDirectionsMap from "../components/contactUs/GetDirectionsMap";
@@ -438,29 +437,13 @@ function SupportForm() {
    MAIN PAGE
 ══════════════════════════════════════════════════════════ */
 export default function Support() {
-  const { URI } = useAuth();
   const router = useRouter();
-  const [seoData, setSeoData] = useState({});
   const [activeFilter, setActiveFilter] = useState("All");
 
   const directionsUrl = useMemo(
     () => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(ADDRESS)}`,
     []
   );
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${URI}/frontend/seo-data/support`, {
-          method: "GET",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (!res.ok) return;
-        setSeoData(await res.json());
-      } catch {}
-    })();
-  }, [URI]);
 
   const topics = ["All", ...Array.from(new Set(FAQS.map((f) => f.topic)))];
 
@@ -476,14 +459,6 @@ export default function Support() {
 
   return (
     <>
-      <SEO
-        title={seoData?.title || "Support Center | Reparv — Real Estate Help & Assistance"}
-        description={
-          seoData?.description ||
-          "Get expert help with property listings, legal documents, booking tracking, and partner programs. Reparv support is available 6 days a week."
-        }
-        canonical="https://www.reparv.in/support"
-      />
 
       {/* ── HERO ─────────────────────────────────────────── */}
       <section className="relative w-full overflow-hidden min-h-[420px] md:min-h-[500px]">

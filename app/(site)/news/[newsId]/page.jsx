@@ -25,17 +25,13 @@ export async function generateMetadata({ params }) {
   const news = await getNewsDetails(params.newsId);
 
   return buildPageMetadata({
-    title:
-      news?.seoTitle ||
-      news?.title ||
-      "Reparv News",
+    title: news?.seoTitle,
     description:
-      news?.seoDescription ||
-      "Stay updated with the latest real estate news, property trends, and market insights on Reparv News.",
+      news?.seoDescription || "Stay updated with the latest real estate news, property trends, and market insights on Reparv News.",
     keywords: news?.seoKeywords,
-    image: news?.thumbnail || news?.image,
+    image: news?.image,
     type: "article",
-    path: `/news/${news?.seoSlug || params.newsId}`,
+    path: `/news/${news?.seoSlug}`,
   });
 }
 

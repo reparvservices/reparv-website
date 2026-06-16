@@ -2,12 +2,8 @@
 
 import React, { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
-import SEO from "../components/SEO";
 import HomeImage from "../components/home/HomeImage";
 import SectionSkeleton from "../components/SectionSkeleton";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useAuth } from "../store/auth";
 import AssociatedWith from "@/components/home/AssociatedWith";
 
 const PropertyOnRentSection = lazy(
@@ -41,48 +37,8 @@ const item = {
 };
 
 function Home() {
-  const { URI } = useAuth();
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "home";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
-
   return (
     <>
-      <SEO
-        title={
-          seoData.title ||
-          "Reparv - India’s Trusted Platform for Verified Properties | Buy, Sell, Rent & Invest with Confidence"
-        }
-        description={
-          seoData.description ||
-          "Discover 100% verified homes, plots, and commercial properties with Reparv. Buy, sell, rent, or invest confidently visit Reparv today."
-        }
-        keywords={
-          seoData.keywords ||
-          "flat on rent in Nagpur, flats in Nagpur, flat for sale in Nagpur, real estate in Nagpur, commercial property in Nagpur, plot for sale in Nagpur, flats for rent in Pune, no broker flats for rent in Pune, property for sale in Pune, commercial property in Pune"
-        }
-        canonical="https://www.reparv.in/"
-      />
-
       <motion.div
         initial="hidden"
         animate="show"

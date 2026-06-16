@@ -8,7 +8,6 @@ import { IoMdEye } from "react-icons/io";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { BiLike } from "react-icons/bi";
 import { useAuth } from "../store/auth";
-import SEO from "../components/SEO";
 import SocialShare from "../components/SocialShare";
 import BlogFeatureProperties from "../components/blog/BlogFeaturedProperties";
 import BlogFeedback from "../components/blog/BlogFeedback";
@@ -108,17 +107,6 @@ function BlogDetails() {
 
   return (
     <>
-      <SEO
-        title={
-          blog?.seoTittle ||
-          "Buy Property in Nagpur Easily with Reparv’s Expert Help"
-        }
-        description={
-          blog?.seoDescription ||
-          "Looking to buy property in Nagpur or nearby? Reparv provides full support from site visits and loans to legal documentation and registry — making real estate hassle-free."
-        }
-        canonical={`https://www.reparv.in/property-info/${blogId}`}
-      />
       <div className="w-[1380px] text-xs sm:text-sm space-y-2 mx-auto py-4 px-4">
         <h2>{"Home> Blogs> Investment> Blog Title"}</h2>
         <h2>By Reparv | {blog?.updatedAt}</h2>

@@ -6,7 +6,7 @@ export async function generateMetadata() {
   const seo = await getSeoData("news");
 
   return buildPageMetadata({
-    title: seo?.metaTitle || "News",
+    title: seo?.metaTitle,
     description: seo?.metaDescription,
     keywords: seo?.metaKeywords,
     path: "/news",

@@ -74,41 +74,9 @@ const propertyTypes = [
 const RentalProperty = () => {
   const router = useRouter();
   const { URI, propertySearch, setPropertySearch } = useAuth();
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "rental-property";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
 
   return (
     <>
-      <SEO
-        title={
-          seoData?.title ||
-          "Property for Rent in India | Flats, Houses, Shops & Offices | Reparv"
-        }
-        description={
-          seoData?.description ||
-          "Find flats, houses, shops, offices and PG for rent across India. Compare prices, locations and verified rental listings to choose the right property on Reparv."
-        }
-      />
       <section className="w-full max-w-[1380px] mx-auto px-4 md:px-8 py-6 lg:py-15 pt-0 md:pt-15">
         {/* Back Navigation Section */}
         <div className="md:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-2 sm:my-4 rounded-lg bg-white">

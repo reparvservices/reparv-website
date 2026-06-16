@@ -29,7 +29,6 @@ import { MdApartment } from "react-icons/md";
 import { GiFarmTractor, GiFamilyHouse } from "react-icons/gi";
 import { uploadToS3 } from "../utils/s3";
 import Loader from "../components/Loader";
-import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 const PURPLE = "#8A38F5";
@@ -155,29 +154,6 @@ function RentProperty() {
       return { ...prev, [category]: updated };
     });
   };
-
-  const [seoData, setSeoData] = useState({});
-
-  const fetchSeoData = async () => {
-    const page = "rent-property";
-    try {
-      const response = await fetch(`${URI}/frontend/seo-data/${page}`, {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) throw new Error("Failed to fetch seo data.");
-      const data = await response.json();
-      console.log(data);
-      setSeoData(data);
-    } catch (err) {
-      console.error("Error fetching Seo Data:", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSeoData();
-  }, []);
 
   // **Fetch States from API**
   const fetchStates = async () => {
@@ -412,15 +388,6 @@ function RentProperty() {
 
   return (
     <>
-      <SEO
-        title={ seoData?.title || 
-          "List Property for Rent Free in India | Post Rental Listing | Reparv"
-        }
-        description={  seoData?.description || 
-          "List your property for rent free in India. Post flats, houses, shops, offices & land. Get verified tenants, more inquiries and secure listing on Reparv."
-        }
-      />
-
       <div className="w-full min-h-screen bg-[#F7F3FF] px-4 py-6 pt-2 sm:pt-6">
         {/* Back Navigation Section */}
         <div className="md:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-3 sm:my-4 rounded-lg bg-white">
