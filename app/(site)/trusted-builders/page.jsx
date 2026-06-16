@@ -6,11 +6,10 @@ export async function generateMetadata() {
   const seo = await getSeoData("trusted-builders");
 
   return buildPageMetadata({
-    title: seo?.metaTitle || "Trusted Builders",
+    title: seo?.title,
     description:
-      seo?.metaDescription ||
-      "Discover trusted builder partners on Reparv.",
-    keywords: seo?.metaKeywords,
+      seo?.description,
+    keywords: seo?.keywords,
     path: "/trusted-builders",
   });
 }

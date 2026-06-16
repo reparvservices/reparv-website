@@ -4,11 +4,11 @@ import { buildPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata() {
   const seo = await getSeoData("news");
-
+  //console.log("SEO DATA:", seo);
   return buildPageMetadata({
-    title: seo?.metaTitle,
-    description: seo?.metaDescription,
-    keywords: seo?.metaKeywords,
+    title: seo?.title,
+    description: seo?.description,
+    keywords: seo?.keywords,
     path: "/news",
   });
 }

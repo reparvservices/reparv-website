@@ -6,11 +6,11 @@ export async function generateMetadata() {
   const seo = await getSeoData("verify-7-12");
 
   return buildPageMetadata({
-    title: seo?.metaTitle || "Verify 7/12",
+    title: seo?.title || "Verify 7/12",
     description:
-      seo?.metaDescription ||
+      seo?.description ||
       "Verify land records and 7/12 extracts.",
-    keywords: seo?.metaKeywords,
+    keywords: seo?.keywords || "verify 7/12, land records, 7/12 extract, property verification",
     path: "/verify-7-12",
   });
 }

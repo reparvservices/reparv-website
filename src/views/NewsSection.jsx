@@ -36,7 +36,7 @@ export default function NewsPage() {
       });
       if (!response.ok) throw new Error("Failed to fetch blogs.");
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       setNews(data);
     } catch (err) {
       console.error("Error fetching Blogs:", err);
@@ -105,7 +105,7 @@ export default function NewsPage() {
   });
 
   return (
-    <>
+    
       <div className="w-full max-w-[1440px] mx-auto min-h-screen bg-[#F8F7FC] text-gray-800">
         {/* NEWS TABS */}
         <div className="w-full bg-[#F8F7FC] py-6">
@@ -407,6 +407,6 @@ export default function NewsPage() {
           <NeverMissUpdates />
         </section>
       </div>
-    </>
+    
   );
 }

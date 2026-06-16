@@ -6,11 +6,10 @@ export async function generateMetadata() {
   const seo = await getSeoData("rera-properties");
 
   return buildPageMetadata({
-    title: seo?.metaTitle || "RERA Properties",
+    title: seo?.title,
     description:
-      seo?.metaDescription ||
-      "Browse RERA-registered projects and listings.",
-    keywords: seo?.metaKeywords,
+      seo?.description,
+    keywords: seo?.keywords,  
     path: "/rera-properties",
   });
 }
