@@ -38,7 +38,7 @@ export const metadata = {
   },
 
   other: {
-    "google-adsense-account": "ca-pub-8914733371473026",
+    "google-adsense-account": "ca-pub-7197621532263972",
     "msvalidate.01": "DCC60D60392DD48243D50DE82B7ECBA2",
   },
 
@@ -83,7 +83,7 @@ export default function RootLayout({ children }) {
           async
           strategy="afterInteractive"
           crossOrigin="anonymous"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8914733371473026"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7197621532263972"
         />
 
         {/* Google Tag Manager */}

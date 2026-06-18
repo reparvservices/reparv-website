@@ -4,7 +4,7 @@ import { getSeoData } from "@/lib/getSeoData";
 
 export async function generateMetadata() {
   const seo = await getSeoData("properties");
-
+  console.log("PROPERTIES SEO:", seo);
   return buildPageMetadata({
     title: seo?.title,
     description: seo?.description,
