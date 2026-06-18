@@ -117,6 +117,7 @@ export default function FilterNavbar({
     },
   ];
 
+
   /* ================= HELPERS ================= */
 
   const getPropertyTypeList = () => {
@@ -129,6 +130,9 @@ export default function FilterNavbar({
     if (!selectedType) return [];
     return bhkTypes.find((b) => b.category === selectedType)?.types || [];
   };
+
+  const formatPropertyCategory = (category) =>
+    category?.replace(/([a-z])([A-Z])/g, "$1 $2");
 
   /* ================= RENDER ================= */
 
@@ -194,7 +198,7 @@ export default function FilterNavbar({
           }
           className="flex items-center gap-2 px-4 py-3 border border-[#D9D9D9] rounded-xl text-sm font-semibold bg-white"
         >
-          {selectedType || "Property Type"}
+          {formatPropertyCategory(selectedType) || "Property Type"}
           <FiChevronDown />
         </button>
 
@@ -210,7 +214,7 @@ export default function FilterNavbar({
                 }}
                 className="px-4 py-2 text-sm cursor-pointer hover:bg-[#f6f3fc]"
               >
-                {t}
+                {formatPropertyCategory(t)}
               </div>
             ))}
           </div>

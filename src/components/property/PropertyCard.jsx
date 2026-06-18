@@ -10,6 +10,9 @@ import { getImageURI } from "../../utils/helper";
 function PropertyCard({ property, top = false }) {
   const router = useRouter();
   const { URI, user, setShowLogin, setShowAlert } = useAuth();
+  
+  const formatPropertyCategory = (category) =>
+    category?.replace(/([a-z])([A-Z])/g, "$1 $2");
 
   const addLike = async () => {
     if (!user?.id) {
@@ -170,7 +173,7 @@ function PropertyCard({ property, top = false }) {
             <div className="w-full flex gap-2 items-center justify-between">
               <div className="flex items-center gap-2 ml-1 py-2 px-5 rounded-2xl bg-[#8a38f520] text-[#8A38F5]">
                 <RiBuildingLine className="w-4 h-4" />
-                <span className="font-bold text-xs">{category}</span>
+                <span className="font-bold text-xs">{formatPropertyCategory(category)}</span>
               </div>
 
               <div className="flex flex-col pr-2">

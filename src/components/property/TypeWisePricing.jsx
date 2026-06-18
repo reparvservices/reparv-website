@@ -16,6 +16,9 @@ function TypeWisePricing({
   const [isActive, setIsActive] = useState(propertyType?.[0] || "");
   const [propertyData, setPropertyData] = useState({});
 
+  const formatPropertyCategory = (category) =>
+    category?.replace(/([a-z])([A-Z])/g, "$1 $2");
+
   // add this helper above overviewData
   const isValid = (value) => {
     return (
@@ -116,7 +119,7 @@ function TypeWisePricing({
     <div className="flex flex-col gap-2 bg-white rounded-lg p-4 md:p-6">
       <div className="w-full flex gap-4 items-center justify-between">
         <h2 className="text-black text-lg sm:text-xl lg:text-2xl mb-3 font-semibold mx-1">
-          {propertyCategory}
+          {formatPropertyCategory(propertyCategory)}
         </h2>
         <div className="flex gap-3 mb-3">
           <BrochureAndVideo brochureFile={brochureFile} videoLink={videoLink} />

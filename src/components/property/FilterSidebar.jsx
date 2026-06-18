@@ -162,6 +162,9 @@ export default function FilterSidebar({ type }) {
   const MAX = 1000000;
   const STEP = 10000;
 
+  const formatPropertyCategory = (category) =>
+    category?.replace(/([a-z])([A-Z])/g, "$1 $2");
+
   const toggleSelection = (value, setFn, list) => {
     if (list.includes(value)) {
       setFn(list.filter((item) => item !== value));
@@ -176,7 +179,7 @@ export default function FilterSidebar({ type }) {
 
       if (selectedType && selectedType.trim() !== "") {
         queryParams.push(
-          `propertyCategory=${encodeURIComponent(selectedType)}`
+          `propertyCategory=${encodeURIComponent(selectedType)}`,
         );
       }
 
@@ -289,7 +292,7 @@ export default function FilterSidebar({ type }) {
                 flex items-center justify-center px-3 py-[6px] text-xs font-medium
                 rounded-xl transition`}
                     >
-                      {t}
+                      {formatPropertyCategory(t)}
                     </div>
                   ))
                 : null;
@@ -403,7 +406,7 @@ export default function FilterSidebar({ type }) {
                     toggleSelection(
                       loc,
                       setSelectedLocations,
-                      selectedLocations
+                      selectedLocations,
                     )
                   }
                   className="hidden"
@@ -449,7 +452,7 @@ export default function FilterSidebar({ type }) {
                     toggleSelection(
                       loc,
                       setSelectedAmenities,
-                      selectedAmenities
+                      selectedAmenities,
                     )
                   }
                   className="hidden"
