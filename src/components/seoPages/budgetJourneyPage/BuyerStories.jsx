@@ -47,7 +47,7 @@ export default function BuyerStories() {
             className={`flex flex-col ${s.imageRight ? "lg:flex-row" : "lg:flex-row-reverse"} gap-8 lg:gap-12 items-center`}
           >
             {/* Text */}
-            <div className="flex-1 space-y-4">
+            <div className="md:max-w-[50%] flex-1 space-y-4">
               <span className="text-[10px] font-bold tracking-[0.2em] text-[#4500B4] uppercase">{s.label}</span>
               <h3 className="text-xl sm:text-2xl font-bold text-[#1a0a3d] leading-snug">{s.name}</h3>
               <p className="text-[#6b6490] text-sm leading-relaxed">{s.text}</p>
@@ -65,7 +65,7 @@ export default function BuyerStories() {
             </div>
 
             {/* Image placeholder */}
-            <div className={`flex-shrink-0 w-full lg:w-80 h-56 sm:h-64 rounded-2xl ${s.imageBg} flex items-center justify-center shadow-md relative overflow-hidden`}>
+            <div className={`md:max-w-[50%] flex-shrink-0 w-full h-56 sm:h-64 rounded-2xl ${s.imageBg} flex items-center justify-center shadow-md relative overflow-hidden`}>
               <div className="absolute inset-0 opacity-10">
                 {Array.from({ length: 6 }).map((_, j) => (
                   <div key={j} className="absolute bg-[#4500B4]/20 rounded-full" style={{

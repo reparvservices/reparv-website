@@ -23,7 +23,7 @@ const dilemmas = [
 
 export default function BudgetDilemmas() {
   return (
-    <section className="py-16 sm:py-20 bg-[#faf8ff]">
+    <section className="py-16 sm:py-20 bg-[#F6F2FB]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-2xl sm:text-3xl font-bold text-[#1a0a3d] mb-3">Common Budget Dilemmas</h2>
         <p className="text-[#6b6490] text-sm sm:text-base max-w-xl mx-auto mb-12 leading-relaxed">
@@ -36,11 +36,11 @@ export default function BudgetDilemmas() {
               key={i}
               className="flex items-start gap-4 bg-white rounded-2xl p-6 border border-[#ede8ff] text-left hover:shadow-lg hover:border-[#5323DC]/30 transition-all duration-200"
             >
-              <span className="text-2xl flex-shrink-0 mt-0.5 w-10 h-10 bg-[#4500B4]/8 rounded-xl flex items-center justify-center">
+              <span className="text-2xl flex-shrink-0 mt-0.5 w-10 h-10 bg-[#E8DDFF] rounded-lg flex items-center justify-center">
                 {d.icon}
               </span>
               <div>
-                <h3 className="text-[#1a0a3d] font-semibold text-base mb-1">{d.title}</h3>
+                <h3 className="text-[#4500B4] font-semibold text-base mb-1">{d.title}</h3>
                 <p className="text-[#6b6490] text-sm leading-relaxed">{d.desc}</p>
               </div>
             </div>

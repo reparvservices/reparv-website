@@ -24,7 +24,7 @@ export default function FAQSection() {
   const [open, setOpen] = useState(null);
 
   return (
-    <section className="py-16 sm:py-20 bg-[#f8f5ff]">
+    <section className="py-16 sm:py-20 bg-[#F0F3FF]">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-2xl sm:text-3xl font-bold text-[#1a0a3d] text-center mb-10">
           Frequently Asked Questions

@@ -1,16 +1,20 @@
 export default function HeroSection() {
   return (
     <section className="relative min-h-[420px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#f5f0ff] via-[#ede8ff] to-[#f9f7ff]">
-      {/* Soft background blobs */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#4500B4]/8 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#5323DC]/6 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-
-      {/* Decorative home illustration (right side) */}
-      <div className="absolute right-8 bottom-0 hidden lg:flex items-end gap-4 opacity-20 pointer-events-none">
-        <div className="w-32 h-40 bg-[#4500B4] rounded-t-full" />
-        <div className="w-20 h-28 bg-[#5323DC] rounded-t-full" />
-        <div className="w-14 h-20 bg-[#7c5ce4] rounded-t-full" />
-      </div>
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/assets/seoPages/budgetJourney/hero.svg')",
+        }}
+      />
+      {/* Stronger purple push on the left where text lives */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(255,255,255,0.93) 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0.30) 58%, rgba(255,255,255,0.08) 100%)",
+        }}
+      />
 
       <div className="relative z-10 text-center px-4 sm:px-6 max-w-3xl mx-auto py-20">
         {/* Eyebrow */}
@@ -25,7 +29,9 @@ export default function HeroSection() {
         </h1>
 
         <p className="text-base sm:text-lg text-[#4a4470] max-w-xl mx-auto mb-8 leading-relaxed">
-          Real stories of buyers who started with budget limits, made thoughtful adjustments, and found homes that improved daily life — without regret.
+          Real stories of buyers who started with budget limits, made thoughtful
+          adjustments, and found homes that improved daily life — without
+          regret.
         </p>
 
         <a

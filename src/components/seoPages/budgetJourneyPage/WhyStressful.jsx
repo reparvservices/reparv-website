@@ -53,7 +53,7 @@ export default function WhyStressful() {
           {reasons.map((r, i) => (
             <div
               key={i}
-              className="bg-[#f8f5ff] rounded-2xl p-6 border border-[#ede8ff] hover:border-[#4500B4]/30 hover:shadow-md transition-all duration-200 group"
+              className="bg-[#ffffff] rounded-2xl p-6 border border-[#ede8ff] hover:border-[#4500B4]/30 hover:shadow-md transition-all duration-200 group"
             >
               <div className="w-11 h-11 rounded-xl bg-[#4500B4]/10 flex items-center justify-center text-[#4500B4] mb-4 group-hover:bg-[#4500B4] group-hover:text-white transition-colors duration-200">
                 {r.icon}

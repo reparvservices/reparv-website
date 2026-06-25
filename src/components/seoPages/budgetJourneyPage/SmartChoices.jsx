@@ -56,7 +56,7 @@ export default function SmartChoices() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
           {values.map((v, i) => (
-            <div key={i} className="bg-[#f8f5ff] rounded-2xl p-6 border border-[#ede8ff] hover:shadow-md transition-shadow duration-200 group">
+            <div key={i} className="bg-[#ffffff] rounded-2xl p-6 border border-[#ede8ff] hover:shadow-md transition-shadow duration-200 group">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${v.color} group-hover:scale-110 transition-transform duration-200`}>
                 {v.icon}
               </div>
@@ -78,7 +78,7 @@ export default function SmartChoices() {
             </button>
           </div>
 
-          <div className="bg-[#1a0a3d] rounded-2xl p-6 sm:p-8">
+          <div className="bg-[#5F5D69] rounded-2xl p-6 sm:p-8">
             <h3 className="text-white font-bold text-lg mb-2">Free Buying Guidance Session</h3>
             <p className="text-purple-200 text-sm mb-5 leading-relaxed">
               A 30-minute session to help you move from budget stress to buying something real.
