@@ -6,7 +6,7 @@ import ReparvPath from "../components/seoPages/seoPage1/ReparvPath.jsx";
 import UniversalFears from "../components/seoPages/seoPage1/UnivarsalFears.jsx";
 import FamilyChecklist from "../components/seoPages/seoPage1/FamilyChecklist.jsx";
 import ReparvStandard from "../components/seoPages/seoPage1/ReparvStandard.jsx";
-import CTASection from "../components/seoPages/seoPage1/CTASection.jsx";
+import CTASection from "../components/seoPages/seoPage1/CtaSection.jsx";
 import Faq from "../components/seoPages/seoPage1/Faq.jsx";
 export default function SeoPage1() {
   return (

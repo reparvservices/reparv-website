@@ -1,10 +1,11 @@
 import BlogDetails from "@/views/BlogDetails";
 import { buildPageMetadata } from "@/lib/seo";
+import { getBackendUrl } from "@/lib/env";
 
 async function getBlogDetails(blogId) {
   try {
     const response = await fetch(
-      `${process.env.VITE_BACKEND_URL}/frontend/blog/details/${blogId}`,
+      `${getBackendUrl()}/frontend/blog/details/${blogId}`,
       {
         next: { revalidate: 3600 },
       },

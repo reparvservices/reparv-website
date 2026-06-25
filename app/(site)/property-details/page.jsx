@@ -1,10 +1,11 @@
 import PropertyDetails from "@/views/PropertyDetails";
 import { buildPageMetadata } from "@/lib/seo";
+import { getBackendUrl } from "@/lib/env";
 
 async function getPropertyDetails(id) {
   try {
     const response = await fetch(
-      `${process.env.VITE_BACKEND_URL}/frontend/propertyinfo/${id}`,
+      `${getBackendUrl()}/frontend/propertyinfo/${id}`,
       {
         next: { revalidate: 3600 },
       },

@@ -1,10 +1,11 @@
 import NewsDetailsPage from "@/views/NewsDetailsPage";
 import { buildPageMetadata } from "@/lib/seo";
+import { getBackendUrl } from "@/lib/env";
 
 async function getNewsDetails(newsId) {
   try {
     const response = await fetch(
-      `${process.env.VITE_BACKEND_URL}/frontend/news/details/${newsId}`,
+      `${getBackendUrl()}/frontend/news/details/${newsId}`,
       {
         next: { revalidate: 3600 },
       }

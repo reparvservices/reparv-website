@@ -1,15 +1,17 @@
 import ProjectPartner from "@/views/ProjectPartner";
 import { buildPageMetadata } from "@/lib/seo";
+import { getBackendUrl, getS3ImageUrl } from "@/lib/env";
 
 export async function generateMetadata({ params }) {
   const { contact } = await params;
 
   const res = await fetch(
-    `${process.env.VITE_BACKEND_URL}/frontend/project-partner/get/${contact}`,
+    `${getBackendUrl()}/frontend/project-partner/get/${contact}`,
     { cache: "no-store" },
   );
 
   const projectPartner = await res.json();
+  const logo = projectPartner?.businessLogo?.replace(/^\/+/, "");
 
   return buildPageMetadata({
     title:
@@ -24,11 +26,9 @@ export async function generateMetadata({ params }) {
     canonical: `https://www.reparv.in/project-partner/${contact}`,
 
     openGraph: {
-      images: [
-        {
-          url: `${process.env.NEXT_PUBLIC_API_URL}${projectPartner?.businessLogo}`,
-        },
-      ],
+      images: logo
+        ? [{ url: `${getS3ImageUrl()}/${logo}` }]
+        : undefined,
     },
 
     twitter: {

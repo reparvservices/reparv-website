@@ -1,8 +1,9 @@
-// lib/getSeoData.js
+import { getBackendUrl } from "./env";
+
 export async function getSeoData(page) {
   try {
     const response = await fetch(
-      `${process.env.VITE_BACKEND_URL}/frontend/seo-data/${page}`,
+      `${getBackendUrl()}/frontend/seo-data/${page}`,
       {
         next: { revalidate: 3600 },
       },
