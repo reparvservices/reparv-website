@@ -16,19 +16,19 @@ export default function HeroSection() {
         }}
       />
 
-      <div className="relative z-10 text-center px-4 sm:px-6 max-w-3xl mx-auto py-20">
+      <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto py-20">
         {/* Eyebrow */}
-        <div className="inline-flex items-center gap-2 bg-[#4500B4]/10 border border-[#4500B4]/20 text-[#4500B4] text-xs font-semibold tracking-widest uppercase rounded-full px-4 py-1.5 mb-6">
+        <div className="inline-flex items-center gap-2 bg-[#4500B4]/10 border border-[#4500B4]/20 text-[#1a0a3d] md:text-[#5E23DC] text-xs font-semibold tracking-widest uppercase rounded-full px-4 py-1.5 mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-[#4500B4] animate-pulse" />
           Real Buyer Home Journeys Report
         </div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1a0a3d] leading-tight mb-5">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#1a0a3d] md:text-[#5E23DC] leading-tight mb-5">
           Budget to Dream Home Journeys –{" "}
-          <span className="text-[#4500B4]">How Buyers Made Smart Choices</span>
+          <span className="text-[#000] md:text-[#5323DC]">How Buyers Made Smart Choices</span>
         </h1>
 
-        <p className="text-base sm:text-lg text-[#4a4470] max-w-xl mx-auto mb-8 leading-relaxed">
+        <p className="text-base sm:text-lg text-[#4a4470] md:text-black max-w-xl mx-auto mb-8 leading-relaxed">
           Real stories of buyers who started with budget limits, made thoughtful
           adjustments, and found homes that improved daily life — without
           regret.

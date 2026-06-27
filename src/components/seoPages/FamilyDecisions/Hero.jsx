@@ -22,7 +22,7 @@ export default function Hero() {
             Based on Real Family Experiences
           </div>
 
-          <h1 className="mb-6 text-4xl font-extrabold leading-tight tracking-tight text-[#4500B4] sm:text-5xl">
+          <h1 className="mb-6 text-4xl font-semibold leading-tight tracking-tight text-[#4500B4] sm:text-5xl">
             Family Decision Stories –
             <span className="block lg:inline"> How Families Aligned</span>{" "}
             Before Buying a Home

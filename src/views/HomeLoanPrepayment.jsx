@@ -1,29 +1,94 @@
 "use client";
 import { useState } from "react";
 
-// ── icons (inline SVG to avoid any dependency) ──────────────────────────────
-const CheckIcon = () => (
-  <svg className="w-4 h-4 text-violet-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+// ─── Inline Icons ─────────────────────────────────────────────────────────────
+const CheckIcon = ({ className = "w-3.5 h-3.5" }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2.5}
+    viewBox="0 0 24 24"
+  >
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
   </svg>
 );
 const CrossIcon = () => (
-  <svg className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+  <svg
+    className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-[#7A7487]"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2.5}
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 18L18 6M6 6l12 12"
+    />
   </svg>
 );
-const ChevronDown = () => (
-  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+const ChevronDownIcon = ({ open }) => (
+  <svg
+    className="w-3 h-3 flex-shrink-0 text-[#151C27] transition-transform duration-200"
+    style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2.5}
+    viewBox="0 0 24 24"
+  >
     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
   </svg>
 );
-const ArrowRight = () => (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+const ArrowRightIcon = () => (
+  <svg
+    className="w-4 h-4 flex-shrink-0"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2.5}
+    viewBox="0 0 24 24"
+  >
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
   </svg>
 );
+const ClockIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" d="M12 6v6l4 2" />
+  </svg>
+);
+const CoinIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path strokeLinecap="round" d="M12 8v8M9 11h6" />
+  </svg>
+);
+const CalcIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+  >
+    <rect x="4" y="2" width="16" height="20" rx="2" />
+    <path d="M8 6h8M8 10h8M8 14h4M8 18h2" />
+  </svg>
+);
 
-// ── helpers ──────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 function formatINR(n) {
   return new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(n);
 }
@@ -31,22 +96,17 @@ function formatLakh(n) {
   const l = n / 100000;
   return l % 1 === 0 ? `₹${l} Lakh` : `₹${l.toFixed(1)} Lakh`;
 }
-
 function calcEMI(P, rAnnual, tenureYears) {
   const r = rAnnual / 12 / 100;
   const n = tenureYears * 12;
   if (r === 0) return P / n;
   return (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
 }
-
 function calcSavings(P, rAnnual, tenureYears) {
   const r = rAnnual / 12 / 100;
   const n = tenureYears * 12;
   const emi = calcEMI(P, rAnnual, tenureYears);
-  const totalWithout = emi * n;
-  const interestWithout = totalWithout - P;
-
-  // Prepay 10% of principal at month 12
+  const interestWithout = emi * n - P;
   const prepay = P * 0.1;
   let balance = P;
   let totalInterestWith = 0;
@@ -56,492 +116,822 @@ function calcSavings(P, rAnnual, tenureYears) {
     totalInterestWith += interest;
     balance = balance - (emi - interest);
     monthsPaid++;
-    if (i === 12 && balance > 0) {
-      balance = Math.max(0, balance - prepay);
-    }
+    if (i === 12 && balance > 0) balance = Math.max(0, balance - prepay);
     if (balance <= 0) break;
   }
-  const interestSaved = interestWithout - totalInterestWith;
-  const tenureReduced = n - monthsPaid;
-  return { emi, interestSaved: Math.max(0, interestSaved), tenureReduced: Math.max(0, tenureReduced), interestWithout };
+  return {
+    emi,
+    interestSaved: Math.max(0, interestWithout - totalInterestWith),
+    tenureReduced: Math.max(0, n - monthsPaid),
+    interestWithout,
+  };
 }
 
-// ── range slider ─────────────────────────────────────────────────────────────
-function Slider({ label, value, min, max, step, onChange, display }) {
+// ─── Slider ───────────────────────────────────────────────────────────────────
+function Slider({
+  label,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+  display,
+  minLabel,
+  maxLabel,
+}) {
   const pct = ((value - min) / (max - min)) * 100;
   return (
-    <div className="mb-5">
-      <div className="flex justify-between items-center mb-1">
-        <span className="text-sm text-gray-600">{label}</span>
-        <span className="text-sm font-semibold text-gray-800">{display}</span>
+    <div className="mb-7">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-[13px] font-bold tracking-[0.8px] uppercase text-[#494455]">
+          {label}
+        </span>
+        <span className="text-[15px] font-bold text-[#4500B4]">{display}</span>
       </div>
-      <div className="relative h-2 rounded-full bg-gray-200">
-        <div className="absolute top-0 left-0 h-2 rounded-full bg-violet-600" style={{ width: `${pct}%` }} />
+      <div className="relative flex items-center h-5">
+        <div className="w-full h-[6px] rounded-full bg-[#E4E0EF] relative">
+          <div
+            className="absolute top-0 left-0 h-[6px] rounded-full bg-[#5E23DC]"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
         <input
-          type="range" min={min} max={max} step={step} value={value}
-          onChange={e => onChange(Number(e.target.value))}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute inset-0 w-full opacity-0 cursor-pointer h-5"
+          style={{ zIndex: 2 }}
         />
-        <div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-violet-600 border-2 border-white shadow" style={{ left: `calc(${pct}% - 8px)` }} />
+        <div
+          className="absolute w-5 h-5 rounded-full bg-[#5E23DC] border-2 border-white shadow-md"
+          style={{
+            left: `calc(${pct}% - 10px)`,
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
       </div>
-      <div className="flex justify-between text-xs text-gray-400 mt-1">
-        <span>{min}</span><span>{max}</span>
+      <div className="flex justify-between text-xs text-[#7A7487] mt-1.5">
+        <span>{minLabel || min}</span>
+        <span>{maxLabel || max}</span>
       </div>
     </div>
   );
 }
 
-// ── FAQ item ─────────────────────────────────────────────────────────────────
-function FAQ({ q, a }) {
-  const [open, setOpen] = useState(false);
+// ─── FAQ Item ─────────────────────────────────────────────────────────────────
+function FAQItem({ q, a, isOpen, onToggle }) {
   return (
-    <div className="border-b border-gray-200 py-4">
-      <button onClick={() => setOpen(!open)} className="w-full flex justify-between items-center text-left gap-3">
-        <span className="text-sm sm:text-base font-medium text-gray-800">{q}</span>
-        <span className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}><ChevronDown /></span>
+    <div className="border-b border-[#CBC3D8] last:border-0">
+      <button
+        onClick={onToggle}
+        className="w-full flex justify-between items-center gap-4 py-5 text-left bg-transparent border-0 cursor-pointer"
+      >
+        <span className="font-manrope font-semibold text-[16px] sm:text-[18px] lg:text-[22px] leading-7 text-[#151C27]">
+          {q}
+        </span>
+        <ChevronDownIcon open={isOpen} />
       </button>
-      {open && <p className="mt-3 text-sm text-gray-600 leading-relaxed">{a}</p>}
+      {isOpen && (
+        <p className="font-jakarta text-[14px] sm:text-[15px] leading-6 text-[#494455] pb-5">
+          {a}
+        </p>
+      )}
     </div>
   );
 }
 
-// ── Guide Card ────────────────────────────────────────────────────────────────
-function GuideCard({ title, desc, cta, href = "#" }) {
+// ─── Guide Card ───────────────────────────────────────────────────────────────
+function GuideCard({ icon, title, desc, cta }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-shadow">
-      <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
-        <svg className="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M5 20h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v11a2 2 0 002 2z" />
-        </svg>
+    <div className="bg-white border border-[rgba(203,195,216,0.3)] rounded-2xl p-8 flex flex-col gap-4 shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+      <div className="w-10 h-10 rounded-xl bg-[#F0F3FF] flex items-center justify-center text-[#5E23DC]">
+        {icon}
       </div>
       <div>
-        <h4 className="font-semibold text-gray-800 text-sm mb-1">{title}</h4>
-        <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
+        <h4 className="font-manrope font-semibold text-[20px] leading-8 text-[#151C27] mb-2">
+          {title}
+        </h4>
+        <p className="font-jakarta text-[14px] leading-6 text-[#494455]">
+          {desc}
+        </p>
       </div>
-      <a href={href} className="text-violet-600 text-xs font-semibold flex items-center gap-1 hover:gap-2 transition-all">
-        {cta} <ArrowRight />
+      <a
+        href="#"
+        className="flex items-center gap-2 font-jakarta font-bold text-[14px] text-[#4500B4] hover:gap-3 transition-all mt-auto group"
+      >
+        {cta} <ArrowRightIcon />
       </a>
     </div>
   );
 }
 
-// ── Property Card ─────────────────────────────────────────────────────────────
-function PropertyCard({ title, desc, cta, bg }) {
+// ─── Property Card ────────────────────────────────────────────────────────────
+function PropertyCard({ title, desc, cta, gradientClass }) {
   return (
-    <div className="rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-      <div className={`h-36 ${bg} flex items-center justify-center`}>
-        <svg className="w-12 h-12 text-white opacity-60" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    <div className="flex flex-col gap-2">
+      <div
+        className={`h-52 lg:h-64 rounded-2xl ${gradientClass} flex items-center justify-center`}
+      >
+        <svg
+          className="w-16 h-16 text-white opacity-50"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={1.2}
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+          />
         </svg>
       </div>
-      <div className="p-4 bg-white">
-        <h4 className="font-semibold text-gray-800 text-sm mb-1">{title}</h4>
-        <p className="text-xs text-gray-500 mb-3 leading-relaxed">{desc}</p>
-        <a href="#" className="text-violet-600 text-xs font-semibold flex items-center gap-1 hover:gap-2 transition-all">
-          {cta} <ArrowRight />
+      <div className="pt-2">
+        <h4 className="font-manrope font-semibold text-[22px] leading-8 text-[#151C27] mb-1">
+          {title}
+        </h4>
+        <p className="font-jakarta text-[14px] leading-6 text-[#494455] mb-3">
+          {desc}
+        </p>
+        <a
+          href="#"
+          className="flex items-center gap-2 font-jakarta font-bold text-[14px] text-[#4500B4] hover:gap-3 transition-all group"
+        >
+          {cta} <ArrowRightIcon />
         </a>
       </div>
     </div>
   );
 }
 
-// ── MAIN PAGE ─────────────────────────────────────────────────────────────────
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function HomeLoanPrepayment() {
-  const [loanAmount, setLoanAmount] = useState(8000000);
-  const [interestRate, setInterestRate] = useState(8.5);
-  const [tenure, setTenure] = useState(16);
+  const [loanAmount, setLoanAmount] = useState(8020000);
+  const [interestRate, setInterestRate] = useState(9.5);
+  const [tenure, setTenure] = useState(15);
   const [activeTab, setActiveTab] = useState("reduce-tenure");
-  const [openFaq, setOpenFaq] = useState(null);
+  const [openFaq, setOpenFaq] = useState(0);
 
-  const { emi, interestSaved, tenureReduced, interestWithout } = calcSavings(loanAmount, interestRate, tenure);
-  const totalEMI = calcEMI(loanAmount, interestRate, tenure);
-  const totalPayable = totalEMI * tenure * 12;
-  const totalInterest = totalPayable - loanAmount;
+  const { emi, interestSaved, tenureReduced, interestWithout } = calcSavings(
+    loanAmount,
+    interestRate,
+    tenure,
+  );
   const tenureReducedYears = (tenureReduced / 12).toFixed(1);
+  const totalInterest = emi * tenure * 12 - loanAmount;
 
   const faqs = [
     {
       q: "Is home loan prepayment always beneficial?",
-      a: "Prepayment is beneficial in most cases. However, it depends on your interest rate, remaining tenure, prepayment charges, and alternative investment returns. If loan interest is higher than expected investment returns, prepayment makes more financial sense.",
+      a: "Prepayment is beneficial in most cases, especially in the early years of a loan. However, it depends on your interest rate, alternative investment returns, and financial stability.",
     },
     {
       q: "Should I reduce EMI or reduce tenure after prepayment?",
-      a: "Reducing tenure saves significantly more interest over the loan's lifetime. Reducing EMI improves monthly cash flow. Choose based on your financial goals — reducing tenure is generally recommended if your finances are stable.",
+      a: "Reducing tenure saves significantly more interest over the loan's lifetime. Reducing EMI improves monthly cash flow. Choose based on your financial goals.",
     },
     {
       q: "Are there any charges for home loan prepayment?",
-      a: "For floating rate home loans taken from banks, RBI has mandated no prepayment penalty. However, fixed-rate loans or loans from NBFCs may have charges. Always check your loan agreement or contact your lender before prepaying.",
+      a: "For floating-rate home loans from banks, RBI has mandated no prepayment penalty. However, fixed-rate loans or loans from NBFCs may carry charges. Always check your loan agreement.",
     },
     {
       q: "What is the best time to prepay a home loan?",
-      a: "The earlier you prepay, the more interest you save — since interest in EMIs is front-loaded. Prepaying in the first 5–7 years is most impactful, but any early prepayment yields better results than later stage prepayment.",
+      a: "The earlier you prepay, the more interest you save. Prepaying within the first 5–7 years is most impactful due to how amortisation front-loads interest.",
     },
   ];
 
   const prepayRows = [
-    { amount: "₹1,00,000", interest: `₹${formatINR(Math.round(interestSaved * 0.1))} saved`, tenure: "7 months reduced" },
-    { amount: "₹5,00,000", interest: `₹${formatINR(Math.round(interestSaved * 0.5))} saved`, tenure: "3–4 years reduced" },
-    { amount: "₹10,00,000", interest: `₹${formatINR(Math.round(interestSaved))} saved`, tenure: `${tenureReducedYears} years reduced` },
+    {
+      amount: "₹1,00,000",
+      interest: `₹${formatINR(Math.round(interestSaved * 0.1))}`,
+      tenure: "7 months reduced",
+    },
+    {
+      amount: "₹5,00,000",
+      interest: `₹${formatINR(Math.round(interestSaved * 0.5))}`,
+      tenure: "3–4 years reduced",
+    },
+    {
+      amount: "₹10,00,000",
+      interest: `₹${formatINR(Math.round(interestSaved))}`,
+      tenure: `${tenureReducedYears} years reduced`,
+    },
   ];
 
   return (
-    <div className="bg-white font-sans text-gray-800 min-w-0">
-      {/* ── Hero ────────────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          {/* Left */}
+    <div className="bg-[#F9F9FF] font-sans min-w-0">
+      {/* ── HERO ──────────────────────────────────────────────────────────── */}
+      <section className="bg-white px-4 sm:px-6 lg:px-16 pt-8 pb-10 lg:pb-16">
+        <div className="max-w-[1312px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+          {/* Left: text */}
           <div className="flex-1 min-w-0">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-3">
+            <h1 className="font-['Segoe_UI',sans-serif] font-bold text-[28px] sm:text-[36px] lg:text-[48px] leading-tight lg:leading-[56px] tracking-[-0.96px] text-[#151C27] mb-4">
               Home Loan Prepayment Calculator:{" "}
-              <span className="text-violet-600">Save Interest &amp; Reduce Loan Tenure</span>
+              <span className="text-[#5E23DC]">
+                Save Interest &amp; Reduce Loan Tenure
+              </span>
             </h1>
-            <p className="text-sm sm:text-base text-gray-600 mb-5 leading-relaxed max-w-xl">
-              Reconnect to a bonus or extra funds? Use this calculator to clearly understand whether prepaying your home loan will help you reduce your monthly EMI or shorten your loan tenure and save lakhs in interest over time.
+            <p className="font-jakarta text-[15px] sm:text-[17px] lg:text-[18px] leading-7 text-[#494455] mb-6 max-w-xl">
+              Got a bonus or extra funds? This calculator helps you clearly
+              understand whether prepaying your home loan will help you reduce
+              your monthly EMI or shorten your loan tenure and save lakhs in
+              interest over time.
             </p>
-            <div className="flex flex-wrap gap-3 mb-5">
-              <button className="bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm">
+            <div className="flex flex-col sm:flex-row gap-3 mb-5">
+              <button className="bg-[#5E23DC] hover:bg-[#4500B4] text-white font-['Segoe_UI',sans-serif] font-bold text-[15px] px-6 sm:px-8 py-3.5 rounded-lg transition-colors shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1),0_4px_6px_-4px_rgba(0,0,0,0.1)] w-full sm:w-auto">
                 Calculate Prepayment Savings
               </button>
-              <button className="border border-violet-600 text-violet-600 hover:bg-violet-50 text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+              <button className="border-2 border-[#5E23DC] text-[#5E23DC] hover:bg-[#F0F3FF] font-['Segoe_UI',sans-serif] font-bold text-[15px] px-6 sm:px-8 py-3.5 rounded-lg transition-colors w-full sm:w-auto">
                 Reduce EMI or Tenure?
               </button>
             </div>
-            <div className="flex flex-wrap gap-4 text-xs text-gray-500">
-              {["Bank-neutral", "No sales bias", "Instant results"].map(t => (
-                <span key={t} className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400 inline-block" />
+            <div className="flex flex-wrap gap-5">
+              {["Bank-neutral", "No sales bias", "Instant results"].map((t) => (
+                <span
+                  key={t}
+                  className="flex items-center gap-2 font-jakarta font-bold text-[15px] text-[#494455]"
+                >
+                  <span className="w-3 h-3 rounded-full border-2 border-[#494455] flex-shrink-0" />
                   {t}
                 </span>
               ))}
             </div>
           </div>
-          {/* Right — guide card */}
-          <div className="w-full lg:w-64 xl:w-72 flex-shrink-0">
-            <div className="rounded-2xl overflow-hidden shadow-lg border border-gray-100">
-              <div className="bg-gradient-to-br from-violet-700 to-violet-500 p-5 text-white">
-                <p className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-1">Home Loan</p>
-                <h3 className="text-lg font-bold leading-tight mb-0.5">PREPAYMENT GUIDE</h3>
-                <p className="text-xs opacity-70">SAVE MORE, LIVE SOONER</p>
-              </div>
-              <div className="bg-white p-4 space-y-2">
-                {["Understand when to prepay","Compare EMI vs tenure options","Calculate your exact savings"].map(item => (
-                  <div key={item} className="flex items-center gap-2 text-xs text-gray-600">
-                    <CheckIcon /> {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* ── Calculator ──────────────────────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="grid lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-            {/* Sliders */}
-            <div className="lg:col-span-3 p-6">
-              <h2 className="text-base font-bold text-gray-800 mb-5 pb-3 border-b border-gray-100">Loan Details</h2>
-              <Slider
-                label="LOAN AMOUNT (₹)"
-                value={loanAmount}
-                min={500000} max={10000000} step={100000}
-                onChange={setLoanAmount}
-                display={formatLakh(loanAmount)}
-              />
-              <Slider
-                label="INTEREST RATE (%)"
-                value={interestRate}
-                min={6} max={15} step={0.1}
-                onChange={setInterestRate}
-                display={`${interestRate}%`}
-              />
-              <Slider
-                label="OUTSTANDING TENURE (YEARS)"
-                value={tenure}
-                min={1} max={30} step={1}
-                onChange={setTenure}
-                display={`${tenure} Years`}
-              />
-            </div>
-            {/* Summary */}
-            <div className="lg:col-span-2 p-6 bg-gray-50 flex flex-col justify-between">
-              <div>
-                <h2 className="text-base font-bold text-gray-800 mb-5 pb-3 border-b border-gray-100">Summary</h2>
-                <div className="grid grid-cols-2 gap-3 mb-4">
+          {/* Right: Guide card */}
+          <div className="w-full sm:max-w-xs lg:w-[532px] lg:max-w-[532px] flex-shrink-0">
+            <div className="rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
+              <div className="bg-gradient-to-br from-[#5E23DC] to-[#4500B4] p-6 sm:p-8 text-white relative overflow-hidden">
+                {/* decorative circles */}
+                <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/5" />
+                <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-white/5" />
+                <p className="font-jakarta text-[11px] font-bold tracking-[2px] uppercase text-white/60 mb-2">
+                  Home Loan
+                </p>
+                <h3 className="font-['Segoe_UI',sans-serif] font-bold text-[22px] sm:text-[28px] leading-tight text-white mb-1">
+                  PREPAYMENT GUIDE
+                </h3>
+                <p className="font-jakarta text-[12px] text-white/60 uppercase tracking-widest mb-6">
+                  SAVE MORE, LIVE SOONER
+                </p>
+                <div className="space-y-3">
                   {[
-                    { label: "Original EMI", value: `₹${formatINR(Math.round(totalEMI))}` },
-                    { label: "Tax Amount", value: `₹${formatINR(Math.round(totalInterest * 0.05))}` },
-                  ].map(item => (
-                    <div key={item.label} className="bg-white rounded-xl p-3 border border-gray-100">
-                      <p className="text-xs text-gray-500 mb-0.5">{item.label}</p>
-                      <p className="text-sm font-bold text-gray-800">{item.value}</p>
+                    "Understand when to prepay",
+                    "Compare EMI vs tenure options",
+                    "Calculate your exact savings",
+                  ].map((item) => (
+                    <div key={item} className="flex items-center gap-3">
+                      <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                        <CheckIcon className="w-2.5 h-2.5 text-white" />
+                      </div>
+                      <span className="font-jakarta text-[13px] text-white/80">
+                        {item}
+                      </span>
                     </div>
                   ))}
                 </div>
-                <div className="bg-violet-600 rounded-xl p-4 text-white mb-3">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-                    </div>
-                    <span className="text-xs font-medium opacity-90">Potential Savings</span>
-                  </div>
-                  <p className="text-2xl font-bold mb-0.5">₹{formatINR(Math.round(interestSaved))}</p>
-                  <p className="text-xs opacity-80">Interest Reduced</p>
-                </div>
-                <div className="bg-white rounded-xl p-3 border border-gray-100">
-                  <p className="text-xs text-gray-500 mb-0.5">Tenure Reduced</p>
-                  <p className="text-lg font-bold text-violet-600">{tenureReducedYears} Years</p>
-                </div>
               </div>
-              <button className="mt-4 w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-xl text-sm transition-colors shadow-sm">
-                Apply For Loan!
-              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Reduce EMI vs Reduce Tenure ─────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="text-center mb-8">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">
-            Reduce EMI vs Reduce Tenure:{" "}
-            <span className="text-violet-600">Which Saves More?</span>
-          </h2>
-          <p className="text-sm text-gray-500 mt-2">Compare the long-term impact of your prepayment strategy</p>
-        </div>
+      {/* ── CALCULATOR ────────────────────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 lg:px-16 py-6">
+        <div className="max-w-[1312px] mx-auto">
+          <div className="bg-[#F0F3FF] border border-[rgba(203,195,216,0.3)] rounded-3xl p-4 sm:p-8 lg:p-12 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+              {/* Sliders panel */}
+              <div className="flex-1 min-w-0">
+                <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[26px] lg:text-[32px] leading-10 tracking-[-0.32px] text-[#151C27] mb-1">
+                  Loan Details
+                </h2>
+                <div className="w-20 h-1.5 bg-[#4500B4] rounded-full mb-8" />
 
-        <div className="grid md:grid-cols-2 gap-4">
-          {/* Reduce EMI */}
-          <div
-            onClick={() => setActiveTab("reduce-emi")}
-            className={`cursor-pointer rounded-2xl border-2 p-6 transition-all ${activeTab === "reduce-emi" ? "border-violet-600 bg-violet-50 shadow-md" : "border-gray-200 bg-white hover:border-violet-300"}`}
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
-                <svg className="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <Slider
+                  label="Loan Amount (₹)"
+                  value={loanAmount}
+                  min={500000}
+                  max={10000000}
+                  step={100000}
+                  onChange={setLoanAmount}
+                  display={formatLakh(loanAmount)}
+                  minLabel="5L"
+                  maxLabel="1Cr"
+                />
+                <Slider
+                  label="Interest Rate (%)"
+                  value={interestRate}
+                  min={6}
+                  max={15}
+                  step={0.1}
+                  onChange={setInterestRate}
+                  display={`${interestRate}%`}
+                  minLabel="6%"
+                  maxLabel="15%"
+                />
+                <Slider
+                  label="Outstanding Tenure (Years)"
+                  value={tenure}
+                  min={1}
+                  max={30}
+                  step={1}
+                  onChange={setTenure}
+                  display={`${tenure} Years`}
+                  minLabel="1 yr"
+                  maxLabel="30 yr"
+                />
               </div>
-              <h3 className="font-bold text-gray-800">Reduce EMI</h3>
+
+              {/* Summary panel */}
+              <div className="w-full lg:w-[476px] flex-shrink-0">
+                <div className="bg-white border border-[rgba(69,0,180,0.1)] rounded-2xl p-6 sm:p-8 shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] flex flex-col gap-6 h-full">
+                  {/* Summary header */}
+                  <div className="pb-6 border-b border-[#CBC3D8]">
+                    <p className="font-jakarta text-[13px] uppercase tracking-wider text-[#7A7487] mb-4">
+                      Summary Panel
+                    </p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="font-jakarta text-[13px] text-[#494455] mb-1">
+                          Original EMI
+                        </p>
+                        <p className="font-manrope text-[15px] font-semibold text-[#151C27]">
+                          ₹{formatINR(Math.round(emi))}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="font-jakarta text-[13px] text-[#494455] mb-1">
+                          Total Interest
+                        </p>
+                        <p className="font-manrope text-[15px] font-semibold text-[#151C27]">
+                          ₹{(totalInterest / 10000000).toFixed(2)} Cr
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Savings highlights */}
+                  <div className="bg-[rgba(94,35,220,0.05)] rounded-2xl p-5 flex flex-col gap-5">
+                    {/* Projected Savings */}
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-[#5E23DC] rounded-xl flex items-center justify-center flex-shrink-0 text-white">
+                        <CoinIcon />
+                      </div>
+                      <div>
+                        <p className="font-['Segoe_UI',sans-serif] font-bold text-[14px] text-[#4500B4] mb-0.5">
+                          Projected Savings
+                        </p>
+                        <p className="font-['Segoe_UI',sans-serif] font-bold text-[28px] sm:text-[32px] leading-10 tracking-[-0.32px] text-[#20005E]">
+                          ₹{formatINR(Math.round(interestSaved))}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Tenure Reduced */}
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-[#575161] rounded-xl flex items-center justify-center flex-shrink-0 text-white">
+                        <ClockIcon />
+                      </div>
+                      <div>
+                        <p className="font-['Segoe_UI',sans-serif] font-bold text-[14px] text-[#3F3A49] mb-0.5">
+                          Tenure Reduced
+                        </p>
+                        <p className="font-['Segoe_UI',sans-serif] font-bold text-[28px] sm:text-[32px] leading-10 tracking-[-0.32px] text-[#151C27]">
+                          {tenureReducedYears} Years
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* CTA */}
+                  <button className="w-full bg-[#5E23DC] hover:bg-[#4500B4] text-white font-['Segoe_UI',sans-serif] font-bold text-[16px] py-4 rounded-2xl transition-colors">
+                    Apply For Loan
+                  </button>
+                </div>
+              </div>
             </div>
-            <ul className="space-y-2">
-              {["Monthly EMI reduces", "Improves short-term cash flow", "Lower total monthly outgo"].map(item => (
-                <li key={item} className="flex items-start gap-2 text-sm text-gray-600"><CheckIcon />{item}</li>
-              ))}
-            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ── REDUCE EMI VS TENURE ──────────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 lg:px-16 py-10 lg:pt-20">
+        <div className="max-w-[1312px] mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[28px] sm:text-[36px] lg:text-[48px] leading-tight lg:leading-[56px] tracking-[-0.96px] text-[#151C27]">
+              Reduce EMI vs Reduce Tenure: Which Saves More?
+            </h2>
+            <p className="font-jakarta text-[16px] sm:text-[18px] text-[#494455] mt-3">
+              Compare the long-term impact of your prepayment strategy
+            </p>
           </div>
 
-          {/* Reduce Tenure */}
-          <div
-            onClick={() => setActiveTab("reduce-tenure")}
-            className={`cursor-pointer rounded-2xl border-2 p-6 transition-all relative ${activeTab === "reduce-tenure" ? "border-violet-600 bg-violet-50 shadow-md" : "border-gray-200 bg-white hover:border-violet-300"}`}
-          >
-            {activeTab === "reduce-tenure" && (
-              <span className="absolute top-3 right-3 bg-violet-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">RECOMMENDED</span>
-            )}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-lg bg-violet-100 flex items-center justify-center">
-                <svg className="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+          <div className="grid md:grid-cols-2 gap-4 relative">
+            {/* Reduce EMI Card */}
+            <div
+              onClick={() => setActiveTab("reduce-emi")}
+              className={`cursor-pointer rounded-3xl border p-8 sm:p-10 transition-all ${
+                activeTab === "reduce-emi"
+                  ? "border-2 border-[#4500B4] bg-white shadow-md"
+                  : "border border-[rgba(203,195,216,0.3)] bg-white hover:border-[#CBC3D8]"
+              }`}
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-5 h-4.5 text-[#4500B4]">
+                  <svg viewBox="0 0 20 18" fill="currentColor">
+                    <path d="M10 0L0 18h20L10 0z" />
+                  </svg>
+                </div>
+                <h3 className="font-['Segoe_UI',sans-serif] font-bold text-[22px] lg:text-[24px] text-[#151C27]">
+                  Reduce EMI
+                </h3>
               </div>
-              <h3 className="font-bold text-gray-800">Reduce Tenure</h3>
+              <ul className="space-y-4">
+                {[
+                  { text: "Monthly EMI reduces", good: true },
+                  { text: "Improves short-term cash flow", good: true },
+                  { text: "Lower total monthly outgo", bad: false },
+                ].map((item, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 font-jakarta text-[15px] text-[#494455]"
+                  >
+                    {item.bad ? (
+                      <svg
+                        className="w-3 h-3 mt-1 flex-shrink-0 text-[#BA1A1A]"
+                        fill="currentColor"
+                        viewBox="0 0 12 12"
+                      >
+                        <circle cx="6" cy="6" r="6" />
+                      </svg>
+                    ) : (
+                      <svg
+                        className="w-4 h-3 mt-1 flex-shrink-0 text-[#4500B4]"
+                        fill="currentColor"
+                        viewBox="0 0 14 10"
+                      >
+                        <path
+                          d="M1 5l4 4 8-8"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          fill="none"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
+                    {item.text}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ul className="space-y-2">
-              {["EMI stays the same", "Maximum interest saved", "Become debt-free sooner", "Loan closes years earlier"].map(item => (
-                <li key={item} className="flex items-start gap-2 text-sm text-gray-600"><CheckIcon />{item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
 
-        <div className="mt-4 text-center bg-amber-50 border border-amber-200 rounded-xl py-3 px-4">
-          <p className="text-sm text-amber-800 font-medium">
-            With the same prepayment amount, reducing tenure can save 2–3× more interest than reducing EMI.
+            {/* Reduce Tenure Card — RECOMMENDED */}
+            <div
+              onClick={() => setActiveTab("reduce-tenure")}
+              className={`cursor-pointer rounded-3xl border-2 p-8 sm:p-10 transition-all relative ${
+                activeTab === "reduce-tenure"
+                  ? "border-[#4500B4] bg-white shadow-md"
+                  : "border-[rgba(203,195,216,0.3)] bg-white hover:border-[#4500B4]"
+              }`}
+            >
+              <span className="absolute top-4 right-4 bg-[#4500B4] text-white font-jakarta font-bold text-[10px] tracking-[1px] uppercase px-3 py-1 rounded-full">
+                Recommended
+              </span>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-5 h-4 text-[#4500B4]">
+                  <svg viewBox="0 0 20 16" fill="currentColor">
+                    <rect x="0" y="0" width="20" height="4" rx="2" />
+                    <rect x="0" y="6" width="20" height="4" rx="2" />
+                    <rect x="0" y="12" width="12" height="4" rx="2" />
+                  </svg>
+                </div>
+                <h3 className="font-['Segoe_UI',sans-serif] font-bold text-[22px] lg:text-[24px] text-[#151C27]">
+                  Reduce Tenure
+                </h3>
+              </div>
+              <ul className="space-y-4">
+                {[
+                  "EMI stays the same",
+                  "Maximum interest saved",
+                  "Become debt-free sooner",
+                  "Loan closes years earlier",
+                ].map((item, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 font-jakarta text-[15px] text-[#494455]"
+                  >
+                    <svg
+                      className="w-4 h-3 mt-1 flex-shrink-0 text-[#4500B4]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      viewBox="0 0 14 10"
+                      strokeLinecap="round"
+                    >
+                      <path d="M1 5l4 4 8-8" />
+                    </svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <p className="mt-6 text-center font-jakarta font-bold italic text-[16px] sm:text-[18px] text-[#4500B4]">
+            With the same prepayment amount, reducing tenure can save 2–3× more
+            interest than reducing EMI.
           </p>
         </div>
       </section>
 
-      {/* ── What Happens If You Prepay Today ────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">What Happens If You Prepay Today?</h2>
-        <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[480px]">
-              <thead>
-                <tr className="bg-violet-600 text-white">
-                  <th className="text-left text-sm font-semibold px-5 py-3.5">Prepayment Amount</th>
-                  <th className="text-left text-sm font-semibold px-5 py-3.5">Interest Saved</th>
-                  <th className="text-left text-sm font-semibold px-5 py-3.5">Tenure Reduced</th>
-                </tr>
-              </thead>
-              <tbody>
-                {prepayRows.map((row, i) => (
-                  <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                    <td className="px-5 py-4 text-sm font-semibold text-gray-800">{row.amount}</td>
-                    <td className="px-5 py-4 text-sm text-green-600 font-medium">{row.interest}</td>
-                    <td className="px-5 py-4 text-sm text-gray-600">{row.tenure}</td>
+      {/* ── PREPAY TODAY TABLE ────────────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 lg:px-16 py-6 lg:pt-16">
+        <div className="max-w-[1312px] mx-auto">
+          <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[24px] sm:text-[28px] lg:text-[32px] leading-10 tracking-[-0.32px] text-[#151C27] mb-6">
+            What Happens If You Prepay Today?
+          </h2>
+          <div className="border border-[#CBC3D8] rounded-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[420px]">
+                <thead>
+                  <tr className="bg-[#5E23DC]">
+                    <th className="text-left font-['Segoe_UI',sans-serif] font-bold text-[18px] sm:text-[22px] lg:text-[24px] text-white px-5 sm:px-6 py-5">
+                      Prepayment Amount
+                    </th>
+                    <th className="text-left font-['Segoe_UI',sans-serif] font-bold text-[18px] sm:text-[22px] lg:text-[24px] text-white px-5 sm:px-6 py-5">
+                      Interest Saved
+                    </th>
+                    <th className="text-left font-['Segoe_UI',sans-serif] font-bold text-[18px] sm:text-[22px] lg:text-[24px] text-white px-5 sm:px-6 py-5 hidden sm:table-cell">
+                      Tenure Reduced
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {prepayRows.map((row, i) => (
+                    <tr
+                      key={i}
+                      className={`border-t border-[#CBC3D8] ${i % 2 === 1 ? "bg-[#F0F3FF]" : "bg-white"}`}
+                    >
+                      <td className="px-5 sm:px-6 py-5 font-jakarta font-bold text-[16px] sm:text-[18px] text-[#151C27]">
+                        {row.amount}
+                      </td>
+                      <td className="px-5 sm:px-6 py-5 font-jakarta font-bold text-[16px] sm:text-[18px] text-[#4500B4]">
+                        ₹{row.interest} saved
+                      </td>
+                      <td className="px-5 sm:px-6 py-5 font-jakarta text-[16px] sm:text-[18px] text-[#494455] hidden sm:table-cell">
+                        {row.tenure}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
+          <p className="mt-3 font-jakarta italic text-[14px] text-[#494455]">
+            ₹10 lakh today can save you ₹{formatINR(Math.round(interestSaved))}{" "}
+            in interest over time. These examples highlight the power of early
+            prepayment.
+          </p>
         </div>
-        <p className="text-xs text-gray-400 mt-2 px-1">
-          *If ₹10 lakh today can save you ₹{formatINR(Math.round(interestSaved))} in interest over time. These examples highlight the power of early prepayment.
-        </p>
       </section>
 
-      {/* ── Should You Prepay or Invest ─────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="grid lg:grid-cols-2 gap-6 items-center">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">
-              Should You Prepay Your Home Loan or Invest the Money?
-            </h2>
-            {/* Prepay If */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 mb-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
+      {/* ── PREPAY OR INVEST ──────────────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 lg:px-16 py-8 lg:pt-20">
+        <div className="max-w-[1312px] mx-auto">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
+            {/* Left: decision cards */}
+            <div className="flex-1 min-w-0">
+              <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[22px] sm:text-[28px] lg:text-[32px] leading-tight tracking-[-0.32px] text-[#151C27] mb-8">
+                Should You Prepay Your Home Loan or Invest the Money?
+              </h2>
+
+              {/* Prepay If */}
+              <div className="bg-white border-l-8 border-[#4500B4] rounded-2xl p-6 sm:p-8 mb-6 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-16 h-16 rounded-full border-4 border-[#4500B4] flex items-center justify-center flex-shrink-0">
+                    <svg
+                      className="w-5 h-5 text-[#4500B4]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2.5}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="font-['Segoe_UI',sans-serif] font-bold text-[22px] lg:text-[24px] text-[#4500B4]">
+                    Prepay If
+                  </h3>
                 </div>
-                <h3 className="font-bold text-gray-800">Prepay If</h3>
+                <ul className="space-y-4">
+                  {[
+                    "Loan interest rate is higher than expected investment returns — prepayment gives a guaranteed return",
+                    "You have a sufficient emergency fund",
+                    "Your income is stable",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-4 font-jakarta text-[15px] text-[#151C27]"
+                    >
+                      <svg
+                        className="w-5 h-5 mt-0.5 flex-shrink-0 text-[#4500B4]"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-2">
-                {[
-                  "Loan interest rate is higher than expected investment returns",
-                  "You have a sufficient emergency fund",
-                  "Your income is stable",
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-gray-600"><CheckIcon />{item}</li>
-                ))}
-              </ul>
-            </div>
-            {/* Avoid Prepaying If */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </div>
-                <h3 className="font-bold text-gray-800">Avoid Prepaying If</h3>
+
+              {/* Avoid Prepaying If */}
+              <div className="bg-[#F0F3FF] rounded-2xl p-6 sm:p-8 shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+                <h3 className="font-['Segoe_UI',sans-serif] font-bold text-[22px] lg:text-[24px] text-[#151C27] mb-5">
+                  Avoid Prepaying If
+                </h3>
+                <ul className="space-y-4">
+                  {[
+                    "You'll get better investment returns elsewhere (e.g. equity at 12%+ CAGR)",
+                    "Your monthly cash flow is tight or unstable",
+                    "There is job or income uncertainty",
+                  ].map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-4 font-jakarta text-[15px] text-[#494455]"
+                    >
+                      <CrossIcon />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-2">
-                {[
-                  "You'll get better investment returns elsewhere",
-                  "Your monthly cash flow is tight",
-                  "There is job or income uncertainty",
-                ].map(item => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-gray-600"><CrossIcon />{item}</li>
-                ))}
-              </ul>
+            </div>
+
+            {/* Right: image */}
+            <div className="w-full lg:w-[624px] flex-shrink-0 rounded-3xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] h-72 sm:h-96 lg:h-[632px] bg-gradient-to-br from-amber-100 via-orange-100 to-yellow-50 flex items-center justify-center">
+              <div className="text-center opacity-40">
+                <svg
+                  className="w-24 h-24 mx-auto text-amber-400 mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+                <p className="text-amber-600 font-medium">Your Dream Home</p>
+              </div>
             </div>
           </div>
-          {/* Image placeholder */}
-          <div className="rounded-2xl overflow-hidden h-72 lg:h-full min-h-[260px] bg-gradient-to-br from-amber-100 via-orange-100 to-yellow-50 flex items-center justify-center">
-            <div className="text-center p-8 opacity-50">
-              <svg className="w-20 h-20 mx-auto text-amber-400 mb-3" fill="none" stroke="currentColor" strokeWidth={1} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              <p className="text-amber-600 text-sm font-medium">Your Dream Home</p>
+        </div>
+      </section>
+
+      {/* ── BEST TIME TO PREPAY ───────────────────────────────────────────── */}
+      <section className="mx-4 sm:mx-6 lg:mx-16 my-8 lg:my-16 bg-[#E8DFF2] rounded-[48px] px-6 sm:px-12 lg:px-48 py-14 lg:py-16">
+        <div className="max-w-3xl">
+          <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[28px] sm:text-[36px] lg:text-[48px] leading-tight lg:leading-[56px] tracking-[-0.96px] text-[#1E1927] mb-8">
+            Best Time to Prepay Your Home Loan
+          </h2>
+          <p className="font-jakarta text-[16px] sm:text-[18px] leading-[29px] text-[#4A4454] mb-5">
+            In the initial years of a home loan, a large portion of your EMI
+            goes towards paying interest rather than the principal amount. This
+            is due to the way amortization works.
+          </p>
+          <p className="font-jakarta text-[16px] sm:text-[18px] leading-[29px] text-[#4A4454]">
+            As a result, making prepayments during the early phase of your loan
+            — typically within the first 5 to 7 years — can dramatically reduce
+            the total interest payable. Late-stage prepayments, while still
+            helpful, usually offer limited benefits compared to early action.
+          </p>
+        </div>
+      </section>
+
+      {/* ── EXPLORE HOME LOAN GUIDES ──────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 lg:px-16 py-6 lg:pt-16">
+        <div className="max-w-[1312px] mx-auto">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-8">
+            <div>
+              <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[24px] sm:text-[28px] lg:text-[32px] tracking-[-0.32px] text-[#151C27]">
+                Explore More Home Loan Guides
+              </h2>
+              <p className="font-jakarta text-[14px] text-[#494455] mt-1">
+                Master your mortgage with expert resources
+              </p>
             </div>
+            <a
+              href="#"
+              className="flex items-center gap-2 font-jakarta font-bold text-[15px] text-[#4500B4] hover:gap-3 transition-all flex-shrink-0 group"
+            >
+              View All Guides <ArrowRightIcon />
+            </a>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <GuideCard
+              icon={<CalcIcon />}
+              title="Home Loan EMI Calculator"
+              desc="Calculate your monthly EMI based on loan amount, interest rate, and tenure."
+              cta="Calculate EMI"
+            />
+            <GuideCard
+              icon={<ClockIcon />}
+              title="Reduce EMI or Reduce Tenure?"
+              desc="Understand which option works better for your financial goals and cash flow."
+              cta="Compare Options"
+            />
+            <GuideCard
+              icon={<CoinIcon />}
+              title="Best Time to Prepay Home Loan"
+              desc="Learn when prepayment delivers maximum interest savings during your loan tenure."
+              cta="Read Guide"
+            />
           </div>
         </div>
       </section>
 
-      {/* ── Best Time to Prepay ──────────────────────────────────────────── */}
-      <section className="bg-gray-50 py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Best Time to Prepay Your Home Loan</h2>
-            <p className="text-sm text-gray-600 leading-relaxed mb-4">
-              In the initial years of a home loan, a large portion of your EMI goes toward paying interest rather than the principal amount. This is due to the way amortisation works.
-            </p>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              As a result, making prepayments during the early phase of your loan — typically within the first 5 to 7 years — can dramatically reduce the total interest payable. Late-stage prepayments, while still helpful, usually offer less benefit compared to early action.
-            </p>
+      {/* ── EXPLORE VERIFIED PROPERTIES ───────────────────────────────────── */}
+      <section className="px-4 sm:px-6 lg:px-16 py-8 lg:pt-16">
+        <div className="max-w-[1312px] mx-auto">
+          <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[24px] sm:text-[28px] lg:text-[32px] tracking-[-0.32px] text-[#151C27] mb-8">
+            Explore Verified Properties
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            <PropertyCard
+              title="Apartments for Sale"
+              desc="Browse ready-to-move and under-construction apartments."
+              cta="View Properties"
+              gradientClass="bg-gradient-to-br from-violet-500 to-violet-700"
+            />
+            <PropertyCard
+              title="Plots &amp; Land"
+              desc="Explore approved plots for investment or home construction."
+              cta="View Plots"
+              gradientClass="bg-gradient-to-br from-emerald-400 to-teal-600"
+            />
+            <PropertyCard
+              title="New Residential Projects"
+              desc="Discover newly launched projects from trusted developers."
+              cta="Explore Projects"
+              gradientClass="bg-gradient-to-br from-blue-400 to-indigo-600"
+            />
           </div>
         </div>
       </section>
 
-      {/* ── Explore More Home Loan Guides ───────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Explore More Home Loan Guides</h2>
-            <p className="text-sm text-gray-500 mt-1">Master your mortgage with our expert resources</p>
-          </div>
-          <a href="#" className="text-violet-600 text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all whitespace-nowrap">
-            View All Guides <ArrowRight />
-          </a>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <GuideCard
-            title="Home Loan EMI Calculator"
-            desc="Calculate your monthly EMI based on your loan amount, interest rate, and tenure."
-            cta="Calculate EMI"
-          />
-          <GuideCard
-            title="Reduce EMI or Reduce Tenure?"
-            desc="A decision which option works better for you. What gives a better result? See for yourself."
-            cta="Compare Options"
-          />
-          <GuideCard
-            title="Best Time to Prepay Home Loan"
-            desc="Loan when to prepay so it maximises savings during your loan's lifetime."
-            cta="Read Guide"
-          />
-        </div>
-      </section>
-
-      {/* ── Explore Verified Properties ─────────────────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-12">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Explore Verified Properties</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <PropertyCard
-            title="Apartments for Sale"
-            desc="Browse ready-to-move and under-construction apartments across top cities."
-            cta="View Properties"
-            bg="bg-gradient-to-br from-violet-500 to-violet-700"
-          />
-          <PropertyCard
-            title="Plots &amp; Land"
-            desc="Find verified plots for investment or home construction with full legal clarity."
-            cta="View Plots"
-            bg="bg-gradient-to-br from-emerald-400 to-teal-600"
-          />
-          <PropertyCard
-            title="New Residential Projects"
-            desc="Discover newly launched projects from trusted builders across major cities."
-            cta="Explore Projects"
-            bg="bg-gradient-to-br from-blue-400 to-indigo-600"
-          />
-        </div>
-      </section>
-
-      {/* ── FAQ ─────────────────────────────────────────────────────────── */}
-      <section className="bg-gray-50 py-12">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-5 divide-y divide-gray-100">
+      {/* ── FAQ ───────────────────────────────────────────────────────────── */}
+      <section className="px-4 sm:px-6 lg:px-16 py-12 lg:py-20">
+        <div className="max-w-[1312px] mx-auto">
+          <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[24px] sm:text-[28px] lg:text-[32px] tracking-[-0.32px] text-[#151C27] mb-10 text-center">
+            Frequently Asked Questions
+          </h2>
+          <div className="max-w-4xl mx-auto">
             {faqs.map((faq, i) => (
-              <FAQ key={i} q={faq.q} a={faq.a} />
+              <FAQItem
+                key={i}
+                q={faq.q}
+                a={faq.a}
+                isOpen={openFaq === i}
+                onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── CTA Banner ──────────────────────────────────────────────────── */}
-      <section className="bg-violet-600 py-12 px-4">
-        <div className="max-w-2xl mx-auto text-center text-white">
-          <h2 className="text-xl sm:text-2xl font-bold mb-2">Still confused whether to prepay or invest?</h2>
-          <p className="text-sm opacity-80 mb-6">Get a bank-neutral opinion before making a big financial decision</p>
-          <button className="bg-white text-violet-700 font-bold text-sm px-8 py-3 rounded-xl hover:bg-violet-50 transition-colors shadow-md">
+      {/* ── CTA BANNER ────────────────────────────────────────────────────── */}
+      <section className="mx-4 sm:mx-6 lg:mx-16 mb-8 lg:mb-16 bg-gradient-to-r from-[#5E23DC] to-[#4500B4] rounded-[48px] px-6 sm:px-16 lg:px-20 py-16 lg:py-[120px] text-center relative overflow-hidden isolation-isolate">
+        {/* Decorative ring */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+          <div className="w-[600px] h-[600px] rounded-full border-[4px] border-white" />
+        </div>
+
+        <div className="relative z-10">
+          <h2 className="font-manrope font-bold text-[26px] sm:text-[36px] lg:text-[48px] leading-tight lg:leading-[56px] tracking-[-0.96px] text-white mb-4">
+            Still confused whether to prepay or invest?
+          </h2>
+          <p className="font-jakarta text-[15px] sm:text-[18px] text-[rgba(232,221,255,0.8)] mb-10 max-w-lg mx-auto">
+            Get a bank-neutral opinion before making a big financial decision
+          </p>
+          <button className="bg-white text-[#4500B4] font-manrope font-semibold text-[15px] px-8 py-4 rounded-2xl hover:bg-[#F0F3FF] transition-colors shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
             Talk to a Reparv Advisor
           </button>
         </div>

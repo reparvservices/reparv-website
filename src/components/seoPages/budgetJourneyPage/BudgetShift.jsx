@@ -19,7 +19,7 @@ export default function BudgetShift() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white mb-3">
             How Budget Thinking Changes After the Right Decision
           </h2>
           <p className="text-purple-200 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
