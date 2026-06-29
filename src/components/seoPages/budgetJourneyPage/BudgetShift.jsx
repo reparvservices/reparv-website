@@ -12,7 +12,7 @@ const after = [
 
 export default function BudgetShift() {
   return (
-    <section className="py-16 sm:py-20 bg-[#4500B4] relative overflow-hidden">
+    <section className="py-16 sm:py-20 bg-[linear-gradient(180deg,#5E23DC_0%,#3F2D62_100%)] relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#5323DC] rounded-full opacity-30 blur-3xl translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-60 h-60 bg-[#3a00a0] rounded-full opacity-40 blur-3xl -translate-x-1/2 translate-y-1/2" />

@@ -325,7 +325,7 @@ export default function HomeLoanPrepayment() {
     <div className="bg-[#F9F9FF] font-sans min-w-0">
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="bg-white px-4 sm:px-6 lg:px-16 pt-8 pb-10 lg:pb-16">
-        <div className="max-w-[1312px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
+        <div className="max-w-[1312px] mx-auto flex flex-col-reverse lg:flex-row gap-8 lg:gap-12 items-start">
           {/* Left: text */}
           <div className="flex-1 min-w-0">
             <h1 className="font-['Segoe_UI',sans-serif] font-bold text-[28px] sm:text-[36px] lg:text-[48px] leading-tight lg:leading-[56px] tracking-[-0.96px] text-[#151C27] mb-4">
@@ -362,37 +362,10 @@ export default function HomeLoanPrepayment() {
           </div>
 
           {/* Right: Guide card */}
-          <div className="w-full sm:max-w-xs lg:w-[532px] lg:max-w-[532px] flex-shrink-0">
-            <div className="rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
-              <div className="bg-gradient-to-br from-[#5E23DC] to-[#4500B4] p-6 sm:p-8 text-white relative overflow-hidden">
-                {/* decorative circles */}
-                <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/5" />
-                <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-white/5" />
-                <p className="font-jakarta text-[11px] font-bold tracking-[2px] uppercase text-white/60 mb-2">
-                  Home Loan
-                </p>
-                <h3 className="font-['Segoe_UI',sans-serif] font-bold text-[22px] sm:text-[28px] leading-tight text-white mb-1">
-                  PREPAYMENT GUIDE
-                </h3>
-                <p className="font-jakarta text-[12px] text-white/60 uppercase tracking-widest mb-6">
-                  SAVE MORE, LIVE SOONER
-                </p>
-                <div className="space-y-3">
-                  {[
-                    "Understand when to prepay",
-                    "Compare EMI vs tenure options",
-                    "Calculate your exact savings",
-                  ].map((item) => (
-                    <div key={item} className="flex items-center gap-3">
-                      <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-                        <CheckIcon className="w-2.5 h-2.5 text-white" />
-                      </div>
-                      <span className="font-jakarta text-[13px] text-white/80">
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+          <div className="w-full sm:max-w-xs lg:w-[532px] lg:max-w-[532px] flex-shrink-0 flex items-center justify-center">
+            <div className="w-full flex md:mt-15 items-center justify-center rounded-2xl overflow-hidden md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
+              <div className="text-white relative overflow-hidden w-full flex items-center justify-center">
+                <img src="/assets/seoPages/HomeLoanPrePayment/hero.svg" alt="hero image" className="w-full bg-cover" />
               </div>
             </div>
           </div>
@@ -520,7 +493,7 @@ export default function HomeLoanPrepayment() {
       {/* ── REDUCE EMI VS TENURE ──────────────────────────────────────────── */}
       <section className="px-4 sm:px-6 lg:px-16 py-10 lg:pt-20">
         <div className="max-w-[1312px] mx-auto">
-          <div className="text-center mb-10">
+          <div className="md:text-center mb-10">
             <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[28px] sm:text-[36px] lg:text-[48px] leading-tight lg:leading-[56px] tracking-[-0.96px] text-[#151C27]">
               Reduce EMI vs Reduce Tenure: Which Saves More?
             </h2>
@@ -784,22 +757,7 @@ export default function HomeLoanPrepayment() {
 
             {/* Right: image */}
             <div className="w-full lg:w-[624px] flex-shrink-0 rounded-3xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] h-72 sm:h-96 lg:h-[632px] bg-gradient-to-br from-amber-100 via-orange-100 to-yellow-50 flex items-center justify-center">
-              <div className="text-center opacity-40">
-                <svg
-                  className="w-24 h-24 mx-auto text-amber-400 mb-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
-                <p className="text-amber-600 font-medium">Your Dream Home</p>
-              </div>
+              <img src="/assets/seoPages/HomeLoanPrePayment/image.svg" alt="image" />
             </div>
           </div>
         </div>
@@ -900,7 +858,7 @@ export default function HomeLoanPrepayment() {
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section className="px-4 sm:px-6 lg:px-16 py-12 lg:py-20">
         <div className="max-w-[1312px] mx-auto">
-          <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[24px] sm:text-[28px] lg:text-[32px] tracking-[-0.32px] text-[#151C27] mb-10 text-center">
+          <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[24px] sm:text-[28px] lg:text-[32px] tracking-[-0.32px] text-[#151C27] mb-10 md:text-center">
             Frequently Asked Questions
           </h2>
           <div className="max-w-4xl mx-auto">

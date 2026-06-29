@@ -44,7 +44,7 @@ function FaqItem({ q, a }) {
   return (
     <div className="bg-white border border-[#F3F4F6] shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
       <button onClick={() => setOpen(!open)} className="w-full flex justify-between items-center px-6 py-5 text-left gap-4 hover:bg-gray-50/50 transition-colors">
-        <span className="font-['Manrope'] font-black text-sm text-[#111827]">{q}</span>
+        <span className="font-['Manrope'] font-semibold text-sm text-[#111827]">{q}</span>
         <span className="text-[#5E23DC] text-lg font-light flex-shrink-0">{open ? "−" : "+"}</span>
       </button>
       {open && (
@@ -65,13 +65,13 @@ function FlatCard({ badge, location, title, price }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
         </svg>
         <div className="absolute top-3 left-3 bg-[#5E23DC] rounded px-2 py-0.5">
-          <span className="font-['Manrope'] font-bold text-[10px] text-white uppercase">{badge}</span>
+          <span className="font-['Manrope'] font-semibold text-[10px] text-white uppercase">{badge}</span>
         </div>
       </div>
       <div className="p-5 flex flex-col gap-1">
-        <p className="font-['Manrope'] font-bold text-[10px] text-[#9CA3AF] uppercase tracking-wide">{location}</p>
-        <h3 className="font-['Manrope'] font-black text-lg text-[#111827]">{title}</h3>
-        <p className="font-['Manrope'] font-black text-xl text-[#5E23DC] mt-1">{price}</p>
+        <p className="font-['Manrope'] ffont-semibold text-[10px] text-[#9CA3AF] uppercase tracking-wide">{location}</p>
+        <h3 className="font-['Manrope'] font-semibold text-lg text-[#111827]">{title}</h3>
+        <p className="font-['Manrope'] font-semibold text-xl text-[#5E23DC] mt-1">{price}</p>
         <button className="w-full border border-[#5E23DC] text-[#5E23DC] font-['Manrope'] font-bold text-sm py-2.5 rounded-xl mt-2 hover:bg-[#5E23DC] hover:text-white transition-colors">
           View Details
         </button>
@@ -91,9 +91,9 @@ function ProjectCard({ badge, badgeBg, name, sub, priceOrDate, btnLabel = "Regis
         <div className="absolute top-4 left-4" style={{ background: badgeBg }} dangerouslySetInnerHTML={{ __html: `<span class="font-['Manrope'] font-bold text-[10px] text-white uppercase px-3 py-1 rounded-full inline-block">${badge}</span>` }} />
       </div>
       <div className="pt-3 flex flex-col gap-1">
-        <h3 className="font-['Manrope'] font-black text-xl text-[#111827]">{name}</h3>
+        <h3 className="font-['Manrope'] font-semibold text-xl text-[#111827]">{name}</h3>
         <p className="font-['Manrope'] text-sm text-[#9CA3AF]">{sub}</p>
-        <p className="font-['Manrope'] font-bold text-base text-[#5E23DC] py-1">{priceOrDate}</p>
+        <p className="font-['Manrope'] font-semibold text-base text-[#5E23DC] py-1">{priceOrDate}</p>
         <button className="w-full bg-[rgba(94,35,220,0.05)] text-[#5E23DC] font-['Manrope'] font-bold text-sm py-3 rounded-xl hover:bg-[rgba(94,35,220,0.1)] transition-colors">
           {btnLabel}
         </button>
@@ -109,8 +109,8 @@ function AreaCard({ name, priceRange, priceColor, borderColor, iconBg, iconColor
       <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-1 text-xl" style={{ background: iconBg }}>
         🏙️
       </div>
-      <h3 className="font-['Manrope'] font-black text-lg text-[#111827] pt-3">{name}</h3>
-      <p className="font-['Manrope'] font-bold text-sm" style={{ color: priceColor }}>{priceRange}</p>
+      <h3 className="font-['Manrope'] font-semibold text-lg text-[#111827] pt-3">{name}</h3>
+      <p className="font-['Manrope'] font-semibold text-sm" style={{ color: priceColor }}>{priceRange}</p>
       <div className="flex flex-col gap-2 py-3">
         {items.map((item, i) => (
           <div key={i} className="flex items-start gap-2">
@@ -119,7 +119,7 @@ function AreaCard({ name, priceRange, priceColor, borderColor, iconBg, iconColor
           </div>
         ))}
       </div>
-      <a href="#" className="font-['Manrope'] font-bold text-xs border-b pb-0.5 hover:opacity-80 transition-opacity" style={{ color: linkColor, borderColor: linkColor }}>
+      <a href="#" className="font-['Manrope'] font-semibold text-xs border-b pb-0.5 hover:opacity-80 transition-opacity" style={{ color: linkColor, borderColor: linkColor }}>
         View Flats →
       </a>
     </div>
@@ -132,12 +132,12 @@ function PersonaCard({ bg, border, badge, badgeBg, badgeText, title, desc, btnCo
     <div className={`border rounded-2xl p-6 flex flex-col justify-between hover:shadow-md transition-shadow flex-shrink-0 w-64 sm:w-auto`} style={{ background: bg, borderColor: border }}>
       <div>
         <div className="mb-3">
-          <span className="font-['Manrope'] font-bold text-[10px] uppercase px-2 py-1 rounded" style={{ background: badgeBg, color: badgeText }}>{badge}</span>
+          <span className="font-['Manrope'] font-semibold text-[10px] uppercase px-2 py-1 rounded" style={{ background: badgeBg, color: badgeText }}>{badge}</span>
         </div>
-        <h3 className="font-['Manrope'] font-black text-xl text-[#111827] mb-2">{title}</h3>
+        <h3 className="font-['Manrope'] font-semibold text-xl text-[#111827] mb-2">{title}</h3>
         <p className="font-['Manrope'] text-sm text-[#6B7280] leading-5">{desc}</p>
       </div>
-      <button className="w-full font-['Manrope'] font-bold text-sm py-2 rounded-lg mt-6 text-white hover:opacity-90 transition-opacity shadow-sm" style={{ background: btnColor }}>
+      <button className="w-full font-['Manrope'] font-semibold text-sm py-2 rounded-lg mt-6 text-white hover:opacity-90 transition-opacity shadow-sm" style={{ background: btnColor }}>
         {btnText}
       </button>
     </div>
@@ -154,22 +154,22 @@ function StoryCard({ initials, name, role, location, problem, outcome }) {
             {initials}
           </div>
           <div>
-            <p className="font-['Manrope'] font-black text-sm text-[#111827]">{name}</p>
+            <p className="font-['Manrope'] font-semibold text-sm text-[#111827]">{name}</p>
             <p className="font-['Manrope'] text-xs text-[#9CA3AF]">{role}</p>
           </div>
         </div>
-        <span className="font-['Manrope'] font-bold text-xs text-[#5E23DC]">{location}</span>
+        <span className="font-['Manrope'] font-semibold text-xs text-[#5E23DC]">{location}</span>
       </div>
       <div className="flex flex-col gap-4">
         <div>
-          <p className="font-['Manrope'] font-bold text-[10px] uppercase text-[#9CA3AF] mb-1">Problem</p>
+          <p className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] mb-1">Problem</p>
           <p className="font-['Manrope'] text-sm text-[#4B5563] leading-5">{problem}</p>
         </div>
         <div>
-          <p className="font-['Manrope'] font-bold text-[10px] uppercase text-[#9CA3AF] mb-1">Outcome</p>
+          <p className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] mb-1">Outcome</p>
           <div className="flex items-start gap-2">
-            <span className="text-[#5E23DC] font-bold text-sm">→</span>
-            <p className="font-['Manrope'] font-bold text-sm text-[#5E23DC] leading-5">{outcome}</p>
+            <span className="text-[#5E23DC] font-semibold text-sm">→</span>
+            <p className="font-['Manrope'] font-semibold text-sm text-[#5E23DC] leading-5">{outcome}</p>
           </div>
         </div>
       </div>
@@ -239,20 +239,20 @@ export default function FlatsForSale() {
               {/* Breadcrumbs */}
               <div className="flex gap-3 mb-5">
                 {["Flats for Sale", "Nagpur"].map(b => (
-                  <span key={b} className="bg-white/10 text-white font-['Manrope'] font-semibold text-xs px-3 py-1 rounded-full">{b}</span>
+                  <span key={b} className="bg-white/10 text-white font-['Manrope'] font-medium text-xs px-3 py-1 rounded-full">{b}</span>
                 ))}
               </div>
-              <h1 className="font-['Manrope'] font-black text-5xl text-white leading-[48px] mb-5">
+              <h1 className="font-['Manrope'] font-semibold text-5xl text-white leading-[48px] mb-5">
                 Flats for Sale<br />in Nagpur
               </h1>
               <p className="font-['Manrope'] text-lg text-white/80 leading-7 mb-7 max-w-[447px]">
                 Explore 2, 3 BHK Apartments & new flat listings in Nagpur. Buy verified properties with complete legal support and zero hidden costs.
               </p>
               <div className="flex flex-wrap gap-4 mb-5">
-                <button className="bg-white text-[#5E23DC] font-['Manrope'] font-bold text-base px-6 py-3 rounded-lg hover:bg-violet-50 transition-colors shadow">
+                <button className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-base px-6 py-3 rounded-lg hover:bg-violet-50 transition-colors shadow">
                   Show Flats
                 </button>
-                <button className="bg-white/10 border border-white/20 text-white font-['Manrope'] font-bold text-base px-6 py-3 rounded-lg hover:bg-white/20 transition-colors">
+                <button className="bg-white/10 border border-white/20 text-white font-['Manrope'] font-semibold text-base px-6 py-3 rounded-lg hover:bg-white/20 transition-colors">
                   Talk to Expert
                 </button>
               </div>
@@ -271,10 +271,8 @@ export default function FlatsForSale() {
 
             {/* Right — building image card */}
             <div className="w-full lg:w-[458px] flex-shrink-0 relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] h-[380px] bg-gradient-to-br from-amber-600 to-amber-800 flex items-center justify-center">
-                <svg className="w-24 h-24 text-white/20" fill="none" stroke="currentColor" strokeWidth={0.8} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
+              <div className="w-full relative rounded-2xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] h-[400px] flex items-center justify-center">
+                <img src="/assets/seoPages/flatsForSale/hero.jpg" alt="hero image" className="w-full h-full object-cover rounded-2xl" />
                 {/* Live badge */}
                 <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2">
                   <div className="w-2 h-2 bg-[#22C55E] rounded-full animate-pulse" />
@@ -322,10 +320,10 @@ export default function FlatsForSale() {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-12">
         <div className="flex items-end justify-between mb-8 gap-4">
           <div>
-            <p className="font-['Manrope'] font-bold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-2">RERA VERIFIED</p>
-            <h2 className="font-['Manrope'] font-black text-[30px] text-[#111827] leading-9">Featured &amp; Verified Flats in Nagpur</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-2">RERA VERIFIED</p>
+            <h2 className="font-['Manrope'] font-semibold text-[30px] text-[#111827] leading-9">Featured &amp; Verified Flats in Nagpur</h2>
           </div>
-          <a href="#" className="flex items-center gap-1 text-[#5E23DC] font-['Manrope'] font-bold text-sm whitespace-nowrap hover:gap-2 transition-all">
+          <a href="#" className="flex items-center gap-1 text-[#5E23DC] font-['Manrope'] font-semibold text-sm whitespace-nowrap hover:gap-2 transition-all">
             Show All <ArrowRight cls="w-4 h-4 text-[#5E23DC]" />
           </a>
         </div>
@@ -338,8 +336,8 @@ export default function FlatsForSale() {
       <section className="bg-white py-20">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
           <div className="text-center mb-10">
-            <p className="font-['Manrope'] font-bold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">PRE LAUNCH</p>
-            <h2 className="font-['Manrope'] font-black text-[36px] text-[#111827] leading-10 mb-3">Upcoming Projects in Nagpur</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">PRE LAUNCH</p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-3">Upcoming Projects in Nagpur</h2>
             <p className="font-['Manrope'] text-base text-[#6B7280] max-w-[660px] mx-auto leading-6">
               Discover pre-launch and upcoming residential projects in Nagpur — in areas delivering strong ROI and build quality.
             </p>
@@ -353,8 +351,8 @@ export default function FlatsForSale() {
       {/* ══ POPULAR AREAS ═══════════════════════════════════════════════════ */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-20">
         <div className="text-center mb-12">
-          <p className="font-['Manrope'] font-bold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">POPULAR AREAS</p>
-          <h2 className="font-['Manrope'] font-black text-[36px] text-[#111827] leading-10 mb-3">Popular Areas for Buying Flats in Nagpur</h2>
+          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">POPULAR AREAS</p>
+          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-3">Popular Areas for Buying Flats in Nagpur</h2>
           <p className="font-['Manrope'] text-base text-[#6B7280] max-w-[598px] mx-auto leading-6">
             Each area has its own vibe, price band, and lifestyle — pick the one that matches your priorities.
           </p>
@@ -367,7 +365,7 @@ export default function FlatsForSale() {
       {/* ══ EXPLORE BY AREA (Link Grid) ══════════════════════════════════════ */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 mb-16">
         <div className="bg-[rgba(94,35,220,0.05)] rounded-3xl p-10 md:p-16">
-          <h2 className="font-['Manrope'] font-black text-2xl text-[#111827] text-center mb-8">Explore Flats by Area in Nagpur</h2>
+          <h2 className="font-['Manrope'] font-semibold text-2xl text-[#111827] text-center mb-8">Explore Flats by Area in Nagpur</h2>
           <div className="flex flex-col gap-4">
             {areaLinks.map((row, ri) => (
               <div key={ri} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -386,8 +384,8 @@ export default function FlatsForSale() {
       {/* ══ BUYER PERSONAS ══════════════════════════════════════════════════ */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-20">
         <div className="text-center mb-12">
-          <p className="font-['Manrope'] font-bold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">FIND YOUR MATCH</p>
-          <h2 className="font-['Manrope'] font-black text-[36px] text-[#111827] leading-10">What Type of Flat Buyer Are You?</h2>
+          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">FIND YOUR MATCH</p>
+          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10">What Type of Flat Buyer Are You?</h2>
         </div>
         <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
           {personas.map((p, i) => <PersonaCard key={i} {...p} />)}
@@ -398,7 +396,7 @@ export default function FlatsForSale() {
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pb-16">
         <div className="bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-[40px] p-10 md:p-20">
           <div className="text-center mb-12">
-            <h2 className="font-['Manrope'] font-black text-[30px] text-[#111827] leading-9 mb-3">Ready to Move vs Under Construction — What Should You Choose?</h2>
+            <h2 className="font-['Manrope'] font-semibold text-[30px] text-[#111827] leading-9 mb-3">Ready to Move vs Under Construction — What Should You Choose?</h2>
             <p className="font-['Manrope'] text-base text-[#6B7280]">A side-by-side comparison to help you decide which option suits your needs.</p>
           </div>
           <div className="grid sm:grid-cols-2 gap-12 max-w-[1024px] mx-auto">
@@ -408,7 +406,7 @@ export default function FlatsForSale() {
                 <div className="w-12 h-12 rounded-full bg-[rgba(16,185,129,0.2)] flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 text-[#10B981]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                 </div>
-                <h3 className="font-['Manrope'] font-bold text-2xl text-[#111827]">Ready to Move Flats</h3>
+                <h3 className="font-['Manrope'] font-semibold text-2xl text-[#111827]">Ready to Move Flats</h3>
               </div>
               <div className="flex flex-col gap-4">
                 {["Immediate possession available", "No GST applicable", "Physical inspection before buying", "No construction risk involved"].map(item => (
@@ -418,7 +416,7 @@ export default function FlatsForSale() {
                   </div>
                 ))}
               </div>
-              <button className="w-full bg-[#10B981] text-white font-['Manrope'] font-bold text-base py-4 rounded-xl hover:bg-[#059669] transition-colors mt-2">
+              <button className="w-full bg-[#10B981] text-white font-['Manrope'] font-semibold text-base py-4 rounded-xl hover:bg-[#059669] transition-colors mt-2">
                 Explore Ready Flats
               </button>
             </div>
@@ -428,7 +426,7 @@ export default function FlatsForSale() {
                 <div className="w-12 h-12 rounded-full bg-[rgba(94,35,220,0.2)] flex items-center justify-center flex-shrink-0">
                   <svg className="w-6 h-6 text-[#5E23DC]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                 </div>
-                <h3 className="font-['Manrope'] font-bold text-2xl text-[#111827]">Under Construction Flats</h3>
+                <h3 className="font-['Manrope'] font-semibold text-2xl text-[#111827]">Under Construction Flats</h3>
               </div>
               <div className="flex flex-col gap-4">
                 {["Lower entry price and down payment", "Higher capital appreciation", "Flexible payment schedules", "Customisation options available"].map(item => (
@@ -450,8 +448,8 @@ export default function FlatsForSale() {
       <section className="max-w-[1408px] mx-auto px-4 mb-16">
         <div className="bg-gradient-to-r from-[#5E23DC] to-[#3B0A91] rounded-[32px] px-10 md:px-16 py-16 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
           <div className="flex-1 max-w-[451px]">
-            <p className="font-['Manrope'] font-bold text-xs text-white/70 uppercase tracking-[1.2px] mb-3">SELL YOUR PROPERTY</p>
-            <h2 className="font-['Manrope'] font-black text-[36px] text-white leading-10 mb-4">Selling Flats in Nagpur?</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-white/70 uppercase tracking-[1.2px] mb-3">SELL YOUR PROPERTY</p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-white leading-10 mb-4">Selling Flats in Nagpur?</h2>
             <p className="font-['Manrope'] text-base text-white/70 leading-6 mb-6">
               List your flat for free, reach verified buyers across all of Nagpur with strong marketing and expert support.
             </p>
@@ -466,7 +464,7 @@ export default function FlatsForSale() {
               ))}
             </div>
           </div>
-          <button className="bg-white text-[#5E23DC] font-['Manrope'] font-black text-base px-10 py-4 rounded-2xl shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] hover:bg-gray-50 transition-colors flex-shrink-0">
+          <button className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-base px-10 py-4 rounded-2xl shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] hover:bg-gray-50 transition-colors flex-shrink-0">
             Request Expert Partner
           </button>
         </div>
@@ -477,8 +475,8 @@ export default function FlatsForSale() {
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left */}
           <div className="flex flex-col gap-6">
-            <p className="font-['Manrope'] font-bold text-xs text-[#5E23DC] uppercase tracking-[1.2px]">FREE FLAT EXPERT</p>
-            <h2 className="font-['Manrope'] font-black text-[36px] text-[#111827] leading-[45px]">Talk to a Flat Buying Expert</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px]">FREE FLAT EXPERT</p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-[45px]">Talk to a Flat Buying Expert</h2>
             <p className="font-['Manrope'] text-base text-[#6B7280] leading-6">
               Our dedicated property experts help you find the flat for sale in Nagpur suited to your lifestyle and financial goals.
             </p>
@@ -492,7 +490,7 @@ export default function FlatsForSale() {
               ].map(f => (
                 <div key={f.title}>
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl mb-2" style={{ background: f.bg }}>{f.icon}</div>
-                  <p className="font-['Manrope'] font-bold text-base text-[#111827] mb-1">{f.title}</p>
+                  <p className="font-['Manrope'] font-semibold text-base text-[#111827] mb-1">{f.title}</p>
                   <p className="font-['Manrope'] text-xs text-[#6B7280] leading-4">{f.sub}</p>
                 </div>
               ))}
@@ -504,7 +502,7 @@ export default function FlatsForSale() {
                   <div key={i} className={`w-10 h-10 rounded-full ${c} border-2 border-white flex items-center justify-center text-white font-bold text-xs`}>E{i+1}</div>
                 ))}
               </div>
-              <span className="font-['Manrope'] font-bold text-xs text-[#111827]">Expert Nagpur Team</span>
+              <span className="font-['Manrope'] font-semibold text-xs text-[#111827]">Expert Nagpur Team</span>
             </div>
           </div>
 
@@ -517,13 +515,13 @@ export default function FlatsForSale() {
                 { label: "PHONE NUMBER", placeholder: "Enter your phone number", key: "phone", type: "tel" },
               ].map(f => (
                 <div key={f.key} className="flex flex-col gap-1">
-                  <label className="font-['Manrope'] font-bold text-[10px] uppercase text-[#9CA3AF] tracking-wide">{f.label}</label>
+                  <label className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] tracking-wide">{f.label}</label>
                   <input type={f.type} placeholder={f.placeholder} value={form[f.key]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
                     className="w-full bg-white border border-[#E5E7EB] rounded-xl px-3 py-3.5 font-['Manrope'] text-base text-[#111827] placeholder-[#6B7280] outline-none focus:ring-2 focus:ring-[#5E23DC] transition" />
                 </div>
               ))}
               <div className="flex flex-col gap-1">
-                <label className="font-['Manrope'] font-bold text-[10px] uppercase text-[#9CA3AF] tracking-wide">PREFERRED BHK</label>
+                <label className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] tracking-wide">PREFERRED BHK</label>
                 <div className="relative">
                   <select value={form.bhk} onChange={e => setForm({ ...form, bhk: e.target.value })}
                     className="w-full appearance-none bg-white border border-[#E5E7EB] rounded-xl px-3 py-3.5 font-['Manrope'] text-base text-[#111827] outline-none focus:ring-2 focus:ring-[#5E23DC] cursor-pointer">
@@ -532,7 +530,7 @@ export default function FlatsForSale() {
                   <ChevronDown cls="w-5 h-5 text-[#6B7280] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
-              <button className="w-full bg-[#5E23DC] text-white font-['Manrope'] font-bold text-base py-4 rounded-xl hover:bg-[#4500B4] transition-colors mt-2">
+              <button className="w-full bg-[#5E23DC] text-white font-['Manrope'] font-semibold text-base py-4 rounded-xl hover:bg-[#4500B4] transition-colors mt-2">
                 Submit Callback
               </button>
               <p className="font-['Manrope'] text-[10px] text-[#9CA3AF] text-center">We'll reach out within 15 minutes on business days.</p>
@@ -542,29 +540,27 @@ export default function FlatsForSale() {
       </section>
 
       {/* ══ APP PROMO ═══════════════════════════════════════════════════════ */}
-      <section className="max-w-[1408px] mx-auto px-4 mb-16">
-        <div className="bg-[#5E23DC] rounded-[32px] overflow-hidden relative min-h-[372px] flex items-center">
+      <section className="max-w-[1408px] mx-auto px-4 mb-16 mt-20">
+        <div className="bg-[#5E23DC] rounded-[32px] relative min-h-[372px] flex items-center">
           {/* Decorative glow */}
           <div className="absolute right-0 top-0 bottom-0 w-[40%] pointer-events-none">
             <div className="absolute inset-0 opacity-30">
               <div className="absolute bottom-0 left-0 w-96 h-72 bg-gradient-radial from-[#D9BDFF] to-[#8A38F5] blur-[38px] rounded-full" />
             </div>
             {/* Phone mockups */}
-            <div className="absolute right-8 bottom-0 flex items-end gap-3">
-              {[{ h: "h-60 w-32", cls: "" }, { h: "h-72 w-36", cls: "" }].map((m, i) => (
-                <div key={i} className={`${m.h} ${m.cls} bg-white/20 rounded-[28px] border border-white/30 backdrop-blur-sm`} />
-              ))}
+            <div className="w-80 absolute right-15 bottom-10 flex item-center justify-center gap-3">
+              <img src="/assets/seoPages/mobileImage.png" alt="mobile image app promo" className="w-full object-cover" />
             </div>
           </div>
 
           <div className="relative z-10 px-10 md:px-16 py-16 max-w-[832px]">
-            <p className="font-['Manrope'] font-bold text-xs text-white/70 uppercase tracking-[1.2px] mb-4">REPARV APP</p>
-            <h2 className="font-['Manrope'] font-black text-[36px] text-white leading-10 mb-4">All Property Solutions in One App</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-white/70 uppercase tracking-[1.2px] mb-4">REPARV APP</p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-white leading-10 mb-4">All Property Solutions in One App</h2>
             <p className="font-['Manrope'] text-lg text-white/70 leading-7 mb-8 max-w-[368px]">
               Search flats, check RERA status, and message owners directly from your phone.
             </p>
             <div className="flex items-center gap-4 flex-wrap">
-              <button className="bg-white text-[#5E23DC] font-['Manrope'] font-bold text-sm px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-lg">
+              <button className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-sm px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-lg">
                 <DownloadIcon />
                 Download Now
               </button>
@@ -577,8 +573,8 @@ export default function FlatsForSale() {
       {/* ══ FAQ ════════════════════════════════════════════════════════════ */}
       <section className="max-w-[896px] mx-auto px-4 py-16">
         <div className="text-center mb-10">
-          <p className="font-['Manrope'] font-bold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">YOUR QUESTIONS ANSWERED</p>
-          <h2 className="font-['Manrope'] font-black text-[36px] text-[#111827] leading-10">Flat Buyer FAQs</h2>
+          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">YOUR QUESTIONS ANSWERED</p>
+          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10">Flat Buyer FAQs</h2>
         </div>
         <div className="flex flex-col gap-4">
           {faqs.map((f, i) => <FaqItem key={i} {...f} />)}
@@ -589,8 +585,8 @@ export default function FlatsForSale() {
       <section className="bg-[#F9FAFB] py-20">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
           <div className="text-center mb-12">
-            <p className="font-['Manrope'] font-bold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">BUYER STORIES</p>
-            <h2 className="font-['Manrope'] font-black text-[36px] text-[#111827] leading-10 mb-2">Real Flat Buyer Stories — Nagpur</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">BUYER STORIES</p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-2">Real Flat Buyer Stories — Nagpur</h2>
             <p className="font-['Manrope'] text-base text-[#6B7280]">Real stories from verified buyers who found their perfect flat through Reparv.</p>
           </div>
           <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">

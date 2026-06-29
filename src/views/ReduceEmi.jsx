@@ -280,27 +280,12 @@ export default function ReduceEmi() {
 
             {/* Right — illustration + float card */}
             <div className="flex-1 max-w-[712px] w-full relative pb-8 lg:pb-0">
-              <div className="bg-gradient-to-br from-[#f0e8ff] to-[#e0d0ff] rounded-3xl h-[340px] flex items-center justify-center shadow-[0_10px_30px_rgba(94,35,220,0.10)]">
-                <div className="text-center">
-                  <div className="w-28 h-28 mx-auto mb-4 bg-gradient-to-br from-[#7B3FE4] to-[#5E23DC] rounded-3xl flex items-center justify-center shadow-[0_16px_40px_rgba(94,35,220,0.3)]">
-                    <svg
-                      className="w-14 h-14 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      viewBox="0 0 24 24"
-                    >
-                      <rect x="3" y="4" width="18" height="18" rx="2" />
-                      <path d="M8 2v4M16 2v4M3 10h18" strokeLinecap="round" />
-                    </svg>
-                  </div>
-                  <p className="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#4500B4]">
-                    Smart Prepayment
-                  </p>
-                  <p className="font-['Plus_Jakarta_Sans'] font-normal text-sm text-[#7B5EA7] mt-1">
-                    Choose the right strategy
-                  </p>
-                </div>
+              <div className="rounded-3xl h-[400px] flex items-center justify-center shadow-[0_10px_30px_rgba(94,35,220,0.10)] overflow-hidden">
+                <img
+                  src="/assets/seoPages/reduceEmi/hero.svg"
+                  alt="hero image"
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               {/* Float card */}
@@ -437,7 +422,7 @@ export default function ReduceEmi() {
       {/* ══ REAL EMI vs TENURE EXAMPLE ════════════════════════════════════ */}
       <section className="py-16 lg:py-20">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
-          <div className="text-center mb-12">
+          <div className="md:text-center mb-12">
             <h2 className="font-['Segoe_UI',system-ui,sans-serif] font-bold text-4xl lg:text-6xl leading-tight tracking-[-0.32px] text-[#151C27]">
               A Real EMI vs Tenure Example
             </h2>
@@ -581,7 +566,7 @@ export default function ReduceEmi() {
       {/* ══ COMMON MISTAKES ═══════════════════════════════════════════════ */}
       <section className="py-16 lg:py-20">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
-          <div className="text-center mb-16">
+          <div className="md:text-center mb-16">
             <h2 className="font-['Segoe_UI',system-ui,sans-serif] font-bold text-4xl lg:text-6xl leading-tight tracking-[-0.32px] text-[#151C27]">
               Common Mistakes Borrowers Make
             </h2>
@@ -593,19 +578,71 @@ export default function ReduceEmi() {
 
           <div className="flex flex-wrap gap-6 justify-center">
             <MistakeCard
-              emoji="😓"
+              emoji={
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.5 9C13.9167 9 14.2708 8.85417 14.5625 8.5625C14.8542 8.27083 15 7.91667 15 7.5C15 7.08333 14.8542 6.72917 14.5625 6.4375C14.2708 6.14583 13.9167 6 13.5 6C13.0833 6 12.7292 6.14583 12.4375 6.4375C12.1458 6.72917 12 7.08333 12 7.5C12 7.91667 12.1458 8.27083 12.4375 8.5625C12.7292 8.85417 13.0833 9 13.5 9ZM6.5 9C6.91667 9 7.27083 8.85417 7.5625 8.5625C7.85417 8.27083 8 7.91667 8 7.5C8 7.08333 7.85417 6.72917 7.5625 6.4375C7.27083 6.14583 6.91667 6 6.5 6C6.08333 6 5.72917 6.14583 5.4375 6.4375C5.14583 6.72917 5 7.08333 5 7.5C5 7.91667 5.14583 8.27083 5.4375 8.5625C5.72917 8.85417 6.08333 9 6.5 9ZM10 11.5C8.86667 11.5 7.8375 11.8208 6.9125 12.4625C5.9875 13.1042 5.31667 13.95 4.9 15H6.55C6.91667 14.3833 7.40417 13.8958 8.0125 13.5375C8.62083 13.1792 9.28333 13 10 13C10.7167 13 11.3792 13.1792 11.9875 13.5375C12.5958 13.8958 13.0833 14.3833 13.45 15H15.1C14.6833 13.95 14.0125 13.1042 13.0875 12.4625C12.1625 11.8208 11.1333 11.5 10 11.5ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z"
+                    fill="#BA1A1A"
+                  />
+                </svg>
+              }
               title="Choosing EMI reduction only for short-term comfort"
             />
             <MistakeCard
-              emoji="📊"
+              emoji={
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 15H6.5V13H8.5V11.5H6.5V9.5H5V11.5H3V13H5V15ZM10 14.25H15V12.75H10V14.25ZM10 11.75H15V10.25H10V11.75ZM11.1 7.95L12.5 6.55L13.9 7.95L14.95 6.9L13.55 5.45L14.95 4.05L13.9 3L12.5 4.4L11.1 3L10.05 4.05L11.45 5.45L10.05 6.9L11.1 7.95ZM3.25 6.2H8.25V4.7H3.25V6.2ZM2 18C1.45 18 0.979167 17.8042 0.5875 17.4125C0.195833 17.0208 0 16.55 0 16V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H16C16.55 0 17.0208 0.195833 17.4125 0.5875C17.8042 0.979167 18 1.45 18 2V16C18 16.55 17.8042 17.0208 17.4125 17.4125C17.0208 17.8042 16.55 18 16 18H2ZM2 16H16V2H2V16ZM2 2V16V2Z"
+                    fill="#BA1A1A"
+                  />
+                </svg>
+              }
               title="Not calculating total interest paid over time"
             />
             <MistakeCard
-              emoji="📈"
+              emoji={
+                <svg
+                  width="22"
+                  height="20"
+                  viewBox="0 0 22 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15.1 10.5L13.65 9.05C13.8 8.26667 13.575 7.53333 12.975 6.85C12.375 6.16667 11.6 5.9 10.65 6.05L9.2 4.6C9.48333 4.46667 9.77083 4.36667 10.0625 4.3C10.3542 4.23333 10.6667 4.2 11 4.2C12.25 4.2 13.3125 4.6375 14.1875 5.5125C15.0625 6.3875 15.5 7.45 15.5 8.7C15.5 9.03333 15.4667 9.34583 15.4 9.6375C15.3333 9.92917 15.2333 10.2167 15.1 10.5ZM18.3 13.65L16.85 12.25C17.4833 11.7667 18.0458 11.2375 18.5375 10.6625C19.0292 10.0875 19.45 9.43333 19.8 8.7C18.9667 7.01667 17.7708 5.67917 16.2125 4.6875C14.6542 3.69583 12.9167 3.2 11 3.2C10.5167 3.2 10.0417 3.23333 9.575 3.3C9.10833 3.36667 8.65 3.46667 8.2 3.6L6.65 2.05C7.33333 1.76667 8.03333 1.55417 8.75 1.4125C9.46667 1.27083 10.2167 1.2 11 1.2C13.5167 1.2 15.7583 1.89583 17.725 3.2875C19.6917 4.67917 21.1167 6.48333 22 8.7C21.6167 9.68333 21.1125 10.5958 20.4875 11.4375C19.8625 12.2792 19.1333 13.0167 18.3 13.65ZM18.8 19.8L14.6 15.65C14.0167 15.8333 13.4292 15.9708 12.8375 16.0625C12.2458 16.1542 11.6333 16.2 11 16.2C8.48333 16.2 6.24167 15.5042 4.275 14.1125C2.30833 12.7208 0.883333 10.9167 0 8.7C0.35 7.81667 0.791667 6.99583 1.325 6.2375C1.85833 5.47917 2.46667 4.8 3.15 4.2L0.4 1.4L1.8 0L20.2 18.4L18.8 19.8ZM4.55 5.6C4.06667 6.03333 3.625 6.50833 3.225 7.025C2.825 7.54167 2.48333 8.1 2.2 8.7C3.03333 10.3833 4.22917 11.7208 5.7875 12.7125C7.34583 13.7042 9.08333 14.2 11 14.2C11.3333 14.2 11.6583 14.1792 11.975 14.1375C12.2917 14.0958 12.6167 14.05 12.95 14L12.05 13.05C11.8667 13.1 11.6917 13.1375 11.525 13.1625C11.3583 13.1875 11.1833 13.2 11 13.2C9.75 13.2 8.6875 12.7625 7.8125 11.8875C6.9375 11.0125 6.5 9.95 6.5 8.7C6.5 8.51667 6.5125 8.34167 6.5375 8.175C6.5625 8.00833 6.6 7.83333 6.65 7.65L4.55 5.6Z"
+                    fill="#BA1A1A"
+                  />
+                </svg>
+              }
               title="Ignoring future income growth potential"
             />
             <MistakeCard
-              emoji="💰"
+              emoji={
+                <svg
+                  width="21"
+                  height="21"
+                  viewBox="0 0 21 21"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.025 20.05C9.75833 20.05 9.50417 20 9.2625 19.9C9.02083 19.8 8.8 19.6583 8.6 19.475L0.575 11.45C0.391667 11.25 0.25 11.0292 0.15 10.7875C0.05 10.5458 0 10.2917 0 10.025C0 9.75833 0.05 9.5 0.15 9.25C0.25 9 0.391667 8.78333 0.575 8.6L8.6 0.575C8.8 0.375 9.02083 0.229167 9.2625 0.1375C9.50417 0.0458333 9.75833 0 10.025 0C10.2917 0 10.55 0.0458333 10.8 0.1375C11.05 0.229167 11.2667 0.375 11.45 0.575L19.475 8.6C19.675 8.78333 19.8208 9 19.9125 9.25C20.0042 9.5 20.05 9.75833 20.05 10.025C20.05 10.2917 20.0042 10.5458 19.9125 10.7875C19.8208 11.0292 19.675 11.25 19.475 11.45L11.45 19.475C11.2667 19.6583 11.05 19.8 10.8 19.9C10.55 20 10.2917 20.05 10.025 20.05ZM10.025 18.05L18.05 10.025L10.025 2L2 10.025L10.025 18.05ZM9.025 11.025H11.025V5.025H9.025V11.025ZM10.025 14.025C10.3083 14.025 10.5458 13.9292 10.7375 13.7375C10.9292 13.5458 11.025 13.3083 11.025 13.025C11.025 12.7417 10.9292 12.5042 10.7375 12.3125C10.5458 12.1208 10.3083 12.025 10.025 12.025C9.74167 12.025 9.50417 12.1208 9.3125 12.3125C9.12083 12.5042 9.025 12.7417 9.025 13.025C9.025 13.3083 9.12083 13.5458 9.3125 13.7375C9.50417 13.9292 9.74167 14.025 10.025 14.025Z"
+                    fill="#BA1A1A"
+                  />
+                </svg>
+              }
               title="Prepaying without keeping an emergency fund"
             />
           </div>
@@ -618,20 +655,8 @@ export default function ReduceEmi() {
           <div className="bg-white border border-[#E2E8F8] shadow-[0_10px_30px_rgba(94,35,220,0.04)] rounded-[32px] flex flex-col lg:flex-row items-center gap-12 p-12">
             {/* Illustration */}
             <div className="flex-shrink-0">
-              <div className="w-[250px] h-[250px] rounded-2xl bg-gradient-to-br from-[#E2E8F8] to-[#C7D2F0] flex items-center justify-center">
-                <svg
-                  className="w-24 h-24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#4500B4"
-                  strokeWidth="1.2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"
-                  />
-                </svg>
+              <div className="w-[350px] h-[350px] rounded-2xl bg-gradient-to-br from-[#E2E8F8] to-[#C7D2F0] flex items-center justify-center">
+                <img src="/assets/seoPages/ReduceEmi/image.svg" alt="reducing emi image" className="w-full h-full object-cover" />
               </div>
             </div>
 
