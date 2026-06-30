@@ -2,8 +2,9 @@ import ReadyToMovePropertiesInNagpur from "@/views/ReadyToMovePropertiesInNagpur
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata = buildPageMetadata({
-  title: "Ready To Move Properties In Nagpur",
-  description: "Get help with property listings, bookings, documentation and more. Contact the Reparv support team or browse FAQs.",
+  title: "Ready to Move Properties in Nagpur | No Wait | Reparv.in",
+  description:
+    "Find verified ready-to-move flats & houses in Nagpur. Clear ownership, instant possession, zero brokerage. Compare options & book a free site visit on Reparv!",
   path: "/ready-to-move-properties-in-nagpur",
 });
 

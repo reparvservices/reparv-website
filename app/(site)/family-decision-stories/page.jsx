@@ -3,9 +3,9 @@ import FamilyStoriesPage from "@/views/FamilyStoriesPage";
 //import FamilyDecisionStoriesPage from "@/views/FamilyDecisions";
 
 export const metadata = buildPageMetadata({
-  title: "Family Decision Stories",
-  description: "Get help with property listings, bookings, documentation and more. Contact the Reparv support team or browse FAQs.",
-  path: "/family-decision",
+  title: "How Families Aligned on Home Buying in Nagpur | Reparv.in",
+  description: "Read how Nagpur families aligned on budget, location & lifestyle before buying a home. Real decisions, real insights. Get inspired & find your perfect property!",
+  path: "/family-decision-stories",
 });
 
 export default function Page() {

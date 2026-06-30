@@ -23,6 +23,24 @@ function Footer({ footerRef }) {
     },
   ];
 
+  const seoPages = [
+    { title: "Find Verified Properties in Nagpur", url: "https://www.reparv.in/find-verified-properties-in-nagpur" },
+    { title: "Flat for Sale in Nagpur", url: "https://www.reparv.in/flats-for-sale-in-nagpur" },
+    { title: "Plots for Sale in Nagpur", url: "https://www.reparv.in/plots-for-sale-in-nagpur" },
+    { title: "Rental Properties in Nagpur", url: "https://www.reparv.in/rental-properties-in-nagpur" },
+    {
+      title: "New Projects in Nagpur",
+      url: "https://www.reparv.in/new-projects-in-nagpur",
+    },
+    { title: "Top Trusted Properties in Nagpur", url: "https://www.reparv.in/top-trusted-properties-in-nagpur" },
+    { title: "First Time Buyer Stories – Real Home Buying Journeys", url: "https://www.reparv.in/first-time-buyer" },
+    { title: "Family Decision Stories – How Families Aligned Before Buying", url: "https://www.reparv.in/family-decision-stories" },
+    { title: "Budget to Dream Home – How Buyers Made Smart Choices", url: "https://www.reparv.in/budget-to-dream-home" },
+    { title: "Home Loan Prepayment Calculator", url: "https://www.reparv.in/home-loan-prepayment-calculator" },
+    { title: "Reduce EMI or Reduce Tenure?", url: "https://www.reparv.in/reduce-emi-or-tenure" },
+  ];
+
+
   return (
     <>
       {/* Desktop Footer */}
