@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import {
   FaFacebookF,
   FaLinkedin,
@@ -7,345 +6,168 @@ import {
   FaYoutube,
   FaRegCopyright,
 } from "react-icons/fa";
+import {
+  FOOTER_APP_LINKS,
+  FOOTER_BUYER_GUIDE_LINKS,
+  FOOTER_COMPANY_LINKS,
+  FOOTER_HOME_LOAN_LINKS,
+  FOOTER_LEGAL_LINKS,
+  FOOTER_NAGPUR_PROPERTY_LINKS,
+  FOOTER_PARTNER_LINKS,
+  FOOTER_SOCIAL_LINKS,
+  FOOTER_TOOL_LINKS,
+} from "@/config/footerLinks";
+import FooterLinkColumn from "./FooterLinkColumn";
+import FooterMobileSection from "./FooterMobileSection";
+
+const SOCIAL_ICONS = {
+  facebook: FaFacebookF,
+  linkedin: FaLinkedin,
+  instagram: FaInstagram,
+  youtube: FaYoutube,
+};
+
+function SocialLinks({ className = "" }) {
+  return (
+    <div className={`flex items-center gap-3 lg:gap-4 ${className}`}>
+      {FOOTER_SOCIAL_LINKS.map((social) => {
+        const Icon = SOCIAL_ICONS[social.icon];
+        return (
+          <Link
+            key={social.href}
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={social.title}
+            className="flex items-center justify-center w-10 h-10 lg:w-11 lg:h-11 bg-white/15 rounded-full hover:bg-white/25 transition-colors text-lg lg:text-xl"
+          >
+            <Icon />
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
 function Footer({ footerRef }) {
-  const usefulLinks = [
-    { title: "EMI Calculator", url: "https://www.reparv.in/emi-calculator" },
-    { title: "Cost Calculator", url: "https://www.reparv.in/cost-calculator" },
-    { title: "Verify 7/12", url: "https://www.reparv.in/verify-7-12" },
-    { title: "RERA Properties", url: "https://www.reparv.in/rera-properties" },
-    {
-      title: "Visit Properties on Weekends",
-      url: "https://www.reparv.in/visit-properties-on-week-ends",
-    },
-    {
-      title: "Trusted Builders",
-      url: "https://www.reparv.in/trusted-builders",
-    },
-  ];
-
-  const seoPages = [
-    { title: "Find Verified Properties in Nagpur", url: "https://www.reparv.in/find-verified-properties-in-nagpur" },
-    { title: "Flat for Sale in Nagpur", url: "https://www.reparv.in/flats-for-sale-in-nagpur" },
-    { title: "Plots for Sale in Nagpur", url: "https://www.reparv.in/plots-for-sale-in-nagpur" },
-    { title: "Rental Properties in Nagpur", url: "https://www.reparv.in/rental-properties-in-nagpur" },
-    {
-      title: "New Projects in Nagpur",
-      url: "https://www.reparv.in/new-projects-in-nagpur",
-    },
-    { title: "Top Trusted Properties in Nagpur", url: "https://www.reparv.in/top-trusted-properties-in-nagpur" },
-    { title: "First Time Buyer Stories – Real Home Buying Journeys", url: "https://www.reparv.in/first-time-buyer" },
-    { title: "Family Decision Stories – How Families Aligned Before Buying", url: "https://www.reparv.in/family-decision-stories" },
-    { title: "Budget to Dream Home – How Buyers Made Smart Choices", url: "https://www.reparv.in/budget-to-dream-home" },
-    { title: "Home Loan Prepayment Calculator", url: "https://www.reparv.in/home-loan-prepayment-calculator" },
-    { title: "Reduce EMI or Reduce Tenure?", url: "https://www.reparv.in/reduce-emi-or-tenure" },
-  ];
-
+  const currentYear = new Date().getFullYear();
 
   return (
     <>
       {/* Desktop Footer */}
-      <div ref={footerRef} className="w-full md:block hidden bg-[#5E23DC]">
-        <div className="w-full max-w-[1380px] mx-auto flex flex-col gap-6 bg-[#5E23DC] text-white py-8 px-8 lg:px-10">
-          <div className="flex items-center justify-start">
-            <Link href="/">
-              <img src="/assets/footerLogo.svg"alt="Reparv Logo" className="w-[160px]" />
+      <footer
+        ref={footerRef}
+        className="w-full hidden md:block bg-[#5E23DC] text-white"
+      >
+        <div className="w-full max-w-[1380px] mx-auto flex flex-col gap-8 py-10 px-8 lg:px-10">
+          <div className="flex items-center justify-between gap-6">
+            <Link href="/" aria-label="Reparv home">
+              <img
+                src="/assets/footerLogo.svg"
+                alt="Reparv Logo"
+                className="w-[160px]"
+              />
             </Link>
+            <SocialLinks />
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-8">
-            {/* 1. Company */}
-            <div className="flex flex-col gap-2 text-sm lg:text-base">
-              <h3 className="text-lg lg:text-xl font-semibold">Company</h3>
-              <Link href="/" className="hover:underline">
-                Home
-              </Link>
-              <Link href="/blogs" className="hover:underline">
-                Blogs
-              </Link>
-              <Link href="/news" className="hover:underline">
-                News
-              </Link>
-              <Link href="/about-us" className="hover:underline">
-                About Us
-              </Link>
-              <Link href="/contact-us" className="hover:underline">
-                Contact Us
-              </Link>
-              <Link href="/support" className="hover:underline">
-                Support
-              </Link>
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-8 lg:gap-6">
+            <FooterLinkColumn title="Company" links={FOOTER_COMPANY_LINKS} />
+            <FooterLinkColumn
+              title="Become a Professional"
+              links={FOOTER_PARTNER_LINKS}
+            />
+            <FooterLinkColumn title="Download Apps" links={FOOTER_APP_LINKS} />
+            <FooterLinkColumn title="Tools & Guides" links={FOOTER_TOOL_LINKS} />
+            <FooterLinkColumn
+              title="Properties in Nagpur"
+              links={FOOTER_NAGPUR_PROPERTY_LINKS}
+            />
+            <FooterLinkColumn
+              title="Buyer Stories"
+              links={FOOTER_BUYER_GUIDE_LINKS}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2 border-t border-white/20">
+            <FooterLinkColumn title="Buy, Rent & Sell" links={FOOTER_HOME_LOAN_LINKS} />
+            <div className="flex flex-col justify-end text-sm text-white/80 lg:text-right">
+              <p>
+                Explore verified properties, calculators, and home loan tools
+                across Nagpur — all in one place.
+              </p>
             </div>
+          </div>
 
-            {/* 2. Become a Professional */}
-            <div className="flex flex-col gap-2 text-sm lg:text-base">
-              <h3 className="text-lg lg:text-xl font-semibold">
-                Become a Professional
-              </h3>
+          <hr className="w-full h-px bg-white/20 border-0" />
 
-              <a
-                href="https://partners.reparv.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-pointer hover:underline"
+          <div className="text-xs lg:text-sm flex flex-wrap items-center justify-center gap-4 lg:gap-8">
+            <span className="flex items-center gap-1.5">
+              <FaRegCopyright /> {currentYear} reparv.in All Rights Reserved
+            </span>
+            {FOOTER_LEGAL_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="hover:underline"
               >
-                Project Partner
-              </a>
+                {link.title}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </footer>
 
-            </div>
+      {/* Mobile Footer */}
+      <footer className="md:hidden w-full bg-[#5E23DC] text-white py-8 px-5 mb-[70px]">
+        <div className="flex flex-col gap-6 max-w-md mx-auto">
+          <div className="flex items-center justify-between gap-4">
+            <Link href="/" aria-label="Reparv home">
+              <img
+                src="/assets/footerLogo.svg"
+                alt="Reparv logo"
+                className="w-[140px]"
+              />
+            </Link>
+            <SocialLinks />
+          </div>
 
-            {/* 3. Download Link */}
-            <div className="flex flex-col gap-2 text-sm lg:text-base">
-              <h3 className="text-lg lg:text-xl font-semibold">
-                Download Apps
-              </h3>
+          <FooterMobileSection title="Company" links={FOOTER_COMPANY_LINKS} />
+          <FooterMobileSection
+            title="Become a Professional"
+            links={FOOTER_PARTNER_LINKS}
+          />
+          <FooterMobileSection title="Download Apps" links={FOOTER_APP_LINKS} />
+          <FooterMobileSection title="Tools & Guides" links={FOOTER_TOOL_LINKS} />
+          <FooterMobileSection
+            title="Properties in Nagpur"
+            links={FOOTER_NAGPUR_PROPERTY_LINKS}
+          />
+          <FooterMobileSection
+            title="Buyer Stories"
+            links={FOOTER_BUYER_GUIDE_LINKS}
+          />
+          <FooterMobileSection
+            title="Buy, Rent & Sell"
+            links={FOOTER_HOME_LOAN_LINKS}
+          />
 
-              <a
-                href="https://play.google.com/store/apps/details?id=com.reparvcustomer"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-pointer hover:underline"
-              >
-                Customer
-              </a>
+          <hr className="w-full h-px bg-white/20 border-0" />
 
-              <a
-                href="https://play.google.com/store/apps/details?id=com.reparvprojectpartner"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-pointer hover:underline"
-              >
-                Project Partner
-              </a>
-
-            </div>
-
-            {/* 4. Useful Links */}
-            <div className="flex flex-col gap-2 text-sm lg:text-base">
-              <h3 className="text-lg lg:text-xl font-semibold">Useful Links</h3>
-              {usefulLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  className="cursor-pointer hover:underline"
-                  href={link.url}
-                >
+          <div className="flex flex-col items-center gap-3 text-xs text-center">
+            <span className="flex items-center gap-1.5">
+              <FaRegCopyright /> {currentYear} reparv.in All Rights Reserved
+            </span>
+            <div className="flex flex-wrap justify-center gap-4">
+              {FOOTER_LEGAL_LINKS.map((link) => (
+                <Link key={link.href} href={link.href} className="hover:underline">
                   {link.title}
                 </Link>
               ))}
             </div>
-
-            {/* 5. Social Link (only icons) */}
-            <div className="flex flex-col gap-2">
-              <h3 className="text-lg lg:text-xl font-semibold">Social Link</h3>
-              <div className="flex items-center gap-3 lg:gap-5 text-xl lg:text-2xl">
-                <Link
-                  href="https://www.facebook.com/reparv/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
-                >
-                  <FaFacebookF />
-                </Link>
-                <Link
-                  href="https://www.linkedin.com/company/105339179"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
-                >
-                  <FaLinkedin />
-                </Link>
-                <Link
-                  href="https://www.instagram.com/reparv_/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
-                >
-                  <FaInstagram />
-                </Link>
-                <Link
-                  href="https://www.youtube.com/@reparv"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40] transition"
-                >
-                  <FaYoutube />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <hr className="w-full h-px bg-[#D1D5DC33] border-0 my-5" />
-
-          <div className="text-xs lg:text-sm flex flex-wrap items-center justify-center gap-4 lg:gap-8">
-            <span className="flex items-center gap-1.5">
-              <FaRegCopyright /> {new Date().getFullYear()} reparv.in All Rights
-              Reserved
-            </span>
-            <Link href="/terms-and-conditions" className="hover:underline">
-              Terms & Conditions
-            </Link>
-            <Link href="/privacy-policy" className="hover:underline">
-              Privacy Policy
-            </Link>
-            <Link href="/cancellation-policy" className="hover:underline">
-              Cancellation Policy
-            </Link>
           </div>
         </div>
-      </div>
-
-      {/* Mobile Footer - same as before (stacked) */}
-      <div className="md:hidden w-full bg-[#5E23DC] text-white py-8 px-5 mb-[70px]">
-        <div className="flex flex-col gap-5 max-w-md mx-auto">
-          <div className="flex justify-start">
-            <Link href="/">
-              <img src="/assets/footerLogo.svg" alt="reparv logo" className="w-[140px]" />
-            </Link>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Company</h3>
-            <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
-              <Link href="/" className="hover:underline">
-                Home
-              </Link>{" "}
-              |
-              <Link href="/blogs" className="hover:underline">
-                Blogs
-              </Link>{" "}
-              |
-              <Link href="/news" className="hover:underline">
-                News
-              </Link>{" "}
-              |
-              <Link href="/about-us" className="hover:underline">
-                About Us
-              </Link>{" "}
-              |
-              <Link href="/contact-us" className="hover:underline">
-                Contact Us
-              </Link>
-              |
-              <Link href="/support" className="hover:underline">
-                Support
-              </Link>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2">
-              Become a Professional
-            </h3>
-            <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
-              <a
-                href="https://partners.reparv.in"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-pointer hover:underline"
-              >
-                Project Partner
-              </a>{" "}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Download Apps</h3>
-            <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
-              <a
-                href="https://play.google.com/store/apps/details?id=com.reparvcustomer"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-pointer hover:underline"
-              >
-                Customer
-              </a>{" "}
-              |
-              <a
-                href="https://play.google.com/store/apps/details?id=com.reparvprojectpartner"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cursor-pointer hover:underline"
-              >
-                Project Partner
-              </a>{" "}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-2">Useful Links</h3>
-            <div className="flex flex-wrap gap-x-2 gap-y-1 text-xs">
-              {usefulLinks.map((link, index) => (
-                <React.Fragment key={index}>
-                  <Link
-                    className="cursor-pointer hover:underline"
-                    href={link.url}
-                  >
-                    {link.title}
-                  </Link>
-                  {index < usefulLinks.length - 1 && "|"}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-semibold">Social Link</h3>
-            <div className="flex items-center gap-4 text-xl">
-              <Link
-                href="https://www.facebook.com/reparv/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
-              >
-                <FaFacebookF />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/company/105339179"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
-              >
-                <FaLinkedin />
-              </Link>
-              <Link
-                href="https://www.instagram.com/reparv_/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
-              >
-                <FaInstagram />
-              </Link>
-              <Link
-                href="https://www.youtube.com/@reparv"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-[#ffffff28] rounded-full hover:bg-[#ffffff40]"
-              >
-                <FaYoutube />
-              </Link>
-            </div>
-          </div>
-
-          <hr className="w-full h-px bg-[#ffffff33] border-0 my-4" />
-
-          <div className="flex flex-col items-center gap-2 text-xs">
-            <span className="flex items-center gap-1.5">
-              <FaRegCopyright /> {new Date().getFullYear()} reparv.in All Rights
-              Reserved
-            </span>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/terms-and-conditions" className="hover:underline">
-                Terms & Conditions
-              </Link>
-              <Link href="/privacy-policy" className="hover:underline">
-                Privacy Policy
-              </Link>
-              <Link href="/cancellation-policy" className="hover:underline">
-                Cancellation Policy
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      </footer>
     </>
   );
 }

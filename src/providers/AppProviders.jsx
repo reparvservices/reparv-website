@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { HelmetProvider } from "react-helmet-async";
+import { getGoogleClientId } from "@/lib/env";
 import { AuthProvider } from "../store/auth";
 import { PropertyFilterProvider } from "../store/propertyFilter";
 
@@ -18,7 +19,7 @@ function DeferredGoogleOAuth({ clientId, children }) {
 }
 
 export default function AppProviders({ children }) {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID ?? "";
+  const clientId = getGoogleClientId();
   return (
     <HelmetProvider>
       <AuthProvider>

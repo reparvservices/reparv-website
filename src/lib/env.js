@@ -17,3 +17,11 @@ export function getS3ImageUrl() {
     DEFAULT_S3_IMAGE_URL
   );
 }
+
+export function getGoogleClientId() {
+  return (
+    process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+    process.env.VITE_GOOGLE_CLIENT_ID ||
+    ""
+  );
+}
