@@ -1,7 +1,9 @@
-import SellProperty from "@/components/dashboard/SellProperty";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
 
-export const metadata = buildPageMetadata({
+import SellProperty from "@/components/dashboard/SellProperty";
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
   title: "Sell properties",
   description: "Create and manage property listings.",
   path: "/sell-properties",

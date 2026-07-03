@@ -1,10 +1,12 @@
+export { dynamic } from "@/lib/ssr";
+
 import Properties from "@/views/Properties";
-import { buildPageMetadata } from "@/lib/seo";
-import { getSeoData } from "@/lib/getSeoData";
+import { fetchProperties } from "@/lib/serverApi";
+import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
   const seo = await getSeoData("properties");
-  console.log("PROPERTIES SEO:", seo);
+
   return buildPageMetadata({
     title: seo?.title,
     description: seo?.description,
@@ -13,6 +15,11 @@ export async function generateMetadata() {
   });
 }
 
-export default function Page() {
-  return <Properties />;
+export default async function Page() {
+  const initialProperties = await fetchProperties({
+    city: "Nagpur",
+    propertyCategory: "properties",
+  });
+
+  return <Properties initialProperties={initialProperties} />;
 }

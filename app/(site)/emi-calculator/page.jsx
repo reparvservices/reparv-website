@@ -1,6 +1,8 @@
+export { dynamic } from "@/lib/ssr";
+
 import EmiCalculator from "@/views/EmiCalculator";
-import { buildPageMetadata } from "@/lib/seo";
-import { getSeoData } from "@/lib/getSeoData";
+import { fetchBlogs } from "@/lib/serverApi";
+import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
   const seo = await getSeoData("emi-calculator");
@@ -13,6 +15,7 @@ export async function generateMetadata() {
   });
 }
 
-export default function Page() {
-  return <EmiCalculator />;
+export default async function Page() {
+  const articles = await fetchBlogs();
+  return <EmiCalculator initialArticles={articles} />;
 }

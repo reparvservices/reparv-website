@@ -17,14 +17,18 @@ import { useAuth } from "../store/auth";
 import { getImageURI } from "../utils/helper";
 import SocialNewsShare from "../components/SocialNewsShare";
 import { addNewsVisitor } from "../utils/analytics";
+import Breadcrumbs from "../components/seo/Breadcrumbs";
 
-export default function NewsDetailsPage() {
+export default function NewsDetailsPage({
+  initialNews = null,
+  initialNewsList = null,
+}) {
   const { newsId } = useParams();
   const router = useRouter();
   const { URI, user, setShowLogin, selectedCity, setShowAlert } = useAuth();
-  const [news, setNews] = useState({});
-  const [newsList, setNewsList] = useState([]);
-  const [relatedNews, setRelatedNews] = useState([]);
+  const [news, setNews] = useState(initialNews ?? {});
+  const [newsList, setNewsList] = useState(initialNewsList ?? []);
+  const [relatedNews, setRelatedNews] = useState(initialNewsList ?? []);
   const [newsHeight, setNewsHeight] = useState(true);
 
   const [email, setEmail] = useState("");
@@ -174,14 +178,18 @@ export default function NewsDetailsPage() {
   }, [message]);
 
   useEffect(() => {
-    fetchData();
-    fetchNewsList();
-    fetchRelatedArticals();
-  }, [newsId]);
+    if (initialNews !== null && initialNewsList !== null) return;
+    if (initialNews === null) fetchData();
+    if (initialNewsList === null) {
+      fetchNewsList();
+      fetchRelatedArticals();
+    }
+  }, [newsId, initialNews, initialNewsList]);
 
   useEffect(() => {
+    if (initialNewsList !== null) return;
     fetchRelatedArticals();
-  }, []);
+  }, [initialNewsList]);
 
   useEffect(() => {
     if (!news?.id) return;
@@ -200,10 +208,6 @@ export default function NewsDetailsPage() {
   }, [news?.id, URI]);
 
   useEffect(() => {
-    fetchData();
-  }, [newsId]);
-
-  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [newsId]);
 
@@ -214,6 +218,14 @@ export default function NewsDetailsPage() {
         <section className="w-full py-6">
           {/* ================= ARTICLE HEADER ================= */}
           <div className="w-full max-w-[1289px] mx-auto px-4 md:px-0 mb-10">
+            <Breadcrumbs
+              className="mb-4"
+              items={[
+                { label: "Home", href: "/" },
+                { label: "News", href: "/news" },
+                { label: news?.title || news?.seoTitle || "Article" },
+              ]}
+            />
             {/* CATEGORY BADGE */}
             <div className="text-start mb-4">
               <span className="inline-block px-4 py-1 text-sm font-medium font-segoe text-purple-600 bg-purple-100 rounded-full">

@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import { buildPageMetadata } from "@/lib/seo";
 import FamilyStoriesPage from "@/views/FamilyStoriesPage";
 //import FamilyDecisionStoriesPage from "@/views/FamilyDecisions";

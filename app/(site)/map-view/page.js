@@ -1,7 +1,10 @@
-import { buildPageMetadata } from "@/lib/seo";
-import dynamic from "next/dynamic";
+export { dynamic } from "@/lib/ssr";
 
-const MapView = dynamic(() => import("@/views/MapView"), {
+import { buildPageMetadata } from "@/lib/seo";
+import nextDynamic from "next/dynamic";
+import { fetchMapViewProperties } from "@/lib/serverApi";
+
+const MapView = nextDynamic(() => import("@/views/MapView"), {
   ssr: false,
 });
 
@@ -11,8 +14,8 @@ export const metadata = buildPageMetadata({
   path: "/map-view",
 });
 
-export default function Page() {
-  return <MapView />;
+export default async function Page() {
+  const initialProperties = await fetchMapViewProperties("Nagpur");
+
+  return <MapView initialProperties={initialProperties} />;
 }
-
-

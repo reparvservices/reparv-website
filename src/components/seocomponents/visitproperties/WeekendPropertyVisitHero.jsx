@@ -6,9 +6,9 @@ export default function WeekendPropertyVisitHero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* ================= LEFT CONTENT ================= */}
           <div className="text-center lg:text-left">
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-black leading-snug lg:leading-[1.25]">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black leading-snug lg:leading-[1.25]">
               Visit Properties on Weekends – Make{" "}
-              <span class="text-[#7C3AED]">Smarter Decisions</span>
+              <span className="text-[#7C3AED]">Smarter Decisions</span>
             </h1>
 
             <p className="mt-4 text-sm sm:text-base text-gray-600 max-w-xl mx-auto lg:mx-0">

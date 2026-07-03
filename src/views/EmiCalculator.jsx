@@ -8,7 +8,7 @@ import LatestArtical from "../components/seocomponents/common/LatestArtical";
 import HowToUseEmiCalculator from "../components/seocomponents/emicomponents/HowToUseEmiCalculator";
 import AdvertisementCard from "../components/AdvertisementCard";
 
-const EmiCalculator = () => {
+const EmiCalculator = ({ initialArticles = null }) => {
   const router = useRouter();
 
   return (
@@ -18,8 +18,8 @@ const EmiCalculator = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-center">
             {/* LEFT CONTENT */}
             <div className="flex flex-col items-center lg:items-start justify-center">
-              <h1 class="text-center lg:text-left text-4xl md:text-5xl xl:text-7xl font-bold text-black leading-tight">
-                Home Loan <span class="text-[#8A38F5]">EMI Calculator</span>
+              <h1 className="text-center lg:text-left text-4xl md:text-5xl xl:text-7xl font-bold text-black leading-tight">
+                Home Loan <span className="text-[#8A38F5]">EMI Calculator</span>
               </h1>
 
               <p className="text-center lg:text-start text-xs md:text-base xl:text-xl mt-2 sm:mt-6 max-w-2xl leading-relaxed">
@@ -107,7 +107,7 @@ const EmiCalculator = () => {
             </div>
           </div>
           <AdvertisementCard />
-          <LatestArtical />
+          <LatestArtical initialArticles={initialArticles} />
           <AdvertisementCard />
         </div>
       </section>

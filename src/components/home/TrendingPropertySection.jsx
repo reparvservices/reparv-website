@@ -7,10 +7,10 @@ import { useAuth } from "../../store/auth";
 import PropertyCard from "../property/PropertyCard";
 import { motion } from "framer-motion";
 
-const TrendingPropertySection = () => {
+const TrendingPropertySection = ({ initialProperties = null }) => {
   const router = useRouter();
   const { URI, selectedCity } = useAuth();
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState(initialProperties ?? []);
 
   const mobileCard = {
     hidden: { opacity: 0, y: 30, scale: 0.96 },
@@ -47,8 +47,9 @@ const TrendingPropertySection = () => {
   };
 
   useEffect(() => {
+    if (initialProperties !== null) return;
     fetchData();
-  }, [selectedCity]);
+  }, [selectedCity, initialProperties]);
 
   return (
     <section className="w-full max-w-[1440px] mx-auto px-4 lg:py-10">

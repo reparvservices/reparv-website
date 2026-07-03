@@ -11,7 +11,10 @@ import VerifiedWeekendProperties from "../components/seocomponents/visitproperti
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 
-export default function VisitPropertiesOnWeekend() {
+export default function VisitPropertiesOnWeekend({
+  initialArticles = null,
+  initialFaqs = null,
+}) {
   
   return (
     <>
@@ -27,8 +30,11 @@ export default function VisitPropertiesOnWeekend() {
       <div className="max-w-[1380px] mx-auto my-5">
         <AdvertisementCard />
       </div>
-      <FAQSection location={"Reparv Visit Properties On Weekend Page"} />
-      <LatestArtical />
+      <FAQSection
+        location={"Reparv Visit Properties On Weekend Page"}
+        initialFaqs={initialFaqs}
+      />
+      <LatestArtical initialArticles={initialArticles} />
       <div className="max-w-[1380px] mx-auto my-5">
         <AdvertisementCard />
       </div>

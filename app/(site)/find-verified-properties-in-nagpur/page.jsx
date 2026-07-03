@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import FindVerifiedProperties from "@/views/FindVerifiedProperties";
 import { buildPageMetadata } from "@/lib/seo";
 

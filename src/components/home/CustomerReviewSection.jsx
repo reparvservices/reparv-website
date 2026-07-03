@@ -30,10 +30,10 @@ const reviews = [
   },
 ];
 
-const CustomerReviewSection = () => {
+const CustomerReviewSection = ({ initialReviews = null }) => {
   const swiperRef = useRef(null);
   const { URI } = useAuth();
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState(initialReviews ?? []);
 
   // **Fetch Data from API**
   const fetchReviews = async () => {
@@ -65,8 +65,9 @@ const CustomerReviewSection = () => {
   };
 
   useEffect(() => {
+    if (initialReviews !== null) return;
     fetchReviews();
-  }, []);
+  }, [initialReviews]);
   
 
   return (

@@ -6,11 +6,11 @@ import FormatPrice from "../FormatPrice";
 import { getImageURI } from "../../utils/helper";
 import { motion, AnimatePresence } from "framer-motion";
 
-const TopPicksSlider = () => {
+const TopPicksSlider = ({ initialProperties = null }) => {
   const router = useRouter();
   const { URI, selectedCity } = useAuth();
 
-  const [properties, setProperties] = useState([]);
+  const [properties, setProperties] = useState(initialProperties ?? []);
   const [isPaused, setIsPaused] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -59,6 +59,7 @@ const TopPicksSlider = () => {
   }, [properties, isPaused]);
 
   useEffect(() => {
+    if (initialProperties !== null) return;
     const fetchData = async () => {
       try {
         const res = await fetch(
@@ -72,7 +73,7 @@ const TopPicksSlider = () => {
       }
     };
     fetchData();
-  }, [selectedCity]);
+  }, [selectedCity, initialProperties, URI]);
 
   if (!item) return null;
 

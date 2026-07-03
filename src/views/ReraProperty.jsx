@@ -14,7 +14,7 @@ import NonRERARisks from "../components/seocomponents/reravprojects/NonReraPrope
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 
-const RERAProperty = () => {
+const RERAProperty = ({ initialArticles = null, initialFaqs = null }) => {
   
   return (
     <>
@@ -71,8 +71,11 @@ const RERAProperty = () => {
           <AdvertisementCard />
         </div>
         <NonRERARisks />
-        <FAQSection location={"Reparv Rera Property Page"} />
-        <NewsSection />
+        <FAQSection
+          location={"Reparv Rera Property Page"}
+          initialFaqs={initialFaqs}
+        />
+        <NewsSection initialArticles={initialArticles} />
         <div className="max-w-[1380px] mx-auto my-5">
           <AdvertisementCard />
         </div>

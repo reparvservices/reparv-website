@@ -25,13 +25,13 @@ const FILTERS = [
   "Marketing",
 ];
 
-export default function NewBlogs() {
+export default function NewBlogs({ initialBlogs = null }) {
   const [activeFilter, setActiveFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(12);
 
   const { URI } = useAuth();
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState(initialBlogs ?? []);
 
   // Fetch Property Info
   const fetchData = async () => {
@@ -51,8 +51,9 @@ export default function NewBlogs() {
   };
 
   useEffect(() => {
+    if (initialBlogs !== null) return;
     fetchData();
-  }, []);
+  }, [initialBlogs, URI]);
 
   const filtered = blogs?.filter((b) => {
     const type = (b?.type || "").toLowerCase();

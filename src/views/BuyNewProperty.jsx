@@ -72,7 +72,11 @@ const propertyTypes = [
   },
 ];
 
-const BuyNewProperty = () => {
+const BuyNewProperty = ({
+  initialProperties = null,
+  initialBlogs = null,
+  initialFaqs = null,
+}) => {
   const router = useRouter();
   const { URI, propertySearch, setPropertySearch } = useAuth();
 
@@ -167,13 +171,16 @@ const BuyNewProperty = () => {
         <Suspense
           fallback={<div className="text-center">Loading properties...</div>}
         >
-          <PropertySection category={"New"} />
+          <PropertySection
+            category={"New"}
+            initialProperties={initialProperties}
+          />
         </Suspense>
 
         <Suspense
           fallback={<div className="text-center">Loading steps...</div>}
         >
-          <BlogSection />
+          <BlogSection blogs={initialBlogs} />
         </Suspense>
 
         <div className="max-w-[1380px] mx-auto my-5">
@@ -183,7 +190,10 @@ const BuyNewProperty = () => {
         <Suspense
           fallback={<div className="text-center">Loading steps...</div>}
         >
-          <FAQSection location={"Reparv Buy New Property Page"} />
+          <FAQSection
+            location={"Reparv Buy New Property Page"}
+            initialFaqs={initialFaqs}
+          />
         </Suspense>
         <div className="max-w-[1380px] mx-auto my-5">
           <AdvertisementCard />

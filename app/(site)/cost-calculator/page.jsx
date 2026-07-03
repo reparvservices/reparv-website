@@ -1,6 +1,8 @@
+export { dynamic } from "@/lib/ssr";
+
 import CostCalculator from "@/views/CostCalculator";
-import { buildPageMetadata } from "@/lib/seo";
-import { getSeoData } from "@/lib/getSeoData";
+import { fetchSeoPageWidgets } from "@/lib/serverApi";
+import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
   const seo = await getSeoData("cost-calculator");
@@ -13,6 +15,12 @@ export async function generateMetadata() {
   });
 }
 
-export default function Page() {
-  return <CostCalculator />;
+export default async function Page() {
+  const { articles, faqs } = await fetchSeoPageWidgets({
+    faqLocation: "Reparv Cost Calculator Page",
+  });
+
+  return (
+    <CostCalculator initialArticles={articles} initialFaqs={faqs} />
+  );
 }

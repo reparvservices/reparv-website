@@ -1,29 +1,24 @@
 import BlogDetails from "@/views/BlogDetails";
-import { buildPageMetadata } from "@/lib/seo";
-import { getBackendUrl } from "@/lib/env";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildPageMetadata, buildArticleSchema } from "@/lib/seo";
+import {
+  fetchBlogDetailsCached,
+  fetchBlogFaqsCached,
+} from "@/lib/serverApi";
+import {
+  DETAIL_PAGE_REVALIDATE,
+  generateBlogStaticParams,
+} from "@/lib/staticParams";
 
-async function getBlogDetails(blogId) {
-  try {
-    const response = await fetch(
-      `${getBackendUrl()}/frontend/blog/details/${blogId}`,
-      {
-        next: { revalidate: 3600 },
-      },
-    );
+export const revalidate = DETAIL_PAGE_REVALIDATE;
+export const dynamicParams = true;
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch blog details");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Blog SEO Fetch Error:", error);
-    return null;
-  }
+export async function generateStaticParams() {
+  return generateBlogStaticParams();
 }
 
 export async function generateMetadata({ params }) {
-  const blog = await getBlogDetails(params.blogId);
+  const blog = await fetchBlogDetailsCached(params.blogId);
 
   return buildPageMetadata({
     title: blog?.seoTittle || blog?.title || "Blog Article",
@@ -32,10 +27,28 @@ export async function generateMetadata({ params }) {
     keywords: blog?.seoKeywords,
     image: blog?.thumbnail || blog?.image,
     type: "article",
-    path: `/blog/${params.blogId}`,
+    path: `/blog/${blog?.seoSlug || params.blogId}`,
   });
 }
 
-export default function Page() {
-  return <BlogDetails />;
+export default async function Page({ params }) {
+  const blog = await fetchBlogDetailsCached(params.blogId);
+  const initialFaqs = blog?.id ? await fetchBlogFaqsCached(blog.id) : [];
+  const path = `/blog/${blog?.seoSlug || params.blogId}`;
+
+  const articleSchema = buildArticleSchema({
+    title: blog?.seoTittle || blog?.title,
+    description: blog?.seoDescription,
+    image: blog?.thumbnail || blog?.image,
+    path,
+    datePublished: blog?.createdAt || blog?.publishedAt,
+    dateModified: blog?.updatedAt,
+  });
+
+  return (
+    <>
+      <JsonLd data={articleSchema} />
+      <BlogDetails initialBlog={blog} initialFaqs={initialFaqs} />
+    </>
+  );
 }

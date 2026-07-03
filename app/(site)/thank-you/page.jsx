@@ -1,7 +1,9 @@
-import SuccessScreen from "@/views/SuccessScreen";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
 
-export const metadata = buildPageMetadata({
+import SuccessScreen from "@/views/SuccessScreen";
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
   title: "Thank you",
   description: "Your submission was received.",
   path: "/thank-you",

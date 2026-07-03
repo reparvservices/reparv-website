@@ -1,6 +1,8 @@
+export { dynamic } from "@/lib/ssr";
+
 import BuyResaleProperty from "@/views/BuyResaleProperty";
-import { buildPageMetadata } from "@/lib/seo";
-import { getSeoData } from "@/lib/getSeoData";
+import { fetchPropertyLandingPageData } from "@/lib/serverApi";
+import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
   const seo = await getSeoData("buy-resale-property");
@@ -13,6 +15,10 @@ export async function generateMetadata() {
   });
 }
 
-export default function Page() {
-  return <BuyResaleProperty />;
+export default async function Page() {
+  const pageData = await fetchPropertyLandingPageData(
+    "Reparv Buy Resale Property Page",
+  );
+
+  return <BuyResaleProperty {...pageData} />;
 }

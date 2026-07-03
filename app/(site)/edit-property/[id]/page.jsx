@@ -1,9 +1,11 @@
+export { dynamic } from "@/lib/ssr";
+
 import EditProperty from "@/components/dashboard/EditProperty";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildNoIndexMetadata } from "@/lib/seo";
 
 export function generateMetadata({ params }) {
   const { id } = params;
-  return buildPageMetadata({
+  return buildNoIndexMetadata({
     title: "Edit property",
     description: "Update your property listing on Reparv.",
     path: `/edit-property/${id}`,

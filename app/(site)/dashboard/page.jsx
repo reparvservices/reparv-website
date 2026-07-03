@@ -1,7 +1,9 @@
-import Dashboard from "@/views/Dashboard";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
 
-export const metadata = buildPageMetadata({
+import Dashboard from "@/views/Dashboard";
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
   title: "Dashboard",
   description: "Manage your Reparv account, listings and activity.",
   path: "/dashboard",

@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import PrivacyPolicy from "@/views/PrivacyPolicy";
 import { buildPageMetadata } from "@/lib/seo";
 

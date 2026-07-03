@@ -20,7 +20,7 @@ const PropertyCard = React.lazy(
   () => import("../components/property/PropertyCard"),
 );
 
-export default function Properties() {
+export default function Properties({ initialProperties = null }) {
   const { setVideoInView, isIntersecting } = useLayoutScroll();
   const { ref: videoRef, inView: videoInView } = useInView({ threshold: 0.1 });
   const params = useParams();
@@ -51,7 +51,7 @@ export default function Properties() {
     setShowCitySelector,
   } = useAuth();
   
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialProperties === null);
   const [sortBy, setSortBy] = useState("");
 
   const sortProperties = (data, sortBy) => {
@@ -105,8 +105,10 @@ export default function Properties() {
     setSelectedCity(slugStr);
   }
 
-  const [properties, setProperties] = useState([]);
-  const [filteredProperties, setFilteredProperties] = useState(properties);
+  const [properties, setProperties] = useState(initialProperties ?? []);
+  const [filteredProperties, setFilteredProperties] = useState(
+    initialProperties ?? [],
+  );
   const [searchTerm, setSearchTerm] = useState(propertySearch);
 
   const filteredData = sortProperties(

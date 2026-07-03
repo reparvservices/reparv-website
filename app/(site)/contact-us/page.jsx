@@ -1,6 +1,7 @@
+export { dynamic } from "@/lib/ssr";
+
 import ContactUs from "@/views/ContactUs";
-import { buildPageMetadata } from "@/lib/seo";
-import { getSeoData } from "@/lib/getSeoData";
+import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
   const seo = await getSeoData("contact-us");

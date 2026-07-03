@@ -32,10 +32,16 @@ const defaultFaqs = [
   },
 ];
 
-function FAQSection({ id, location }) {
+function FAQSection({ id, location, initialFaqs = null }) {
   const { URI } = useAuth();
   const [activeIndex, setActiveIndex] = useState(1);
-  const [faqs, setFaqs] = useState([]);
+  const [faqs, setFaqs] = useState(
+    initialFaqs !== null
+      ? initialFaqs.length > 0
+        ? initialFaqs
+        : defaultFaqs
+      : [],
+  );
 
   const toggleFAQ = (index) => {
     setActiveIndex(index === activeIndex ? null : index);
@@ -74,12 +80,13 @@ function FAQSection({ id, location }) {
   };
 
   useEffect(() => {
+    if (initialFaqs !== null) return;
     if (location === "Reparv Blog Details Page" || id) {
       fetchBlogFAQs();
     } else {
       fetchFAQs();
     }
-  }, [location, id]);
+  }, [location, id, initialFaqs]);
 
   return (
     <>

@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import FirstTimeBuyerPage from "@/views/FirstTimeBuyer.jsx";
 import { buildPageMetadata } from "@/lib/seo";
 

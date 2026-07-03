@@ -5,8 +5,8 @@ export default function Verify712Hero() {
       <div className="max-w-[1380px] mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         {/* LEFT CONTENT */}
         <div className="text-center lg:text-left">
-          <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-black leading-tight">
-            Verify <span class="text-[#7C3AED]">7/12 Utara</span> Online
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-black leading-tight">
+            Verify <span className="text-[#7C3AED]">7/12 Utara</span> Online
           </h1>
 
           <p className="text-base sm:text-lg mt-3 text-black">

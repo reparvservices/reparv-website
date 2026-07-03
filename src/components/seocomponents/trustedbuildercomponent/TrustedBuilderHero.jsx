@@ -30,9 +30,9 @@ export default function TrustedBuilderHero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           {/* LEFT CONTENT */}
           <div className="text-center lg:text-left">
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold text-black leading-snug sm:leading-tight lg:leading-[1.5]">
-              Trusted Builders & Verified Real Estate Projects
-              <span class="text-[#7C3AED]">Across India</span>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-black leading-snug sm:leading-tight lg:leading-[1.5]">
+              Trusted Builders & Verified Real Estate Projects{" "}
+              <span className="text-[#7C3AED]">Across India</span>
             </h1>
 
             <p className="text-sm sm:text-base text-gray-600 mt-4 max-w-xl mx-auto lg:mx-0">

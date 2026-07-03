@@ -36,7 +36,14 @@ const item = {
   },
 };
 
-function Home() {
+function Home({
+  initialRentalProperties = null,
+  initialTrendingProperties = null,
+  initialTopPicks = null,
+  initialBlogs = null,
+  initialTestimonials = null,
+  initialFaqs = null,
+}) {
   return (
     <>
       <motion.div
@@ -57,7 +64,9 @@ function Home() {
 
         <Suspense fallback={<SectionSkeleton height="320px" />}>
           <motion.div variants={item}>
-            <TrendingPropertySection />
+            <TrendingPropertySection
+              initialProperties={initialTrendingProperties}
+            />
           </motion.div>
         </Suspense>
 
@@ -69,20 +78,20 @@ function Home() {
 
         <Suspense fallback={<SectionSkeleton height="320px" />}>
           <motion.div variants={item}>
-            <PropertySection />
+            <PropertySection initialProperties={initialRentalProperties} />
           </motion.div>
         </Suspense>
 
 
         <Suspense fallback={<SectionSkeleton height="300px" />}>
           <motion.div variants={item}>
-            <CustomerReviewSection />
+            <CustomerReviewSection initialReviews={initialTestimonials} />
           </motion.div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton height="350px" />}>
           <motion.div variants={item}>
-            <TopPicksSlider />
+            <TopPicksSlider initialProperties={initialTopPicks} />
           </motion.div>
         </Suspense>
 
@@ -94,13 +103,13 @@ function Home() {
 
         <Suspense fallback={<SectionSkeleton height="260px" />}>
           <motion.div variants={item}>
-            <NewsSection />
+            <NewsSection initialArticles={initialBlogs} />
           </motion.div>
         </Suspense>
 
         <Suspense fallback={<SectionSkeleton height="300px" />}>
           <motion.div variants={item}>
-            <FAQSection />
+            <FAQSection initialFaqs={initialFaqs} />
           </motion.div>
         </Suspense>
 

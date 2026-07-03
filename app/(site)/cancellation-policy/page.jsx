@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import RefundPolicy from "@/views/RefundPolicy";
 import { buildPageMetadata } from "@/lib/seo";
 

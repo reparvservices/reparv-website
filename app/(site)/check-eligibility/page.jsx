@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import CheckEligibility from "@/views/CheckEligibility";
 import { buildPageMetadata } from "@/lib/seo";
 

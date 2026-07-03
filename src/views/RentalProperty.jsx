@@ -6,7 +6,6 @@ import { useAuth } from "../store/auth";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
 import NavCard from "../components/NavCard";
-import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 // lazy load heavy components
@@ -71,7 +70,11 @@ const propertyTypes = [
   },
 ];
 
-const RentalProperty = () => {
+const RentalProperty = ({
+  initialProperties = null,
+  initialBlogs = null,
+  initialFaqs = null,
+}) => {
   const router = useRouter();
   const { URI, propertySearch, setPropertySearch } = useAuth();
 
@@ -174,13 +177,16 @@ const RentalProperty = () => {
         <Suspense
           fallback={<div className="text-center">Loading properties...</div>}
         >
-          <PropertySection category={"Rental"} />
+          <PropertySection
+            category={"Rental"}
+            initialProperties={initialProperties}
+          />
         </Suspense>
 
         <Suspense
           fallback={<div className="text-center">Loading steps...</div>}
         >
-          <BlogSection />
+          <BlogSection blogs={initialBlogs} />
         </Suspense>
         <div className="max-w-[1380px] mx-auto my-5">
           <AdvertisementCard />
@@ -188,7 +194,10 @@ const RentalProperty = () => {
         <Suspense
           fallback={<div className="text-center">Loading steps...</div>}
         >
-          <FAQSection location={"Reparv Rental Property Page"} />
+          <FAQSection
+            location={"Reparv Rental Property Page"}
+            initialFaqs={initialFaqs}
+          />
         </Suspense>
         <div className="max-w-[1380px] mx-auto my-5">
           <AdvertisementCard />

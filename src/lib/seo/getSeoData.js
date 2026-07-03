@@ -1,12 +1,10 @@
-import { getBackendUrl } from "./env";
+import { getBackendUrl } from "../env";
 
 export async function getSeoData(page) {
   try {
     const response = await fetch(
       `${getBackendUrl()}/frontend/seo-data/${page}`,
-      {
-        next: { revalidate: 3600 },
-      },
+      { cache: "no-store" },
     );
 
     if (!response.ok) throw new Error("Failed to fetch SEO data");

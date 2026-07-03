@@ -21,6 +21,7 @@ import PropertyHighlights from "../components/property/PropertyHighlights";
 import FilterNavbar from "../components/property/FilterNavbar";
 import { getImageURI } from "../utils/helper";
 import AdvertisementCard from "../components/AdvertisementCard";
+import Breadcrumbs from "../components/seo/Breadcrumbs";
 // Lazy-loaded components
 const PropertyImageGallery = lazy(
   () => import("../components/property/PropertyImageGallery"),
@@ -29,15 +30,20 @@ const SimilarProperties = lazy(
   () => import("../components/property/SimilarProperties"),
 );
 
-function PropertyDetails() {
+function PropertyDetails({
+  initialPropertyInfo = null,
+  initialPropertyImages = null,
+}) {
   const { setOtherPropertiesInView, isScrolling } = useLayoutScroll();
   const { ref: videoRef, inView: otherPropertiesInView } = useInView({
     threshold: 0.1,
   });
 
   const { id } = useParams();
-  const [propertyInfo, setPropertyInfo] = useState({});
-  const [propertyImages, setPropertyImages] = useState([]);
+  const [propertyInfo, setPropertyInfo] = useState(initialPropertyInfo ?? {});
+  const [propertyImages, setPropertyImages] = useState(
+    initialPropertyImages ?? [],
+  );
   const router = useRouter();
   const {
     setShowSiteVisitPopup,
@@ -48,7 +54,7 @@ function PropertyDetails() {
     showWhatsappEnquiryPopup,
     setShowWhatsappEnquiryPopup,
   } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(initialPropertyInfo === null);
   const [notFound, setNotFound] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const [activeTab, setActiveTab] = useState("Highlights");
@@ -129,6 +135,12 @@ function PropertyDetails() {
   };
 
   useEffect(() => {
+    if (initialPropertyInfo !== null) {
+      if (!initialPropertyImages?.length) {
+        fetchImages();
+      }
+      return;
+    }
     fetchData();
     fetchImages();
   }, [id]);
@@ -176,6 +188,20 @@ function PropertyDetails() {
   return (
     <>
       <div className="w-full max-w-345 flex flex-col sm:p-4 mx-auto">
+        <Breadcrumbs
+          className="mx-4 sm:mx-6 mt-2"
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Properties", href: "/properties" },
+            {
+              label:
+                propertyInfo?.pageTitle ||
+                propertyInfo?.propertyTitle ||
+                propertyInfo?.projectName ||
+                "Property",
+            },
+          ]}
+        />
         <div className="hidden lg:flex fixed top-15 sm:top-22 sm:bg-[#fafafa] left-0 w-full items-center justify-center z-20 pt-5">
           <div className="w-full max-w-335 px-4 sm:pr-6">
             <FilterNavbar />

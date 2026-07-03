@@ -1,9 +1,12 @@
+export { dynamic } from "@/lib/ssr";
+
 import SeoPage1 from "@/views/SeoPage1";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata = buildPageMetadata({
-  title: "Reparv Seo Page 1",
-  description: "Get help with property listings, bookings, documentation and more. Contact the Reparv support team or browse FAQs.",
+  title: "Real Home Buying Stories from Real Families",
+  description:
+    "Explore authentic home buying journeys from families across India. Learn how they navigated budgets, decisions, and dreams with Reparv.",
   path: "/seo-page-1",
 });
 

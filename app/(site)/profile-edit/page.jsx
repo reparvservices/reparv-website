@@ -1,9 +1,11 @@
-import EditProfile from "@/components/dashboard/EditProfile";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
 
-export const metadata = buildPageMetadata({
+import EditProfile from "@/components/dashboard/EditProfile";
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
   title: "Edit profile",
-  description: "Update your account details.",
+  description: "Update your Reparv profile details.",
   path: "/profile-edit",
 });
 

@@ -15,7 +15,6 @@ import Step2Income from "../components/homeLoanPage/Step2Income";
 import Step3Documents from "../components/homeLoanPage/Step3Documents";
 import WhyWeNeedThis from "../components/homeLoanPage/WhyWeNeedThis";
 const leftImage = "/assets/homeLoan/leftImage.svg";
-import SEO from "../components/SEO";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 const BlogSection = lazy(() => import("../components/BlogSection"));

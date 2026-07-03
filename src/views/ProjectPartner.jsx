@@ -13,7 +13,6 @@ import SuccessScreen from "../components/SuccessScreen.jsx";
 import PriceSummery from "../components/property/PriceSummery.jsx";
 import ContactUsPopup from "../components/projectPartner/ContactUsPopup.jsx";
 import WhatsappShare from "../components/projectPartner/WhatsappShare.jsx";
-import LandingPageSEO from "../components/projectPartner/LandingPageSEO.jsx";
 import EnquiryPopup from "../components/projectPartner/EnquiryPopup.jsx";
 import AdvertisementCard from "../components/AdvertisementCard.jsx";
 
@@ -49,7 +48,7 @@ function LoadingSkeleton({ className = "", label = "loading" }) {
   );
 }
 
-export default function ProjectPartner() {
+export default function ProjectPartner({ initialProjectPartner = null }) {
   const { contact } = useParams();
   const {
     URI,
@@ -68,8 +67,12 @@ export default function ProjectPartner() {
   const { selectedType } = usePropertyFilter();
 
   const [cities, setCities] = useState([]);
-  const [projectPartner, setProjectPartner] = useState({});
-  const [projectPartnerId, setProjectPartnerId] = useState({});
+  const [projectPartner, setProjectPartner] = useState(
+    initialProjectPartner ?? {},
+  );
+  const [projectPartnerId, setProjectPartnerId] = useState(
+    initialProjectPartner?.id ?? null,
+  );
 
   const handleContactSubmit = async (payload) => {
     // Example: send to your backend
@@ -103,39 +106,17 @@ export default function ProjectPartner() {
   };
 
   useEffect(() => {
+    if (initialProjectPartner !== null) {
+      if (initialProjectPartner?.city) {
+        setSelectedCity(initialProjectPartner.city);
+      }
+      return;
+    }
     fetchData();
-  }, [contact]);
+  }, [contact, initialProjectPartner]);
 
   return (
     <div>
-      <LandingPageSEO
-        seoTitle={
-          projectPartner?.seoTitle
-            ? projectPartner?.seoTitle
-            : "Reparv - India's Fast-Growing Real Estate Ecosystem | Property & Partner Programs"
-        }
-        seoDescription={
-          projectPartner?.seoDescription
-            ? projectPartner?.seoDescription
-            : "Buy, sell, or rent property with seamless legal and loan assistance. Become a Sales, Territory, Project Partner and grow your real estate career with low investment, high margins, and nationwide scalability powered by Reparv."
-        }
-        seoKeywords={
-          projectPartner?.seoKeywords
-            ? projectPartner?.seoKeywords
-            : "Buy, sell, or rent property with seamless legal and loan assistance. Become a Sales, Territory, Project Partner and grow your real estate career with low investment, high margins, and nationwide scalability powered by Reparv."
-        }
-        canonicalUrl={`https://www.reparv.in/project-partner/${contact}`}
-        ogImage={`${URI}${projectPartner?.businessLogo}` || ""}
-        twitterSite={
-          projectPartner?.twitterSite ? projectPartner?.twitterSite : "@reparv"
-        }
-        twitterDescription={
-          projectPartner?.twitterDescription
-            ? projectPartner?.twitterDescription
-            : "Buy, sell, or rent property with seamless legal and loan assistance. Become a Sales, Territory, Project Partner and grow your real estate career with low investment, high margins, and nationwide scalability powered by Reparv."
-        }
-      />
-
       <div className="w-full min-h-screen bg-[#F7FBFD] overflow-x-hidden">
         <Navbar projectPartner={projectPartner} cities={cities} />
 

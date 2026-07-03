@@ -11,11 +11,13 @@ import ExpertVerificationServices from "../components/seocomponents/verify712/Ex
 import UtaraVsPropertyCard from "../components/seocomponents/verify712/UtaraVsPropertyCard";
 import RiskWithout712Verification from "../components/seocomponents/verify712/RiskWithout712Verification";
 import VerifyBeforeYouBuyCTA from "../components/seocomponents/verify712/VerifyBeforeYouBuyCTA";
-import SEO from "../components/SEO";
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 
-export default function Verify712() {
+export default function Verify712({
+  initialArticles = null,
+  initialFaqs = null,
+}) {
   
 
   return (
@@ -35,11 +37,14 @@ export default function Verify712() {
         </div>
         <UtaraVsPropertyCard />
         <RiskWithout712Verification />
-        <FAQSection location={"Reparv Verify 7-12 Page"} />
+        <FAQSection
+          location={"Reparv Verify 7-12 Page"}
+          initialFaqs={initialFaqs}
+        />
         <div className="max-w-[1380px] mx-auto my-5">
           <AdvertisementCard />
         </div>
-        <LatestArtical />
+        <LatestArtical initialArticles={initialArticles} />
         <VerifyBeforeYouBuyCTA />
         <div className="max-w-[1380px] mx-auto my-5">
           <AdvertisementCard />

@@ -12,7 +12,7 @@ import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 
-const CostCalculator = () => {
+const CostCalculator = ({ initialArticles = null, initialFaqs = null }) => {
   const router = useRouter();
   
   return (
@@ -22,9 +22,9 @@ const CostCalculator = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-center">
             {/* LEFT CONTENT */}
             <div className="flex flex-col items-center lg:items-start justify-center">
-              <h1 class="text-center lg:text-left text-4xl md:text-5xl xl:text-6xl font-bold text-black leading-tight">
+              <h1 className="text-center lg:text-left text-4xl md:text-5xl xl:text-6xl font-bold text-black leading-tight">
                 Reparv Property All In{" "}
-                <span class="text-[#8A38F5]">Cost Calculator</span>
+                <span className="text-[#8A38F5]">Cost Calculator</span>
               </h1>
 
               <p className="text-center lg:text-start text-xs md:text-base xl:text-xl mt-2 sm:mt-6 max-w-2xl leading-relaxed">
@@ -102,8 +102,11 @@ const CostCalculator = () => {
            <AdvertisementCard />
           <HowReparvCalculatorWorks />
           <AdvertisementCard />
-          <FAQSection location={"Reparv Cost Calculator Page"} />
-          <LatestArtical />
+          <FAQSection
+            location={"Reparv Cost Calculator Page"}
+            initialFaqs={initialFaqs}
+          />
+          <LatestArtical initialArticles={initialArticles} />
           <AdvertisementCard />
         </div>
       </section>

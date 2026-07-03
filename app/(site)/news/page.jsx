@@ -1,10 +1,12 @@
-import NewsPage from "@/views/NewsSection";
-import { getSeoData } from "@/lib/getSeoData";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
+
+import NewsSection from "@/views/NewsSection";
+import { fetchNews } from "@/lib/serverApi";
+import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
   const seo = await getSeoData("news");
-  //console.log("SEO DATA:", seo);
+
   return buildPageMetadata({
     title: seo?.title,
     description: seo?.description,
@@ -13,6 +15,7 @@ export async function generateMetadata() {
   });
 }
 
-export default function Page() {
-  return <NewsPage />;
+export default async function Page() {
+  const initialNews = await fetchNews();
+  return <NewsSection initialNews={initialNews} />;
 }

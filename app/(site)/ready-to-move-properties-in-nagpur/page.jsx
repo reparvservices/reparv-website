@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import ReadyToMovePropertiesInNagpur from "@/views/ReadyToMovePropertiesInNagpur";
 import { buildPageMetadata } from "@/lib/seo";
 

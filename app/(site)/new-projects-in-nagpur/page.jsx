@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import NewProjects from "@/views/NewProjects";
 import { buildPageMetadata } from "@/lib/seo";
 

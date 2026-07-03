@@ -1,41 +1,60 @@
 import NewsDetailsPage from "@/views/NewsDetailsPage";
-import { buildPageMetadata } from "@/lib/seo";
-import { getBackendUrl } from "@/lib/env";
+import JsonLd from "@/components/seo/JsonLd";
+import { buildPageMetadata, buildNewsArticleSchema } from "@/lib/seo";
+import {
+  fetchNewsCached,
+  fetchNewsDetailsCached,
+} from "@/lib/serverApi";
+import {
+  DETAIL_PAGE_REVALIDATE,
+  generateNewsStaticParams,
+} from "@/lib/staticParams";
 
-async function getNewsDetails(newsId) {
-  try {
-    const response = await fetch(
-      `${getBackendUrl()}/frontend/news/details/${newsId}`,
-      {
-        next: { revalidate: 3600 },
-      }
-    );
+export const revalidate = DETAIL_PAGE_REVALIDATE;
+export const dynamicParams = true;
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch news details");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("News SEO Fetch Error:", error);
-    return null;
-  }
+export async function generateStaticParams() {
+  return generateNewsStaticParams();
 }
 
 export async function generateMetadata({ params }) {
-  const news = await getNewsDetails(params.newsId);
+  const news = await fetchNewsDetailsCached(params.newsId);
 
   return buildPageMetadata({
     title: news?.seoTitle,
     description:
-      news?.seoDescription || "Stay updated with the latest real estate news, property trends, and market insights on Reparv News.",
+      news?.seoDescription ||
+      "Stay updated with the latest real estate news, property trends, and market insights on Reparv News.",
     keywords: news?.seoKeywords,
     image: news?.image,
     type: "article",
-    path: `/news/${news?.seoSlug}`,
+    path: `/news/${news?.seoSlug || params.newsId}`,
   });
 }
 
-export default function Page() {
-  return <NewsDetailsPage />;
+export default async function Page({ params }) {
+  const [initialNews, initialNewsList] = await Promise.all([
+    fetchNewsDetailsCached(params.newsId),
+    fetchNewsCached(),
+  ]);
+
+  const path = `/news/${initialNews?.seoSlug || params.newsId}`;
+  const newsSchema = buildNewsArticleSchema({
+    title: initialNews?.seoTitle || initialNews?.title,
+    description: initialNews?.seoDescription,
+    image: initialNews?.image,
+    path,
+    datePublished: initialNews?.created_at || initialNews?.published_at,
+    dateModified: initialNews?.updated_at,
+  });
+
+  return (
+    <>
+      <JsonLd data={newsSchema} />
+      <NewsDetailsPage
+        initialNews={initialNews}
+        initialNewsList={initialNewsList}
+      />
+    </>
+  );
 }

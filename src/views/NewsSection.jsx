@@ -15,9 +15,9 @@ import { getImageURI } from "../utils/helper";
 import AdComponent from "../components/AdsForFeed";
 import AdsForNewsFeed from "../components/News/AdsForNewsFeed";
 
-export default function NewsPage() {
+export default function NewsPage({ initialNews = null }) {
   const { URI } = useAuth();
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState(initialNews ?? []);
   const [visibleCount, setVisibleCount] = useState(9);
   const [activeTab, setActiveTab] = useState("All");
   const [selectedCity, setSelectedCity] = useState("All");
@@ -94,8 +94,9 @@ export default function NewsPage() {
   }, [message]);
 
   useEffect(() => {
+    if (initialNews !== null) return;
     fetchData();
-  }, []);
+  }, [initialNews, URI]);
 
   const filteredNews = news.filter((item) => {
     const matchTab = activeTab === "All" || item.type === activeTab;

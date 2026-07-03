@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import TrustScorePage from "@/views/TrustScorePage";
 import { buildPageMetadata } from "@/lib/seo";
 

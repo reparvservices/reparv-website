@@ -1,15 +1,22 @@
+export { dynamic } from "@/lib/ssr";
+
 import Properties from "@/views/Properties";
-import { buildPageMetadata } from "@/lib/seo";
+import { buildListingPageMetadata } from "@/lib/seo";
+import { fetchProperties } from "@/lib/serverApi";
 
 export function generateMetadata({ params }) {
   const { listingType } = params;
-  return buildPageMetadata({
-    title: `Properties — ${listingType}`,
-    description: "Browse verified listings filtered by type on Reparv.",
+  return buildListingPageMetadata({
+    params,
     path: `/properties/type/${listingType}`,
   });
 }
 
-export default function Page() {
-  return <Properties />;
+export default async function Page({ params }) {
+  const initialProperties = await fetchProperties({
+    city: "Nagpur",
+    propertyCategory: params.listingType,
+  });
+
+  return <Properties initialProperties={initialProperties} />;
 }

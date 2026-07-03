@@ -1,9 +1,11 @@
-import MyListingsMobile from "@/components/dashboard/MyListingsMobile";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
 
-export const metadata = buildPageMetadata({
+import MyListingsMobile from "@/components/dashboard/MyListingsMobile";
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
   title: "My listings",
-  description: "Manage your property listings on mobile.",
+  description: "Manage your property listings on Reparv.",
   path: "/my-listings",
 });
 

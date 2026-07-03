@@ -5,11 +5,11 @@ import { TbArrowRightDashed } from "react-icons/tb";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { getImageURI } from "../utils/helper";
 
-function BlogSection({ heading, blogs }) {
+function BlogSection({ heading, blogs = null }) {
   const router = useRouter();
-  const { URI, selectedCity } = useAuth();
+  const { URI } = useAuth();
 
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState(blogs ?? []);
 
   // Fetch Property Info
   const fetchData = async () => {
@@ -29,8 +29,9 @@ function BlogSection({ heading, blogs }) {
   };
 
   useEffect(() => {
+    if (blogs !== null) return;
     fetchData();
-  }, []);
+  }, [blogs, URI]);
 
   const scrollRef = useRef(null);
   const scrollLeft = () => {

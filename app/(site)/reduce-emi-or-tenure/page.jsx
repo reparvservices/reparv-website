@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import ReduceEmi from "@/views/ReduceEmi";
 import { buildPageMetadata } from "@/lib/seo";
 

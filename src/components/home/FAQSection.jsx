@@ -33,10 +33,12 @@ const defaultFaqs = [
   },
 ];
 
-function FAQSection() {
+function FAQSection({ initialFaqs = null }) {
   const { URI } = useAuth();
   const [activeIndex, setActiveIndex] = useState(1);
-  const [faqs, setFaqs] = useState([]);
+  const [faqs, setFaqs] = useState(
+    initialFaqs?.length ? initialFaqs : initialFaqs === null ? [] : defaultFaqs,
+  );
 
   const toggleFAQ = (index) => {
     setActiveIndex(index === activeIndex ? null : index);
@@ -61,8 +63,9 @@ function FAQSection() {
   };
 
   useEffect(() => {
+    if (initialFaqs !== null) return;
     fetchFAQs();
-  }, []);
+  }, [initialFaqs]);
 
   return (
     <>

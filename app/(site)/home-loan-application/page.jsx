@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import HomeLoanForm from "@/views/HomeLoanForm";
 import { buildPageMetadata } from "@/lib/seo";
 

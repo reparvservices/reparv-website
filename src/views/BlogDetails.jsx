@@ -17,13 +17,14 @@ import { addBlogVisitor } from "../utils/analytics";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
+import Breadcrumbs from "../components/seo/Breadcrumbs";
 
-function BlogDetails() {
+function BlogDetails({ initialBlog = null, initialFaqs = null }) {
   const router = useRouter();
 
   const { URI, user, setShowLogin, selectedCity, setShowAlert } = useAuth();
   const { blogId } = useParams();
-  const [blog, setBlog] = useState({});
+  const [blog, setBlog] = useState(initialBlog ?? {});
   const [blogHeight, setBlogHeight] = useState(true);
 
   // Fetch Property Info
@@ -86,8 +87,9 @@ function BlogDetails() {
   };
 
   useEffect(() => {
+    if (initialBlog !== null) return;
     fetchData();
-  }, [blogId]);
+  }, [blogId, initialBlog]);
 
   useEffect(() => {
     if (!blog?.id) return;
@@ -108,7 +110,13 @@ function BlogDetails() {
   return (
     <>
       <div className="w-[1380px] text-xs sm:text-sm space-y-2 mx-auto py-4 px-4">
-        <h2>{"Home> Blogs> Investment> Blog Title"}</h2>
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Blogs", href: "/blogs" },
+            { label: blog?.title || blog?.seoTittle || "Article" },
+          ]}
+        />
         <h2>By Reparv | {blog?.updatedAt}</h2>
       </div>
 
@@ -251,7 +259,11 @@ function BlogDetails() {
         </div>
         <AdvertisementCard />
         <DreamHomeCTA />
-        <FAQSection id={blog?.id} location={"Reparv Blog Details Page"} />
+        <FAQSection
+          id={blog?.id}
+          location={"Reparv Blog Details Page"}
+          initialFaqs={initialFaqs}
+        />
       </div>
     </>
   );

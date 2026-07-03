@@ -385,14 +385,14 @@ const SkeletonCard = React.memo(function SkeletonCard() {
 });
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-export default function MapView() {
+export default function MapView({ initialProperties = null }) {
   const { URI, selectedCity, propertyType, setPropertyType } = useAuth();
   const { selectedBHKType, setSelectedBHKType, minBudget, maxBudget } =
     usePropertyFilter();
 
   // ── UI state ───────────────────────────────────────────────────────────────
-  const [properties, setProperties] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [properties, setProperties] = useState(initialProperties ?? []);
+  const [loading, setLoading] = useState(initialProperties === null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(propertyType || "");
@@ -454,8 +454,9 @@ export default function MapView() {
   }, [URI, selectedCity, selectedCategory, selectedBHK]);
 
   useEffect(() => {
+    if (initialProperties !== null) return;
     fetchProperties();
-  }, [fetchProperties]);
+  }, [fetchProperties, initialProperties]);
 
   // ── Derived lists (memoized) ───────────────────────────────────────────────
   const filteredProperties = useMemo(() => {

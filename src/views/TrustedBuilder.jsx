@@ -11,7 +11,10 @@ import FeaturedProjects from "../components/seocomponents/trustedbuildercomponen
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 
-export default function TrustedBuilder() {
+export default function TrustedBuilder({
+  initialArticles = null,
+  initialFaqs = null,
+}) {
   return (
     <>
       <TrustedBuilderHero />
@@ -26,8 +29,11 @@ export default function TrustedBuilder() {
       <ExploreBuildersByCity />
       <ExploreBuildersPage />
       <GetInTouch />
-      <FAQSection location={"Reparv Trusted Builder Page"} />
-      <LatestArtical />
+      <FAQSection
+        location={"Reparv Trusted Builder Page"}
+        initialFaqs={initialFaqs}
+      />
+      <LatestArtical initialArticles={initialArticles} />
       <div className="max-w-[1380px] mx-auto my-5">
         <AdvertisementCard />
       </div>

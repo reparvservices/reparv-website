@@ -1,7 +1,9 @@
-import Activity from "@/views/Activity";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
 
-export const metadata = buildPageMetadata({
+import Activity from "@/views/Activity";
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
   title: "Activity",
   description: "Your recent activity on Reparv.",
   path: "/activities",

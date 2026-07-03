@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { HelmetProvider } from "react-helmet-async";
 import { getGoogleClientId } from "@/lib/env";
 import { AuthProvider } from "../store/auth";
 import { PropertyFilterProvider } from "../store/propertyFilter";
@@ -21,14 +20,12 @@ function DeferredGoogleOAuth({ clientId, children }) {
 export default function AppProviders({ children }) {
   const clientId = getGoogleClientId();
   return (
-    <HelmetProvider>
-      <AuthProvider>
-        <PropertyFilterProvider>
-          <DeferredGoogleOAuth clientId={clientId}>
-            {children}
-          </DeferredGoogleOAuth>
-        </PropertyFilterProvider>
-      </AuthProvider>
-    </HelmetProvider>
+    <AuthProvider>
+      <PropertyFilterProvider>
+        <DeferredGoogleOAuth clientId={clientId}>
+          {children}
+        </DeferredGoogleOAuth>
+      </PropertyFilterProvider>
+    </AuthProvider>
   );
 }

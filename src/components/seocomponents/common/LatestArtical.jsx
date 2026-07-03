@@ -4,13 +4,12 @@ import { useAuth } from "../../../store/auth";
 import { TbArrowRightDashed } from "react-icons/tb";
 import { getImageURI } from "../../../utils/helper";
 
-function LatestArtical() {
+function LatestArtical({ initialArticles = null }) {
   const router = useRouter();
-  const { URI, selectedCity } = useAuth();
+  const { URI } = useAuth();
 
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState(initialArticles ?? []);
 
-  // Fetch Property Info
   const fetchData = async () => {
     try {
       const response = await fetch(`${URI}/frontend/blog`, {
@@ -20,7 +19,6 @@ function LatestArtical() {
       });
       if (!response.ok) throw new Error("Failed to fetch blogs.");
       const data = await response.json();
-      //console.log(data);
       setArticles(data);
     } catch (err) {
       console.error("Error fetching Blogs:", err);
@@ -28,8 +26,9 @@ function LatestArtical() {
   };
 
   useEffect(() => {
+    if (initialArticles !== null) return;
     fetchData();
-  }, []);
+  }, [initialArticles, URI]);
 
   const ImageUri = import.meta.env.VITE_S3_IMAGE_URL;
 

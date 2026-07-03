@@ -1,3 +1,5 @@
+export { dynamic } from "@/lib/ssr";
+
 import TermsAndConditions from "@/views/TermsAndConditions";
 import { buildPageMetadata } from "@/lib/seo";
 

@@ -1,5 +1,5 @@
 # robots.txt for reparv.in
-# Last Updated: June 2026
+# Last Updated: July 2026
 
 # SECTION 1: ALL BOTS — GLOBAL RULES
 
@@ -7,27 +7,38 @@ User-agent: *
 
 # Allow core public pages
 Allow: /
-Allow: /about/
-Allow: /contact/
+Allow: /about-us
+Allow: /contact-us
 Allow: /properties
 Allow: /property-info/
-Allow: /blogs/
+Allow: /blogs
+Allow: /blog/
+Allow: /news
 Allow: /news/
 Allow: /trusted-builders
 Allow: /rera-properties
 Allow: /verify-7-12
 Allow: /emi-calculator
 Allow: /cost-calculator
+Allow: /home-loan
+Allow: /map-view
 
 
 # Disallow admin & backend
 Disallow: /admin/
 Disallow: /wp-admin/
+Disallow: /dashboard
 Disallow: /dashboard/
 Disallow: /login/
 Disallow: /logout/
 Disallow: /register/
 Disallow: /account/
+Disallow: /profile
+Disallow: /profile-edit
+Disallow: /my-listings
+Disallow: /activities
+Disallow: /sell-properties
+Disallow: /edit-property/
 
 # Disallow API endpoints
 Disallow: /api/
@@ -106,4 +117,3 @@ Disallow: /
 # SECTION 4: SITEMAPS
 
 Sitemap: https://www.reparv.in/sitemap.xml
-

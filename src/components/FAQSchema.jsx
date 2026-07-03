@@ -1,26 +1,14 @@
-import { Helmet } from "react-helmet-async";
+import { buildFaqPageSchema } from "@/lib/seo";
 
 const FAQSchema = ({ faqs }) => {
-
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
-  };
+  const schema = buildFaqPageSchema(faqs);
+  if (!schema) return null;
 
   return (
-    <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(schema)}
-      </script>
-    </Helmet>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
   );
 };
 

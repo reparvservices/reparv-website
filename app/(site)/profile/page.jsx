@@ -1,7 +1,9 @@
-import Profile from "@/components/dashboard/Profile";
-import { buildPageMetadata } from "@/lib/seo";
+export { dynamic } from "@/lib/ssr";
 
-export const metadata = buildPageMetadata({
+import Profile from "@/components/dashboard/Profile";
+import { buildNoIndexMetadata } from "@/lib/seo";
+
+export const metadata = buildNoIndexMetadata({
   title: "Profile",
   description: "View and update your profile.",
   path: "/profile",
