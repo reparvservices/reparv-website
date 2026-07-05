@@ -1,5 +1,27 @@
 "use client";
-import { useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import FormatPrice from "../components/FormatPrice";
+import { useAuth } from "../store/auth";
+import { openAgentAdvisor } from "../utils/openAgentAdvisor";
+import {
+  formatPriceLabel,
+  formatPropertyCategory,
+  formatVerifiedStatValue,
+  getHeroStatusLabel,
+  getPartnerName,
+  getPropertyBadge,
+  getPropertyImage,
+  getPropertyLocationText,
+  mapBlogInsights,
+  mapFaqs,
+} from "../utils/verifiedPropertiesPage";
+
+const PAGE_CITY = "Nagpur";
+
+const scrollToSection = (id) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+};
 
 // ── Inline SVG Icons ──────────────────────────────────────────────────────────
 const ArrowRight = ({ className = "w-4 h-4" }) => (
@@ -222,105 +244,100 @@ const SelectIcon = () => (
 );
 
 // ── Category Card ─────────────────────────────────────────────────────────────
-function CategoryCard({ icon, label }) {
+function CategoryCard({ icon, label, href, count }) {
   return (
-    <a
-      href="#"
+    <Link
+      href={href}
       className="flex flex-col items-center gap-3 p-6 bg-[#F9F9FF] rounded-2xl shadow-sm hover:shadow-md hover:border-violet-300 border border-transparent transition-all group"
     >
       <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
         {icon}
       </div>
-      <div className="flex items-center gap-2 text-sm text-[#151C27]">
-        <span>{label}</span>
-        <ArrowRight className="w-3 h-3 text-[#5E23DC]" />
+      <div className="flex flex-col items-center gap-1 text-sm text-[#151C27]">
+        <div className="flex items-center gap-2">
+          <span>{label}</span>
+          <ArrowRight className="w-3 h-3 text-[#5E23DC]" />
+        </div>
+        {count > 0 && (
+          <span className="text-xs text-[#5F5D69]">{count} listings</span>
+        )}
       </div>
-    </a>
+    </Link>
   );
 }
 
 // ── Property Card ─────────────────────────────────────────────────────────────
-function PropertyCard({
-  badge,
-  badgeColor = "bg-[#8A38F5]",
-  label,
-  location,
-  title,
-  type,
-  oldPrice,
-  price,
-}) {
+function PropertyCard({ property }) {
+  const badge = getPropertyBadge(property);
+  const offerPrice = Number(property?.totalOfferPrice);
+  const salesPrice = Number(property?.totalSalesPrice);
+
   return (
     <div className="bg-white rounded-2xl shadow-[6px_4px_23px_1px_rgba(63,45,98,0.15)] overflow-hidden flex-shrink-0 w-72 sm:w-auto hover:shadow-xl transition-shadow">
-      <div className="relative h-48 bg-gradient-to-br from-amber-700 to-amber-500 flex items-center justify-center">
-        <svg
-          className="w-16 h-16 text-white/30"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1}
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-          />
-        </svg>
-        {/* Badge top-left */}
+      <div className="relative h-48 bg-[#00000010]">
+        <img
+          src={getPropertyImage(property)}
+          alt={property?.propertyName}
+          className="w-full h-full object-cover"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = "/assets/property/propertyPicture.svg";
+          }}
+        />
         <div className="absolute top-4 left-4 flex items-center gap-1.5">
           <div
-            className={`${badgeColor} rounded-md px-2 py-1 flex items-center gap-1`}
+            className={`${badge.color} rounded-md px-2 py-1 flex items-center gap-1`}
           >
-            <svg
-              className="w-3 h-3 text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span className="text-white text-[10px] font-bold">{badge}</span>
+            <span className="text-white text-[10px] font-bold">{badge.label}</span>
           </div>
         </div>
-        {/* Heart top-right */}
-        <button className="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow hover:scale-110 transition-transform">
-          <HeartIcon />
-        </button>
       </div>
       <div className="p-4">
         <div className="flex items-center gap-1 mb-1">
           <LocationIcon />
-          <span className="text-xs text-gray-400">{location}</span>
+          <span className="text-xs text-gray-400">
+            {getPropertyLocationText(property)}
+          </span>
         </div>
-        <h3 className="font-bold text-[#151C27] text-base mb-3">{title}</h3>
-        {/* Type + Price row */}
+        <h3 className="font-bold text-[#151C27] text-base mb-3">
+          {property?.propertyName}
+        </h3>
         <div className="bg-[#8A38F5]/10 rounded-[22px] px-3 py-2 flex items-center justify-between mb-3">
           <div className="flex items-center gap-1.5">
             <BuildingIcon />
-            <span className="text-xs font-semibold text-[#8A38F5]">{type}</span>
+            <span className="text-xs font-semibold text-[#8A38F5]">
+              {formatPropertyCategory(property?.propertyCategory)}
+            </span>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-400 line-through">{oldPrice}</p>
-            <p className="text-base font-black text-[#151C27]">{price}</p>
+            {salesPrice > offerPrice && offerPrice ? (
+              <p className="text-xs text-gray-400 line-through">
+                <FormatPrice price={salesPrice} />
+              </p>
+            ) : null}
+            <p className="text-base font-black text-[#151C27]">
+              {formatPriceLabel(property)}
+            </p>
           </div>
         </div>
-        {/* Footer */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full border border-[#8A38F5] flex items-center justify-center bg-white">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-8 h-8 rounded-full border border-[#8A38F5] flex items-center justify-center bg-white flex-shrink-0">
               <UserIcon />
             </div>
-            <div>
-              <p className="text-xs font-medium text-gray-500">Lucky</p>
-              <p className="text-[10px] text-gray-400">Owner</p>
+            <div className="min-w-0">
+              <p className="text-xs font-medium text-gray-500 truncate">
+                {getPartnerName(property)}
+              </p>
+              <p className="text-[10px] text-gray-400">Partner</p>
             </div>
           </div>
-          <button className="bg-[#8A38F5] hover:bg-[#7c3aed] text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+          <Link
+            href={`/property-info/${property?.seoSlug}`}
+            className="bg-[#8A38F5] hover:bg-[#7c3aed] text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
+          >
             View Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -360,23 +377,27 @@ function JourneyStep({ num, title, desc }) {
 }
 
 // ── Insight Card ──────────────────────────────────────────────────────────────
-function InsightCard({ tag, title, desc }) {
+function InsightCard({ tag, title, desc, href, image }) {
   return (
     <div className="bg-white rounded-3xl shadow-[0px_10px_30px_rgba(94,35,220,0.04)] overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="h-44 bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center">
-        <svg
-          className="w-14 h-14 text-white/50"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1}
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-          />
-        </svg>
+      <div className="h-44 bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center overflow-hidden">
+        {image ? (
+          <img src={image} alt={title} className="w-full h-full object-cover" />
+        ) : (
+          <svg
+            className="w-14 h-14 text-white/50"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+        )}
       </div>
       <div className="p-8">
         <p className="text-xs font-bold text-[#4500B4] tracking-[1.2px] uppercase mb-3">
@@ -386,12 +407,12 @@ function InsightCard({ tag, title, desc }) {
           {title}
         </h3>
         <p className="text-sm text-[#5F5D69] leading-6 mb-6">{desc}</p>
-        <a
-          href="#"
+        <Link
+          href={href}
           className="flex items-center gap-2 text-[#4500B4] font-bold text-sm hover:gap-3 transition-all"
         >
           Read More <ArrowRight className="w-3.5 h-3.5" />
-        </a>
+        </Link>
       </div>
     </div>
   );
@@ -419,46 +440,195 @@ function FaqItem({ q, a }) {
 }
 
 // ── MAIN PAGE ─────────────────────────────────────────────────────────────────
-export default function FindVerifiedProperties() {
-  const [form, setForm] = useState({ name: "", phone: "", area: "Dharampeth" });
+export default function FindVerifiedProperties({
+  initialPageData = null,
+  initialArticles = null,
+  initialFaqs = null,
+}) {
+  const { URI, setShowAlert } = useAuth();
+  const skipInitialFetch = useRef(!!initialPageData);
+  const [pageData, setPageData] = useState(initialPageData);
+  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    area: "",
+  });
 
-  const categories = [
-    { icon: <BuildingIcon />, label: "Flats for Sale" },
-    { icon: <PlotIcon />, label: "Plots for Sale" },
-    { icon: <RentalIcon />, label: "Rental Properties" },
-    { icon: <NewProjectIcon />, label: "New Projects" },
-    { icon: <ReadyMoveIcon />, label: "Ready to Move" },
-  ];
+  const fetchPageData = useCallback(async () => {
+    if (!URI) return;
 
-  const properties = [
-    {
-      badge: "Verified",
-      badgeColor: "bg-[#8A38F5]",
-      location: "Property Location (5KM)",
-      title: "3 BHK MarlBoro House",
-      type: "New Flat",
-      oldPrice: "₹20Lakh",
-      price: "₹15Lakh",
-    },
-    {
-      badge: "New Launch",
-      badgeColor: "bg-[#8A38F5]",
-      location: "Property Location (5KM)",
-      title: "3 BHK MarlBoro House",
-      type: "New Flat",
-      oldPrice: "₹20Lakh",
-      price: "₹15Lakh",
-    },
-    {
-      badge: "Hot Deal",
-      badgeColor: "bg-[#8A38F5]",
-      location: "Property Location (5KM)",
-      title: "3 BHK MarlBoro House",
-      type: "New Flat",
-      oldPrice: "₹20Lakh",
-      price: "₹15Lakh",
-    },
-  ];
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${URI}/frontend/verified-properties-page/${encodeURIComponent(PAGE_CITY)}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch verified properties page data");
+      }
+
+      setPageData(await response.json());
+    } catch (error) {
+      console.error("Verified properties page fetch error:", error);
+      setPageData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [URI]);
+
+  useEffect(() => {
+    if (!URI) return;
+
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
+
+    fetchPageData();
+  }, [URI, fetchPageData]);
+
+  useEffect(() => {
+    if (form.area || !pageData?.localities?.length) return;
+    setForm((current) => ({
+      ...current,
+      area: pageData.localities[0],
+    }));
+  }, [pageData?.localities, form.area]);
+
+  const categoryIcons = useMemo(
+    () => ({
+      "Flats for Sale": <BuildingIcon />,
+      "Plots for Sale": <PlotIcon />,
+      "Rental Properties": <RentalIcon />,
+      "New Projects": <NewProjectIcon />,
+      "Ready to Move": <ReadyMoveIcon />,
+    }),
+    [],
+  );
+
+  const categories = useMemo(
+    () =>
+      (pageData?.categories || []).map((category) => ({
+        ...category,
+        icon: categoryIcons[category.label] || <BuildingIcon />,
+      })),
+    [pageData?.categories, categoryIcons],
+  );
+
+  const featuredProperties = pageData?.featuredProperties || [];
+  const heroProperty = pageData?.heroProperty || featuredProperties[0] || null;
+  const verifiedCount = pageData?.stats?.verifiedListings || 0;
+  const localityCount = pageData?.stats?.localities || 0;
+
+  const insights = useMemo(() => {
+    const articles = [...(initialArticles || [])];
+    articles.sort((a, b) => {
+      const aScore = /nagpur|property|real estate|home loan|buy/i.test(
+        `${a.tittle} ${a.seoDescription}`,
+      )
+        ? 1
+        : 0;
+      const bScore = /nagpur|property|real estate|home loan|buy/i.test(
+        `${b.tittle} ${b.seoDescription}`,
+      )
+        ? 1
+        : 0;
+      return bScore - aScore;
+    });
+    return mapBlogInsights(articles);
+  }, [initialArticles]);
+
+  const faqs = useMemo(() => {
+    const mapped = mapFaqs(initialFaqs || []);
+    if (mapped.length > 0) return mapped;
+
+    return [
+      {
+        q: "Are all properties on Reparv legally verified?",
+        a: "Yes, every property listed on Reparv undergoes a comprehensive legal verification process covering title, approvals, and ownership documents before being listed.",
+      },
+      {
+        q: "Do you charge brokerage for buying or renting property?",
+        a: "No. Reparv operates on a zero-brokerage model. You pay no commission or hidden fees when buying or renting through our platform.",
+      },
+      {
+        q: "Can I schedule a site visit through Reparv?",
+        a: "Absolutely. You can schedule guided site visits with our property advisors directly through the platform.",
+      },
+      {
+        q: "Do you help with home loans and documentation?",
+        a: "Yes. Our legal and financial experts assist you through home loan applications, stamp duty calculation, registry, and documentation.",
+      },
+    ];
+  }, [initialFaqs]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const fullname = form.name.trim();
+    const contact = form.phone.trim();
+    const email = form.email.trim().toLowerCase();
+    const area = form.area.trim();
+
+    if (!fullname || !contact || !email || !area) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(contact)) {
+      alert("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const response = await fetch(`${URI}/frontend/contact-us/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullname,
+          contact,
+          email,
+          subject: `Find Verified Properties - ${area}, ${PAGE_CITY}`,
+          message: `Callback requested from Find Verified Properties page. Preferred area: ${area}, ${PAGE_CITY}.`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Something went wrong");
+        return;
+      }
+
+      setShowAlert?.({
+        show: true,
+        type: "success",
+        message: data.message || "Request submitted successfully",
+      });
+
+      setForm({ name: "", phone: "", email: "", area: pageData?.localities?.[0] || "" });
+    } catch (error) {
+      console.error("Callback form error:", error);
+      alert("Server error, please try again later");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const whyItems = [
     {
@@ -482,7 +652,7 @@ export default function FindVerifiedProperties() {
     {
       num: 1,
       title: "Share Requirement",
-      desc: "Tell us your budget and preferred location in Nagpur.",
+      desc: `Tell us your budget and preferred location in ${PAGE_CITY}.`,
     },
     {
       num: 2,
@@ -503,43 +673,6 @@ export default function FindVerifiedProperties() {
       num: 5,
       title: "Possession",
       desc: "Smooth transition to your new home with complete support.",
-    },
-  ];
-
-  const insights = [
-    {
-      tag: "Market Trends",
-      title: "Best Areas to Buy Property in Nagpur: 2026 Edition",
-      desc: "A detailed guide covering price trends, connectivity, and livability of top residential areas.",
-    },
-    {
-      tag: "Buying Guide",
-      title: "Flat vs Plot – What Should You Buy in Nagpur?",
-      desc: "Understand the pros, cons, and long-term value of flats and plots in the current market.",
-    },
-    {
-      tag: "Legal Corner",
-      title: "Home Loan & Registry Process Explained",
-      desc: "Step-by-step explanation of home loans, stamp duty, and property registration in Maharashtra.",
-    },
-  ];
-
-  const faqs = [
-    {
-      q: "Are all properties on Reparv legally verified?",
-      a: "Yes, every property listed on Reparv undergoes a comprehensive 24-point legal verification process covering title, RERA, encumbrance, and ownership documents before being listed.",
-    },
-    {
-      q: "Do you charge brokerage for buying or renting property?",
-      a: "No. Reparv operates on a zero-brokerage model. You pay no commission or hidden fees when buying or renting through our platform.",
-    },
-    {
-      q: "Can I schedule a site visit through Reparv?",
-      a: "Absolutely. You can schedule guided site visits with our property advisors directly through the platform. We accompany you and provide honest insights about each property.",
-    },
-    {
-      q: "Do you help with home loans and documentation?",
-      a: "Yes. Our legal and financial experts assist you through the entire process — from home loan applications to stamp duty calculation, registry, and documentation.",
     },
   ];
 
@@ -579,26 +712,39 @@ export default function FindVerifiedProperties() {
               </h1>
 
               <p className="text-base text-[#5F5D69] leading-6 max-w-xl mb-8">
-                Premium real estate storytelling for modern homes. Buy or rent
-                verified properties with complete legal support and zero hidden
-                costs.
+                Buy or rent verified properties in {PAGE_CITY} with complete legal
+                support and zero hidden costs. Browse {verifiedCount || "verified"}{" "}
+                listings across {localityCount || "multiple"} localities.
               </p>
 
-              {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4 mb-8">
-                <button className="bg-[#5E23DC] hover:bg-[#4500B4] text-white font-medium text-base px-8 py-[18px] rounded-lg transition-colors shadow-[0_20px_25px_-5px_rgba(69,0,180,0.2),0_8px_10px_-6px_rgba(69,0,180,0.2)]">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection("featured-properties")}
+                  className="bg-[#5E23DC] hover:bg-[#4500B4] text-white font-medium text-base px-8 py-[18px] rounded-lg transition-colors shadow-[0_20px_25px_-5px_rgba(69,0,180,0.2),0_8px_10px_-6px_rgba(69,0,180,0.2)]"
+                >
                   Explore Properties
                 </button>
-                <button className="border-2 border-[#4500B4] text-[#4500B4] hover:bg-[#4500B4] hover:text-white font-medium text-base px-8 py-4 rounded-lg transition-colors">
+                <button
+                  type="button"
+                  onClick={() =>
+                    openAgentAdvisor(
+                      `I want help finding verified properties in ${PAGE_CITY}.`,
+                    )
+                  }
+                  className="border-2 border-[#4500B4] text-[#4500B4] hover:bg-[#4500B4] hover:text-white font-medium text-base px-8 py-4 rounded-lg transition-colors"
+                >
                   Talk to Property Expert
                 </button>
               </div>
 
-              {/* Divider + Stats */}
               <div className="border-t border-[#CBC3D8] pt-8">
                 <div className="grid grid-cols-3 gap-4">
                   {[
-                    { val: "500+", label: "Verified Listings" },
+                    {
+                      val: formatVerifiedStatValue(verifiedCount),
+                      label: "Verified Listings",
+                    },
                     { val: "0%", label: "Brokerage" },
                     { val: "24/7", label: "Legal Support" },
                   ].map((s) => (
@@ -629,21 +775,32 @@ export default function FindVerifiedProperties() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   {/* Frosted glass info card */}
                   <div className="hidden md:block absolute bottom-8 left-8 right-8 bg-white/70 backdrop-blur-md border border-white/20 rounded-2xl p-6 shadow-[0_10px_15px_-3px_rgba(0,0,0,0.1)]">
-                    <div className="flex items-end justify-between">
+                    <div className="flex items-end justify-between gap-4">
                       <div>
                         <p className="text-[#5E23DC] text-xs font-bold tracking-[1.2px] uppercase mb-1">
-                          Upcoming Project
+                          {heroProperty
+                            ? getHeroStatusLabel(heroProperty)
+                            : "Featured Property"}
                         </p>
                         <p className="text-[#151C27] text-base font-medium">
-                          Luxury Residential, Dharampeth
+                          {heroProperty?.propertyName || "Verified listings in Nagpur"}
                         </p>
+                        {heroProperty ? (
+                          <p className="text-[#5F5D69] text-xs mt-1">
+                            {getPropertyLocationText(heroProperty)}
+                          </p>
+                        ) : null}
                       </div>
                       <div className="text-right">
                         <p className="text-[#4500B4] text-sm font-bold">
-                          Starting ₹1.2 Cr
+                          {heroProperty
+                            ? formatPriceLabel(heroProperty)
+                            : `${formatVerifiedStatValue(verifiedCount)} listings`}
                         </p>
                         <p className="text-[#5F5D69] text-xs mt-0.5">
-                          Launching 2026
+                          {heroProperty?.builtYear
+                            ? `Built ${heroProperty.builtYear}`
+                            : "Updated daily"}
                         </p>
                       </div>
                     </div>
@@ -667,15 +824,22 @@ export default function FindVerifiedProperties() {
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categories.map((c) => (
-              <CategoryCard key={c.label} {...c} />
-            ))}
+            {loading
+              ? Array.from({ length: 5 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-[140px] rounded-2xl bg-[#F9F9FF] animate-pulse"
+                  />
+                ))
+              : categories.map((category) => (
+                  <CategoryCard key={category.label} {...category} />
+                ))}
           </div>
         </div>
       </section>
 
       {/* ══ FEATURED PROPERTIES ═════════════════════════════════════════════ */}
-      <section className="bg-[#F9F9FF] py-20 sm:py-24">
+      <section className="bg-[#F9F9FF] py-20 sm:py-24" id="featured-properties">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
           <div className="flex items-end justify-between mb-10 gap-4">
             <div>
@@ -683,23 +847,33 @@ export default function FindVerifiedProperties() {
                 Featured Verified Properties
               </h2>
               <p className="text-base text-[#5F5D69]">
-                Every property listed here has undergone a 24-point legal
-                verification process.
+                Every property listed here has undergone a legal verification
+                process before going live on Reparv.
               </p>
             </div>
-            <a
-              href="#"
+            <Link
+              href="/properties"
               className="flex items-center gap-2 text-[#4500B4] text-sm font-medium whitespace-nowrap hover:gap-3 transition-all"
             >
               View All Properties <ArrowRight className="w-4 h-4" />
-            </a>
+            </Link>
           </div>
-          {/* Horizontal scroll on mobile, grid on lg */}
-          <div className="flex lg:grid lg:grid-cols-3 gap-5 overflow-x-auto pb-2 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0">
-            {properties.map((p, i) => (
-              <PropertyCard key={i} {...p} />
-            ))}
-          </div>
+          {loading ? (
+            <div className="grid lg:grid-cols-3 gap-5">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl h-[360px] animate-pulse"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex lg:grid lg:grid-cols-3 gap-5 overflow-x-auto pb-2 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0">
+              {featuredProperties.map((property) => (
+                <PropertyCard key={property.propertyid} property={property} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -731,30 +905,21 @@ export default function FindVerifiedProperties() {
               {/* Stats overlay — bottom-left */}
               <div className="absolute -bottom-5 -left-5 bg-white border border-[#E8DDFF] rounded-3xl p-8 shadow-[0_10px_30px_rgba(94,35,220,0.04)]">
                 <p className="text-[32px] font-bold text-[#4500B4] tracking-[-0.32px]">
-                  10k+
+                  {formatVerifiedStatValue(verifiedCount)}
                 </p>
                 <p className="text-xs font-bold text-[#5F5D69] mt-1">
-                  Happy Homeowners
+                  Verified Listings
                 </p>
               </div>
-              {/* Rating overlay — top-right */}
               <div className="absolute top-10 -right-5 bg-white/70 backdrop-blur-md border border-white/40 rounded-3xl p-6 shadow-[0_10px_30px_rgba(94,35,220,0.04)]">
                 <div className="flex items-center gap-4">
-                  <div className="flex -space-x-3">
-                    {["bg-slate-300", "bg-slate-400", "bg-slate-500"].map(
-                      (c, i) => (
-                        <div
-                          key={i}
-                          className={`w-10 h-10 rounded-full ${c} border-2 border-white flex items-center justify-center`}
-                        >
-                        </div>
-                      ),
-                    )}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-xs font-bold text-[#151C27] ml-1">
-                      4.9/5 Rating
+                  <div>
+                    <span className="text-xs font-bold text-[#151C27]">
+                      {localityCount}+ Localities
                     </span>
+                    <p className="text-[10px] text-[#5F5D69] mt-1">
+                      Across {PAGE_CITY}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -835,8 +1000,7 @@ export default function FindVerifiedProperties() {
                 <h3 className="text-base text-[#151C27]">
                   Speak with an Expert
                 </h3>
-                <div className="flex flex-col gap-6">
-                  {/* Full Name */}
+                <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold text-[#5F5D69] tracking-[0.28px]">
                       Full Name
@@ -851,22 +1015,34 @@ export default function FindVerifiedProperties() {
                       className="w-full bg-[#E4E0EF] rounded-xl px-4 py-[18px] text-base text-gray-500 placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#5E23DC] transition"
                     />
                   </div>
-                  {/* Phone */}
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold text-[#5F5D69] tracking-[0.28px]">
                       Phone Number
                     </label>
                     <input
                       type="tel"
-                      placeholder="+91 98765 43210"
+                      placeholder="9876543210"
                       value={form.phone}
                       onChange={(e) =>
-                        setForm({ ...form, phone: e.target.value })
+                        setForm({ ...form, phone: e.target.value.replace(/\D/g, "").slice(0, 10) })
                       }
                       className="w-full bg-[#E4E0EF] rounded-xl px-4 py-[18px] text-base text-gray-500 placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#5E23DC] transition"
                     />
                   </div>
-                  {/* Area of Interest */}
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-[#5F5D69] tracking-[0.28px]">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      value={form.email}
+                      onChange={(e) =>
+                        setForm({ ...form, email: e.target.value })
+                      }
+                      className="w-full bg-[#E4E0EF] rounded-xl px-4 py-[18px] text-base text-gray-500 placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#5E23DC] transition"
+                    />
+                  </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold text-[#5F5D69] tracking-[0.28px]">
                       Area of Interest
@@ -879,15 +1055,10 @@ export default function FindVerifiedProperties() {
                         }
                         className="w-full appearance-none bg-[#E4E0EF] rounded-xl px-4 py-4 text-base text-[#151C27] outline-none focus:ring-2 focus:ring-[#5E23DC] transition cursor-pointer"
                       >
-                        {[
-                          "Dharampeth",
-                          "Sadar",
-                          "Sitabuldi",
-                          "Nagpur Central",
-                          "Ramdaspeth",
-                          "Civil Lines",
-                        ].map((a) => (
-                          <option key={a}>{a}</option>
+                        {(pageData?.localities || []).map((area) => (
+                          <option key={area} value={area}>
+                            {area}
+                          </option>
                         ))}
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -895,11 +1066,14 @@ export default function FindVerifiedProperties() {
                       </div>
                     </div>
                   </div>
-                  {/* Submit */}
-                  <button className="w-full bg-[#5E23DC] hover:bg-[#4500B4] text-white font-bold text-lg py-[18px] rounded-xl transition-colors shadow-[0_10px_15px_-3px_rgba(69,0,180,0.2),0_4px_6px_-4px_rgba(69,0,180,0.2)]">
-                    Request Callback
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full bg-[#5E23DC] hover:bg-[#4500B4] disabled:opacity-70 text-white font-bold text-lg py-[18px] rounded-xl transition-colors shadow-[0_10px_15px_-3px_rgba(69,0,180,0.2),0_4px_6px_-4px_rgba(69,0,180,0.2)]"
+                  >
+                    {submitting ? "Submitting..." : "Request Callback"}
                   </button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
@@ -919,9 +1093,15 @@ export default function FindVerifiedProperties() {
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {insights.map((ins, i) => (
-              <InsightCard key={i} {...ins} />
-            ))}
+            {insights.length > 0 ? (
+              insights.map((insight) => (
+                <InsightCard key={insight.href} {...insight} />
+              ))
+            ) : (
+              <p className="text-center text-[#5F5D69] sm:col-span-2 lg:col-span-3">
+                Property guides and market insights will appear here soon.
+              </p>
+            )}
           </div>
         </div>
       </section>
@@ -940,9 +1120,12 @@ export default function FindVerifiedProperties() {
                 List your project with Reparv and reach verified buyers faster.
                 We help with marketing, site visits, and closures.
               </p>
-              <button className="bg-white text-[#4500B4] hover:bg-gray-50 font-bold text-lg px-12 py-[22px] rounded-xl transition-colors shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)]">
+              <Link
+                href="/project-partner"
+                className="inline-flex bg-white text-[#4500B4] hover:bg-gray-50 font-bold text-lg px-12 py-[22px] rounded-xl transition-colors shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)]"
+              >
                 Become a Partner
-              </button>
+              </Link>
             </div>
           </div>
         </div>

@@ -4,8 +4,9 @@ import { FcGoogle } from "react-icons/fc";
 import { FaWhatsapp } from "react-icons/fa";
 import { useAuth } from "../../store/auth";
 import GoogleLoginButton from "../../utils/GoogleLoginButton";
+import { getBackendUrl } from "../../lib/env";
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL;
+const API_BASE = getBackendUrl();
 
 function Login() {
   const { showLogin, setShowLogin, setShowAgreement } = useAuth();

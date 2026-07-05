@@ -1,3 +1,9 @@
+"use client";
+
+import Link from "next/link";
+import { openAgentAdvisor } from "@/utils/openAgentAdvisor";
+import { buildBudgetPropertiesLink } from "@/utils/budgetToDreamHomePage";
+
 const values = [
   {
     icon: (
@@ -41,23 +47,37 @@ const values = [
   },
 ];
 
-export default function SmartChoices() {
+export default function SmartChoices({ city = "Nagpur", pageData = null }) {
+  const propertiesLink = buildBudgetPropertiesLink(
+    city,
+    pageData?.stats?.maxPrice || 6000000,
+  );
+
   return (
     <section className="py-16 sm:py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-3 flex items-center gap-2">
           <span className="block w-8 h-0.5 bg-[#4500B4]" />
-          <p className="text-[#4500B4] text-sm font-semibold tracking-wide uppercase">The Non-Negotiables</p>
+          <p className="text-[#4500B4] text-sm font-semibold tracking-wide uppercase">
+            The Non-Negotiables
+          </p>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-bold text-[#1a0a3d] mb-3">What Smart Buyers Did Not Compromise On</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-[#1a0a3d] mb-3">
+          What Smart Buyers Did Not Compromise On
+        </h2>
         <p className="text-[#6b6490] text-sm sm:text-base max-w-xl mb-10 leading-relaxed">
           These are the non-negotiable decisions that protected their long-term stability, joy, and financial wellbeing.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
           {values.map((v, i) => (
-            <div key={i} className="bg-[#ffffff] rounded-2xl p-6 border border-[#ede8ff] hover:shadow-md transition-shadow duration-200 group">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${v.color} group-hover:scale-110 transition-transform duration-200`}>
+            <div
+              key={i}
+              className="bg-[#ffffff] rounded-2xl p-6 border border-[#ede8ff] hover:shadow-md transition-shadow duration-200 group"
+            >
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${v.color} group-hover:scale-110 transition-transform duration-200`}
+              >
                 {v.icon}
               </div>
               <h3 className="text-[#1a0a3d] font-semibold text-sm mb-2">{v.title}</h3>
@@ -66,16 +86,18 @@ export default function SmartChoices() {
           ))}
         </div>
 
-        {/* CTA cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="bg-[#4500B4] rounded-2xl p-6 sm:p-8">
             <h3 className="text-white font-bold text-lg mb-2">Explore More Budget Journeys</h3>
             <p className="text-purple-200 text-sm mb-5 leading-relaxed">
-              Read detailed real-life journeys from buyers who navigated budget decisions with clarity.
+              Browse smart-budget homes in {city} and read how buyers made clarity-led choices.
             </p>
-            <button className="bg-white text-[#4500B4] font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-purple-50 transition-colors">
-              Explore Journeys
-            </button>
+            <Link
+              href={propertiesLink}
+              className="inline-block bg-white text-[#4500B4] font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-purple-50 transition-colors no-underline"
+            >
+              Explore Homes
+            </Link>
           </div>
 
           <div className="bg-[#5F5D69] rounded-2xl p-6 sm:p-8">
@@ -83,7 +105,15 @@ export default function SmartChoices() {
             <p className="text-purple-200 text-sm mb-5 leading-relaxed">
               A 30-minute session to help you move from budget stress to buying something real.
             </p>
-            <button className="border border-white/40 text-white font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-white/10 transition-colors">
+            <button
+              type="button"
+              onClick={() =>
+                openAgentAdvisor(
+                  `I am planning a budget-conscious home purchase in ${city} and want a free buying guidance session.`,
+                )
+              }
+              className="border border-white/40 text-white font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-white/10 transition-colors"
+            >
               Attend Session
             </button>
           </div>

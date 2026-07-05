@@ -1,3 +1,5 @@
+import { formatBudgetRange } from "@/utils/budgetToDreamHomePage";
+
 const before = [
   { title: "Comparison Anxiety", desc: "Constant comparison with others' homes leads to dissatisfaction." },
   { title: "FOMO Pressure", desc: "Fear of missing out on anything 'better' and beyond reach." },
@@ -10,10 +12,12 @@ const after = [
   { title: "Sustainable Choice", desc: "Deep satisfaction in a sustainable long-term decision." },
 ];
 
-export default function BudgetShift() {
+export default function BudgetShift({ pageData = null }) {
+  const stats = pageData?.stats || {};
+  const budgetLabel = formatBudgetRange(stats.minPrice, stats.maxPrice);
+
   return (
     <section className="py-16 sm:py-20 bg-[linear-gradient(180deg,#5E23DC_0%,#3F2D62_100%)] relative overflow-hidden">
-      {/* Background decoration */}
       <div className="absolute top-0 right-0 w-80 h-80 bg-[#5323DC] rounded-full opacity-30 blur-3xl translate-x-1/2 -translate-y-1/2" />
       <div className="absolute bottom-0 left-0 w-60 h-60 bg-[#3a00a0] rounded-full opacity-40 blur-3xl -translate-x-1/2 translate-y-1/2" />
 
@@ -23,12 +27,13 @@ export default function BudgetShift() {
             How Budget Thinking Changes After the Right Decision
           </h2>
           <p className="text-purple-200 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-            Hear from buyers who share what changed emotionally and practically once they truly committed to their real journey.
+            {stats.budgetHomes
+              ? `Across ${stats.budgetHomes}+ homes between ${budgetLabel}, buyers share what changed emotionally and practically once they committed to a smart choice.`
+              : "Hear from buyers who share what changed emotionally and practically once they truly committed to their real journey."}
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Before */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/20">
             <div className="flex items-center gap-2 mb-6">
               <span className="w-3 h-3 rounded-full bg-red-400" />
@@ -51,7 +56,6 @@ export default function BudgetShift() {
             </div>
           </div>
 
-          {/* After */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/20">
             <div className="flex items-center gap-2 mb-6">
               <span className="w-3 h-3 rounded-full bg-green-400" />

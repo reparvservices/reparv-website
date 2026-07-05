@@ -1,4 +1,8 @@
-export default function GetInTouch() {
+export default function GetInTouch({ preferredCities = [] }) {
+  const cityOptions =
+    preferredCities.length > 0
+      ? preferredCities
+      : ["Mumbai", "Delhi", "Bangalore", "Pune"];
   return (
     <section className="bg-[#F6F1FF] py-10 sm:py-16">
       <div className="max-w-[1100px] mx-auto px-4">
@@ -36,7 +40,7 @@ export default function GetInTouch() {
               <FormSelect
                 label="Preferred City"
                 required
-                options={["Mumbai", "Delhi", "Bangalore", "Pune"]}
+                options={cityOptions}
               />
               <FormSelect
                 label="Looking For"

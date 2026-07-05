@@ -1,26 +1,33 @@
-const stories = [
+import Link from "next/link";
+import { mapJourneyStories } from "@/utils/budgetToDreamHomePage";
+
+const FALLBACK_STORIES = [
   {
     label: "A BUYER JOURNEY REVIEWED",
-    name: "The Mathurs Family: Prioritising Peace of Mind",
-    text: "The Mathur family had their eyes set on a 3BHK in the prime locality, but realised the EMI would leave them with very little breathing room. They chose a well-designed 2BHK in an up-coming neighbourhood — and haven't looked back.",
-    quote: "Once we focused on what we could comfortably afford, the decision felt lighter and more confident. After moving in, we could become smoother and strongly invest more.",
+    name: "Nagpur: Prioritising Peace of Mind",
+    text: "A family had their eyes on a 3BHK in a prime locality, but realised the EMI would leave very little breathing room. They chose a well-designed 2BHK in an upcoming neighbourhood — and haven't looked back.",
+    quote:
+      "Once we focused on what we could comfortably afford, the decision felt lighter and more confident.",
     stars: 5,
-    readMore: "Read Full Journey →",
+    readMore: "Explore Homes →",
     imageRight: true,
-    imageBg: "bg-gradient-to-br from-[#ede8ff] to-[#d5c8ff]",
-    avatar: "MF",
+    image: null,
+    href: "/properties?city=Nagpur",
+    avatar: "NG",
     avatarColor: "bg-[#4500B4]",
   },
   {
     label: "A BUYER JOURNEY REVIEWED",
-    name: "Anurag's Journey: Quality Over Quantity",
-    text: "Anurag wanted a spacious flat but his budget capped at a lower range. He pivoted to a compact, premium-finished flat in a quieter neighbourhood — and now sleeps better.",
-    quote: "I realised that a smaller well-designed home in a prime neighbourhood gave me 2 hours back every day. That was my true dream feature.",
+    name: "Nagpur: Quality Over Quantity",
+    text: "A buyer wanted a spacious flat but the budget capped at a lower range. They pivoted to a compact, premium-finished flat in a quieter neighbourhood — and now sleep better.",
+    quote:
+      "I realised that a smaller well-designed home in the right neighbourhood gave me time back every day.",
     stars: 5,
-    readMore: "Read Full Journey →",
+    readMore: "Explore Homes →",
     imageRight: false,
-    imageBg: "bg-gradient-to-br from-[#e8f5e9] to-[#c8e6c9]",
-    avatar: "AJ",
+    image: null,
+    href: "/properties?city=Nagpur",
+    avatar: "NG",
     avatarColor: "bg-[#5323DC]",
   },
 ];
@@ -37,48 +44,84 @@ function StarRating({ count }) {
   );
 }
 
-export default function BuyerStories() {
+export default function BuyerStories({ pageData = null }) {
+  const stories = pageData?.journeys?.length
+    ? mapJourneyStories(pageData.journeys)
+    : FALLBACK_STORIES;
+
   return (
     <section id="stories" className="py-16 sm:py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {stories.map((s, i) => (
           <div
-            key={i}
+            key={`${s.name}-${i}`}
             className={`flex flex-col ${s.imageRight ? "lg:flex-row" : "lg:flex-row-reverse"} gap-8 lg:gap-12 items-center`}
           >
-            {/* Text */}
             <div className="md:max-w-[50%] flex-1 space-y-4">
-              <span className="text-[10px] font-bold tracking-[0.2em] text-[#4500B4] uppercase">{s.label}</span>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#1a0a3d] leading-snug">{s.name}</h3>
+              <span className="text-[10px] font-bold tracking-[0.2em] text-[#4500B4] uppercase">
+                {s.label}
+              </span>
+              <h3 className="text-xl sm:text-2xl font-bold text-[#1a0a3d] leading-snug">
+                {s.name}
+              </h3>
               <p className="text-[#6b6490] text-sm leading-relaxed">{s.text}</p>
 
-              {/* Quote block */}
               <div className="bg-[#f8f5ff] border-l-4 border-[#4500B4] rounded-r-xl p-4">
-                <p className="text-[#2d1a6e] text-sm italic leading-relaxed">"{s.quote}"</p>
+                <p className="text-[#2d1a6e] text-sm italic leading-relaxed">
+                  &ldquo;{s.quote}&rdquo;
+                </p>
               </div>
+
+              {s.priceRange && (
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#4500B4]">
+                  Budget range: {s.priceRange}
+                </p>
+              )}
 
               <StarRating count={s.stars} />
 
-              <a href="#" className="inline-flex items-center gap-1.5 text-[#4500B4] font-semibold text-sm hover:text-[#5323DC] transition-colors">
+              <Link
+                href={s.href}
+                className="inline-flex items-center gap-1.5 text-[#4500B4] font-semibold text-sm hover:text-[#5323DC] transition-colors"
+              >
                 {s.readMore}
-              </a>
+              </Link>
             </div>
 
-            {/* Image placeholder */}
-            <div className={`md:max-w-[50%] flex-shrink-0 w-full h-56 sm:h-64 rounded-2xl ${s.imageBg} flex items-center justify-center shadow-md relative overflow-hidden`}>
-              <div className="absolute inset-0 opacity-10">
-                {Array.from({ length: 6 }).map((_, j) => (
-                  <div key={j} className="absolute bg-[#4500B4]/20 rounded-full" style={{
-                    width: `${40 + j * 20}px`,
-                    height: `${40 + j * 20}px`,
-                    top: `${10 + j * 8}%`,
-                    left: `${5 + j * 12}%`,
-                  }} />
-                ))}
-              </div>
-              <div className={`w-20 h-20 rounded-full ${s.avatarColor} flex items-center justify-center text-white text-2xl font-bold shadow-lg z-10`}>
-                {s.avatar}
-              </div>
+            <div
+              className={`md:max-w-[50%] flex-shrink-0 w-full h-56 sm:h-64 rounded-2xl ${
+                s.image ? "bg-[#ede8ff]" : "bg-gradient-to-br from-[#ede8ff] to-[#d5c8ff]"
+              } flex items-center justify-center shadow-md relative overflow-hidden`}
+            >
+              {s.image ? (
+                <img
+                  src={s.image}
+                  alt={s.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <>
+                  <div className="absolute inset-0 opacity-10">
+                    {Array.from({ length: 6 }).map((_, j) => (
+                      <div
+                        key={j}
+                        className="absolute bg-[#4500B4]/20 rounded-full"
+                        style={{
+                          width: `${40 + j * 20}px`,
+                          height: `${40 + j * 20}px`,
+                          top: `${10 + j * 8}%`,
+                          left: `${5 + j * 12}%`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div
+                    className={`w-20 h-20 rounded-full ${s.avatarColor} flex items-center justify-center text-white text-2xl font-bold shadow-lg z-10`}
+                  >
+                    {s.avatar}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         ))}

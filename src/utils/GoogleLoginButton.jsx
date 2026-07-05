@@ -3,8 +3,9 @@ import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 import { useRef } from "react";
+import { getBackendUrl } from "../lib/env";
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL;
+const API_BASE = getBackendUrl();
 
 const GoogleLoginButton = ({ onSuccess, onError }) => {
   const googleBtnRef = useRef(null);

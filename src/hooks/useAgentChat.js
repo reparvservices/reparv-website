@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getBackendUrl } from "../lib/env";
 
 const STORAGE_GUEST = "reparv_ai_guest_id";
 const WELCOME_MESSAGE =
   "Namaste! Main aapka Reparv AI Advisor hoon. Properties, budget ya site visit — kuch bhi pooch sakte ho.";
 
 function getApiBase() {
-  return import.meta.env.VITE_BACKEND_URL || "https://aws-api.reparv.in";
+  return getBackendUrl();
 }
 
 function getOrCreateGuestId() {

@@ -1,5 +1,26 @@
 "use client";
-import { useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { useAuth } from "../store/auth";
+import { openAgentAdvisor } from "../utils/openAgentAdvisor";
+import {
+  buildPropertiesLink,
+  filterTrustedProperties,
+  formatPriceLabel,
+  formatPropertyCategory,
+  formatVerifiedStatValue,
+  getPropertyImage,
+  getPropertyLocationText,
+  getScoreLabel,
+  getTrustedTitle,
+  mapFaqs,
+} from "../utils/topTrustedPropertiesPage";
+
+const PAGE_CITY = "Nagpur";
+
+const scrollToSection = (id) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+};
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 const ChevronDown = ({ open }) => (
@@ -67,7 +88,7 @@ function FAQ({ q, a, defaultOpen = false }) {
 }
 
 // ── Score Ring ────────────────────────────────────────────────────────────────
-function ScoreRing({ score = 9.4 }) {
+function ScoreRing({ score = 9.4, listingCount = 500 }) {
   const r = 60;
   const circ = 2 * Math.PI * r;
   const dash = (score / 10) * circ;
@@ -110,7 +131,7 @@ function ScoreRing({ score = 9.4 }) {
           Trust Score
         </span>
         <span className="text-[9px] text-[#8B83A0] mt-0.5">
-          Based on 500+ listings
+          Based on {formatVerifiedStatValue(listingCount) || listingCount} listings
         </span>
       </div>
     </div>
@@ -142,47 +163,30 @@ function PillarCard({ icon, title, pct, desc }) {
 }
 
 // ── Property Card ─────────────────────────────────────────────────────────────
-function PropertyCard({ score, title, location, price, oldPrice, type }) {
+function PropertyCard({ property }) {
+  const salesPrice = Number(property?.totalSalesPrice);
+  const offerPrice = Number(property?.totalOfferPrice);
+  const showStrike = salesPrice > offerPrice && offerPrice > 0;
+
   return (
     <div className="bg-white rounded-2xl shadow-[0_4px_24px_rgba(63,45,98,0.13)] overflow-hidden flex flex-col">
-      {/* Image area */}
       <div className="relative">
-        <div className="h-44 sm:h-52 bg-gradient-to-br from-amber-700 via-amber-600 to-amber-500 flex items-center justify-center">
-          <svg
-            className="w-16 h-16 text-white/25"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={0.8}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-            />
-          </svg>
+        <div className="h-44 sm:h-52 bg-gradient-to-br from-amber-700 via-amber-600 to-amber-500 overflow-hidden">
+          <img
+            src={getPropertyImage(property)}
+            alt={getTrustedTitle(property)}
+            className="h-full w-full object-cover"
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = "/assets/property/propertyPicture.svg";
+            }}
+          />
         </div>
         <span className="absolute top-3 left-4 bg-[#8A38F5] text-white font-bold text-xs px-2.5 py-1 rounded-lg">
-          {score}/10
+          {property?.trustScore || "8.0"}/10
         </span>
-        <button className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md">
-          <svg
-            className="w-4 h-4 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-            />
-          </svg>
-        </button>
       </div>
 
-      {/* Card body */}
       <div className="p-4 flex flex-col gap-2 flex-1">
         <div className="flex items-center gap-1.5 text-[#868686]">
           <svg
@@ -198,17 +202,18 @@ function PropertyCard({ score, title, location, price, oldPrice, type }) {
               d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
             />
           </svg>
-          <span className="text-xs">{location}</span>
+          <span className="text-xs line-clamp-1">{getPropertyLocationText(property)}</span>
         </div>
-        <h4 className="font-bold text-sm text-[#151C27]">{title}</h4>
+        <h4 className="font-bold text-sm text-[#151C27] line-clamp-2">
+          {property?.propertyName || getTrustedTitle(property)}
+        </h4>
 
-        {/* Type + price strip */}
         <div className="relative rounded-full overflow-hidden mt-1">
           <div className="absolute inset-0 bg-[#8A38F5] opacity-10" />
-          <div className="relative flex items-center justify-between px-3 py-2">
-            <div className="flex items-center gap-1.5">
+          <div className="relative flex items-center justify-between px-3 py-2 gap-2">
+            <div className="flex items-center gap-1.5 min-w-0">
               <svg
-                className="w-4 h-4 text-[#8A38F5]"
+                className="w-4 h-4 text-[#8A38F5] flex-shrink-0"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={2}
@@ -220,25 +225,26 @@ function PropertyCard({ score, title, location, price, oldPrice, type }) {
                   d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"
                 />
               </svg>
-              <span className="text-xs font-semibold text-[#8A38F5]">
-                {type}
+              <span className="text-xs font-semibold text-[#8A38F5] truncate">
+                {formatPropertyCategory(property?.propertyCategory)}
               </span>
             </div>
-            <div className="text-right">
-              <p className="text-[10px] font-bold text-[#868686] line-through">
-                {oldPrice}
-              </p>
+            <div className="text-right flex-shrink-0">
+              {showStrike ? (
+                <p className="text-[10px] font-bold text-[#868686] line-through">
+                  ₹{Math.round(salesPrice / 100000)} Lakh
+                </p>
+              ) : null}
               <p className="text-base font-black text-[#151C27] leading-tight">
-                {price}
+                {formatPriceLabel(property)}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="border-t border-[#EFEFEF] mt-1 pt-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full border border-[#8A38F5] bg-white flex items-center justify-center">
+        <div className="border-t border-[#EFEFEF] mt-1 pt-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 rounded-full border border-[#8A38F5] bg-white flex items-center justify-center flex-shrink-0">
               <svg
                 className="w-3.5 h-3.5 text-[#5E23DC]"
                 fill="none"
@@ -253,14 +259,19 @@ function PropertyCard({ score, title, location, price, oldPrice, type }) {
                 />
               </svg>
             </div>
-            <div>
-              <p className="text-[11px] font-semibold text-[#868686]">Lucky</p>
-              <p className="text-[9px] text-[#868686]">Owner</p>
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold text-[#868686] truncate">
+                {property?.partnerName || "Verified"}
+              </p>
+              <p className="text-[9px] text-[#868686]">{getScoreLabel(property?.trustScore)}</p>
             </div>
           </div>
-          <button className="bg-[#8A38F5] text-white font-bold text-xs px-4 py-2 rounded-lg">
+          <Link
+            href={`/property-info/${property?.seoSlug}`}
+            className="bg-[#8A38F5] text-white font-bold text-xs px-4 py-2 rounded-lg whitespace-nowrap"
+          >
             View Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>
@@ -336,52 +347,132 @@ function ScoreRow({ range, rangeColor, label, sub }) {
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
-export default function TrustScorePage() {
-  const faqs = [
-    {
-      q: "What makes a property 'Trusted' on Reparv?",
-      a: "A 'Trusted' status is only awarded after a property passes our 150-point audit covering legal paperwork, builder track record, construction material quality, and post-possession resident feedback. It must score above 7.0 on our Trust Framework.",
-    },
-    {
-      q: "Are all properties in Nagpur listed here?",
-      a: "No. We only list properties that meet our rigorous verification standards. We actively exclude properties with pending legal disputes, builder complaints, or insufficient documentation.",
-    },
-    {
-      q: "Can a Trust Score change over time?",
-      a: "Yes. Trust Scores are reviewed quarterly and can increase or decrease based on new resident feedback, any emerging legal issues, changes in builder reputation, and updated construction inspections.",
-    },
-    {
-      q: "Do builders pay for higher scores?",
-      a: "Absolutely not. Our Trust Score is independently calculated and cannot be purchased. We maintain strict separation between our sales and verification teams.",
-    },
-  ];
+export default function TrustScorePage({
+  initialPageData = null,
+  initialFaqs = [],
+}) {
+  const { URI, setShowAlert } = useAuth();
+  const pageData = initialPageData;
 
-  const properties = [
-    {
-      score: "9.1",
-      title: "3 BHK MarlBoro House",
-      location: "Property Location (5KM)",
-      price: "₹15Lakh",
-      oldPrice: "₹20Lakh",
-      type: "New Flat",
-    },
-    {
-      score: "8.9",
-      title: "3 BHK MarlBoro House",
-      location: "Property Location (5KM)",
-      price: "₹15Lakh",
-      oldPrice: "₹20Lakh",
-      type: "New Flat",
-    },
-    {
-      score: "9.3",
-      title: "3 BHK MarlBoro House",
-      location: "Property Location (5KM)",
-      price: "₹15Lakh",
-      oldPrice: "₹20Lakh",
-      type: "New Flat",
-    },
-  ];
+  const [filters, setFilters] = useState({
+    minScore: "Any",
+    type: "Any",
+    budget: "Any",
+    bhk: "Any",
+    area: "All Areas",
+  });
+  const [form, setForm] = useState({ name: "", phone: "" });
+  const [submitting, setSubmitting] = useState(false);
+
+  const trustedCount = pageData?.stats?.trustedCount || 0;
+  const topPicksCount = pageData?.stats?.topPicksCount || 0;
+  const avgTrustScore = pageData?.stats?.avgTrustScore || 9.2;
+  const localityCount = pageData?.stats?.localities || 0;
+  const reraVerified = pageData?.stats?.reraVerified || 0;
+
+  const allProperties = pageData?.properties || [];
+  const localityOptions = pageData?.localities || [];
+  const bhkOptions = pageData?.bhkOptions || [];
+  const categoryOptions = pageData?.categoryOptions || ["Any", "Flat", "Plot"];
+  const heroProperty = pageData?.heroProperty || null;
+  const heroImage = heroProperty
+    ? getPropertyImage(heroProperty)
+    : "/assets/seoPages/TrustScorePage/hero.jpg";
+
+  const filteredProperties = useMemo(
+    () => filterTrustedProperties(allProperties, filters),
+    [allProperties, filters],
+  );
+
+  const hasActiveFilters =
+    filters.minScore !== "Any" ||
+    filters.type !== "Any" ||
+    filters.budget !== "Any" ||
+    filters.bhk !== "Any" ||
+    filters.area !== "All Areas";
+
+  const displayProperties = hasActiveFilters
+    ? filteredProperties.slice(0, 9)
+    : (pageData?.featuredProperties || allProperties).slice(0, 9);
+
+  const faqs = useMemo(() => {
+    const mapped = mapFaqs(initialFaqs || []);
+    if (mapped.length > 0) return mapped;
+
+    return [
+      {
+        q: "What makes a property 'Trusted' on Reparv?",
+        a: `A 'Trusted' status is awarded after a property passes our verification audit covering legal paperwork, builder track record, and listing quality. Reparv features ${trustedCount || "verified"} trusted listings in Nagpur scoring 7.0+ on our Trust Framework.`,
+      },
+      {
+        q: "Are all properties in Nagpur listed here?",
+        a: "No. We only highlight properties that meet our verification standards — including RERA checks, partner validation, and engagement signals from verified buyers.",
+      },
+      {
+        q: "Can a Trust Score change over time?",
+        a: "Yes. Trust Scores are reviewed based on new buyer feedback, legal updates, builder reputation changes, and listing performance signals.",
+      },
+      {
+        q: "Do builders pay for higher scores?",
+        a: "Absolutely not. Our Trust Score is independently calculated and cannot be purchased. We maintain strict separation between sales and verification.",
+      },
+    ];
+  }, [initialFaqs, trustedCount]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const fullname = form.name.trim();
+    const contact = form.phone.trim();
+
+    if (!fullname || !contact) {
+      alert("Please fill in your name and phone number");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(contact)) {
+      alert("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const response = await fetch(`${URI}/frontend/contact-us/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullname,
+          contact,
+          email: `${contact}@callback.reparv.in`,
+          subject: `Top Trusted Properties - ${PAGE_CITY}`,
+          message: `Trust consultation requested from Top Trusted Properties page. City: ${PAGE_CITY}.`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Something went wrong");
+        return;
+      }
+
+      setShowAlert?.({
+        show: true,
+        type: "success",
+        message: data.message || "Request submitted successfully",
+      });
+
+      setForm({ name: "", phone: "" });
+    } catch (error) {
+      console.error("Trust consultation callback error:", error);
+      alert("Server error, please try again later");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const properties = displayProperties;
 
   const pillars = [
     {
@@ -708,16 +799,24 @@ export default function TrustScorePage() {
               </h1>
               <p className="text-sm sm:text-base text-[#CFBFFF] leading-relaxed md:mb-6 max-w-md">
                 Legally verified, builder-checked, and buyer-approved properties
-                in Nagpur. Shortlisted by Reparv advisors after rigorous
-                auditing.
+                in {PAGE_CITY}. {formatVerifiedStatValue(trustedCount) || trustedCount} listings
+                shortlisted by Reparv advisors after rigorous auditing.
               </p>
 
               {/* CTA buttons */}
               <div className="hidden md:flex flex-col sm:flex-row gap-3 mb-7">
-                <button className="bg-white text-[#4500B4] hover:bg-gray-50 font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection("trusted-properties")}
+                  className="bg-white text-[#4500B4] hover:bg-gray-50 font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg w-full sm:w-auto"
+                >
                   View Trusted Properties
                 </button>
-                <button className="border border-white/40 text-white hover:bg-white/10 font-semibold text-sm px-6 py-3 rounded-xl transition-colors w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => openAgentAdvisor("Top Trusted Properties")}
+                  className="border border-white/40 text-white hover:bg-white/10 font-semibold text-sm px-6 py-3 rounded-xl transition-colors w-full sm:w-auto"
+                >
                   Talk to an Advisor
                 </button>
               </div>
@@ -812,9 +911,13 @@ export default function TrustScorePage() {
                 {/* Building photo placeholder */}
                 <div className="w-[80%] md:w-full h-52 sm:h-64 lg:h-100 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden mx-auto">
                   <img
-                    src="/assets/seoPages/TrustScorePage/hero.jpg"
-                    alt="hero image"
+                    src={heroImage}
+                    alt={heroProperty?.propertyName || "Trusted property in Nagpur"}
                     className="w-full h-full object-cover"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = "/assets/seoPages/TrustScorePage/hero.jpg";
+                    }}
                   />
                 </div>
 
@@ -822,23 +925,33 @@ export default function TrustScorePage() {
                 <div className="absolute bottom-5 md:-bottom-5 left-4 sm:left-6 bg-white rounded-2xl px-4 py-3 flex items-center gap-3 shadow-xl">
                   <div className="w-12 h-12 rounded-full bg-[#5E23DC] flex items-center justify-center flex-shrink-0">
                     <span className="font-medium text-white text-base leading-none">
-                      9.2
+                      {heroProperty?.trustScore || avgTrustScore}
                     </span>
                   </div>
                   <div>
                     <p className="font-bold text-sm text-[#151C27] leading-tight">
                       Trust Score
                     </p>
-                    <p className="text-xs text-[#8B83A0]">Exceptional Rating</p>
+                    <p className="text-xs text-[#8B83A0]">
+                      {getScoreLabel(heroProperty?.trustScore || avgTrustScore)}
+                    </p>
                   </div>
                 </div>
               </div>
               {/* CTA buttons */}
               <div className="md:hidden flex flex-col sm:flex-row gap-3 mt-10">
-                <button className="bg-white text-[#4500B4] hover:bg-gray-50 font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection("trusted-properties")}
+                  className="bg-white text-[#4500B4] hover:bg-gray-50 font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg w-full sm:w-auto"
+                >
                   View Trusted Properties
                 </button>
-                <button className="border border-white/40 text-white hover:bg-white/10 font-semibold text-sm px-6 py-3 rounded-xl transition-colors w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => openAgentAdvisor("Top Trusted Properties")}
+                  className="border border-white/40 text-white hover:bg-white/10 font-semibold text-sm px-6 py-3 rounded-xl transition-colors w-full sm:w-auto"
+                >
                   Talk to an Advisor
                 </button>
               </div>
@@ -865,13 +978,8 @@ export default function TrustScorePage() {
           </div>
 
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
-            {/* Ring */}
             <div className="hidden md:flex flex-col items-center justify-center gap-3 flex-shrink-0">
-              <img
-                src="/assets/seoPages/TrustScorePage/image.svg"
-                alt="trust score"
-                className="w-full h-full object-cover"
-              />
+              <ScoreRing score={avgTrustScore} listingCount={trustedCount || allProperties.length} />
             </div>
             {/* Pillars */}
             <div className="flex-1 w-full grid grid-cols-1 gap-4">
@@ -884,40 +992,115 @@ export default function TrustScorePage() {
       </section>
 
       {/* ══ MOST TRUSTED PROPERTIES ════════════════════════════════════════════ */}
-      <section className="bg-[#F0F3FF] py-14 sm:py-16 lg:py-20">
+      <section id="trusted-properties" className="bg-[#F0F3FF] py-14 sm:py-16 lg:py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
             <div>
               <h2 className="font-semibold text-2xl sm:text-3xl text-[#5E23DC] mb-1">
-                Most Trusted Properties in Nagpur
+                Most Trusted Properties in {PAGE_CITY}
               </h2>
               <p className="text-sm text-[#494455]">
-                Properties that passed every verification layer.
+                {hasActiveFilters
+                  ? `${filteredProperties.length} properties match your filters.`
+                  : `${formatVerifiedStatValue(trustedCount) || trustedCount} verified listings with trust scores above 7.0.`}
               </p>
             </div>
-            {/* Desktop button */}
-            <button className="hidden sm:block bg-[#5E23DC] hover:bg-[#4a1ab8] text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors whitespace-nowrap flex-shrink-0">
-              See All 120+ Listings
-            </button>
+            <Link
+              href={buildPropertiesLink({ city: PAGE_CITY, ...filters })}
+              className="hidden sm:inline-flex bg-[#5E23DC] hover:bg-[#4a1ab8] text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors whitespace-nowrap flex-shrink-0"
+            >
+              See All {formatVerifiedStatValue(trustedCount) || trustedCount} Listings
+            </Link>
           </div>
 
-          {/* Cards: horizontal scroll on mobile, grid on sm+ */}
-          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory sm:snap-none">
-            {properties.map((p, i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 w-[78vw] sm:w-auto snap-start"
-              >
-                <PropertyCard {...p} />
+          <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
+            {[
+              {
+                label: "Min Score",
+                key: "minScore",
+                opts: ["Any", "9.0", "8.0", "7.0"],
+              },
+              {
+                label: "Type",
+                key: "type",
+                opts: categoryOptions,
+              },
+              {
+                label: "Budget",
+                key: "budget",
+                opts: ["Any", "₹20-40L", "₹40-60L", "₹60-80L", "₹80L+"],
+              },
+              {
+                label: "BHK",
+                key: "bhk",
+                opts: ["Any", ...bhkOptions],
+              },
+              {
+                label: "Area",
+                key: "area",
+                opts: ["All Areas", ...localityOptions],
+              },
+            ].map((field) => (
+              <div key={field.key} className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-wide text-[#8B83A0]">
+                  {field.label}
+                </label>
+                <select
+                  value={filters[field.key]}
+                  onChange={(event) =>
+                    setFilters((prev) => ({ ...prev, [field.key]: event.target.value }))
+                  }
+                  className="rounded-xl border border-[#E5E0F0] bg-white px-3 py-2.5 text-sm text-[#151C27] outline-none focus:ring-2 focus:ring-[#5E23DC]/20"
+                >
+                  {field.opts.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
             ))}
           </div>
 
-          {/* Mobile button */}
+          {displayProperties.length > 0 ? (
+            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x snap-mandatory sm:snap-none">
+              {properties.map((property) => (
+                <div
+                  key={property.propertyid}
+                  className="flex-shrink-0 w-[78vw] sm:w-auto snap-start"
+                >
+                  <PropertyCard property={property} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-[#5E23DC]/20 bg-white px-8 py-16 text-center">
+              <p className="mb-4 text-lg font-bold text-[#151C27]">No trusted properties match your filters</p>
+              <button
+                type="button"
+                onClick={() =>
+                  setFilters({
+                    minScore: "Any",
+                    type: "Any",
+                    budget: "Any",
+                    bhk: "Any",
+                    area: "All Areas",
+                  })
+                }
+                className="rounded-xl bg-[#5E23DC] px-6 py-3 text-sm font-bold text-white"
+              >
+                Reset Filters
+              </button>
+            </div>
+          )}
+
           <div className="mt-5 flex sm:hidden justify-center">
-            <button className="bg-[#5E23DC] text-white font-bold text-sm px-8 py-3 rounded-xl w-full max-w-xs">
-              See All 120+ Listings
-            </button>
+            <Link
+              href={buildPropertiesLink({ city: PAGE_CITY })}
+              className="bg-[#5E23DC] text-white font-bold text-sm px-8 py-3 rounded-xl w-full max-w-xs text-center"
+            >
+              See All {formatVerifiedStatValue(trustedCount) || trustedCount} Listings
+            </Link>
           </div>
         </div>
       </section>
@@ -1027,7 +1210,8 @@ export default function TrustScorePage() {
                 <p className="text-sm sm:text-base text-[#CFBFFF] leading-relaxed mb-6 relative z-10">
                   We never rank or promote projects with unresolved legal
                   issues, repeated delivery delays, or negative buyer history —
-                  even if they pay higher commissions.
+                  even if they pay higher commissions. {reraVerified} listings include
+                  RERA verification across {localityCount} Nagpur localities.
                 </p>
 
                 <ul className="flex flex-col gap-3 mb-7 relative z-10">
@@ -1043,7 +1227,11 @@ export default function TrustScorePage() {
                   ))}
                 </ul>
 
-                <button className="w-full bg-white hover:bg-gray-50 text-[#4500B4] font-bold text-sm py-3.5 rounded-xl transition-colors relative z-10">
+                <button
+                  type="button"
+                  onClick={() => openAgentAdvisor("Trust Advisor")}
+                  className="w-full bg-white hover:bg-gray-50 text-[#4500B4] font-bold text-sm py-3.5 rounded-xl transition-colors relative z-10"
+                >
                   Talk to Our Trust Advisor
                 </button>
               </div>
@@ -1072,14 +1260,58 @@ export default function TrustScorePage() {
                 considering, even if it's not listed on Reparv.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <button className="bg-white hover:bg-gray-50 text-[#4500B4] font-bold text-sm px-7 py-3.5 rounded-xl transition-colors shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => scrollToSection("trust-consultation")}
+                  className="bg-white hover:bg-gray-50 text-[#4500B4] font-bold text-sm px-7 py-3.5 rounded-xl transition-colors shadow-lg"
+                >
                   Get Your Free Trust Consultation
                 </button>
-                <button className="border border-white/40 text-white hover:bg-white/10 font-semibold text-sm px-7 py-3.5 rounded-xl transition-colors">
-                  Download Sample Audit Report
-                </button>
+                <Link
+                  href="/find-verified-properties-in-nagpur"
+                  className="border border-white/40 text-white hover:bg-white/10 font-semibold text-sm px-7 py-3.5 rounded-xl transition-colors text-center"
+                >
+                  Browse Verified Properties
+                </Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ TRUST CONSULTATION ═════════════════════════════════════════════════ */}
+      <section id="trust-consultation" className="bg-[#F0F3FF] py-12 sm:py-16">
+        <div className="max-w-xl mx-auto px-4 sm:px-6">
+          <div className="rounded-3xl border border-[#E5E0F0] bg-white p-8 shadow-sm">
+            <h3 className="font-semibold text-xl text-[#151C27] mb-2 text-center">
+              Get a Free Trust Consultation
+            </h3>
+            <p className="text-sm text-[#494455] mb-6 text-center">
+              Tell us which property you are evaluating and our advisor will share a trust audit summary.
+            </p>
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Your full name"
+                value={form.name}
+                onChange={(event) => setForm({ ...form, name: event.target.value })}
+                className="rounded-xl border border-[#E5E0F0] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#5E23DC]/20"
+              />
+              <input
+                type="tel"
+                placeholder="10-digit mobile number"
+                value={form.phone}
+                onChange={(event) => setForm({ ...form, phone: event.target.value })}
+                className="rounded-xl border border-[#E5E0F0] px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#5E23DC]/20"
+              />
+              <button
+                type="submit"
+                disabled={submitting}
+                className="rounded-xl bg-[#5E23DC] py-3.5 text-sm font-bold text-white disabled:opacity-60"
+              >
+                {submitting ? "Submitting..." : "Request Trust Consultation"}
+              </button>
+            </form>
           </div>
         </div>
       </section>

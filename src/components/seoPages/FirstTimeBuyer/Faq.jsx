@@ -1,27 +1,42 @@
 "use client";
-import { useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { mapFaqs } from "@/utils/firstTimeBuyerPage";
 
-const faqs = [
-  {
-    question: "Are these stories based on real buyers?",
-    answer:
-      "Yes. Every story on this page is based on real first-time buyers who went through the home buying journey. Names and some personal details may be changed for privacy, but the experiences, emotions, and decisions are entirely authentic.",
-  },
-  {
-    question: "Is any builder or project promoted here?",
-    answer:
-      "No. This page is editorially independent. No builder, developer, or project pays to be featured here. Our goal is to share honest buyer experiences, not to promote any specific property or developer.",
-  },
-  {
-    question: "Is this useful before property visits?",
-    answer:
-      "Yes. It is especially helpful before site visits, when buyers are still gaining clarity. Understanding what others went through helps you ask better questions and stay focused on your true priorities.",
-  },
-];
+export default function FAQ({ initialFaqs = [], pageData = null }) {
+  const affordableHomes = pageData?.stats?.affordableHomes || 0;
 
-export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState(2); // third open by default like the image
+  const faqs = useMemo(() => {
+    const mapped = mapFaqs(initialFaqs || []);
+    if (mapped.length > 0) {
+      return mapped.map((item) => ({
+        question: item.q,
+        answer: item.a,
+      }));
+    }
+
+    return [
+      {
+        question: "Are these stories based on real buyers?",
+        answer:
+          "Yes. Every story on this page is grounded in real first-time buyer journeys and actual Nagpur localities. Names and some personal details may be changed for privacy, but the experiences, emotions, and decisions reflect authentic buying patterns.",
+      },
+      {
+        question: "Is any builder or project promoted here?",
+        answer:
+          "No. This page is editorially independent. No builder, developer, or project pays to be featured here. Our goal is to share honest buyer experiences, not to promote any specific property or developer.",
+      },
+      {
+        question: "Is this useful before property visits?",
+        answer: affordableHomes
+          ? `Yes. It is especially helpful before site visits, when buyers are still gaining clarity. With ${affordableHomes}+ starter homes listed in Nagpur, understanding what others went through helps you ask better questions and stay focused on your true priorities.`
+          : "Yes. It is especially helpful before site visits, when buyers are still gaining clarity. Understanding what others went through helps you ask better questions and stay focused on your true priorities.",
+      },
+    ];
+  }, [initialFaqs, affordableHomes]);
+
+  const [openIndex, setOpenIndex] = useState(0);
 
   return (
     <section className="bg-white py-20 px-6 md:px-16 lg:px-24">
@@ -31,11 +46,11 @@ export default function FAQ() {
         </h2>
 
         <div className="flex flex-col gap-4">
-          {faqs.map((faq, i) => {
-            const isOpen = openIndex === i;
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
             return (
               <div
-                key={i}
+                key={faq.question}
                 className={`rounded-2xl transition-all duration-200 ${
                   isOpen
                     ? "bg-[#F9F9FF] border border-[#4500B433]"
@@ -43,7 +58,8 @@ export default function FAQ() {
                 }`}
               >
                 <button
-                  onClick={() => setOpenIndex(isOpen ? null : i)}
+                  type="button"
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
                   className="w-full flex items-center justify-between px-6 py-5 text-left gap-4"
                   aria-expanded={isOpen}
                 >
@@ -57,7 +73,6 @@ export default function FAQ() {
                   )}
                 </button>
 
-                {/* Answer */}
                 <div
                   className={`overflow-hidden transition-all duration-300 ${
                     isOpen ? "max-h-48 opacity-100" : "max-h-0 opacity-0"
@@ -70,6 +85,15 @@ export default function FAQ() {
               </div>
             );
           })}
+        </div>
+
+        <div className="mt-10 text-center">
+          <Link
+            href="/find-verified-properties-in-nagpur"
+            className="text-[#5323DC] font-semibold text-sm hover:underline"
+          >
+            Start exploring verified properties in Nagpur →
+          </Link>
         </div>
       </div>
     </section>

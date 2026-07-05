@@ -1,152 +1,239 @@
-"use client"
+"use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { FaArrowLeft } from "react-icons/fa6";
+import { BiBriefcase, BiBuildings } from "react-icons/bi";
 import { IoSpeedometerOutline } from "react-icons/io5";
-import { useAuth } from "../store/auth";
+import { MdVerified } from "react-icons/md";
 import Loader from "../components/Loader";
+import Step1Personal from "../components/homeLoanPage/Step1Personal";
+import CheckEligibilityIncome from "../components/homeLoanPage/CheckEligibilityIncome";
+import WhyWeNeedThis from "../components/homeLoanPage/WhyWeNeedThis";
+import { useAuth } from "../store/auth";
 
-function CheckEligibility() {
+const INITIAL_FORM = {
+  employmentType: "Job",
+  fullname: "",
+  contactNo: "",
+  email: "",
+  dateOfBirth: "",
+  panNumber: "",
+  aadhaarNumber: "",
+  state: "",
+  city: "",
+  pincode: "",
+  employmentSector: "",
+  workexperienceYear: "",
+  workexperienceMonth: "",
+  salaryType: "",
+  grossPay: "",
+  netPay: "",
+  pfDeduction: "",
+  otherIncome: "",
+  yearIncome: "",
+  monthIncome: "",
+  ongoingEmi: "",
+  businessSector: "",
+  businessCategory: "",
+  businessExperienceYears: "",
+  businessExperienceMonths: "",
+  businessOtherIncome: "",
+};
+
+function EligibilityStepIndicator({ step }) {
+  const steps = ["Personal Details", "Income Details"];
+
+  return (
+    <div className="flex items-center justify-center my-4 sm:my-6 px-2">
+      {steps.map((label, i) => {
+        const stepNum = i + 1;
+        const isCompleted = step > stepNum;
+        const isActive = step === stepNum;
+
+        return (
+          <div key={label} className="flex items-center">
+            <div className="flex flex-col items-center gap-1">
+              <div
+                className={`w-11 h-11 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-base sm:text-lg font-bold transition-all ${
+                  isActive || isCompleted
+                    ? "bg-[#8A38F5] text-white shadow-md shadow-purple-200"
+                    : "bg-[#D9D9D9] text-[#868686]"
+                }`}
+              >
+                {stepNum}
+              </div>
+              <span
+                className={`text-[11px] sm:text-sm font-semibold mt-1 text-center max-w-[88px] sm:max-w-none ${
+                  isActive || isCompleted ? "text-[#8A38F5]" : "text-[#868686]"
+                }`}
+              >
+                {label}
+              </span>
+            </div>
+            {i < steps.length - 1 && (
+              <div
+                className={`h-[2px] w-14 sm:w-24 mx-1 mb-5 rounded-full transition-all ${
+                  step > stepNum ? "bg-[#8A38F5]" : "bg-[#D9D9D9]"
+                }`}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function CheckEligibility() {
   const router = useRouter();
-  const { URI, setLoading, setSuccessScreen } = useAuth();
-  const [activeTab, setActiveTab] = useState("Job");
+  const { URI, setLoading, setSuccessScreen, setShowAlert } = useAuth();
+  const fieldRefs = useRef({});
+
+  const [step, setStep] = useState(1);
+  const [incomeType, setIncomeType] = useState("Job");
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
+  const [formData, setFormData] = useState(INITIAL_FORM);
 
-  //EMI Form Data
-  const [formData, setFormData] = useState({
-    employmentType: activeTab,
-    fullname: "",
-    contactNo: "",
-    email: "",
-    dateOfBirth: "",
-    panNumber: "",
-    aadhaarNumber: "",
-    state: "",
-    city: "",
-    pincode: "",
-    employmentSector: "",
-    workexperienceYear: "",
-    workexperienceMonth: "",
-    salaryType: "",
-    grossPay: "",
-    netPay: "",
-    pfDeduction: "",
-    otherIncome: "",
-    yearIncome: "",
-    monthIncome: "",
-    ongoingEmi: "",
-    businessSector: "",
-    businessCategory: "",
-    businessExperienceYears: "",
-    businessExperienceMonths: "",
-    businessOtherIncome: "",
-  });
+  const requiredFieldsByStep = {
+    1: [
+      "fullname",
+      "contactNo",
+      "email",
+      "dateOfBirth",
+      "panNumber",
+      "aadhaarNumber",
+      "state",
+      "city",
+      "pincode",
+    ],
+    2:
+      incomeType === "Job"
+        ? [
+            "employmentSector",
+            "workexperienceYear",
+            "workexperienceMonth",
+            "salaryType",
+            "grossPay",
+            "netPay",
+            "pfDeduction",
+            "otherIncome",
+            "yearIncome",
+            "monthIncome",
+            "ongoingEmi",
+          ]
+        : [
+            "businessSector",
+            "businessCategory",
+            "businessExperienceYears",
+            "businessExperienceMonths",
+            "businessOtherIncome",
+            "yearIncome",
+            "monthIncome",
+            "ongoingEmi",
+          ],
+  };
 
-  // **Fetch States from API**
   const fetchStates = async () => {
     try {
-      const response = await fetch(URI + "/admin/states", {
+      const response = await fetch(`${URI}/admin/states`, {
         method: "GET",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
-      if (!response.ok) throw new Error("Failed to fetch States.");
-      const data = await response.json();
-      setStates(data);
+      if (!response.ok) throw new Error("Failed to fetch states.");
+      setStates(await response.json());
     } catch (err) {
-      console.error("Error fetching :", err);
+      console.error("Error fetching states:", err);
     }
   };
 
-  // **Fetch States from API**
   const fetchCities = async () => {
     try {
-      const response = await fetch(`${URI}/admin/cities/${formData?.state}`, {
+      const response = await fetch(`${URI}/admin/cities/${formData.state}`, {
         method: "GET",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
       if (!response.ok) throw new Error("Failed to fetch cities.");
-      const data = await response.json();
-      console.log(data);
-      setCities(data);
+      setCities(await response.json());
     } catch (err) {
-      console.error("Error fetching :", err);
+      console.error("Error fetching cities:", err);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const validateStep = () => {
+    const requiredFields = requiredFieldsByStep[step];
+
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        const el = fieldRefs.current[field];
+        setShowAlert({
+          show: true,
+          type: "warning",
+          title: "",
+          message: `Please fill ${field.replace(/([A-Z])/g, " $1")}`,
+        });
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          setTimeout(() => el.focus?.(), 300);
+        }
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
     setLoading(true);
 
     try {
+      const payload = { ...formData, employmentType: incomeType };
+
       const response = await fetch(`${URI}/frontend/emi/check-eligibility`, {
         method: "POST",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
-        throw new Error(
-          `Failed to Submit EMI Form. Status: ${response.status}`
-        );
+        throw new Error(`Failed to submit form. Status: ${response.status}`);
       }
 
-      // Show success message
       setSuccessScreen({
         show: true,
-        label: "Thank You For Submit!",
-        description: "Our Representative will call you shortly",
+        label: "Thank You For Submitting!",
+        description: "Our loan expert will call you shortly with your eligibility offer.",
       });
 
-      // Reset form BEFORE navigation
-      setFormData({
-        ...formData,
-        employmentType: activeTab,
-        fullname: "",
-        contactNo: "",
-        email: "",
-        dateOfBirth: "",
-        panNumber: "",
-        aadhaarNumber: "",
-        state: "",
-        city: "",
-        pincode: "",
-        employmentSector: "",
-        workexperienceYear: "",
-        workexperienceMonth: "",
-        salaryType: "",
-        grossPay: "",
-        netPay: "",
-        pfDeduction: "",
-        otherIncome: "",
-        yearIncome: "",
-        monthIncome: "",
-        ongoingEmi: "",
-        businessSector: "",
-        businessCategory: "",
-        businessExperienceYears: "",
-        businessExperienceMonths: "",
-        businessOtherIncome: "",
-      });
+      setFormData({ ...INITIAL_FORM, employmentType: incomeType });
+      setStep(1);
+      setIncomeType("Job");
 
-      // Navigate back after 1 second
-      setTimeout(() => {
-        router.back();
-      }, 1000);
+      setTimeout(() => router.push("/"), 1500);
     } catch (err) {
-      console.error("Error Submit Form:", err);
+      console.error("Error submitting form:", err);
+      setShowAlert({
+        show: true,
+        type: "error",
+        title: "Submission failed",
+        message: "Something went wrong. Please try again in a moment.",
+      });
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNext = () => {
+    if (!validateStep()) return;
+    if (step === 2) {
+      handleSubmit();
+      return;
+    }
+    setStep((prev) => Math.min(prev + 1, 2));
   };
 
   useEffect(() => {
@@ -154,581 +241,170 @@ function CheckEligibility() {
   }, []);
 
   useEffect(() => {
-    if (formData.state != "") {
-      fetchCities();
-    }
+    if (formData.state) fetchCities();
+    else setCities([]);
   }, [formData.state]);
 
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, employmentType: incomeType }));
+  }, [incomeType]);
+
   return (
-    <div className="max-w-7xl mx-auto p-4 sm:p-6 pb-10 sm:pb-40">
-      <div className="flex gap-2 items-center justify-center mb-6 text-base font-medium text-gray-900">
-        <IoSpeedometerOutline />{" "}
-        <span className="text-sm">Get FREE CIBIL score with your offer!</span>
+    <section className="min-h-screen bg-[#FAF8FF] lg:bg-white">
+      <div className="lg:hidden w-full h-[50px] flex items-center gap-4 px-4 py-2 my-2 rounded-lg bg-white shadow-sm">
+        <FaArrowLeft onClick={() => router.back()} className="w-5 h-5 cursor-pointer" />
+        <span className="w-full text-base font-bold text-center">
+          Check Loan Eligibility
+        </span>
       </div>
 
-      {/* Toggle Buttons */}
-      <div className="flex gap-4 md:gap-10 justify-start md:justify-center mb-6">
-        <button
-          className={`md:w-[400px] px-8 py-1 border rounded-md font-semibold ${
-            activeTab === "Job"
-              ? "bg-[#0ab50192] text-black"
-              : "bg-white text-gray-500"
-          }`}
-          onClick={() => setActiveTab("Job")}
-        >
-          Job
-        </button>
-        <button
-          className={`md:w-[400px] px-8 py-1 border rounded-md font-semibold ${
-            activeTab === "Business"
-              ? "bg-[#0ab50192] text-black"
-              : "bg-white text-gray-500"
-          }`}
-          onClick={() => setActiveTab("Business")}
-        >
-          Business
-        </button>
+      <div className="hidden lg:grid w-full max-w-[1440px] h-[420px] pb-8 mx-auto relative lg:mb-5 grid-cols-2 overflow-hidden rounded-br-4xl rounded-bl-4xl bg-gradient-to-br from-[#8A38F5] via-[#6B21D8] to-[#3B0764] text-white">
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-purple-500/30 blur-[120px]" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
+        <div className="relative z-10 flex items-end justify-center pl-10 pb-8">
+          <img
+            src="/assets/homeLoan/leftImage.svg"
+            alt="Loan eligibility"
+            className="w-[320px]"
+          />
+        </div>
+        <div className="relative z-10 flex flex-col justify-end pr-10 pb-10">
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2 text-sm font-medium mb-4 w-fit">
+            <IoSpeedometerOutline className="text-lg" />
+            Free CIBIL score with your offer
+          </div>
+          <h1 className="text-4xl xl:text-5xl font-extrabold mb-3 leading-tight">
+            Check Your Home Loan Eligibility
+          </h1>
+          <p className="opacity-90 text-lg max-w-lg">
+            Share a few details and get a personalised EMI offer from our experts — quick, secure, and bank-neutral.
+          </p>
+          <div className="flex flex-wrap gap-4 mt-6 text-sm">
+            {["2-minute form", "Expert callback", "No spam"].map((item) => (
+              <span
+                key={item}
+                className="inline-flex items-center gap-1.5 bg-white/10 rounded-full px-3 py-1"
+              >
+                <MdVerified className="text-green-300" />
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
-      {/* Form */}
-      <form onSubmit={handleSubmit}>
-        <h2 className="text-xl font-semibold mb-1">
-          Let’s get started with your EMI offer
-        </h2>
-        <p className="text-[#067700] font-semibold text-sm mb-4">
-          Step 1 : Personal details
-        </p>
 
-        {/* Form */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf]">
-            <label className="ml-1 text-xs">Full Name (As per pan card)</label>
-            <input
-              type="text"
-              placeholder="Enter Name"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              required
-              value={formData.fullname}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  fullname: e.target.value,
-                })
-              }
-            />
+      <div className="lg:hidden px-4 pt-4">
+        <div className="rounded-2xl bg-gradient-to-r from-[#8A38F5] to-[#5E23DC] text-white p-5 shadow-lg">
+          <div className="flex items-center gap-2 text-sm font-medium mb-2">
+            <IoSpeedometerOutline />
+            Free CIBIL score with your offer
           </div>
+          <h1 className="text-2xl font-bold mb-2">Check Loan Eligibility</h1>
+          <p className="text-sm text-white/90">
+            Fill in your details and our expert will share a personalised EMI offer.
+          </p>
+        </div>
+      </div>
 
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">Contact No.</label>
-            <input
-              type="number"
-              placeholder="Enter Contact Number"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              required
-              value={formData.contactNo}
-              onChange={(e) => {
-                const input = e.target.value;
-                if (/^\d{0,10}$/.test(input)) {
-                  // Allows only up to 10 digits
-                  setFormData({
-                    ...formData,
-                    contactNo: e.target.value,
-                  });
-                }
-              }}
+      <div className="max-w-[1380px] mx-auto sm:p-4 grid lg:grid-cols-2 gap-8 lg:gap-10 bg-[#FAF8FF] sm:bg-white mb-8 sm:mb-12 px-4 sm:px-0">
+        <div className="hidden lg:block">
+          <WhyWeNeedThis />
+        </div>
+
+        <div className="bg-white lg:bg-[#FAF8FF] rounded-3xl shadow-xl border border-[#E8E8E8] lg:border-0 p-4 sm:p-6">
+          <EligibilityStepIndicator step={step} />
+
+          {step === 2 && (
+            <div className="w-full flex items-center justify-center mb-4">
+              <div className="w-full flex items-center p-1.5 bg-white rounded-2xl border border-[#E8E8E8] shadow-sm gap-2">
+                {[
+                  { key: "Job", label: "Salaried", Icon: BiBriefcase },
+                  { key: "Business", label: "Business", Icon: BiBuildings },
+                ].map(({ key, label, Icon }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setIncomeType(key)}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+                      incomeType === key
+                        ? "bg-[#8A38F5] text-white shadow-md"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    <Icon size={18} />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {step === 1 && (
+            <>
+              <Step1Personal
+                formData={formData}
+                setFormData={setFormData}
+                states={states}
+                cities={cities}
+                fieldRefs={fieldRefs}
+              />
+              <div className="mt-4 bg-white p-4 sm:p-6 border border-[#B8B8B8] rounded-xl">
+                <label className="text-sm text-black">
+                  Aadhaar Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  name="aadhaarNumber"
+                  ref={(el) => {
+                    fieldRefs.current.aadhaarNumber = el;
+                  }}
+                  value={formData.aadhaarNumber}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      aadhaarNumber: e.target.value.replace(/\D/g, "").slice(0, 12),
+                    }))
+                  }
+                  className="w-full border border-[#D9D9D9] rounded-lg px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-[#8A38F5] mt-1"
+                  placeholder="Enter 12-digit Aadhaar number"
+                />
+              </div>
+            </>
+          )}
+
+          {step === 2 && (
+            <CheckEligibilityIncome
+              formData={formData}
+              setFormData={setFormData}
+              fieldRefs={fieldRefs}
+              incomeType={incomeType}
             />
-          </div>
+          )}
 
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">Email</label>
-            <input
-              type="email"
-              placeholder="Enter Your Email"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              required
-              value={formData.email}
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  email: e.target.value,
-                });
-              }}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">Date of Birth (D.O.B.)</label>
-            <input
-              type="date"
-              placeholder="Enter Date of Birth"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              required
-              value={formData.dateOfBirth}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  dateOfBirth: e.target.value,
-                })
-              }
-            />
-          </div>
-
-          {/* State Select Input */}
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#00000066]">
-            <label htmlFor="state" className="ml-1 text-xs text-[#000000bf]">
-              Select State
-            </label>
-            <select
-              name="state"
-              id="state"
-              required
-              className="w-full font-medium p-3 text-[#000000bf] border border-[#00000033] rounded-md focus:outline-0 appearance-none"
-              style={{ backgroundImage: "none" }}
-              value={formData.state}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  state: e.target.value,
-                })
-              }
+          <div className="flex justify-between my-5 sm:my-6 gap-3">
+            <button
+              type="button"
+              onClick={() => setStep((prev) => Math.max(prev - 1, 1))}
+              disabled={step === 1}
+              className="px-4 sm:px-6 py-2.5 text-sm sm:text-base border border-gray-300 rounded-xl disabled:opacity-40 font-medium bg-white"
             >
-              <option value="">Select Your State</option>
-              {states?.map((state, index) => (
-                <option key={index} value={state.state}>
-                  {state.state}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* City Select Input */}
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#00000066] ">
-            <label htmlFor="city" className="ml-1 text-xs text-[#000000bf]">
-              Select City
-            </label>
-            <select
-              name="city"
-              id="city"
-              required
-              className="w-full font-medium p-3 text-[#000000bf] border border-[#00000033] rounded-md focus:outline-0 appearance-none"
-              style={{ backgroundImage: "none" }}
-              value={formData.city}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  city: e.target.value,
-                })
-              }
+              ← Back
+            </button>
+            <button
+              type="button"
+              onClick={handleNext}
+              className="flex-1 px-4 sm:px-8 py-2.5 text-sm sm:text-base bg-[#8A38F5] text-white rounded-xl font-bold active:scale-95 shadow-md shadow-purple-200"
             >
-              <option value="">Select Your City</option>
-              {cities?.map((city, index) => (
-                <option key={index} value={city.city}>
-                  {city.city}
-                </option>
-              ))}
-            </select>
+              {step === 2 ? "Submit & Get Offer →" : "Continue →"}
+            </button>
           </div>
 
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">PIN Code</label>
-            <input
-              type="number"
-              placeholder="Enter PIN Code"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0 "
-              required
-              value={formData.pincode}
-              onChange={(e) => {
-                const input = e.target.value;
-                if (/^\d{0,6}$/.test(input)) {
-                  setFormData({ ...formData, pincode: input });
-                }
-              }}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">Aadhaar Number</label>
-            <input
-              type="number"
-              placeholder="Enter Aadhaar Number"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0 "
-              required
-              value={formData.aadhaarNumber}
-              onChange={(e) => {
-                const input = e.target.value;
-                if (/^\d{0,12}$/.test(input)) {
-                  setFormData({ ...formData, aadhaarNumber: input });
-                }
-              }}
-            />
-          </div>
-
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf]">
-            <label className="ml-1 text-xs">PAN Number</label>
-            <input
-              type="text"
-              placeholder="Enter PAN Number"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0 "
-              required
-              value={formData.panNumber}
-              onChange={(e) => {
-                const input = e.target.value.toUpperCase(); // Convert to uppercase
-                if (/^[A-Z0-9]{0,10}$/.test(input)) {
-                  setFormData({ ...formData, panNumber: input });
-                }
-              }}
-            />
-          </div>
+          <p className="text-center text-xs text-gray-400 flex items-center justify-center gap-1">
+            <span>🔒</span> Your information is secure and encrypted
+          </p>
         </div>
+      </div>
 
-        <p className="text-[#067700] font-semibold text-sm my-4">
-          Step 2 : Income details
-        </p>
-
-        {/* Job Form */}
-        <div
-          className={`${
-            activeTab !== "Job" && "hidden"
-          } grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5`}
-        >
-          {/* Employment Sector */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Employment Sector</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {["Private", "Government", "Proprietorship"].map((sector) => (
-                <label key={sector} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    required={activeTab === "Job"}
-                    value={sector}
-                    checked={formData.employmentSector === sector}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        employmentSector: e.target.value,
-                      })
-                    }
-                  />
-                  {sector}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Work Experience */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Work Experience</label>
-            <div className="flex gap-4">
-              <input
-                type="number"
-                placeholder="Years"
-                required={activeTab === "Job"}
-                value={formData.workexperienceYear}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    workexperienceYear: e.target.value,
-                  })
-                }
-                className="w-full sm:max-w-[400px] font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              />
-
-              <input
-                type="number"
-                placeholder="Months"
-                required={activeTab === "Job"}
-                value={formData.workexperienceMonth}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    workexperienceMonth: e.target.value,
-                  })
-                }
-                className="w-full sm:max-w-[400px] font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              />
-            </div>
-          </div>
-
-          {/* Salary Type */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Salary Type</label>
-            <div className="flex gap-6">
-              {["Account Transfer", "Cash"].map((type) => (
-                <label key={type} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    required={activeTab === "Job"}
-                    value={type}
-                    checked={formData.salaryType === type}
-                    onChange={(e) =>
-                      setFormData({ ...formData, salaryType: e.target.value })
-                    }
-                  />
-                  {type}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Salary Details */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Salary Details</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <input
-                type="text"
-                placeholder="Gross Pay"
-                required={activeTab === "Job"}
-                value={formData.grossPay}
-                onChange={(e) =>
-                  setFormData({ ...formData, grossPay: e.target.value })
-                }
-                className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              />
-
-              <input
-                type="text"
-                placeholder="Net Pay"
-                required={activeTab === "Job"}
-                value={formData.netPay}
-                onChange={(e) =>
-                  setFormData({ ...formData, netPay: e.target.value })
-                }
-                className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              />
-
-              <input
-                type="text"
-                placeholder="PF Deduction"
-                required={activeTab === "Job"}
-                value={formData.pfDeduction}
-                onChange={(e) =>
-                  setFormData({ ...formData, pfDeduction: e.target.value })
-                }
-                className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              />
-            </div>
-          </div>
-
-          {/* Other Income */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Other Income :</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {["Co-applicant", "Rental Income", "Other Income"].map(
-                (income) => (
-                  <label
-                    key={income}
-                    className="flex items-center gap-2 text-sm"
-                  >
-                    <input
-                      type="radio"
-                      required={activeTab === "Job"}
-                      value={income}
-                      checked={formData.otherIncome === income}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          otherIncome: e.target.value,
-                        })
-                      }
-                    />
-                    {income}
-                  </label>
-                )
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Business Form */}
-        <div
-          className={`${
-            activeTab !== "Business" && "hidden"
-          } grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-5`}
-        >
-          {/* Business Sector */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Business Sector</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {["Services", "Traders", "Manufacturing"].map((sector) => (
-                <label key={sector} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    required={activeTab === "Business"}
-                    name="businessSector"
-                    value={sector}
-                    checked={formData.businessSector === sector}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        businessSector: e.target.value,
-                      })
-                    }
-                  />
-                  {sector}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Business Category */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Business Category</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {["Private Limited", "Proprietorship", "Partnership"].map(
-                (category) => (
-                  <label
-                    key={category}
-                    className="flex items-center gap-2 text-sm"
-                  >
-                    <input
-                      type="radio"
-                      name="businessCategory"
-                      required={activeTab === "Business"}
-                      value={category}
-                      checked={formData.businessCategory === category}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          businessCategory: e.target.value,
-                        })
-                      }
-                    />
-                    {category}
-                  </label>
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Work Experience */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">
-              Business Experience (as per Shop Act / Registration)
-            </label>
-            <div className="flex gap-4">
-              <input
-                type="number"
-                placeholder="Years"
-                required={activeTab === "Business"}
-                value={formData.businessExperienceYears}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    businessExperienceYears: e.target.value,
-                  })
-                }
-                className="w-full sm:max-w-[400px] font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              />
-
-              <input
-                type="number"
-                placeholder="Months"
-                required={activeTab === "Business"}
-                value={formData.businessExperienceMonths}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    businessExperienceMonths: e.target.value,
-                  })
-                }
-                className="w-full sm:max-w-[400px] font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              />
-            </div>
-          </div>
-
-          {/* Other Income */}
-          <div className="flex flex-col gap-2 text-sm font-semibold text-[#000000bf]">
-            <label className="block text-xs">Other Income :</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {["Co-applicant", "Rental Income", "Other Income"].map(
-                (income) => (
-                  <label
-                    key={income}
-                    className="flex items-center gap-2 text-sm"
-                  >
-                    <input
-                      type="radio"
-                      name="businessOtherIncome"
-                      required={activeTab === "Business"}
-                      value={income}
-                      checked={formData.businessOtherIncome === income}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          businessOtherIncome: e.target.value,
-                        })
-                      }
-                    />
-                    {income}
-                  </label>
-                )
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Compulsary */}
-        <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Yearly Income */}
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">
-              Yearly Income Details (as per ITR):
-            </label>
-            <input
-              type="number"
-              placeholder="Enter Income"
-              required
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              value={formData.yearIncome}
-              onChange={(e) =>
-                setFormData({ ...formData, yearIncome: e.target.value })
-              }
-            />
-          </div>
-
-          {/* Monthly Avg. Balance */}
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">
-              Monthly Avg. (Bank Statement):
-            </label>
-            <input
-              type="number"
-              required
-              placeholder="Enter Balance"
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              value={formData.monthIncome}
-              onChange={(e) =>
-                setFormData({ ...formData, monthIncome: e.target.value })
-              }
-            />
-          </div>
-
-          {/* Ongoing Loan EMI */}
-          <div className="flex flex-col gap-1 text-sm font-semibold text-[#000000bf] ">
-            <label className="ml-1 text-xs">Ongoing Loan EMI (if any):</label>
-            <input
-              type="number"
-              placeholder="Enter EMI"
-              required
-              className="w-full font-medium p-3 border border-[#00000033] rounded-md focus:outline-0"
-              value={formData.ongoingEmi}
-              onChange={(e) =>
-                setFormData({ ...formData, ongoingEmi: e.target.value })
-              }
-            />
-          </div>
-        </div>
-        <div className="flex h-10 mt-10 md:mt-10 justify-center font-semibold gap-6">
-          <button
-            type="submit"
-            className="sm:w-[400px] px-4 py-2 text-white bg-[#0BB501] rounded-md active:scale-[0.98] cursor-pointer"
-          >
-            Submit Form
-          </button>
-          <Loader></Loader>
-        </div>
-      </form>
-    </div>
+      <Loader />
+    </section>
   );
 }
-
-export default CheckEligibility;

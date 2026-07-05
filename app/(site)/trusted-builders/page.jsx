@@ -1,7 +1,7 @@
 export { dynamic } from "@/lib/ssr";
 
 import TrustedBuilder from "@/views/TrustedBuilder";
-import { fetchSeoPageWidgets } from "@/lib/serverApi";
+import { fetchSeoPageWidgets, fetchTrustedBuildersData } from "@/lib/serverApi";
 import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
@@ -16,11 +16,18 @@ export async function generateMetadata() {
 }
 
 export default async function Page() {
-  const { articles, faqs } = await fetchSeoPageWidgets({
-    faqLocation: "Reparv Trusted Builder Page",
-  });
+  const [{ articles, faqs }, trustedBuildersData] = await Promise.all([
+    fetchSeoPageWidgets({
+      faqLocation: "Reparv Trusted Builder Page",
+    }),
+    fetchTrustedBuildersData("Nagpur"),
+  ]);
 
   return (
-    <TrustedBuilder initialArticles={articles} initialFaqs={faqs} />
+    <TrustedBuilder
+      initialArticles={articles}
+      initialFaqs={faqs}
+      initialTrustedBuildersData={trustedBuildersData}
+    />
   );
 }

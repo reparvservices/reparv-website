@@ -1,4 +1,6 @@
-const URI = import.meta.env.VITE_BACKEND_URL;
+import { getBackendUrl } from "../lib/env";
+
+const URI = getBackendUrl();
 
 export const uploadToS3 = async (file) => {
   try {

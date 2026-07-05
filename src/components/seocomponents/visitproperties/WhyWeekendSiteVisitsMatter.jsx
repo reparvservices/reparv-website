@@ -1,12 +1,12 @@
 
-export default function WhyWeekendSiteVisitsMatter() {
+export default function WhyWeekendSiteVisitsMatter({ city = "your city" }) {
   const checks = [
     {
       badge: "Reality Check #1",
       title: "Real Traffic Reality",
       description:
         "That 15-minute weekday commute? It becomes 45 minutes on Saturday mornings when everyone's out shopping, visiting relatives, or running errands. Experience the actual travel time before you commit.",
-      note: "Weekend traffic patterns are 3x more congested in key Nagpur corridors.",
+      note: "Weekend traffic patterns are often more congested in busy city corridors.",
       image: "/assets/seopageassets/visitproperties/visit1.svg",
     },
     {
@@ -44,8 +44,8 @@ export default function WhyWeekendSiteVisitsMatter() {
             Why Weekend Site Visits Matter
           </h2>
           <p className="mt-3 text-sm sm:text-base text-gray-500">
-            Weekdays hide critical realities. Weekend visits reveal what life
-            will actually be like.
+            Weekdays hide critical realities. Weekend visits in {city} reveal
+            what life will actually be like.
           </p>
         </div>
 

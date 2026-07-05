@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
 
-const faqs = [
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { mapFaqs, buildBudgetPropertiesLink } from "@/utils/budgetToDreamHomePage";
+
+const DEFAULT_FAQS = [
   {
     q: "Are these real buyer journeys?",
-    a: "Yes. Every journey featured on this page is based on real buyer experiences. Details may be anonymised to protect privacy, but the decisions, trade-offs, and outcomes are authentic.",
+    a: "Yes. Every journey featured on this page is based on real buyer experiences in Nagpur. Details may be anonymised to protect privacy, but the decisions, trade-offs, and outcomes are authentic.",
   },
   {
     q: "Do buyers regret choosing within budget?",
@@ -20,8 +23,28 @@ const faqs = [
   },
 ];
 
-export default function FAQSection() {
+export default function FAQSection({ initialFaqs = [], pageData = null }) {
   const [open, setOpen] = useState(null);
+  const city = pageData?.city || "Nagpur";
+  const budgetHomes = pageData?.stats?.budgetHomes || 0;
+
+  const faqs = useMemo(() => {
+    const mapped = mapFaqs(initialFaqs || []);
+    if (mapped.length > 0) return mapped;
+
+    if (budgetHomes) {
+      return DEFAULT_FAQS.map((faq, index) =>
+        index === 0
+          ? {
+              ...faq,
+              a: `Yes. Every journey reflects real budget-conscious buying patterns in Nagpur, grounded in ${budgetHomes}+ homes buyers actually chose within their comfort range.`,
+            }
+          : faq,
+      );
+    }
+
+    return DEFAULT_FAQS;
+  }, [initialFaqs, budgetHomes]);
 
   return (
     <section className="py-16 sm:py-20 bg-white sm:bg-[#F0F3FF]">
@@ -33,18 +56,32 @@ export default function FAQSection() {
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <div
-              key={i}
+              key={faq.q}
               className="bg-white sm:rounded-2xl border-b sm:border border-[#ede8ff] overflow-hidden"
             >
               <button
+                type="button"
                 className="w-full flex items-center justify-between px-6 py-5 text-left gap-4 group"
                 onClick={() => setOpen(open === i ? null : i)}
+                aria-expanded={open === i}
               >
                 <span className="text-[#1a0a3d] font-semibold text-sm sm:text-base group-hover:text-[#4500B4] transition-colors">
                   {faq.q}
                 </span>
-                <span className={`flex-shrink-0 w-7 h-7 flex items-center justify-center transition-all duration-200 ${open === i ? "bg-[#4500B4] border-[#4500B4] rotate-45" : "border-[#4500B4]/30"}`}>
-                  <svg className={`w-3.5 h-3.5 ${open === i ? "text-white" : "text-[#4500B4]"}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <span
+                  className={`flex-shrink-0 w-7 h-7 flex items-center justify-center transition-all duration-200 ${
+                    open === i
+                      ? "bg-[#4500B4] border-[#4500B4] rotate-45"
+                      : "border-[#4500B4]/30"
+                  }`}
+                >
+                  <svg
+                    className={`w-3.5 h-3.5 ${open === i ? "text-white" : "text-[#4500B4]"}`}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    viewBox="0 0 24 24"
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                 </span>
@@ -58,6 +95,15 @@ export default function FAQSection() {
               )}
             </div>
           ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <Link
+            href={buildBudgetPropertiesLink(city)}
+            className="text-[#5323DC] font-semibold text-sm hover:underline"
+          >
+            Browse smart-budget homes in {city} →
+          </Link>
         </div>
       </div>
     </section>

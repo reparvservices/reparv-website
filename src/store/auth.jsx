@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { getBackendUrl } from "../lib/env";
 
 export const AuthContext = createContext();
 
@@ -120,9 +121,7 @@ export const AuthProvider = ({ children }) => {
 
   /* ===================== API BASE ===================== */
 
-  //const URI = "https://api.reparv.in";
-  const URI = "https://aws-api.reparv.in";
-  //const URI = "http://localhost:3000";
+  const URI = getBackendUrl();
 
   return (
     <AuthContext.Provider

@@ -24,7 +24,7 @@ const narratives = [
 
 export default function FeaturedNarratives() {
   return (
-    <section className="py-20 px-6 md:px-16 lg:px-24 bg-white">
+    <section id="featured-narratives" className="py-20 px-6 md:px-16 lg:px-24 bg-white">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-[#5323DC] text-center mb-16">
           Featured Narratives

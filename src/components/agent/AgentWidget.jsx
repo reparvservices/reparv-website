@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../../store/auth";
 import { useAgentChat } from "../../hooks/useAgentChat";
+import { OPEN_AGENT_ADVISOR_EVENT } from "../../utils/openAgentAdvisor";
 
 const QUICK_PROMPTS = [
   "2 BHK in Pune under 90L",
@@ -203,6 +204,7 @@ export default function AgentWidget() {
   const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const pendingMessageRef = useRef(null);
 
   const {
     connectionStatus,
@@ -223,6 +225,25 @@ export default function AgentWidget() {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleOpenAdvisor = (event) => {
+      pendingMessageRef.current = event.detail?.message || null;
+      setIsOpen(true);
+    };
+
+    window.addEventListener(OPEN_AGENT_ADVISOR_EVENT, handleOpenAdvisor);
+    return () =>
+      window.removeEventListener(OPEN_AGENT_ADVISOR_EVENT, handleOpenAdvisor);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen || isLoadingHistory || !pendingMessageRef.current) return;
+
+    const message = pendingMessageRef.current;
+    pendingMessageRef.current = null;
+    sendMessage(message);
+  }, [isOpen, isLoadingHistory, sendMessage]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

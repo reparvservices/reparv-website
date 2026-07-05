@@ -1,6 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { openAgentAdvisor } from "@/utils/openAgentAdvisor";
+import {
+  buildFamilyPropertiesLink,
+  formatBudgetRange,
+  formatVerifiedStatValue,
+  getHeroImage,
+  getStoryImage,
+  mapFaqs,
+} from "@/utils/familyDecisionStoriesPage";
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
 
@@ -182,7 +192,12 @@ const ChevronDown = ({ open }) => (
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 
-function Hero() {
+function Hero({ pageData }) {
+  const city = pageData?.city || "Nagpur";
+  const stats = pageData?.stats || {};
+  const heroImage = getHeroImage(pageData);
+  const budgetLabel = formatBudgetRange(stats.minPrice, stats.maxPrice);
+
   return (
     <section className="bg-white px-5 pt-10 pb-12 lg:px-6 lg:py-16">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -194,7 +209,9 @@ function Hero() {
               <ShieldIcon />
             </span>
             <span className="text-[11px] font-medium tracking-[0.06em] uppercase text-[#4500B4]">
-              Based on Real Family Experiences
+              {stats.familyHomes
+                ? `${formatVerifiedStatValue(stats.familyHomes)} Family Homes in ${city}`
+                : "Based on Real Family Experiences"}
             </span>
           </div>
 
@@ -207,8 +224,10 @@ function Hero() {
 
           {/* Body */}
           <p className="font-jakarta text-[18px] leading-7 text-[#5F5D69] max-w-lg">
-            Real stories of families navigating different opinions, emotional
-            pressure, and priorities—before reaching a decision everyone felt
+            Real stories of {city} families navigating different opinions,
+            emotional pressure, and priorities — across{" "}
+            {stats.localities ? `${stats.localities}+ localities` : "many areas"}{" "}
+            and {budgetLabel} — before reaching a decision everyone felt
             confident about.
           </p>
         </div>
@@ -216,8 +235,8 @@ function Hero() {
         {/* Hero Image — desktop only */}
         <div className="hidden lg:block rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(94,35,220,0.04)]">
           <img
-            src="/assets/seoPages/familyDecision/hero.svg"
-            alt="Happy family standing in front of their new home"
+            src={heroImage}
+            alt={`Family-friendly homes in ${city}`}
             className="w-full h-[380px] object-cover rounded-2xl"
           />
         </div>
@@ -225,8 +244,8 @@ function Hero() {
         {/* Hero Image — mobile (shown below text, matching Figma) */}
         <div className="block lg:hidden rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(94,35,220,0.04)]">
           <img
-            src="/assets/seoPages/familyDecision/hero.svg"
-            alt="Happy family standing in front of their new home"
+            src={heroImage}
+            alt={`Family-friendly homes in ${city}`}
             className="w-full h-[262px] object-cover"
           />
         </div>
@@ -722,11 +741,12 @@ function SharmaScene() {
 
 // ─── FamilyStories ────────────────────────────────────────────────────────────
 
-const stories = [
+const FALLBACK_STORIES = [
   {
     seed: 0,
     meta: ["Joint Family", "Nagpur", "Renting"],
-    title: "The Agnihotri Journey",
+    title: "The Family Alignment Journey in Nagpur",
+    location: "Nagpur",
     videoLabel: "Family Reflection",
     videoDuration: "2:45",
     videoCaption: "Optional short reflection from the family.",
@@ -740,30 +760,39 @@ const stories = [
     clarityOutcome: "Feeling aligned mattered more than price.",
     gradientFrom: "#C8DDEF",
     gradientTo: "#D8E8F4",
+    href: "/properties?city=Nagpur",
   },
   {
     seed: 1,
-    meta: ["Nuclear Family", "Pune", "Buying"],
-    title: "The Sharma Alignment",
+    meta: ["Nuclear Family", "Nagpur", "Buying"],
+    title: "Finding Shared Priorities in Nagpur",
+    location: "Nagpur",
     videoLabel: "Watch Reflection",
     videoDuration: "3:12",
-    videoCaption: "Navigating 'The Perfect' Search.",
+    videoCaption: "Navigating the perfect-home search together.",
     priorities: [
-      "Parents: closeness to school",
-      "Spouse: kitchen size & light",
-      "Buyer: resale value",
+      "Parents: closeness to schools",
+      "Spouse: daily commute & lifestyle",
+      "Buyer: long-term value",
     ],
-    stressPhase: "Conflict over location vs. amenities led to a 3-month pause.",
+    stressPhase: "Conflict over location vs amenities led to a long pause.",
     clarityMoment:
-      "Structured guidance helped prioritize features over location.",
-    clarityOutcome: "We realized square footage wasn't the goal—joy was.",
+      "Structured guidance helped prioritize needs over wish-list features.",
+    clarityOutcome: "We realized joy at home mattered more than square footage.",
     gradientFrom: "#C8D8E8",
     gradientTo: "#D4E0EC",
+    href: "/properties?city=Nagpur",
   },
 ];
 
 function StoryCard({ story, reverse }) {
-  const Scene = story.seed === 0 ? AgnihotriScene : SharmaScene;
+  const Scene = story.seed % 2 === 0 ? AgnihotriScene : SharmaScene;
+  const storyImage = getStoryImage(story);
+  const storyHref =
+    story.href ||
+    (story.propertySlug
+      ? `/property-info/${story.propertySlug}`
+      : buildFamilyPropertiesLink(story.location || "Nagpur", story.location));
 
   const imagePanel = (
     <div className="flex flex-col gap-3">
@@ -772,22 +801,35 @@ function StoryCard({ story, reverse }) {
         className="relative rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)]"
         style={{
           aspectRatio: "16/10",
-          background: `linear-gradient(135deg, ${story.gradientFrom} 0%, ${story.gradientTo} 100%)`,
+          background: storyImage.includes("hero.svg")
+            ? `linear-gradient(135deg, ${story.gradientFrom} 0%, ${story.gradientTo} 100%)`
+            : "#E8E4F4",
         }}
       >
-        <Scene />
+        {storyImage.includes("hero.svg") ? (
+          <Scene />
+        ) : (
+          <img
+            src={storyImage}
+            alt={story.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
 
         {/* Play button */}
-        <button
-          aria-label={`Play ${story.title} video`}
+        <Link
+          href={storyHref}
+          aria-label={`Explore homes in ${story.location || "Nagpur"}`}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center pl-1 text-[#4500B4] shadow-[0_4px_24px_rgba(0,0,0,0.18)] transition-transform duration-200 hover:scale-110 hover:bg-white z-10"
         >
           <PlayIcon />
-        </button>
+        </Link>
 
         {/* Bottom badge */}
         <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm rounded-lg px-3 py-1 text-[12px] font-semibold text-white z-10 tracking-[0.01em]">
-          {story.videoLabel} • {story.videoDuration}
+          {story.priceRange
+            ? `${story.priceRange} • ${story.location || "Nagpur"}`
+            : `${story.videoLabel} • ${story.videoDuration}`}
         </div>
       </div>
 
@@ -867,15 +909,15 @@ function StoryCard({ story, reverse }) {
       </div>
 
       {/* CTA link */}
-      <a
-        href="#"
+      <Link
+        href={storyHref}
         className="inline-flex items-center gap-1.5 font-jakarta text-[16px] font-bold text-[#4500B4] no-underline mt-6 group"
       >
-        Read Full Family Story
+        {story.propertySlug ? "View Family Home" : "Explore Homes in This Area"}
         <span className="transition-transform duration-200 group-hover:translate-x-1 flex">
           <ArrowIcon />
         </span>
-      </a>
+      </Link>
     </div>
   );
 
@@ -899,14 +941,17 @@ function StoryCard({ story, reverse }) {
   );
 }
 
-function FamilyStories() {
+function FamilyStories({ stories, city = "Nagpur" }) {
+  const displayStories = stories?.length ? stories : FALLBACK_STORIES;
+  const propertiesLink = buildFamilyPropertiesLink(city);
+
   return (
     <section className="bg-[#F6F2FB] md:bg-white px-5 py-16 lg:px-6 lg:py-[72px]">
       <div className="max-w-6xl mx-auto flex flex-col gap-12 lg:gap-[72px]">
-        {stories.map((s, i) => (
-          <div key={s.title}>
+        {displayStories.map((s, i) => (
+          <div key={`${s.title}-${i}`}>
             <StoryCard story={s} reverse={i % 2 !== 0} />
-            {i < stories.length - 1 && (
+            {i < displayStories.length - 1 && (
               <hr className="border-t border-[#E4E0EF] mt-12 lg:hidden" />
             )}
           </div>
@@ -914,9 +959,12 @@ function FamilyStories() {
 
         {/* View More button */}
         <div className="flex justify-center pt-0 pb-2">
-          <button className="border-2 border-[#4500B4] rounded-xl px-10 py-3.5 font-jakarta text-[16px] font-bold text-[#4500B4] bg-transparent cursor-pointer transition-all duration-200 hover:bg-[#4500B4] hover:text-white w-full lg:w-auto">
-            View More Family Stories
-          </button>
+          <Link
+            href={propertiesLink}
+            className="border-2 border-[#4500B4] rounded-xl px-10 py-3.5 font-jakarta text-[16px] font-bold text-[#4500B4] bg-transparent cursor-pointer transition-all duration-200 hover:bg-[#4500B4] hover:text-white w-full lg:w-auto text-center no-underline inline-block"
+          >
+            View Family-Friendly Homes in {city}
+          </Link>
         </div>
       </div>
     </section>
@@ -981,7 +1029,7 @@ function WhatLearned() {
 
 // ─── HowHelps ─────────────────────────────────────────────────────────────────
 
-function HowHelps() {
+function HowHelps({ city = "Nagpur" }) {
   return (
     <div className="relative lg:pb-50 bg-white">
       {/* Purple banner — rounded top corners on mobile matching Figma */}
@@ -1023,9 +1071,12 @@ function HowHelps() {
               Read more journeys where families found alignment before
               committing.
             </p>
-            <button className="w-full bg-[#4500B4] text-white border-none rounded-xl py-4 font-jakarta font-bold text-[16px] cursor-pointer transition-colors duration-200 hover:bg-[#3700a0] shadow-[0_10px_15px_-3px_rgba(69,0,180,0.2),0_4px_6px_-4px_rgba(69,0,180,0.2)]">
-              Explore Stories
-            </button>
+            <Link
+              href="/first-time-buyer"
+              className="block w-full bg-[#4500B4] text-white border-none rounded-xl py-4 font-jakarta font-bold text-[16px] cursor-pointer transition-colors duration-200 hover:bg-[#3700a0] shadow-[0_10px_15px_-3px_rgba(69,0,180,0.2),0_4px_6px_-4px_rgba(69,0,180,0.2)] text-center no-underline"
+            >
+              Explore First-Time Buyer Guide
+            </Link>
           </div>
 
           {/* Card 2 */}
@@ -1036,7 +1087,15 @@ function HowHelps() {
             <p className="font-jakarta text-[16px] leading-6 text-[#5F5D69] mb-6">
               A calm, no-pressure session designed for families.
             </p>
-            <button className="w-full border-2 border-[#4500B4] text-[#4500B4] bg-transparent rounded-xl py-4 font-jakarta font-bold text-[16px] cursor-pointer transition-all duration-200 hover:bg-[#4500B4] hover:text-white">
+            <button
+              type="button"
+              onClick={() =>
+                openAgentAdvisor(
+                  `My family in ${city} needs a free home buying guidance session to align on our priorities.`,
+                )
+              }
+              className="w-full border-2 border-[#4500B4] text-[#4500B4] bg-transparent rounded-xl py-4 font-jakarta font-bold text-[16px] cursor-pointer transition-all duration-200 hover:bg-[#4500B4] hover:text-white"
+            >
               Join Session
             </button>
           </div>
@@ -1048,10 +1107,10 @@ function HowHelps() {
 
 // ─── FAQ ──────────────────────────────────────────────────────────────────────
 
-const faqs = [
+const DEFAULT_FAQS = [
   {
     q: "Are these real family stories?",
-    a: "Yes, every story is based on real families who worked through their home buying decisions with guidance from Reparv advisors.",
+    a: "Yes. Every story reflects real family buying patterns in Nagpur — different priorities, emotional stress, and how alignment was reached before committing.",
   },
   {
     q: "Is this useful if we are not a family?",
@@ -1071,8 +1130,27 @@ const faqs = [
   },
 ];
 
-function FAQ() {
+function FAQ({ initialFaqs = [], pageData = null }) {
   const [open, setOpen] = useState(null);
+  const familyHomes = pageData?.stats?.familyHomes || 0;
+
+  const faqs = useMemo(() => {
+    const mapped = mapFaqs(initialFaqs || []);
+    if (mapped.length > 0) return mapped;
+
+    if (familyHomes) {
+      return DEFAULT_FAQS.map((faq, index) =>
+        index === 0
+          ? {
+              ...faq,
+              a: `Yes. Every story reflects real family buying patterns in Nagpur, grounded in ${familyHomes}+ family-friendly homes across multiple localities.`,
+            }
+          : faq,
+      );
+    }
+
+    return DEFAULT_FAQS;
+  }, [initialFaqs, familyHomes]);
 
   return (
     <section className="bg-white px-5 py-16 lg:px-6 lg:py-20">
@@ -1116,7 +1194,13 @@ function FAQ() {
 
 // ─── Page root ────────────────────────────────────────────────────────────────
 
-export default function FamilyStoriesPage() {
+export default function FamilyStoriesPage({
+  initialPageData = null,
+  initialFaqs = [],
+}) {
+  const city = initialPageData?.city || "Nagpur";
+  const stories = initialPageData?.stories || FALLBACK_STORIES;
+
   return (
     <main
       className="min-h-screen"
@@ -1133,13 +1217,13 @@ export default function FamilyStoriesPage() {
         And in globals.css:
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
       */}
-      <Hero />
+      <Hero pageData={initialPageData} />
       <WhyHard />
       <WhereDifferent />
-      <FamilyStories />
+      <FamilyStories stories={stories} city={city} />
       <WhatLearned />
-      <HowHelps />
-      <FAQ />
+      <HowHelps city={city} />
+      <FAQ initialFaqs={initialFaqs} pageData={initialPageData} />
     </main>
   );
 }

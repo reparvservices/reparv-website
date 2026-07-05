@@ -1,7 +1,29 @@
 "use client";
-import { useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { useAuth } from "../store/auth";
+import { openAgentAdvisor } from "../utils/openAgentAdvisor";
+import {
+  buildPropertiesLink,
+  chunkAreaLinks,
+  filterFlats,
+  formatFlatStatPrice,
+  formatPriceLabel,
+  formatVerifiedStatValue,
+  getFlatTitle,
+  getProjectImage,
+  getPropertyBadge,
+  getPropertyImage,
+  getPropertyLocationText,
+  mapFaqs,
+} from "../utils/flatsForSalePage";
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
+const PAGE_CITY = "Nagpur";
+
+const scrollToSection = (id) => {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+
 const ChevronDown = ({ cls = "w-4 h-4 text-gray-500 flex-shrink-0" }) => (
   <svg className={cls} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -17,33 +39,21 @@ const CheckDot = ({ color = "#10B981" }) => (
     <circle cx="5" cy="5" r="5" fill={color} />
   </svg>
 );
-const GreenCheck = () => (
-  <svg className="w-4 h-4 text-[#10B981] flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-  </svg>
-);
-const PurpleCheck = () => (
-  <svg className="w-4 h-4 text-[#5E23DC] flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-  </svg>
-);
-const PhoneIcon = () => (
-  <svg className="w-5 h-5 text-[#5E23DC]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-  </svg>
-);
 const DownloadIcon = () => (
   <svg className="w-5 h-5 text-[#5E23DC]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
   </svg>
 );
 
-// ── FAQ accordion ─────────────────────────────────────────────────────────────
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="bg-white border border-[#F3F4F6] shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
-      <button onClick={() => setOpen(!open)} className="w-full flex justify-between items-center px-6 py-5 text-left gap-4 hover:bg-gray-50/50 transition-colors">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex justify-between items-center px-6 py-5 text-left gap-4 hover:bg-gray-50/50 transition-colors"
+      >
         <span className="font-['Manrope'] font-semibold text-sm text-[#111827]">{q}</span>
         <span className="text-[#5E23DC] text-lg font-light flex-shrink-0">{open ? "−" : "+"}</span>
       </button>
@@ -56,95 +66,152 @@ function FaqItem({ q, a }) {
   );
 }
 
-// ── Flat Card ─────────────────────────────────────────────────────────────────
-function FlatCard({ badge, location, title, price }) {
+function FlatCard({ property }) {
+  const badge = getPropertyBadge(property);
+
   return (
     <div className="bg-white shadow-[0px_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden flex-shrink-0 w-64 sm:w-auto hover:shadow-lg transition-shadow">
-      <div className="relative h-48 bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center">
-        <svg className="w-12 h-12 text-white/30" fill="none" stroke="currentColor" strokeWidth={1} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-        <div className="absolute top-3 left-3 bg-[#5E23DC] rounded px-2 py-0.5">
-          <span className="font-['Manrope'] font-semibold text-[10px] text-white uppercase">{badge}</span>
+      <div className="relative h-48 bg-gradient-to-br from-slate-300 to-slate-400">
+        <img
+          src={getPropertyImage(property)}
+          alt={property?.propertyName}
+          className="w-full h-full object-cover"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = "/assets/property/propertyPicture.svg";
+          }}
+        />
+        <div className={`absolute top-3 left-3 ${badge.color} rounded px-2 py-0.5`}>
+          <span className="font-['Manrope'] font-semibold text-[10px] text-white uppercase">
+            {badge.label}
+          </span>
         </div>
       </div>
       <div className="p-5 flex flex-col gap-1">
-        <p className="font-['Manrope'] ffont-semibold text-[10px] text-[#9CA3AF] uppercase tracking-wide">{location}</p>
-        <h3 className="font-['Manrope'] font-semibold text-lg text-[#111827]">{title}</h3>
-        <p className="font-['Manrope'] font-semibold text-xl text-[#5E23DC] mt-1">{price}</p>
-        <button className="w-full border border-[#5E23DC] text-[#5E23DC] font-['Manrope'] font-bold text-sm py-2.5 rounded-xl mt-2 hover:bg-[#5E23DC] hover:text-white transition-colors">
+        <p className="font-['Manrope'] font-semibold text-[10px] text-[#9CA3AF] uppercase tracking-wide">
+          {getPropertyLocationText(property)}
+        </p>
+        <h3 className="font-['Manrope'] font-semibold text-lg text-[#111827]">
+          {getFlatTitle(property)}
+        </h3>
+        <p className="font-['Manrope'] font-semibold text-xl text-[#5E23DC] mt-1">
+          {formatPriceLabel(property)}
+        </p>
+        <Link
+          href={`/property-info/${property?.seoSlug}`}
+          className="w-full border border-[#5E23DC] text-[#5E23DC] font-['Manrope'] font-bold text-sm py-2.5 rounded-xl mt-2 hover:bg-[#5E23DC] hover:text-white transition-colors text-center"
+        >
           View Details
-        </button>
+        </Link>
       </div>
     </div>
   );
 }
 
-// ── Project Card ──────────────────────────────────────────────────────────────
-function ProjectCard({ badge, badgeBg, name, sub, priceOrDate, btnLabel = "Register Interest" }) {
+function ProjectCard({ project }) {
   return (
     <div className="flex flex-col gap-1 flex-shrink-0 w-72 sm:w-auto hover:shadow-md transition-shadow">
-      <div className="relative h-56 bg-gradient-to-br from-violet-300 to-violet-600 rounded-2xl overflow-hidden flex items-center justify-center">
-        <svg className="w-14 h-14 text-white/30" fill="none" stroke="currentColor" strokeWidth={1} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-        </svg>
-        <div className="absolute top-4 left-4" style={{ background: badgeBg }} dangerouslySetInnerHTML={{ __html: `<span class="font-['Manrope'] font-bold text-[10px] text-white uppercase px-3 py-1 rounded-full inline-block">${badge}</span>` }} />
+      <div className="relative h-56 bg-gradient-to-br from-violet-300 to-violet-600 rounded-2xl overflow-hidden">
+        <img
+          src={getProjectImage(project)}
+          alt={project?.name}
+          className="w-full h-full object-cover"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = "/assets/property/propertyPicture.svg";
+          }}
+        />
+        <div className="absolute top-4 left-4">
+          <span
+            className="font-['Manrope'] font-bold text-[10px] text-white uppercase px-3 py-1 rounded-full inline-block"
+            style={{ background: project.badgeBg }}
+          >
+            {project.badge}
+          </span>
+        </div>
       </div>
       <div className="pt-3 flex flex-col gap-1">
-        <h3 className="font-['Manrope'] font-semibold text-xl text-[#111827]">{name}</h3>
-        <p className="font-['Manrope'] text-sm text-[#9CA3AF]">{sub}</p>
-        <p className="font-['Manrope'] font-semibold text-base text-[#5E23DC] py-1">{priceOrDate}</p>
-        <button className="w-full bg-[rgba(94,35,220,0.05)] text-[#5E23DC] font-['Manrope'] font-bold text-sm py-3 rounded-xl hover:bg-[rgba(94,35,220,0.1)] transition-colors">
-          {btnLabel}
-        </button>
+        <h3 className="font-['Manrope'] font-semibold text-xl text-[#111827]">{project.name}</h3>
+        <p className="font-['Manrope'] text-sm text-[#9CA3AF]">{project.sub}</p>
+        <p className="font-['Manrope'] font-semibold text-base text-[#5E23DC] py-1">
+          {project.priceOrDate}
+        </p>
+        <Link
+          href={project.seoSlug ? `/property-info/${project.seoSlug}` : "/properties"}
+          className="w-full bg-[rgba(94,35,220,0.05)] text-[#5E23DC] font-['Manrope'] font-bold text-sm py-3 rounded-xl hover:bg-[rgba(94,35,220,0.1)] transition-colors text-center"
+        >
+          Register Interest
+        </Link>
       </div>
     </div>
   );
 }
 
-// ── Area Card ─────────────────────────────────────────────────────────────────
-function AreaCard({ name, priceRange, priceColor, borderColor, iconBg, iconColor, items, linkColor }) {
+function AreaCard({ area }) {
   return (
-    <div className={`bg-white border-t-4 shadow-[0px_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-6 flex flex-col gap-1 hover:shadow-md transition-shadow flex-shrink-0 w-52 sm:w-auto`} style={{ borderTopColor: borderColor }}>
-      <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-1 text-xl" style={{ background: iconBg }}>
+    <div
+      className="bg-white border-t-4 shadow-[0px_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-6 flex flex-col gap-1 hover:shadow-md transition-shadow flex-shrink-0 w-52 sm:w-auto"
+      style={{ borderTopColor: area.borderColor }}
+    >
+      <div
+        className="w-10 h-10 rounded-lg flex items-center justify-center mb-1 text-xl"
+        style={{ background: area.iconBg }}
+      >
         🏙️
       </div>
-      <h3 className="font-['Manrope'] font-semibold text-lg text-[#111827] pt-3">{name}</h3>
-      <p className="font-['Manrope'] font-semibold text-sm" style={{ color: priceColor }}>{priceRange}</p>
+      <h3 className="font-['Manrope'] font-semibold text-lg text-[#111827] pt-3">{area.name}</h3>
+      <p className="font-['Manrope'] font-semibold text-sm" style={{ color: area.priceColor }}>
+        {area.priceRange}
+      </p>
       <div className="flex flex-col gap-2 py-3">
-        {items.map((item, i) => (
-          <div key={i} className="flex items-start gap-2">
+        {area.highlights.map((item) => (
+          <div key={item} className="flex items-start gap-2">
             <CheckDot color="#22C55E" />
             <span className="font-['Manrope'] text-[11px] text-[#6B7280] leading-4">{item}</span>
           </div>
         ))}
       </div>
-      <a href="#" className="font-['Manrope'] font-semibold text-xs border-b pb-0.5 hover:opacity-80 transition-opacity" style={{ color: linkColor, borderColor: linkColor }}>
+      <Link
+        href={buildPropertiesLink({ city: PAGE_CITY, area: area.name })}
+        className="font-['Manrope'] font-semibold text-xs border-b pb-0.5 hover:opacity-80 transition-opacity w-fit"
+        style={{ color: area.linkColor, borderColor: area.linkColor }}
+      >
         View Flats →
-      </a>
+      </Link>
     </div>
   );
 }
 
-// ── Persona Card ──────────────────────────────────────────────────────────────
-function PersonaCard({ bg, border, badge, badgeBg, badgeText, title, desc, btnColor, btnText }) {
+function PersonaCard({ persona, onSelect }) {
   return (
-    <div className={`border rounded-2xl p-6 flex flex-col justify-between hover:shadow-md transition-shadow flex-shrink-0 w-64 sm:w-auto`} style={{ background: bg, borderColor: border }}>
+    <div
+      className="border rounded-2xl p-6 flex flex-col justify-between hover:shadow-md transition-shadow flex-shrink-0 w-64 sm:w-auto"
+      style={{ background: persona.bg, borderColor: persona.border }}
+    >
       <div>
         <div className="mb-3">
-          <span className="font-['Manrope'] font-semibold text-[10px] uppercase px-2 py-1 rounded" style={{ background: badgeBg, color: badgeText }}>{badge}</span>
+          <span
+            className="font-['Manrope'] font-semibold text-[10px] uppercase px-2 py-1 rounded"
+            style={{ background: persona.badgeBg, color: persona.badgeText }}
+          >
+            {persona.badge}
+          </span>
         </div>
-        <h3 className="font-['Manrope'] font-semibold text-xl text-[#111827] mb-2">{title}</h3>
-        <p className="font-['Manrope'] text-sm text-[#6B7280] leading-5">{desc}</p>
+        <h3 className="font-['Manrope'] font-semibold text-xl text-[#111827] mb-2">{persona.title}</h3>
+        <p className="font-['Manrope'] text-sm text-[#6B7280] leading-5">{persona.desc}</p>
       </div>
-      <button className="w-full font-['Manrope'] font-semibold text-sm py-2 rounded-lg mt-6 text-white hover:opacity-90 transition-opacity shadow-sm" style={{ background: btnColor }}>
-        {btnText}
+      <button
+        type="button"
+        onClick={() => onSelect(persona)}
+        className="w-full font-['Manrope'] font-semibold text-sm py-2 rounded-lg mt-6 text-white hover:opacity-90 transition-opacity shadow-sm"
+        style={{ background: persona.btnColor }}
+      >
+        {persona.btnText}
       </button>
     </div>
   );
 }
 
-// ── Story Card ────────────────────────────────────────────────────────────────
 function StoryCard({ initials, name, role, location, problem, outcome }) {
   return (
     <div className="bg-white border border-[#F9FAFB] shadow-[0px_4px_20px_rgba(0,0,0,0.05)] rounded-3xl p-8 flex flex-col gap-6 hover:shadow-md transition-shadow flex-shrink-0 w-72 sm:w-auto">
@@ -177,91 +244,310 @@ function StoryCard({ initials, name, role, location, problem, outcome }) {
   );
 }
 
-// ── MAIN PAGE ─────────────────────────────────────────────────────────────────
-export default function FlatsForSale() {
-  const [filters, setFilters] = useState({ bhk: "Any", budget: "Any", status: "Any", area: "All Areas" });
+export default function FlatsForSale({ initialPageData = null, initialFaqs = [] }) {
+  const { URI, setShowAlert } = useAuth();
+  const pageData = initialPageData;
+
+  const [filters, setFilters] = useState({
+    bhk: "Any",
+    budget: "Any",
+    status: "Any",
+    area: "All Areas",
+  });
   const [form, setForm] = useState({ name: "", phone: "", bhk: "Select BHK" });
+  const [submitting, setSubmitting] = useState(false);
 
-  const flats = [
-    { badge: "Verified", location: "Manish Nagar, Nagpur", title: "2 BHK Apartment", price: "₹42.00 Lacs" },
-    { badge: "Premium", location: "Wardha Road, Nagpur", title: "3 BHK Apartment", price: "₹68.50 Lacs" },
-    { badge: "Ready", location: "Besa, Nagpur", title: "2 BHK Apartment", price: "₹38.00 Lacs" },
-    { badge: "New", location: "MIHAN, Nagpur", title: "1 BHK Apartment", price: "₹24.00 Lacs" },
-  ];
+  const flatListings = pageData?.stats?.flatListings || 0;
+  const localityCount = pageData?.stats?.localities || 0;
+  const minPricePerSqft = pageData?.stats?.minPricePerSqft;
+  const newListingsToday = pageData?.stats?.newListingsToday || 0;
+  const readyCount = pageData?.stats?.readyToMove || 0;
+  const underConstructionCount = pageData?.stats?.underConstruction || 0;
 
-  const projects = [
-    { badge: "Pre Launch", badgeBg: "#F97316", name: "Shree Vishv Residency", sub: "Manish Nagar | 1, 2, 3 BHK", priceOrDate: "Expected Price: ₹32 Lacs+" },
-    { badge: "Ready", badgeBg: "#10B981", name: "Skyline Heights", sub: "Wardha Road | 2, 3, 4 BHK", priceOrDate: "Finalization: Dec 2025" },
-    { badge: "New Launch", badgeBg: "#5E23DC", name: "Royal Heritage Phase 2", sub: "Besa | 2, 3 BHK", priceOrDate: "New Launch Offers Available" },
-  ];
+  const allFlats = pageData?.flats || pageData?.featuredFlats || [];
+  const upcomingProjects = pageData?.upcomingProjects || [];
+  const popularAreas = pageData?.popularAreas || [];
+  const areaLinks = pageData?.areaLinks || [];
+  const localityOptions = pageData?.localities || [];
+  const bhkOptions = pageData?.bhkOptions || [];
 
-  const areas = [
-    { name: "Manish Nagar", priceRange: "₹3.5k - ₹5k/sqft", priceColor: "#5E23DC", borderColor: "#5E23DC", iconBg: "rgba(94,35,220,0.1)", iconColor: "#5E23DC", items: ["Active residential hub", "Great schools nearby", "Good connectivity"], linkColor: "#5E23DC" },
-    { name: "Wardha Road", priceRange: "₹3k - ₹4.5k/sqft", priceColor: "#2563EB", borderColor: "#3B82F6", iconBg: "#DBEAFE", iconColor: "#2563EB", items: ["IT parks nearby", "Airport proximity"], linkColor: "#2563EB" },
-    { name: "Besa", priceRange: "₹2.8k - ₹4k/sqft", priceColor: "#EA580C", borderColor: "#F97316", iconBg: "#FFEDD5", iconColor: "#EA580C", items: ["Premium area", "Green surroundings"], linkColor: "#EA580C" },
-    { name: "MIHAN", priceRange: "₹2.5k - ₹3.8k/sqft", priceColor: "#4F46E5", borderColor: "#6366F1", iconBg: "#E0E7FF", iconColor: "#4F46E5", items: ["Corporate zone", "MIHAN-SEZ access"], linkColor: "#4F46E5" },
-    { name: "Hingna", priceRange: "₹2.2k - ₹3.5k/sqft", priceColor: "#9333EA", borderColor: "#A855F7", iconBg: "#F3E8FF", iconColor: "#9333EA", items: ["Affordable zone", "Growing area"], linkColor: "#9333EA" },
-  ];
+  const heroImage = pageData?.heroProperty
+    ? getPropertyImage(pageData.heroProperty)
+    : "/assets/seopageassets/visitproperties/banner-image.svg";
 
-  const areaLinks = [
-    ["Flats in Manish Nagar", "Flats on Wardha Road", "Flats in Besa", "Flats in MIHAN"],
-    ["Flats in Hingna", "Flats near Airport", "Flats in Dharampeth", "Flats in South Nagpur"],
-  ];
+  const filteredFlats = useMemo(
+    () => filterFlats(allFlats, filters),
+    [allFlats, filters],
+  );
+
+  const hasActiveFilters =
+    filters.bhk !== "Any" ||
+    filters.budget !== "Any" ||
+    filters.status !== "Any" ||
+    filters.area !== "All Areas";
+
+  const displayFlats = hasActiveFilters
+    ? filteredFlats
+    : (pageData?.featuredFlats || allFlats).slice(0, 8);
+
+  const areaLinkRows = useMemo(() => chunkAreaLinks(areaLinks, 4), [areaLinks]);
+
+  const filterConfig = useMemo(
+    () => [
+      {
+        label: "BHK",
+        key: "bhk",
+        opts: ["Any", ...bhkOptions, ...(bhkOptions.includes("4 BHK") ? [] : ["4+ BHK"])],
+      },
+      {
+        label: "BUDGET",
+        key: "budget",
+        opts: ["Any", "₹20-40L", "₹40-60L", "₹60-80L", "₹80L+"],
+      },
+      {
+        label: "STATUS",
+        key: "status",
+        opts: ["Any", "Ready to Move", "Under Construction", "New Launch"],
+      },
+      {
+        label: "PREFERRED AREA",
+        key: "area",
+        opts: ["All Areas", ...localityOptions],
+      },
+    ],
+    [bhkOptions, localityOptions],
+  );
+
+  const faqs = useMemo(() => {
+    const mapped = mapFaqs(initialFaqs || []);
+    if (mapped.length > 0) return mapped;
+
+    return [
+      {
+        q: "Ready to move vs under construction — what to select?",
+        a: "Ready-to-move flats are great for immediate needs and saving GST, whereas under-construction flats offer better capital appreciation and flexible payments. Your choice depends on urgency and financial capacity.",
+      },
+      {
+        q: "Are flats on Reparv verified?",
+        a: `Yes. Reparv lists ${flatListings || "verified"} flats across ${localityCount || "multiple"} Nagpur localities with legal verification and transparent pricing.`,
+      },
+      {
+        q: "What is the average cost of flats in Nagpur?",
+        a: minPricePerSqft
+          ? `Flat prices in Nagpur start from around ${formatFlatStatPrice(minPricePerSqft)} in developing areas and go higher in premium localities like Besa, Manish Nagar, and Wardha Road.`
+          : "Flat prices in Nagpur range from affordable 1 BHK options in developing areas to premium 3 BHK apartments in established localities.",
+      },
+    ];
+  }, [initialFaqs, flatListings, localityCount, minPricePerSqft]);
 
   const personas = [
-    { bg: "#EFF6FF", border: "#DBEAFE", badge: "FAMILY", badgeBg: "#DBEAFE", badgeText: "#2563EB", title: "Family Buyer", desc: "Focus: Safety, schools, connectivity, amenities. Typical Budget: ₹45-80 Lacs.", btnColor: "#2563EB", btnText: "Show Matching Flats" },
-    { bg: "#FAF5FF", border: "#F3E8FF", badge: "PROFESSIONAL", badgeBg: "#F3E8FF", badgeText: "#9333EA", title: "Working Professional", desc: "Focus: Proximity to IT hubs, gym, lifestyle. Typical Budget: ₹35-60 Lacs.", btnColor: "#9333EA", btnText: "Show Matching Flats" },
-    { bg: "#F0FDF4", border: "#DCFCE7", badge: "INVESTOR", badgeBg: "#DCFCE7", badgeText: "#16A34A", title: "Investor", desc: "Focus: Rental yield, appreciation, location potential. Typical Budget: ₹30-50 Lacs.", btnColor: "#16A34A", btnText: "Show Matching Flats" },
-    { bg: "#FFF7ED", border: "#FFEDD5", badge: "FIRST-TIME", badgeBg: "#FFEDD5", badgeText: "#EA580C", title: "First-Time Buyer", desc: "Focus: Loan support, legal clarity, budget. Typical Budget: ₹25-45 Lacs.", btnColor: "#EA580C", btnText: "Show Matching Flats" },
+    {
+      bg: "#EFF6FF",
+      border: "#DBEAFE",
+      badge: "FAMILY",
+      badgeBg: "#DBEAFE",
+      badgeText: "#2563EB",
+      title: "Family Buyer",
+      desc: "Focus: Safety, schools, connectivity, amenities. Typical Budget: ₹45-80 Lacs.",
+      btnColor: "#2563EB",
+      btnText: "Show Matching Flats",
+      budget: "₹40-60L",
+      bhk: "3 BHK",
+    },
+    {
+      bg: "#FAF5FF",
+      border: "#F3E8FF",
+      badge: "PROFESSIONAL",
+      badgeBg: "#F3E8FF",
+      badgeText: "#9333EA",
+      title: "Working Professional",
+      desc: "Focus: Proximity to IT hubs, gym, lifestyle. Typical Budget: ₹35-60 Lacs.",
+      btnColor: "#9333EA",
+      btnText: "Show Matching Flats",
+      budget: "₹40-60L",
+      bhk: "2 BHK",
+    },
+    {
+      bg: "#F0FDF4",
+      border: "#DCFCE7",
+      badge: "INVESTOR",
+      badgeBg: "#DCFCE7",
+      badgeText: "#16A34A",
+      title: "Investor",
+      desc: "Focus: Rental yield, appreciation, location potential. Typical Budget: ₹30-50 Lacs.",
+      btnColor: "#16A34A",
+      btnText: "Show Matching Flats",
+      budget: "₹20-40L",
+      bhk: "Any",
+    },
+    {
+      bg: "#FFF7ED",
+      border: "#FFEDD5",
+      badge: "FIRST-TIME",
+      badgeBg: "#FFEDD5",
+      badgeText: "#EA580C",
+      title: "First-Time Buyer",
+      desc: "Focus: Loan support, legal clarity, budget. Typical Budget: ₹25-45 Lacs.",
+      btnColor: "#EA580C",
+      btnText: "Show Matching Flats",
+      budget: "₹20-40L",
+      bhk: "2 BHK",
+    },
   ];
 
   const stories = [
-    { initials: "RD", name: "Rahul Deshmukh", role: "IT Manager", location: "Wardha Road", problem: "Struggled to find a verified flat without high brokerage in Nagpur.", outcome: "Bought verified 2BHK flat with 0% brokerage via Reparv." },
-    { initials: "EP", name: "Elan Peethambaram", role: "Entrepreneur", location: "Manish Nagar", problem: "Too many options, confused about legal paperwork and RERA status.", outcome: "Reparv expert simplified RERA check & got his dream 3BHK." },
-    { initials: "PD", name: "Priya Dongre", role: "NRI Investor", location: "MIHAN Zone", problem: "Wanted an investment-ready flat near Nagpur Airport.", outcome: "Invested in MIHAN flat with 8% rental yield via Reparv." },
+    {
+      initials: "RD",
+      name: "Rahul Deshmukh",
+      role: "IT Manager",
+      location: popularAreas[0]?.name || "Wardha Road",
+      problem: "Struggled to find a verified flat without high brokerage in Nagpur.",
+      outcome: "Bought verified 2BHK flat with 0% brokerage via Reparv.",
+    },
+    {
+      initials: "EP",
+      name: "Elan Peethambaram",
+      role: "Entrepreneur",
+      location: popularAreas[1]?.name || "Manish Nagar",
+      problem: "Too many options, confused about legal paperwork and RERA status.",
+      outcome: "Reparv expert simplified RERA check & got his dream 3BHK.",
+    },
+    {
+      initials: "PD",
+      name: "Priya Dongre",
+      role: "NRI Investor",
+      location: popularAreas[2]?.name || "MIHAN Zone",
+      problem: "Wanted an investment-ready flat near Nagpur Airport.",
+      outcome: "Invested in MIHAN flat with strong rental yield via Reparv.",
+    },
   ];
 
-  const faqs = [
-    { q: "Ready to move vs under construction — what to select?", a: "Ready-to-move flats are great for immediate needs and saving GST, whereas under-construction flats offer better capital appreciation and flexible payments. Your choice depends on urgency and financial capacity." },
-    { q: "Are there simple plots in Nagpur?", a: "Yes, Reparv lists verified residential and commercial plots across all major Nagpur zones including Wardha Road, Besa, MIHAN, and Hingna with complete legal verification." },
-    { q: "What is the average cost of flats in Nagpur?", a: "Flat prices in Nagpur range from ₹20 Lacs for 1 BHK in developing areas to ₹80+ Lacs for premium 3 BHK apartments in Besa, Manish Nagar, and Wardha Road. Average price is ₹3,500–5,000 per sqft." },
-  ];
+  const handleShowFlats = () => {
+    scrollToSection("featured-flats");
+  };
+
+  const handlePersonaSelect = (persona) => {
+    setFilters({
+      bhk: persona.bhk,
+      budget: persona.budget,
+      status: "Any",
+      area: "All Areas",
+    });
+    scrollToSection("featured-flats");
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const fullname = form.name.trim();
+    const contact = form.phone.trim();
+    const bhk = form.bhk;
+
+    if (!fullname || !contact) {
+      alert("Please fill in your name and phone number");
+      return;
+    }
+
+    if (!/^\d{10}$/.test(contact)) {
+      alert("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const response = await fetch(`${URI}/frontend/contact-us/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullname,
+          contact,
+          email: `${contact}@callback.reparv.in`,
+          subject: `Flats for Sale - ${PAGE_CITY}`,
+          message: `Callback requested from Flats for Sale page. Preferred BHK: ${bhk}. City: ${PAGE_CITY}.`,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Something went wrong");
+        return;
+      }
+
+      setShowAlert?.({
+        show: true,
+        type: "success",
+        message: data.message || "Request submitted successfully",
+      });
+
+      setForm({ name: "", phone: "", bhk: "Select BHK" });
+    } catch (error) {
+      console.error("Callback form error:", error);
+      alert("Server error, please try again later");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="bg-[#F9FAFB] font-['Manrope',sans-serif] min-w-0 overflow-x-hidden">
-
-      {/* ══ HERO ════════════════════════════════════════════════════════════ */}
       <section className="bg-gradient-to-br from-[#8A38F5] to-[#5E23DC] relative overflow-hidden pt-20 pb-20 min-h-[580px] flex items-center">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 w-full">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
-            {/* Left */}
             <div className="flex-1 min-w-0">
-              {/* Breadcrumbs */}
               <div className="flex gap-3 mb-5">
-                {["Flats for Sale", "Nagpur"].map(b => (
-                  <span key={b} className="bg-white/10 text-white font-['Manrope'] font-medium text-xs px-3 py-1 rounded-full">{b}</span>
+                {["Flats for Sale", PAGE_CITY].map((b) => (
+                  <span
+                    key={b}
+                    className="bg-white/10 text-white font-['Manrope'] font-medium text-xs px-3 py-1 rounded-full"
+                  >
+                    {b}
+                  </span>
                 ))}
               </div>
               <h1 className="font-['Manrope'] font-semibold text-5xl text-white leading-[48px] mb-5">
-                Flats for Sale<br />in Nagpur
+                Flats for Sale
+                <br />
+                in {PAGE_CITY}
               </h1>
               <p className="font-['Manrope'] text-lg text-white/80 leading-7 mb-7 max-w-[447px]">
-                Explore 2, 3 BHK Apartments & new flat listings in Nagpur. Buy verified properties with complete legal support and zero hidden costs.
+                Explore verified 1, 2 & 3 BHK apartments and new flat listings in {PAGE_CITY}. Buy
+                with complete legal support and zero hidden costs.
               </p>
               <div className="flex flex-wrap gap-4 mb-5">
-                <button className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-base px-6 py-3 rounded-lg hover:bg-violet-50 transition-colors shadow">
+                <button
+                  type="button"
+                  onClick={handleShowFlats}
+                  className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-base px-6 py-3 rounded-lg hover:bg-violet-50 transition-colors shadow"
+                >
                   Show Flats
                 </button>
-                <button className="bg-white/10 border border-white/20 text-white font-['Manrope'] font-semibold text-base px-6 py-3 rounded-lg hover:bg-white/20 transition-colors">
+                <button
+                  type="button"
+                  onClick={() =>
+                    openAgentAdvisor(`I want help finding flats for sale in ${PAGE_CITY}.`)
+                  }
+                  className="bg-white/10 border border-white/20 text-white font-['Manrope'] font-semibold text-base px-6 py-3 rounded-lg hover:bg-white/20 transition-colors"
+                >
                   Talk to Expert
                 </button>
               </div>
-              {/* Trust badges */}
               <div className="flex flex-wrap gap-5">
-                {["500+ Listings", "RERA Verified", "0% Brokerage"].map(b => (
+                {[
+                  `${formatVerifiedStatValue(flatListings)} Listings`,
+                  "RERA Verified",
+                  "0% Brokerage",
+                ].map((b) => (
                   <div key={b} className="flex items-center gap-1.5">
                     <div className="w-4 h-4 rounded-full bg-[#10B981] flex items-center justify-center">
-                      <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                      <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
                     </div>
                     <span className="font-['Manrope'] text-xs text-white/60">{b}</span>
                   </div>
@@ -269,20 +555,35 @@ export default function FlatsForSale() {
               </div>
             </div>
 
-            {/* Right — building image card */}
             <div className="w-full lg:w-[458px] flex-shrink-0 relative">
-              <div className="w-full relative rounded-2xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] h-[400px] flex items-center justify-center">
-                <img src="/assets/seoPages/flatsForSale/hero.jpg" alt="hero image" className="w-full h-full object-cover rounded-2xl" />
-                {/* Live badge */}
+              <div className="w-full relative rounded-2xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] h-[400px] overflow-hidden">
+                <img
+                  src={heroImage}
+                  alt={`Flats for sale in ${PAGE_CITY}`}
+                  className="w-full h-full object-cover rounded-2xl"
+                  onError={(event) => {
+                    event.currentTarget.onerror = null;
+                    event.currentTarget.src = "/assets/seopageassets/visitproperties/banner-image.svg";
+                  }}
+                />
                 <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-2">
                   <div className="w-2 h-2 bg-[#22C55E] rounded-full animate-pulse" />
-                  <span className="font-['Manrope'] font-bold text-xs text-[#1F2937]">New Listings Available</span>
+                  <span className="font-['Manrope'] font-bold text-xs text-[#1F2937]">
+                    New Listings Available
+                  </span>
                 </div>
-                {/* Price card */}
                 <div className="absolute -left-12 bottom-4 bg-white rounded-xl p-4 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] min-w-[162px]">
-                  <p className="font-['Manrope'] font-bold text-[10px] text-[#6B7280] uppercase tracking-wide mb-1">Starting From</p>
-                  <p className="font-['Manrope'] font-black text-xl text-[#1F2937]">₹5,360/sqft</p>
-                  <p className="font-['Manrope'] font-bold text-[10px] text-[#22C55E] mt-0.5">3 New Units Today</p>
+                  <p className="font-['Manrope'] font-bold text-[10px] text-[#6B7280] uppercase tracking-wide mb-1">
+                    Starting From
+                  </p>
+                  <p className="font-['Manrope'] font-black text-xl text-[#1F2937]">
+                    {formatFlatStatPrice(minPricePerSqft) || "Price on request"}
+                  </p>
+                  <p className="font-['Manrope'] font-bold text-[10px] text-[#22C55E] mt-0.5">
+                    {newListingsToday > 0
+                      ? `${newListingsToday} New Units Today`
+                      : `${localityCount} Localities`}
+                  </p>
                 </div>
               </div>
             </div>
@@ -290,311 +591,461 @@ export default function FlatsForSale() {
         </div>
       </section>
 
-      {/* ══ FILTER BAR ══════════════════════════════════════════════════════ */}
       <div className="max-w-[1408px] mx-auto px-4 -mt-[52px] relative z-20 mb-6">
         <div className="bg-white shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),0px_8px_10px_-6px_rgba(0,0,0,0.1)] rounded-2xl p-6 flex flex-wrap items-end gap-4">
-          {[
-            { label: "BHK", key: "bhk", opts: ["Any", "1 BHK", "2 BHK", "3 BHK", "4+ BHK"] },
-            { label: "BUDGET", key: "budget", opts: ["Any", "₹20-40L", "₹40-60L", "₹60-80L", "₹80L+"] },
-            { label: "STATUS", key: "status", opts: ["Any", "Ready to Move", "Under Construction", "New Launch"] },
-            { label: "PREFERRED AREA", key: "area", opts: ["All Areas", "Manish Nagar", "Wardha Road", "Besa", "MIHAN", "Hingna"] },
-          ].map(f => (
+          {filterConfig.map((f) => (
             <div key={f.key} className="flex flex-col gap-1 flex-1 min-w-[160px]">
-              <label className="font-['Manrope'] font-bold text-[10px] uppercase text-[#9CA3AF] tracking-wide">{f.label}</label>
+              <label className="font-['Manrope'] font-bold text-[10px] uppercase text-[#9CA3AF] tracking-wide">
+                {f.label}
+              </label>
               <div className="relative">
-                <select value={filters[f.key]} onChange={e => setFilters({ ...filters, [f.key]: e.target.value })}
-                  className="w-full appearance-none bg-[#F9FAFB] border-0 rounded-lg pl-3 pr-9 py-2 font-['Manrope'] font-semibold text-sm text-[#111827] outline-none focus:ring-2 focus:ring-[#5E23DC] cursor-pointer">
-                  {f.opts.map(o => <option key={o}>{o}</option>)}
+                <select
+                  value={filters[f.key]}
+                  onChange={(event) =>
+                    setFilters({ ...filters, [f.key]: event.target.value })
+                  }
+                  className="w-full appearance-none bg-[#F9FAFB] border-0 rounded-lg pl-3 pr-9 py-2 font-['Manrope'] font-semibold text-sm text-[#111827] outline-none focus:ring-2 focus:ring-[#5E23DC] cursor-pointer"
+                >
+                  {f.opts.map((o) => (
+                    <option key={o}>{o}</option>
+                  ))}
                 </select>
                 <ChevronDown cls="w-4 h-4 text-[#5E23DC] absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
             </div>
           ))}
-          <button className="bg-[#5E23DC] text-white font-['Manrope'] font-bold text-sm px-8 py-2.5 rounded-lg hover:bg-[#4500B4] transition-colors flex-shrink-0">
+          <button
+            type="button"
+            onClick={handleShowFlats}
+            className="bg-[#5E23DC] text-white font-['Manrope'] font-bold text-sm px-8 py-2.5 rounded-lg hover:bg-[#4500B4] transition-colors flex-shrink-0"
+          >
             Show Flats
           </button>
         </div>
       </div>
 
-      {/* ══ FEATURED FLATS ══════════════════════════════════════════════════ */}
-      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-12">
+      <section id="featured-flats" className="max-w-[1280px] mx-auto px-4 sm:px-8 py-12">
         <div className="flex items-end justify-between mb-8 gap-4">
           <div>
-            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-2">RERA VERIFIED</p>
-            <h2 className="font-['Manrope'] font-semibold text-[30px] text-[#111827] leading-9">Featured &amp; Verified Flats in Nagpur</h2>
-          </div>
-          <a href="#" className="flex items-center gap-1 text-[#5E23DC] font-['Manrope'] font-semibold text-sm whitespace-nowrap hover:gap-2 transition-all">
-            Show All <ArrowRight cls="w-4 h-4 text-[#5E23DC]" />
-          </a>
-        </div>
-        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-          {flats.map((f, i) => <FlatCard key={i} {...f} />)}
-        </div>
-      </section>
-
-      {/* ══ UPCOMING PROJECTS ═══════════════════════════════════════════════ */}
-      <section className="bg-white py-20">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
-          <div className="text-center mb-10">
-            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">PRE LAUNCH</p>
-            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-3">Upcoming Projects in Nagpur</h2>
-            <p className="font-['Manrope'] text-base text-[#6B7280] max-w-[660px] mx-auto leading-6">
-              Discover pre-launch and upcoming residential projects in Nagpur — in areas delivering strong ROI and build quality.
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-2">
+              RERA VERIFIED
             </p>
+            <h2 className="font-['Manrope'] font-semibold text-[30px] text-[#111827] leading-9">
+              Featured &amp; Verified Flats in {PAGE_CITY}
+            </h2>
           </div>
-          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-            {projects.map((p, i) => <ProjectCard key={i} {...p} />)}
-          </div>
+          <Link
+            href={buildPropertiesLink({ city: PAGE_CITY, ...filters })}
+            className="flex items-center gap-1 text-[#5E23DC] font-['Manrope'] font-semibold text-sm whitespace-nowrap hover:gap-2 transition-all"
+          >
+            Show All <ArrowRight cls="w-4 h-4 text-[#5E23DC]" />
+          </Link>
         </div>
-      </section>
-
-      {/* ══ POPULAR AREAS ═══════════════════════════════════════════════════ */}
-      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-20">
-        <div className="text-center mb-12">
-          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">POPULAR AREAS</p>
-          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-3">Popular Areas for Buying Flats in Nagpur</h2>
-          <p className="font-['Manrope'] text-base text-[#6B7280] max-w-[598px] mx-auto leading-6">
-            Each area has its own vibe, price band, and lifestyle — pick the one that matches your priorities.
-          </p>
-        </div>
-        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-4 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-          {areas.map((a, i) => <AreaCard key={i} {...a} />)}
-        </div>
-      </section>
-
-      {/* ══ EXPLORE BY AREA (Link Grid) ══════════════════════════════════════ */}
-      <section className="max-w-[1280px] mx-auto px-4 sm:px-8 mb-16">
-        <div className="bg-[rgba(94,35,220,0.05)] rounded-3xl p-10 md:p-16">
-          <h2 className="font-['Manrope'] font-semibold text-2xl text-[#111827] text-center mb-8">Explore Flats by Area in Nagpur</h2>
-          <div className="flex flex-col gap-4">
-            {areaLinks.map((row, ri) => (
-              <div key={ri} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {row.map((link, li) => (
-                  <div key={li} className="bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-xl px-4 py-3 flex items-center justify-between hover:shadow-md hover:border-violet-200 border border-transparent transition-all cursor-pointer group">
-                    <span className="font-['Manrope'] font-semibold text-sm text-[#111827] group-hover:text-[#5E23DC] transition-colors">{link}</span>
-                    <ChevronDown cls="w-4 h-4 text-[#5E23DC] -rotate-90" />
-                  </div>
-                ))}
-              </div>
+        {displayFlats.length > 0 ? (
+          <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+            {displayFlats.slice(0, 8).map((flat) => (
+              <FlatCard key={flat.propertyid} property={flat} />
             ))}
           </div>
-        </div>
+        ) : (
+          <div className="bg-white rounded-2xl p-10 text-center">
+            <p className="font-['Manrope'] text-[#6B7280] mb-4">
+              No flats match your filters right now. Try adjusting your search or talk to our expert.
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                openAgentAdvisor(`Help me find flats for sale in ${PAGE_CITY}.`)
+              }
+              className="bg-[#5E23DC] text-white font-['Manrope'] font-semibold text-sm px-6 py-3 rounded-lg"
+            >
+              Talk to Expert
+            </button>
+          </div>
+        )}
       </section>
 
-      {/* ══ BUYER PERSONAS ══════════════════════════════════════════════════ */}
+      {upcomingProjects.length > 0 && (
+        <section className="bg-white py-20">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
+            <div className="text-center mb-10">
+              <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">
+                PRE LAUNCH
+              </p>
+              <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-3">
+                Upcoming Projects in {PAGE_CITY}
+              </h2>
+              <p className="font-['Manrope'] text-base text-[#6B7280] max-w-[660px] mx-auto leading-6">
+                Discover pre-launch and upcoming residential projects in {PAGE_CITY} — in areas
+                delivering strong ROI and build quality.
+              </p>
+            </div>
+            <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+              {upcomingProjects.map((project) => (
+                <ProjectCard key={project.propertyid || project.name} project={project} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {popularAreas.length > 0 && (
+        <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-20">
+          <div className="text-center mb-12">
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">
+              POPULAR AREAS
+            </p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-3">
+              Popular Areas for Buying Flats in {PAGE_CITY}
+            </h2>
+            <p className="font-['Manrope'] text-base text-[#6B7280] max-w-[598px] mx-auto leading-6">
+              Each area has its own vibe, price band, and lifestyle — pick the one that matches your
+              priorities.
+            </p>
+          </div>
+          <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-4 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
+            {popularAreas.map((area) => (
+              <AreaCard key={area.name} area={area} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {areaLinkRows.length > 0 && (
+        <section className="max-w-[1280px] mx-auto px-4 sm:px-8 mb-16">
+          <div className="bg-[rgba(94,35,220,0.05)] rounded-3xl p-10 md:p-16">
+            <h2 className="font-['Manrope'] font-semibold text-2xl text-[#111827] text-center mb-8">
+              Explore Flats by Area in {PAGE_CITY}
+            </h2>
+            <div className="flex flex-col gap-4">
+              {areaLinkRows.map((row, rowIndex) => (
+                <div key={rowIndex} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {row.map((link) => (
+                    <Link
+                      key={link.location}
+                      href={buildPropertiesLink({ city: PAGE_CITY, area: link.location })}
+                      className="bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-xl px-4 py-3 flex items-center justify-between hover:shadow-md hover:border-violet-200 border border-transparent transition-all group"
+                    >
+                      <span className="font-['Manrope'] font-semibold text-sm text-[#111827] group-hover:text-[#5E23DC] transition-colors">
+                        {link.label}
+                      </span>
+                      <ChevronDown cls="w-4 h-4 text-[#5E23DC] -rotate-90" />
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-20">
         <div className="text-center mb-12">
-          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">FIND YOUR MATCH</p>
-          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10">What Type of Flat Buyer Are You?</h2>
+          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">
+            FIND YOUR MATCH
+          </p>
+          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10">
+            What Type of Flat Buyer Are You?
+          </h2>
         </div>
         <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-          {personas.map((p, i) => <PersonaCard key={i} {...p} />)}
+          {personas.map((persona) => (
+            <PersonaCard key={persona.title} persona={persona} onSelect={handlePersonaSelect} />
+          ))}
         </div>
       </section>
 
-      {/* ══ COMPARISON SECTION ══════════════════════════════════════════════ */}
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 pb-16">
         <div className="bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] rounded-[40px] p-10 md:p-20">
           <div className="text-center mb-12">
-            <h2 className="font-['Manrope'] font-semibold text-[30px] text-[#111827] leading-9 mb-3">Ready to Move vs Under Construction — What Should You Choose?</h2>
-            <p className="font-['Manrope'] text-base text-[#6B7280]">A side-by-side comparison to help you decide which option suits your needs.</p>
+            <h2 className="font-['Manrope'] font-semibold text-[30px] text-[#111827] leading-9 mb-3">
+              Ready to Move vs Under Construction — What Should You Choose?
+            </h2>
+            <p className="font-['Manrope'] text-base text-[#6B7280]">
+              A side-by-side comparison to help you decide which option suits your needs.
+            </p>
           </div>
           <div className="grid sm:grid-cols-2 gap-12 max-w-[1024px] mx-auto">
-            {/* Ready to Move */}
             <div className="bg-[rgba(249,250,251,0.5)] border border-[#F3F4F6] rounded-3xl p-8 flex flex-col gap-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-[rgba(16,185,129,0.2)] flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-[#10B981]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                  <svg className="w-6 h-6 text-[#10B981]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
                 </div>
-                <h3 className="font-['Manrope'] font-semibold text-2xl text-[#111827]">Ready to Move Flats</h3>
+                <h3 className="font-['Manrope'] font-semibold text-2xl text-[#111827]">
+                  Ready to Move Flats
+                  {readyCount > 0 ? ` (${readyCount})` : ""}
+                </h3>
               </div>
               <div className="flex flex-col gap-4">
-                {["Immediate possession available", "No GST applicable", "Physical inspection before buying", "No construction risk involved"].map(item => (
+                {[
+                  "Immediate possession available",
+                  "No GST applicable",
+                  "Physical inspection before buying",
+                  "No construction risk involved",
+                ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <CheckDot color="#10B981" />
                     <span className="font-['Manrope'] text-sm text-[#4B5563]">{item}</span>
                   </div>
                 ))}
               </div>
-              <button className="w-full bg-[#10B981] text-white font-['Manrope'] font-semibold text-base py-4 rounded-xl hover:bg-[#059669] transition-colors mt-2">
+              <Link
+                href={buildPropertiesLink({ city: PAGE_CITY, status: "Ready to Move" })}
+                className="w-full bg-[#10B981] text-white font-['Manrope'] font-semibold text-base py-4 rounded-xl hover:bg-[#059669] transition-colors mt-2 text-center"
+              >
                 Explore Ready Flats
-              </button>
+              </Link>
             </div>
-            {/* Under Construction */}
             <div className="bg-[rgba(249,250,251,0.5)] border border-[#F3F4F6] rounded-3xl p-8 flex flex-col gap-6">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-[rgba(94,35,220,0.2)] flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-[#5E23DC]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                  <svg className="w-6 h-6 text-[#5E23DC]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
                 </div>
-                <h3 className="font-['Manrope'] font-semibold text-2xl text-[#111827]">Under Construction Flats</h3>
+                <h3 className="font-['Manrope'] font-semibold text-2xl text-[#111827]">
+                  Under Construction Flats
+                  {underConstructionCount > 0 ? ` (${underConstructionCount})` : ""}
+                </h3>
               </div>
               <div className="flex flex-col gap-4">
-                {["Lower entry price and down payment", "Higher capital appreciation", "Flexible payment schedules", "Customisation options available"].map(item => (
+                {[
+                  "Lower entry price and down payment",
+                  "Higher capital appreciation",
+                  "Flexible payment schedules",
+                  "Customisation options available",
+                ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <CheckDot color="#5E23DC" />
                     <span className="font-['Manrope'] text-sm text-[#4B5563]">{item}</span>
                   </div>
                 ))}
               </div>
-              <button className="w-full bg-[#5E23DC] text-white font-['Manrope'] font-bold text-base py-4 rounded-xl hover:bg-[#4500B4] transition-colors mt-2">
+              <Link
+                href={buildPropertiesLink({ city: PAGE_CITY, status: "Under Construction" })}
+                className="w-full bg-[#5E23DC] text-white font-['Manrope'] font-bold text-base py-4 rounded-xl hover:bg-[#4500B4] transition-colors mt-2 text-center"
+              >
                 Explore Under Construction
-              </button>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ SELL BANNER ═════════════════════════════════════════════════════ */}
       <section className="max-w-[1408px] mx-auto px-4 mb-16">
         <div className="bg-gradient-to-r from-[#5E23DC] to-[#3B0A91] rounded-[32px] px-10 md:px-16 py-16 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
           <div className="flex-1 max-w-[451px]">
-            <p className="font-['Manrope'] font-semibold text-xs text-white/70 uppercase tracking-[1.2px] mb-3">SELL YOUR PROPERTY</p>
-            <h2 className="font-['Manrope'] font-semibold text-[36px] text-white leading-10 mb-4">Selling Flats in Nagpur?</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-white/70 uppercase tracking-[1.2px] mb-3">
+              SELL YOUR PROPERTY
+            </p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-white leading-10 mb-4">
+              Selling Flats in {PAGE_CITY}?
+            </h2>
             <p className="font-['Manrope'] text-base text-white/70 leading-6 mb-6">
-              List your flat for free, reach verified buyers across all of Nagpur with strong marketing and expert support.
+              List your flat for free, reach verified buyers across all of {PAGE_CITY} with strong
+              marketing and expert support.
             </p>
             <div className="flex flex-wrap gap-5">
-              {["Safe System", "0% Quality access"].map(f => (
+              {["Safe System", "0% Brokerage"].map((f) => (
                 <div key={f} className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded-full bg-[#10B981] flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" /></svg>
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </div>
                   <span className="font-['Manrope'] font-semibold text-sm text-white">{f}</span>
                 </div>
               ))}
             </div>
           </div>
-          <button className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-base px-10 py-4 rounded-2xl shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] hover:bg-gray-50 transition-colors flex-shrink-0">
+          <Link
+            href="/sell-old-property"
+            className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-base px-10 py-4 rounded-2xl shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)] hover:bg-gray-50 transition-colors flex-shrink-0"
+          >
             Request Expert Partner
-          </button>
+          </Link>
         </div>
       </section>
 
-      {/* ══ EXPERT CONSULTATION ════════════════════════════════════════════ */}
       <section className="max-w-[1230px] mx-auto px-4 sm:px-8 py-16">
         <div className="grid lg:grid-cols-2 gap-16">
-          {/* Left */}
           <div className="flex flex-col gap-6">
-            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px]">FREE FLAT EXPERT</p>
-            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-[45px]">Talk to a Flat Buying Expert</h2>
-            <p className="font-['Manrope'] text-base text-[#6B7280] leading-6">
-              Our dedicated property experts help you find the flat for sale in Nagpur suited to your lifestyle and financial goals.
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px]">
+              FREE FLAT EXPERT
             </p>
-            {/* Feature grid */}
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-[45px]">
+              Talk to a Flat Buying Expert
+            </h2>
+            <p className="font-['Manrope'] text-base text-[#6B7280] leading-6">
+              Our dedicated property experts help you find the flat for sale in {PAGE_CITY} suited to
+              your lifestyle and financial goals.
+            </p>
             <div className="grid grid-cols-2 gap-6 mt-4">
               {[
                 { bg: "#DBEAFE", icon: "🏡", title: "Verified Support", sub: "Get genuine insights from local property experts." },
                 { bg: "#F3E8FF", icon: "💜", title: "Zero Brokerage", sub: "No hidden fees or extra charges for our services." },
                 { bg: "#DCFCE7", icon: "✅", title: "Hassle-Free Process", sub: "We handle documentation and site visits." },
                 { bg: "#FFEDD5", icon: "⚖️", title: "Legal Assistance", sub: "Full transparency in legal verification." },
-              ].map(f => (
+              ].map((f) => (
                 <div key={f.title}>
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl mb-2" style={{ background: f.bg }}>{f.icon}</div>
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl mb-2" style={{ background: f.bg }}>
+                    {f.icon}
+                  </div>
                   <p className="font-['Manrope'] font-semibold text-base text-[#111827] mb-1">{f.title}</p>
                   <p className="font-['Manrope'] text-xs text-[#6B7280] leading-4">{f.sub}</p>
                 </div>
               ))}
             </div>
-            {/* Team avatars */}
             <div className="flex items-center gap-3 mt-2">
               <div className="flex -space-x-2">
                 {["bg-violet-400", "bg-violet-500", "bg-violet-600"].map((c, i) => (
-                  <div key={i} className={`w-10 h-10 rounded-full ${c} border-2 border-white flex items-center justify-center text-white font-bold text-xs`}>E{i+1}</div>
+                  <div
+                    key={c}
+                    className={`w-10 h-10 rounded-full ${c} border-2 border-white flex items-center justify-center text-white font-bold text-xs`}
+                  >
+                    E{i + 1}
+                  </div>
                 ))}
               </div>
-              <span className="font-['Manrope'] font-semibold text-xs text-[#111827]">Expert Nagpur Team</span>
+              <span className="font-['Manrope'] font-semibold text-xs text-[#111827]">
+                Expert {PAGE_CITY} Team
+              </span>
             </div>
           </div>
 
-          {/* Right — form */}
           <div className="bg-white border border-[#F3F4F6] shadow-[0px_20px_25px_-5px_rgba(0,0,0,0.1),0px_8px_10px_-6px_rgba(0,0,0,0.1)] rounded-3xl p-8 flex flex-col gap-4">
             <h3 className="font-['Manrope'] font-black text-xl text-[#111827]">Request a Callback</h3>
-            <div className="flex flex-col gap-4 mt-2">
+            <form className="flex flex-col gap-4 mt-2" onSubmit={handleSubmit}>
               {[
                 { label: "YOUR NAME", placeholder: "Enter your full name", key: "name", type: "text" },
                 { label: "PHONE NUMBER", placeholder: "Enter your phone number", key: "phone", type: "tel" },
-              ].map(f => (
+              ].map((f) => (
                 <div key={f.key} className="flex flex-col gap-1">
-                  <label className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] tracking-wide">{f.label}</label>
-                  <input type={f.type} placeholder={f.placeholder} value={form[f.key]} onChange={e => setForm({ ...form, [f.key]: e.target.value })}
-                    className="w-full bg-white border border-[#E5E7EB] rounded-xl px-3 py-3.5 font-['Manrope'] text-base text-[#111827] placeholder-[#6B7280] outline-none focus:ring-2 focus:ring-[#5E23DC] transition" />
+                  <label className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] tracking-wide">
+                    {f.label}
+                  </label>
+                  <input
+                    type={f.type}
+                    placeholder={f.placeholder}
+                    value={form[f.key]}
+                    onChange={(event) => setForm({ ...form, [f.key]: event.target.value })}
+                    className="w-full bg-white border border-[#E5E7EB] rounded-xl px-3 py-3.5 font-['Manrope'] text-base text-[#111827] placeholder-[#6B7280] outline-none focus:ring-2 focus:ring-[#5E23DC] transition"
+                  />
                 </div>
               ))}
               <div className="flex flex-col gap-1">
-                <label className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] tracking-wide">PREFERRED BHK</label>
+                <label className="font-['Manrope'] font-semibold text-[10px] uppercase text-[#9CA3AF] tracking-wide">
+                  PREFERRED BHK
+                </label>
                 <div className="relative">
-                  <select value={form.bhk} onChange={e => setForm({ ...form, bhk: e.target.value })}
-                    className="w-full appearance-none bg-white border border-[#E5E7EB] rounded-xl px-3 py-3.5 font-['Manrope'] text-base text-[#111827] outline-none focus:ring-2 focus:ring-[#5E23DC] cursor-pointer">
-                    {["Select BHK", "1 BHK", "2 BHK", "3 BHK", "4+ BHK"].map(o => <option key={o}>{o}</option>)}
+                  <select
+                    value={form.bhk}
+                    onChange={(event) => setForm({ ...form, bhk: event.target.value })}
+                    className="w-full appearance-none bg-white border border-[#E5E7EB] rounded-xl px-3 py-3.5 font-['Manrope'] text-base text-[#111827] outline-none focus:ring-2 focus:ring-[#5E23DC] cursor-pointer"
+                  >
+                    {["Select BHK", ...bhkOptions, "4+ BHK"].map((o) => (
+                      <option key={o}>{o}</option>
+                    ))}
                   </select>
                   <ChevronDown cls="w-5 h-5 text-[#6B7280] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
-              <button className="w-full bg-[#5E23DC] text-white font-['Manrope'] font-semibold text-base py-4 rounded-xl hover:bg-[#4500B4] transition-colors mt-2">
-                Submit Callback
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-[#5E23DC] text-white font-['Manrope'] font-semibold text-base py-4 rounded-xl hover:bg-[#4500B4] transition-colors mt-2 disabled:opacity-60"
+              >
+                {submitting ? "Submitting..." : "Submit Callback"}
               </button>
-              <p className="font-['Manrope'] text-[10px] text-[#9CA3AF] text-center">We'll reach out within 15 minutes on business days.</p>
-            </div>
+              <p className="font-['Manrope'] text-[10px] text-[#9CA3AF] text-center">
+                We&apos;ll reach out within 15 minutes on business days.
+              </p>
+            </form>
           </div>
         </div>
       </section>
 
-      {/* ══ APP PROMO ═══════════════════════════════════════════════════════ */}
       <section className="max-w-[1408px] mx-auto px-4 mb-16 mt-20">
-        <div className="bg-[#5E23DC] rounded-[32px] relative min-h-[372px] flex items-center">
-          {/* Decorative glow */}
-          <div className="absolute right-0 top-0 bottom-0 w-[40%] pointer-events-none">
+        <div className="bg-[#5E23DC] rounded-[32px] relative min-h-[372px] flex items-center overflow-hidden">
+          <div className="absolute right-0 top-0 bottom-0 w-[40%] pointer-events-none hidden md:block">
             <div className="absolute inset-0 opacity-30">
               <div className="absolute bottom-0 left-0 w-96 h-72 bg-gradient-radial from-[#D9BDFF] to-[#8A38F5] blur-[38px] rounded-full" />
             </div>
-            {/* Phone mockups */}
-            <div className="w-80 absolute right-15 bottom-10 flex item-center justify-center gap-3">
-              <img src="/assets/seoPages/mobileImage.png" alt="mobile image app promo" className="w-full object-cover" />
+            <div className="absolute right-10 bottom-10 w-64 opacity-90">
+              <img
+                src="/assets/seopageassets/visitproperties/banner-image.svg"
+                alt="Reparv app preview"
+                className="w-full object-contain"
+              />
             </div>
           </div>
 
           <div className="relative z-10 px-10 md:px-16 py-16 max-w-[832px]">
-            <p className="font-['Manrope'] font-semibold text-xs text-white/70 uppercase tracking-[1.2px] mb-4">REPARV APP</p>
-            <h2 className="font-['Manrope'] font-semibold text-[36px] text-white leading-10 mb-4">All Property Solutions in One App</h2>
+            <p className="font-['Manrope'] font-semibold text-xs text-white/70 uppercase tracking-[1.2px] mb-4">
+              REPARV APP
+            </p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-white leading-10 mb-4">
+              All Property Solutions in One App
+            </h2>
             <p className="font-['Manrope'] text-lg text-white/70 leading-7 mb-8 max-w-[368px]">
               Search flats, check RERA status, and message owners directly from your phone.
             </p>
             <div className="flex items-center gap-4 flex-wrap">
-              <button className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-sm px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-lg">
+              <Link
+                href="/properties"
+                className="bg-white text-[#5E23DC] font-['Manrope'] font-semibold text-sm px-6 py-3 rounded-xl flex items-center gap-2 hover:bg-gray-50 transition-colors shadow-lg"
+              >
                 <DownloadIcon />
-                Download Now
-              </button>
+                Browse Flats
+              </Link>
               <span className="font-['Manrope'] text-xs text-white/50">Available on iOS & Android</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══ FAQ ════════════════════════════════════════════════════════════ */}
       <section className="max-w-[896px] mx-auto px-4 py-16">
         <div className="text-center mb-10">
-          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">YOUR QUESTIONS ANSWERED</p>
-          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10">Flat Buyer FAQs</h2>
+          <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">
+            YOUR QUESTIONS ANSWERED
+          </p>
+          <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10">
+            Flat Buyer FAQs
+          </h2>
         </div>
         <div className="flex flex-col gap-4">
-          {faqs.map((f, i) => <FaqItem key={i} {...f} />)}
+          {faqs.map((f) => (
+            <FaqItem key={f.q} q={f.q} a={f.a} />
+          ))}
         </div>
       </section>
 
-      {/* ══ BUYER STORIES ═══════════════════════════════════════════════════ */}
       <section className="bg-[#F9FAFB] py-20">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8">
           <div className="text-center mb-12">
-            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">BUYER STORIES</p>
-            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-2">Real Flat Buyer Stories — Nagpur</h2>
-            <p className="font-['Manrope'] text-base text-[#6B7280]">Real stories from verified buyers who found their perfect flat through Reparv.</p>
+            <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">
+              BUYER STORIES
+            </p>
+            <h2 className="font-['Manrope'] font-semibold text-[36px] text-[#111827] leading-10 mb-2">
+              Real Flat Buyer Stories — {PAGE_CITY}
+            </h2>
+            <p className="font-['Manrope'] text-base text-[#6B7280]">
+              Real stories from verified buyers who found their perfect flat through Reparv.
+            </p>
           </div>
           <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-8 overflow-x-auto pb-2 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
-            {stories.map((s, i) => <StoryCard key={i} {...s} />)}
+            {stories.map((s) => (
+              <StoryCard key={s.initials} {...s} />
+            ))}
           </div>
         </div>
       </section>
-
     </div>
   );
 }

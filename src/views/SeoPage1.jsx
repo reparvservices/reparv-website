@@ -8,11 +8,11 @@ import FamilyChecklist from "../components/seoPages/seoPage1/FamilyChecklist.jsx
 import ReparvStandard from "../components/seoPages/seoPage1/ReparvStandard.jsx";
 import CTASection from "../components/seoPages/seoPage1/CtaSection.jsx";
 import Faq from "../components/seoPages/seoPage1/Faq.jsx";
-export default function SeoPage1() {
+export default function SeoPage1({ initialPageData = null }) {
   return (
     <>
       <main>
-        <Hero />
+        <Hero pageData={initialPageData} />
         <HeartOfJourney />
         <FindAStory />
         <FeaturedNarratives />

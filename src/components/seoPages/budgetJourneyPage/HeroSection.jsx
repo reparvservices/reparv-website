@@ -1,26 +1,21 @@
-export default function HeroSection() {
+import {
+  formatBudgetRange,
+  formatVerifiedStatValue,
+} from "@/utils/budgetToDreamHomePage";
+
+export default function HeroSection({ pageData = null }) {
+  const city = pageData?.city || "Nagpur";
+  const stats = pageData?.stats || {};
+  const budgetLabel = formatBudgetRange(stats.minPrice, stats.maxPrice);
+
   return (
     <section className="relative min-h-[420px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#f5f0ff] via-[#ede8ff] to-[#f9f7ff]">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: "url('/assets/seoPages/budgetJourney/hero.svg')",
-        }}
-      />
-      {/* Stronger purple push on the left where text lives */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(255,255,255,0.93) 0%, rgba(255,255,255,0.85) 30%, rgba(255,255,255,0.30) 58%, rgba(255,255,255,0.08) 100%)",
-        }}
-      />
-
       <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto py-20">
-        {/* Eyebrow */}
         <div className="inline-flex items-center gap-2 bg-[#4500B4]/10 border border-[#4500B4]/20 text-[#1a0a3d] md:text-[#5E23DC] text-xs font-semibold tracking-widest uppercase rounded-full px-4 py-1.5 mb-6">
           <span className="w-1.5 h-1.5 rounded-full bg-[#4500B4] animate-pulse" />
-          Real Buyer Home Journeys Report
+          {stats.budgetHomes
+            ? `${formatVerifiedStatValue(stats.budgetHomes)} Smart-Budget Homes in ${city}`
+            : "Real Buyer Home Journeys Report"}
         </div>
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#1a0a3d] md:text-[#5E23DC] leading-tight mb-5">
@@ -29,9 +24,10 @@ export default function HeroSection() {
         </h1>
 
         <p className="text-base sm:text-lg text-[#4a4470] md:text-black max-w-xl mx-auto mb-8 leading-relaxed">
-          Real stories of buyers who started with budget limits, made thoughtful
-          adjustments, and found homes that improved daily life — without
-          regret.
+          Real stories of {city} buyers who started with budget limits between{" "}
+          {budgetLabel}, made thoughtful adjustments across{" "}
+          {stats.localities ? `${stats.localities}+ localities` : "many areas"},
+          and found homes that improved daily life — without regret.
         </p>
 
         <a

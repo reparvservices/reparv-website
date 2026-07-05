@@ -312,3 +312,159 @@ export async function fetchSeoPageWidgets({
     articles: includeArticles ? results[faqLocation ? 1 : 0] : [],
   };
 }
+
+export async function fetchTrustedBuildersData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/project-partner/trusted-builders/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchTrustedBuildersData error:", error);
+    return null;
+  }
+}
+
+export async function fetchWeekendVisitData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/weekend-visits/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchWeekendVisitData error:", error);
+    return null;
+  }
+}
+
+export async function fetchVerifiedPropertiesPageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/verified-properties-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchVerifiedPropertiesPageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchFlatsForSalePageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/flats-for-sale-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchFlatsForSalePageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchPlotsForSalePageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/plots-for-sale-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchPlotsForSalePageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchRentalPropertiesPageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/rental-properties-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchRentalPropertiesPageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchNewProjectsPageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/new-projects-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchNewProjectsPageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchReadyToMovePageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/ready-to-move-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchReadyToMovePageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchTopTrustedPropertiesPageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/top-trusted-properties-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchTopTrustedPropertiesPageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchFirstTimeBuyerPageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/first-time-buyer-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchFirstTimeBuyerPageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchFamilyDecisionStoriesPageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/family-decision-stories-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchFamilyDecisionStoriesPageData error:", error);
+    return null;
+  }
+}
+
+export async function fetchBudgetToDreamHomePageData(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/budget-to-dream-home-page/${encodeURIComponent(city)}`,
+      SSR_FETCH_OPTIONS,
+    );
+    return data;
+  } catch (error) {
+    console.error("SSR fetchBudgetToDreamHomePageData error:", error);
+    return null;
+  }
+}

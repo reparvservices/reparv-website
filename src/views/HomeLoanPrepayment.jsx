@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import ExploreVerifiedProperties from "../components/seocomponents/common/ExploreVerifiedProperties";
+import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 
 // ─── Inline Icons ─────────────────────────────────────────────────────────────
 const CheckIcon = ({ className = "w-3.5 h-3.5" }) => (
@@ -225,45 +227,6 @@ function GuideCard({ icon, title, desc, cta }) {
       >
         {cta} <ArrowRightIcon />
       </a>
-    </div>
-  );
-}
-
-// ─── Property Card ────────────────────────────────────────────────────────────
-function PropertyCard({ title, desc, cta, gradientClass }) {
-  return (
-    <div className="flex flex-col gap-2">
-      <div
-        className={`h-52 lg:h-64 rounded-2xl ${gradientClass} flex items-center justify-center`}
-      >
-        <svg
-          className="w-16 h-16 text-white opacity-50"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={1.2}
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-          />
-        </svg>
-      </div>
-      <div className="pt-2">
-        <h4 className="font-manrope font-semibold text-[22px] leading-8 text-[#151C27] mb-1">
-          {title}
-        </h4>
-        <p className="font-jakarta text-[14px] leading-6 text-[#494455] mb-3">
-          {desc}
-        </p>
-        <a
-          href="#"
-          className="flex items-center gap-2 font-jakarta font-bold text-[14px] text-[#4500B4] hover:gap-3 transition-all group"
-        >
-          {cta} <ArrowRightIcon />
-        </a>
-      </div>
     </div>
   );
 }
@@ -652,7 +615,7 @@ export default function HomeLoanPrepayment() {
                         {row.amount}
                       </td>
                       <td className="px-5 sm:px-6 py-5 font-jakarta font-bold text-[16px] sm:text-[18px] text-[#4500B4]">
-                        ₹{row.interest} saved
+                        {row.interest} saved
                       </td>
                       <td className="px-5 sm:px-6 py-5 font-jakarta text-[16px] sm:text-[18px] text-[#494455] hidden sm:table-cell">
                         {row.tenure}
@@ -826,34 +789,7 @@ export default function HomeLoanPrepayment() {
         </div>
       </section>
 
-      {/* ── EXPLORE VERIFIED PROPERTIES ───────────────────────────────────── */}
-      <section className="px-4 sm:px-6 lg:px-16 py-8 lg:pt-16">
-        <div className="max-w-[1312px] mx-auto">
-          <h2 className="font-['Segoe_UI',sans-serif] font-bold text-[24px] sm:text-[28px] lg:text-[32px] tracking-[-0.32px] text-[#151C27] mb-8">
-            Explore Verified Properties
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            <PropertyCard
-              title="Apartments for Sale"
-              desc="Browse ready-to-move and under-construction apartments."
-              cta="View Properties"
-              gradientClass="bg-gradient-to-br from-violet-500 to-violet-700"
-            />
-            <PropertyCard
-              title="Plots &amp; Land"
-              desc="Explore approved plots for investment or home construction."
-              cta="View Plots"
-              gradientClass="bg-gradient-to-br from-emerald-400 to-teal-600"
-            />
-            <PropertyCard
-              title="New Residential Projects"
-              desc="Discover newly launched projects from trusted developers."
-              cta="Explore Projects"
-              gradientClass="bg-gradient-to-br from-blue-400 to-indigo-600"
-            />
-          </div>
-        </div>
-      </section>
+      <ExploreVerifiedProperties loanAmount={loanAmount} />
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section className="px-4 sm:px-6 lg:px-16 py-12 lg:py-20">
@@ -889,7 +825,15 @@ export default function HomeLoanPrepayment() {
           <p className="font-jakarta text-[15px] sm:text-[18px] text-[rgba(232,221,255,0.8)] mb-10 max-w-lg mx-auto">
             Get a bank-neutral opinion before making a big financial decision
           </p>
-          <button className="bg-white text-[#4500B4] font-manrope font-semibold text-[15px] px-8 py-4 rounded-2xl hover:bg-[#F0F3FF] transition-colors shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
+          <button
+            type="button"
+            onClick={() =>
+              openAgentAdvisor(
+                "I'm confused whether to prepay my home loan or invest. Can you guide me?",
+              )
+            }
+            className="bg-white text-[#4500B4] font-manrope font-semibold text-[15px] px-8 py-4 rounded-2xl hover:bg-[#F0F3FF] transition-colors shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]"
+          >
             Talk to a Reparv Advisor
           </button>
         </div>

@@ -1,39 +1,124 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import ExploreVerifiedProperties from "../components/seocomponents/common/ExploreVerifiedProperties";
+import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function formatINR(n) {
   return new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(n);
 }
-function calcEMI(P, rAnnual, n) {
-  const r = rAnnual / 12 / 100;
-  if (r === 0) return P / n;
-  return (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+function formatLakh(n) {
+  const l = n / 100000;
+  return l % 1 === 0 ? `₹${l} Lakh` : `₹${l.toFixed(1)} Lakh`;
 }
-function calcTenureReduction(P, rAnnual, tenureMonths, prepay) {
+function calcEMI(P, rAnnual, tenureMonths) {
+  const r = rAnnual / 12 / 100;
+  if (r === 0) return P / tenureMonths;
+  return (P * r * Math.pow(1 + r, tenureMonths)) / (Math.pow(1 + r, tenureMonths) - 1);
+}
+function calcTotalInterest(P, rAnnual, tenureMonths) {
+  const emi = calcEMI(P, rAnnual, tenureMonths);
+  return emi * tenureMonths - P;
+}
+function calcReduceEmiSavings(P, rAnnual, tenureMonths, prepay) {
+  const newPrincipal = Math.max(0, P - prepay);
+  const origInterest = calcTotalInterest(P, rAnnual, tenureMonths);
+  const newInterest = calcTotalInterest(newPrincipal, rAnnual, tenureMonths);
+  const origEMI = calcEMI(P, rAnnual, tenureMonths);
+  const newEMI = calcEMI(newPrincipal, rAnnual, tenureMonths);
+
+  return {
+    interestSaved: Math.max(0, origInterest - newInterest),
+    newEMI,
+    emiReduction: Math.max(0, origEMI - newEMI),
+  };
+}
+function calcReduceTenureSavings(P, rAnnual, tenureMonths, prepay) {
   const r = rAnnual / 12 / 100;
   const emi = calcEMI(P, rAnnual, tenureMonths);
-  let balance = P - prepay;
+  const origInterest = calcTotalInterest(P, rAnnual, tenureMonths);
+
+  let balance = Math.max(0, P - prepay);
   let months = 0;
-  while (balance > 0.01 && months < tenureMonths) {
+  let totalInterest = 0;
+
+  while (balance > 0.01 && months < tenureMonths * 2) {
     const interest = balance * r;
-    balance = balance - (emi - interest);
+    totalInterest += interest;
+    balance = Math.max(0, balance - (emi - interest));
     months++;
   }
-  return { tenureSavedMonths: Math.max(0, tenureMonths - months) };
+
+  const tenureSavedMonths = Math.max(0, tenureMonths - months);
+
+  return {
+    interestSaved: Math.max(0, origInterest - totalInterest),
+    tenureSavedMonths,
+    tenureSavedYears: tenureSavedMonths / 12,
+  };
 }
-function calcInterestSaved(P, rAnnual, tenureMonths, prepay) {
-  const r = rAnnual / 12 / 100;
-  const emi = calcEMI(P, rAnnual, tenureMonths);
-  const totalOrig = emi * tenureMonths - P;
-  let balance = P - prepay;
-  let totalNew = 0;
-  for (let i = 0; i < tenureMonths && balance > 0.01; i++) {
-    const interest = balance * r;
-    totalNew += interest;
-    balance -= emi - interest;
-  }
-  return Math.max(0, totalOrig - totalNew);
+function formatTenureReduction(months) {
+  if (months <= 0) return "No change";
+  if (months < 12) return `${months} months shorter`;
+  const years = months / 12;
+  return years % 1 === 0 ? `${years} yrs shorter` : `${years.toFixed(1)} yrs shorter`;
+}
+
+function Slider({
+  label,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+  display,
+  minLabel,
+  maxLabel,
+}) {
+  const pct = ((value - min) / (max - min)) * 100;
+
+  return (
+    <div className="mb-6">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-[13px] font-bold tracking-[0.8px] uppercase text-[#494455]">
+          {label}
+        </span>
+        <span className="text-[15px] font-bold text-[#4500B4]">{display}</span>
+      </div>
+      <div className="relative flex items-center h-5">
+        <div className="w-full h-[6px] rounded-full bg-[#E4E0EF] relative">
+          <div
+            className="absolute top-0 left-0 h-[6px] rounded-full bg-[#5E23DC]"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute inset-0 w-full opacity-0 cursor-pointer h-5"
+          style={{ zIndex: 2 }}
+        />
+        <div
+          className="absolute w-5 h-5 rounded-full bg-[#5E23DC] border-2 border-white shadow-md"
+          style={{
+            left: `calc(${pct}% - 10px)`,
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+      </div>
+      <div className="flex justify-between text-xs text-[#7A7487] mt-1.5">
+        <span>{minLabel || min}</span>
+        <span>{maxLabel || max}</span>
+      </div>
+    </div>
+  );
 }
 
 // ── Icons ────────────────────────────────────────────────────────────────────
@@ -149,71 +234,61 @@ function MistakeCard({ emoji, title }) {
   );
 }
 
-// ── Property Category Card ────────────────────────────────────────────────────
-function CategoryCard({ gradientClass, heading, desc, cta }) {
-  return (
-    <div className="flex flex-col gap-2">
-      <div
-        className={`h-64 rounded-2xl ${gradientClass} flex items-center justify-center`}
-      >
-        <svg
-          className="w-16 h-16 text-white opacity-40"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-          />
-        </svg>
-      </div>
-      <div className="pt-4">
-        <h3 className="font-['Manrope'] font-semibold text-2xl leading-8 text-[#151C27]">
-          {heading}
-        </h3>
-      </div>
-      <p className="font-['Plus_Jakarta_Sans'] text-base leading-6 text-[#494455]">
-        {desc}
-      </p>
-      <a
-        href="#"
-        className="font-['Plus_Jakarta_Sans'] font-bold text-base leading-6 text-[#4500B4] hover:underline"
-      >
-        {cta}
-      </a>
-    </div>
-  );
-}
-
 // ── Main Page ─────────────────────────────────────────────────────────────────
 export default function ReduceEmi() {
-  const loanAmount = 5000000;
-  const rate = 8.75;
-  const tenureMonths = 240;
-  const prepay = 500000;
+  const router = useRouter();
+  const [loanAmount, setLoanAmount] = useState(5000000);
+  const [interestRate, setInterestRate] = useState(8.75);
+  const [tenureYears, setTenureYears] = useState(20);
+  const [prepayAmount, setPrepayAmount] = useState(500000);
 
-  const origEMI = calcEMI(loanAmount, rate, tenureMonths);
-  const { tenureSavedMonths } = calcTenureReduction(
+  const tenureMonths = tenureYears * 12;
+  const origEMI = calcEMI(loanAmount, interestRate, tenureMonths);
+
+  const reduceEmi = calcReduceEmiSavings(
     loanAmount,
-    rate,
+    interestRate,
     tenureMonths,
-    prepay,
+    prepayAmount,
   );
-  const interestSavedEMI =
-    calcEMI(loanAmount, rate, tenureMonths) * tenureMonths -
-    loanAmount -
-    (calcEMI(loanAmount - prepay, rate, tenureMonths) * tenureMonths -
-      (loanAmount - prepay));
-  const interestSavedTenure = calcInterestSaved(
+  const reduceTenure = calcReduceTenureSavings(
     loanAmount,
-    rate,
+    interestRate,
     tenureMonths,
-    prepay,
+    prepayAmount,
   );
-  const tenureSavedYears = (tenureSavedMonths / 12).toFixed(1);
+
+  const interestSavedEMI = reduceEmi.interestSaved;
+  const interestSavedTenure = reduceTenure.interestSaved;
+  const tenureSavedMonths = reduceTenure.tenureSavedMonths;
+  const savingsMultiplier =
+    interestSavedEMI > 0 ? interestSavedTenure / interestSavedEMI : 0;
+  const debtReductionPct =
+    tenureMonths > 0
+      ? Math.round((tenureSavedMonths / tenureMonths) * 100)
+      : 0;
+
+  const relatedTools = [
+    {
+      label: "Home Loan Prepayment Calculator",
+      href: "/home-loan-prepayment-calculator",
+    },
+    { label: "EMI Calculator", href: "/emi-calculator" },
+    { label: "Cost Calculator", href: "/cost-calculator" },
+  ];
+
+  const scrollToCalculator = () => {
+    const element = document.getElementById("comparison-calculator");
+    if (!element) return;
+    const y =
+      element.getBoundingClientRect().top + window.pageYOffset - 80;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const maxPrepay = Math.min(3000000, loanAmount);
+    setPrepayAmount((current) => (current > maxPrepay ? maxPrepay : current));
+  }, [loanAmount]);
 
   const faqs = [
     {
@@ -269,11 +344,19 @@ export default function ReduceEmi() {
               </p>
 
               <div className="flex flex-wrap gap-4 pt-4">
-                <button className="bg-[#5E23DC] hover:bg-[#4c1cb0] text-white font-['Plus_Jakarta_Sans'] font-semibold text-sm leading-5 tracking-[0.28px] px-8 py-[18px] rounded-lg transition-colors cursor-pointer border-none">
+                <button
+                  type="button"
+                  onClick={() => router.push("/emi-calculator")}
+                  className="bg-[#5E23DC] hover:bg-[#4c1cb0] text-white font-['Plus_Jakarta_Sans'] font-semibold text-sm leading-5 tracking-[0.28px] px-8 py-[18px] rounded-lg transition-colors cursor-pointer border-none"
+                >
                   Try EMI Calculator
                 </button>
-                <button className="border-2 border-[#CBC3D8] hover:border-[#5E23DC] text-[#4500B4] bg-transparent font-['Plus_Jakarta_Sans'] font-semibold text-sm leading-5 tracking-[0.28px] px-8 py-4 rounded-lg transition-colors cursor-pointer">
-                  View Savings Guide
+                <button
+                  type="button"
+                  onClick={scrollToCalculator}
+                  className="border-2 border-[#CBC3D8] hover:border-[#5E23DC] text-[#4500B4] bg-transparent font-['Plus_Jakarta_Sans'] font-semibold text-sm leading-5 tracking-[0.28px] px-8 py-4 rounded-lg transition-colors cursor-pointer"
+                >
+                  Compare Your Savings
                 </button>
               </div>
             </div>
@@ -420,29 +503,91 @@ export default function ReduceEmi() {
       </section>
 
       {/* ══ REAL EMI vs TENURE EXAMPLE ════════════════════════════════════ */}
-      <section className="py-16 lg:py-20">
+      <section id="comparison-calculator" className="py-16 lg:py-20">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
           <div className="md:text-center mb-12">
             <h2 className="font-['Segoe_UI',system-ui,sans-serif] font-bold text-4xl lg:text-6xl leading-tight tracking-[-0.32px] text-[#151C27]">
-              A Real EMI vs Tenure Example
+              Compare EMI vs Tenure Reduction
             </h2>
             <p className="font-['Plus_Jakarta_Sans'] font-normal text-base leading-6 text-[#494455] mt-4 max-w-[700px] mx-auto">
-              Consider a realistic scenario to see how the same prepayment
+              Adjust your loan details below to see how the same prepayment
               amount produces very different results depending on the option you
               choose.
             </p>
           </div>
 
           <div className="bg-white border border-[#E2E8F8] shadow-[0_10px_30px_rgba(94,35,220,0.04)] rounded-3xl overflow-hidden">
+            <div className="border-b border-[#E2E8F8] p-6 sm:p-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <Slider
+                  label="Loan Amount (₹)"
+                  value={loanAmount}
+                  min={500000}
+                  max={10000000}
+                  step={100000}
+                  onChange={setLoanAmount}
+                  display={formatLakh(loanAmount)}
+                  minLabel="5L"
+                  maxLabel="1Cr"
+                />
+                <Slider
+                  label="Prepayment Amount (₹)"
+                  value={prepayAmount}
+                  min={100000}
+                  max={Math.min(3000000, loanAmount)}
+                  step={50000}
+                  onChange={setPrepayAmount}
+                  display={formatLakh(prepayAmount)}
+                  minLabel="1L"
+                  maxLabel={formatLakh(Math.min(3000000, loanAmount))}
+                />
+                <Slider
+                  label="Interest Rate (%)"
+                  value={interestRate}
+                  min={6}
+                  max={15}
+                  step={0.1}
+                  onChange={setInterestRate}
+                  display={`${interestRate}%`}
+                  minLabel="6%"
+                  maxLabel="15%"
+                />
+                <Slider
+                  label="Outstanding Tenure (Years)"
+                  value={tenureYears}
+                  min={1}
+                  max={30}
+                  step={1}
+                  onChange={setTenureYears}
+                  display={`${tenureYears} Years`}
+                  minLabel="1 yr"
+                  maxLabel="30 yr"
+                />
+              </div>
+            </div>
+
             {/* Parameters header */}
             <div className="border-b border-[#E2E8F8] flex flex-wrap justify-center gap-8 p-10">
               {[
-                { label: "Loan Amount", value: "₹50,00,000", colored: false },
-                { label: "Interest Rate", value: "8.75%", colored: false },
+                {
+                  label: "Loan Amount",
+                  value: `₹${formatINR(loanAmount)}`,
+                  colored: false,
+                },
+                {
+                  label: "Interest Rate",
+                  value: `${interestRate}%`,
+                  colored: false,
+                },
                 {
                   label: "Prepayment Amount",
-                  value: "₹5,00,000",
+                  value: `₹${formatINR(prepayAmount)}`,
                   colored: true,
+                },
+                {
+                  label: "Current EMI",
+                  value: `₹${formatINR(Math.round(origEMI))}`,
+                  colored: false,
                 },
               ].map((item) => (
                 <div
@@ -485,9 +630,12 @@ export default function ReduceEmi() {
                       </td>
                       <td className="font-['Plus_Jakarta_Sans'] font-normal text-base leading-6 text-[#494455] py-6 pr-2">
                         No change
+                        <span className="block text-sm text-[#4500B4] mt-1">
+                          New EMI: ₹{formatINR(Math.round(reduceEmi.newEMI))}
+                        </span>
                       </td>
                       <td className="font-['Plus_Jakarta_Sans'] font-semibold text-base leading-6 text-[#151C27] py-6">
-                        ₹{formatINR(Math.round(Math.max(0, interestSavedEMI)))}
+                        ₹{formatINR(Math.round(interestSavedEMI))}
                       </td>
                     </tr>
                     <tr>
@@ -495,7 +643,7 @@ export default function ReduceEmi() {
                         Reduce Tenure
                       </td>
                       <td className="font-['Plus_Jakarta_Sans'] font-normal text-base leading-6 text-[#494455] py-6 pr-2">
-                        {tenureSavedYears} yrs shorter
+                        {formatTenureReduction(tenureSavedMonths)}
                       </td>
                       <td className="font-['Plus_Jakarta_Sans'] font-bold text-base leading-6 text-[#4CAF50] py-6">
                         ₹{formatINR(Math.round(interestSavedTenure))}
@@ -509,8 +657,9 @@ export default function ReduceEmi() {
               <div className="bg-[rgba(69,0,180,0.05)] border border-[rgba(69,0,180,0.1)] rounded-xl px-4 py-4 flex items-center gap-3">
                 <InfoCircle />
                 <span className="font-['Plus_Jakarta_Sans'] font-semibold text-sm leading-5 tracking-[0.28px] text-[#4500B4]">
-                  Same prepayment. Nearly 2× more interest saved when you reduce
-                  tenure instead of EMI.
+                  {savingsMultiplier >= 1.5
+                    ? `Same prepayment. About ${savingsMultiplier.toFixed(1)}× more interest saved when you reduce tenure instead of EMI.`
+                    : "Reducing tenure typically saves more interest when you can continue paying the same EMI."}
                 </span>
               </div>
             </div>
@@ -543,16 +692,16 @@ export default function ReduceEmi() {
           <div className="flex-1 flex gap-4 max-w-[544px] w-full">
             <div className="flex-1 bg-white rounded-2xl p-8 pb-16 shadow-[0_10px_30px_rgba(94,35,220,0.27)]">
               <p className="font-['Plus_Jakarta_Sans'] font-bold text-[32px] leading-12 text-[#4500B4]">
-                2.5x
+                {savingsMultiplier >= 1 ? `${savingsMultiplier.toFixed(1)}x` : "—"}
               </p>
               <p className="font-['Plus_Jakarta_Sans'] font-medium text-xs leading-4 text-[#494455] mt-2">
-                Avg. Multiplier of Interest Savings
+                Interest Savings Multiplier
               </p>
             </div>
             <div className="flex-1 pt-8">
               <div className="bg-white rounded-2xl p-8 shadow-[0_10px_30px_rgba(94,35,220,0.2)]">
                 <p className="font-['Plus_Jakarta_Sans'] font-bold text-[32px] leading-12 text-[#4500B4]">
-                  38%
+                  {debtReductionPct}%
                 </p>
                 <p className="font-['Plus_Jakarta_Sans'] font-medium text-xs leading-4 text-[#494455] mt-2">
                   Reduction in Debt Duration
@@ -706,53 +855,7 @@ export default function ReduceEmi() {
         </div>
       </section>
 
-      {/* ══ EXPLORE VERIFIED PROPERTIES ═══════════════════════════════════ */}
-      <section className="bg-white px-4 py-[120px] sm:px-8 lg:px-16">
-        <div className="max-w-[1280px] mx-auto flex flex-col gap-12">
-          {/* Header row */}
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6">
-            <div className="flex flex-col gap-4 max-w-[672px]">
-              <h2 className="font-['Segoe_UI',system-ui,sans-serif] font-bold text-[32px] leading-10 tracking-[-0.32px] text-[#151C27]">
-                Explore Verified Properties
-              </h2>
-              <p className="font-['Plus_Jakarta_Sans'] font-normal text-base leading-6 text-[#494455]">
-                If you are planning to buy a home, explore verified properties
-                with transparent pricing and proper documentation. Buying the
-                right property is as important as choosing the right loan
-                strategy.
-              </p>
-            </div>
-            <a
-              href="#"
-              className="flex items-center gap-2 font-['Plus_Jakarta_Sans'] font-semibold text-sm leading-5 tracking-[0.28px] text-[#4500B4] hover:underline whitespace-nowrap"
-            >
-              View All Listings <ArrowRightIcon />
-            </a>
-          </div>
-
-          {/* Category cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <CategoryCard
-              gradientClass="bg-gradient-to-br from-[#7B3FE4] to-[#5E23DC]"
-              heading="Apartments for Sale"
-              desc="Browse ready-to-move and under-construction apartments in prime locations."
-              cta="View Apartments →"
-            />
-            <CategoryCard
-              gradientClass="bg-gradient-to-br from-[#34D399] to-[#059669]"
-              heading="Plots & Land"
-              desc="Discover approved plots suitable for investment or building your dream home."
-              cta="View Plots →"
-            />
-            <CategoryCard
-              gradientClass="bg-gradient-to-br from-[#60A5FA] to-[#3B82F6]"
-              heading="New Residential Projects"
-              desc="Explore newly launched residential projects from trusted developers."
-              cta="Explore Projects →"
-            />
-          </div>
-        </div>
-      </section>
+      <ExploreVerifiedProperties loanAmount={loanAmount} />
 
       {/* ══ RELATED HOME LOAN TOOLS ═══════════════════════════════════════ */}
       <section className="border-t border-[#E2E8F8] px-4 py-[120px] sm:px-8 lg:px-16">
@@ -761,21 +864,43 @@ export default function ReduceEmi() {
             Related Home Loan Tools
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              "Home Loan Prepayment Calculator",
-              "Best Time to Prepay Home Loan",
-              "Prepay vs Invest Calculator",
-            ].map((label) => (
-              <a
+            {relatedTools.map(({ label, href }) => (
+              <Link
                 key={label}
-                href="#"
+                href={href}
                 className="flex items-center justify-between gap-3 bg-[#F5EDFF] rounded-xl px-6 py-6 font-['Plus_Jakarta_Sans'] font-semibold text-sm leading-5 tracking-[0.28px] text-[#151C27] hover:shadow-[0_4px_16px_rgba(94,35,220,0.12)] transition-shadow"
               >
                 <span>{label}</span>
                 <ArrowRightIcon className="w-2 h-3 flex-shrink-0" />
-              </a>
+              </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ══ CTA BANNER ══════════════════════════════════════════════════════ */}
+      <section className="mx-4 sm:mx-6 lg:mx-16 mb-8 lg:mb-16 bg-gradient-to-r from-[#5E23DC] to-[#4500B4] rounded-[48px] px-6 sm:px-16 lg:px-20 py-16 lg:py-[120px] text-center relative overflow-hidden isolation-isolate">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+          <div className="w-[600px] h-[600px] rounded-full border-[4px] border-white" />
+        </div>
+        <div className="relative z-10">
+          <h2 className="font-manrope font-bold text-[26px] sm:text-[36px] lg:text-[48px] leading-tight lg:leading-[56px] tracking-[-0.96px] text-white mb-4">
+            Still unsure — reduce EMI or tenure?
+          </h2>
+          <p className="font-jakarta text-[15px] sm:text-[18px] text-[rgba(232,221,255,0.8)] mb-10 max-w-lg mx-auto">
+            Get a bank-neutral opinion before making a big financial decision
+          </p>
+          <button
+            type="button"
+            onClick={() =>
+              openAgentAdvisor(
+                "Should I reduce my home loan EMI or reduce the loan tenure after prepayment?",
+              )
+            }
+            className="bg-white text-[#4500B4] font-manrope font-semibold text-[15px] px-8 py-4 rounded-2xl hover:bg-[#F0F3FF] transition-colors shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]"
+          >
+            Talk to a Reparv Advisor
+          </button>
         </div>
       </section>
     </div>

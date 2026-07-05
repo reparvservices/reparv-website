@@ -16,25 +16,25 @@ export default function WhyRERAImportant() {
         {/* INFO CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 mb-14">
           <InfoCard
-            icon="/assets/seopageassets/reparvproperties/shield-off.svg"
+            icon="/assets/seopageassets/reparvproperties/fake.svg"
             title="Avoid Fake Projects"
             description="Verify authenticity of projects and builders through official government records. Protect yourself from fraudulent schemes and unauthorized developments."
           />
 
           <InfoCard
-            icon="/assets/seopageassets/reparvproperties/document-check.svg"
+            icon="/assets/seopageassets/reparvproperties/legal.svg"
             title="Confirm Legal Compliance"
             description="Ensure the project meets all legal requirements and has obtained necessary approvals from relevant authorities before making any investment."
           />
 
           <InfoCard
-            icon="/assets/seopageassets/reparvproperties/timeline.svg"
+            icon="/assets/seopageassets/reparvproperties/clock-filled.svg"
             title="Transparency in Timelines"
             description="Access verified project timelines and completion dates. Make informed decisions based on actual project status and developer track record."
           />
 
           <InfoCard
-            icon="/assets/seopageassets/reparvproperties/accountability.svg"
+            icon="/assets/seopageassets/reparvproperties/builder.svg"
             title="Builder Accountability"
             description="Hold builders accountable for commitments. RERA registration ensures builders follow regulations and maintain quality standards throughout construction."
           />

@@ -7,8 +7,8 @@ import { useAuth } from "../store/auth";
 import BlogCard from "../components/blog/BlogCard";
 import NewsLetterBanner from "../components/blog/NewsLetterBanner";
 import { getImageURI } from "../utils/helper";
-import AdvertisementCard from "../components/AdvertisementCard";
 import AdComponent from "../components/AdsForFeed";
+import AdvertisementCard from "../components/AdvertisementCard";
 
 const HERO_BG = "linear-gradient(180deg,#F2FDF6 0%,#FFFFFF 50%,#F2FDF6 100%)";
 // subtle body background

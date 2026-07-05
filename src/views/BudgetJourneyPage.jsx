@@ -6,16 +6,21 @@ import BudgetShift from "../components/seoPages/budgetJourneyPage/BudgetShift.js
 import SmartChoices from "../components/seoPages/budgetJourneyPage/SmartChoices.jsx";
 import FAQSection from "../components/seoPages/budgetJourneyPage/FaqSection.jsx";
 
-export default function BudgetJourneyPage() {
+export default function BudgetJourneyPage({
+  initialPageData = null,
+  initialFaqs = [],
+}) {
+  const city = initialPageData?.city || "Nagpur";
+
   return (
     <main className="min-h-screen font-sans antialiased">
-      <HeroSection />
+      <HeroSection pageData={initialPageData} />
       <WhyStressful />
       <BudgetDilemmas />
-      <BuyerStories />
-      <BudgetShift />
-      <SmartChoices />
-      <FAQSection />
+      <BuyerStories pageData={initialPageData} />
+      <BudgetShift pageData={initialPageData} />
+      <SmartChoices city={city} pageData={initialPageData} />
+      <FAQSection initialFaqs={initialFaqs} pageData={initialPageData} />
     </main>
   );
 }

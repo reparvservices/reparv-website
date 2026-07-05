@@ -1,5 +1,6 @@
 "use client";
 import { TriangleAlert, MapPin, HeadphonesIcon } from "lucide-react";
+import { formatVerifiedStatValue } from "@/utils/firstTimeBuyerPage";
 
 const patterns = [
   {
@@ -19,7 +20,11 @@ const patterns = [
   },
 ];
 
-export default function CommonPatterns() {
+export default function CommonPatterns({ pageData = null }) {
+  const affordableHomes = pageData?.stats?.affordableHomes || 0;
+  const oneBhk = pageData?.stats?.oneBhkCount || 0;
+  const twoBhk = pageData?.stats?.twoBhkCount || 0;
+
   return (
     <section
       className="relative py-20 px-6 md:px-16 lg:px-24 overflow-hidden"
@@ -45,7 +50,10 @@ export default function CommonPatterns() {
           </h2>
           <p className="text-white/70 text-base max-w-xl leading-relaxed">
             Across different budgets and situations, most first-time buyers
-            experience the same mental and emotional patterns.
+            experience the same mental and emotional patterns
+            {affordableHomes
+              ? ` — from ${formatVerifiedStatValue(oneBhk || affordableHomes)} 1 BHK to ${formatVerifiedStatValue(twoBhk || affordableHomes)} 2 BHK starter options in Nagpur`
+              : " in Nagpur"}.
           </p>
         </div>
 

@@ -101,8 +101,8 @@ export default function LocalityRealityCheckFramework() {
           {/* RIGHT – ILLUSTRATION */}
           <div className="flex justify-center lg:justify-end">
             <img
-              src="/assets/seopageassets/visitproperties/locality-illustration.svg"
-              alt="Locality Reality Check Illustration"
+              src="/assets/seopageassets/visitproperties/banner-image.svg"
+              alt="Locality reality check illustration"
               className="w-full max-w-md lg:max-w-lg"
             />
           </div>
