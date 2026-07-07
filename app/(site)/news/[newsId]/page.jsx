@@ -1,6 +1,11 @@
+import { notFound } from "next/navigation";
 import NewsDetailsPage from "@/views/NewsDetailsPage";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildPageMetadata, buildNewsArticleSchema } from "@/lib/seo";
+import {
+  buildNoIndexMetadata,
+  buildPageMetadata,
+  buildNewsArticleSchema,
+} from "@/lib/seo";
 import {
   fetchNewsCached,
   fetchNewsDetailsCached,
@@ -20,6 +25,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const news = await fetchNewsDetailsCached(params.newsId);
 
+  if (!news?.id) {
+    return buildNoIndexMetadata({
+      title: "Page not found",
+      description: "The page you requested could not be found on Reparv.",
+      path: `/news/${params.newsId}`,
+    });
+  }
+
   return buildPageMetadata({
     title: news?.seoTitle,
     description:
@@ -37,6 +50,10 @@ export default async function Page({ params }) {
     fetchNewsDetailsCached(params.newsId),
     fetchNewsCached(),
   ]);
+
+  if (!initialNews?.id) {
+    notFound();
+  }
 
   const path = `/news/${initialNews?.seoSlug || params.newsId}`;
   const newsSchema = buildNewsArticleSchema({

@@ -1,6 +1,11 @@
+import { notFound } from "next/navigation";
 import BlogDetails from "@/views/BlogDetails";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildPageMetadata, buildArticleSchema } from "@/lib/seo";
+import {
+  buildNoIndexMetadata,
+  buildPageMetadata,
+  buildArticleSchema,
+} from "@/lib/seo";
 import {
   fetchBlogDetailsCached,
   fetchBlogFaqsCached,
@@ -20,6 +25,14 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const blog = await fetchBlogDetailsCached(params.blogId);
 
+  if (!blog?.id) {
+    return buildNoIndexMetadata({
+      title: "Page not found",
+      description: "The page you requested could not be found on Reparv.",
+      path: `/blog/${params.blogId}`,
+    });
+  }
+
   return buildPageMetadata({
     title: blog?.seoTittle || blog?.title || "Blog Article",
     description:
@@ -33,7 +46,12 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const blog = await fetchBlogDetailsCached(params.blogId);
-  const initialFaqs = blog?.id ? await fetchBlogFaqsCached(blog.id) : [];
+
+  if (!blog?.id) {
+    notFound();
+  }
+
+  const initialFaqs = await fetchBlogFaqsCached(blog.id);
   const path = `/blog/${blog?.seoSlug || params.blogId}`;
 
   const articleSchema = buildArticleSchema({

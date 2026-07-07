@@ -43,6 +43,9 @@ Disallow: /edit-property/
 # Disallow API endpoints
 Disallow: /api/
 
+# Disallow error pages
+Disallow: /404
+
 # Disallow payment & utility pages
 Disallow: /checkout/
 Disallow: /payment/

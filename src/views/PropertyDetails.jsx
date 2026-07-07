@@ -1,6 +1,6 @@
 "use client"
 
-import { useParams, useRouter } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useLayoutScroll } from "../context/LayoutScrollContext";
 import React, { useState, useEffect, lazy, Suspense, useMemo } from "react";
 import { useAuth } from "../store/auth";
@@ -44,7 +44,6 @@ function PropertyDetails({
   const [propertyImages, setPropertyImages] = useState(
     initialPropertyImages ?? [],
   );
-  const router = useRouter();
   const {
     setShowSiteVisitPopup,
     URI,
@@ -55,7 +54,7 @@ function PropertyDetails({
     setShowWhatsappEnquiryPopup,
   } = useAuth();
   const [loading, setLoading] = useState(initialPropertyInfo === null);
-  const [notFound, setNotFound] = useState(false);
+  const [isPropertyNotFound, setIsPropertyNotFound] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const [activeTab, setActiveTab] = useState("Highlights");
   const tabs = [
@@ -92,7 +91,7 @@ function PropertyDetails({
 
       // If backend returns 404 or invalid slug
       if (!response.ok) {
-        setNotFound(true);
+        setIsPropertyNotFound(true);
         return;
       }
 
@@ -100,7 +99,7 @@ function PropertyDetails({
 
       // If API returns empty object or null
       if (!data || !data.propertyid) {
-        setNotFound(true);
+        setIsPropertyNotFound(true);
         return;
       }
 
@@ -108,7 +107,7 @@ function PropertyDetails({
       setPropertyCategory(data.propertyCategory);
     } catch (err) {
       console.error("Error fetching property info:", err);
-      setNotFound(true);
+      setIsPropertyNotFound(true);
     } finally {
       setLoading(false);
     }
@@ -165,12 +164,6 @@ function PropertyDetails({
     }
   }, [propertyInfo?.propertyid]);
 
-  useEffect(() => {
-    if (notFound && !loading) {
-      router.replace("/404");
-    }
-  }, [notFound, loading, router]);
-
   if (loading) {
     return (
       <div className="w-full h-[60vh] flex items-center justify-center">
@@ -181,8 +174,8 @@ function PropertyDetails({
     );
   }
 
-  if (notFound) {
-    return null; // Redirect is happening
+  if (isPropertyNotFound) {
+    notFound();
   }
 
   return (

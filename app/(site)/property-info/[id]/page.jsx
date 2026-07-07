@@ -1,6 +1,11 @@
+import { notFound } from "next/navigation";
 import PropertyDetails from "@/views/PropertyDetails";
 import JsonLd from "@/components/seo/JsonLd";
-import { buildPageMetadata, buildRealEstateListingSchema } from "@/lib/seo";
+import {
+  buildNoIndexMetadata,
+  buildPageMetadata,
+  buildRealEstateListingSchema,
+} from "@/lib/seo";
 import {
   fetchPropertyDetailsCached,
   fetchPropertyImagesCached,
@@ -27,14 +32,17 @@ function getPropertyImage(property) {
   }
 }
 
+function isMissingProperty(property) {
+  return !property?.propertyid;
+}
+
 export async function generateMetadata({ params }) {
   const property = await fetchPropertyDetailsCached(params.id);
 
-  if (!property) {
-    return buildPageMetadata({
-      title: "Property Details",
-      description:
-        "View photos, pricing and location for this listing on Reparv.",
+  if (isMissingProperty(property)) {
+    return buildNoIndexMetadata({
+      title: "Page not found",
+      description: "The page you requested could not be found on Reparv.",
       path: `/property-info/${params.id}`,
     });
   }
@@ -60,6 +68,10 @@ export default async function Page({ params }) {
     fetchPropertyDetailsCached(params.id),
     fetchPropertyImagesCached(params.id),
   ]);
+
+  if (isMissingProperty(initialPropertyInfo)) {
+    notFound();
+  }
 
   const path = `/property-info/${initialPropertyInfo?.seoSlug || params.id}`;
   const listingSchema = buildRealEstateListingSchema(
