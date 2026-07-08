@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { openAgentAdvisor } from "@/utils/openAgentAdvisor";
 import {
+  applyFamilyStoryOverrides,
   buildFamilyPropertiesLink,
   formatBudgetRange,
   formatVerifiedStatValue,
@@ -760,7 +761,7 @@ const FALLBACK_STORIES = [
     clarityOutcome: "Feeling aligned mattered more than price.",
     gradientFrom: "#C8DDEF",
     gradientTo: "#D8E8F4",
-    href: "/properties?city=Nagpur",
+    href: "/blog/joint-family-renting-besa-nagpur",
   },
   {
     seed: 1,
@@ -781,7 +782,30 @@ const FALLBACK_STORIES = [
     clarityOutcome: "We realized joy at home mattered more than square footage.",
     gradientFrom: "#C8D8E8",
     gradientTo: "#D4E0EC",
-    href: "/properties?city=Nagpur",
+    href: "/blog/finding-shared-priorities-in-manish-nagar-a-nuclear-familys-home-buying-story",
+  },
+  {
+    seed: 2,
+    meta: ["Growing Family", "Manewada", "Planning"],
+    title: "Balancing Safety and Budget in Manewada",
+    location: "Manewada",
+    videoLabel: "Planning Story",
+    videoDuration: "2:58",
+    videoCaption: "How one family compared communities before deciding.",
+    priorities: [
+      "Safe neighbourhood for children",
+      "Affordable monthly EMI",
+      "Room to grow over 5 years",
+    ],
+    stressPhase:
+      "Conflicting expectations from relatives added emotional pressure.",
+    clarityMoment:
+      "Comparing three localities side-by-side removed guesswork for everyone.",
+    clarityOutcome:
+      "A balanced choice emerged that the whole family supported.",
+    gradientFrom: "#D8E0F0",
+    gradientTo: "#E8ECF7",
+    href: "/blog/growing-family-planning-manewada",
   },
 ];
 
@@ -913,7 +937,7 @@ function StoryCard({ story, reverse }) {
         href={storyHref}
         className="inline-flex items-center gap-1.5 font-jakarta text-[16px] font-bold text-[#4500B4] no-underline mt-6 group"
       >
-        {story.propertySlug ? "View Family Home" : "Explore Homes in This Area"}
+        {storyHref?.startsWith("/blog/") ? "View Family Story" : "View Family Home"}
         <span className="transition-transform duration-200 group-hover:translate-x-1 flex">
           <ArrowIcon />
         </span>
@@ -1199,7 +1223,9 @@ export default function FamilyStoriesPage({
   initialFaqs = [],
 }) {
   const city = initialPageData?.city || "Nagpur";
-  const stories = initialPageData?.stories || FALLBACK_STORIES;
+  const stories = initialPageData?.stories?.length
+    ? applyFamilyStoryOverrides(initialPageData.stories)
+    : FALLBACK_STORIES;
 
   return (
     <main

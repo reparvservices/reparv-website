@@ -6,6 +6,7 @@ import { LayoutScrollContext } from "../context/LayoutScrollContext";
 import { useInView } from "react-intersection-observer";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import AdvertisementCard from "../components/AdvertisementCard";
 import SuccessScreen from "../components/SuccessScreen";
 import PriceSummery from "../components/property/PriceSummery";
 import BenefitsPopup from "../components/property/BenefitsPopup";
@@ -89,6 +90,10 @@ export default function SiteLayout({ children }) {
 
         {/* container */}
         <div className="w-full pt-15 sm:pt-21! sm:bg-[#fafafa]">{children}</div>
+
+        <div className="w-full max-w-[1380px] mx-auto px-4 sm:px-6">
+          <AdvertisementCard />
+        </div>
 
         {/* footer */}
         <Footer footerRef={footerRef} />

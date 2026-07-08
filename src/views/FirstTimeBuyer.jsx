@@ -9,6 +9,7 @@ import HowThisHelps from "../components/seoPages/FirstTimeBuyer/HowThisHelps.jsx
 import WhatNext from "../components/seoPages/FirstTimeBuyer/WhatNext.jsx";
 import FAQ from "../components/seoPages/FirstTimeBuyer/Faq.jsx";
 import LatestArtical from "../components/seocomponents/common/LatestArtical";
+import AdvertisementCard from "../components/AdvertisementCard";
 
 export default function FirstTimeBuyerPage({
   initialPageData = null,
@@ -20,10 +21,16 @@ export default function FirstTimeBuyerPage({
       <Hero pageData={initialPageData} />
       <WhyConfused />
       <HowToRead />
+      <div className="max-w-[1380px] mx-auto my-5">
+        <AdvertisementCard variant="seoDisplay" />
+      </div>
       <RealStories pageData={initialPageData} />
       <CommonPatterns pageData={initialPageData} />
       <HowThisHelps />
       <WhatNext pageData={initialPageData} guides={initialArticles} />
+      <div className="max-w-[1380px] mx-auto my-5">
+        <AdvertisementCard variant="seoInFeed" />
+      </div>
       <LatestArtical initialArticles={initialArticles} />
       <FAQ initialFaqs={initialFaqs} pageData={initialPageData} />
     </main>

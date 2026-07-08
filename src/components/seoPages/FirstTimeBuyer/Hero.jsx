@@ -11,7 +11,9 @@ import {
 const PAGE_CITY = "Nagpur";
 
 const scrollToSection = (id) => {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  document
+    .getElementById(id)
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 export default function Hero({ pageData = null }) {
@@ -42,7 +44,7 @@ export default function Hero({ pageData = null }) {
             confusion, faced doubts, and found clarity before making confident
             decisions in {PAGE_CITY}
             {localityCount ? ` across ${localityCount} localities` : ""}.
-            {affordableHomes ? ` Explore starter homes from ${budgetRange}.` : ""}
+            {affordableHomes ? ` Explore starter homes from ₹60L - ₹75L.` : ""}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -64,12 +66,13 @@ export default function Hero({ pageData = null }) {
 
         <div className="flex-1 min-w-0 w-full">
           <img
-            src={getHeroImage(pageData)}
+            src={getHeroImage()}
             alt="First-time buyer exploring homes in Nagpur"
             className="w-full h-[380px] object-cover rounded-2xl"
             onError={(event) => {
               event.currentTarget.onerror = null;
-              event.currentTarget.src = "/assets/seoPages/firstTimeBuyer/hero.svg";
+              event.currentTarget.src =
+                "/assets/seoPages/firstTimeBuyer/hero.svg";
             }}
           />
         </div>

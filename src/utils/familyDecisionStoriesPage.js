@@ -6,24 +6,58 @@ import {
 
 export { formatVerifiedStatValue, getPropertyImage, mapFaqs };
 
-export function getStoryImage(story) {
-  if (story?.image) {
-    return getPropertyImage({ frontView: story.image });
+const FAMILY_HERO_IMAGE = "/assets/seoPages/familyDecision/hero-family-banner.png";
+
+const FAMILY_STORY_OVERRIDES = {
+  "The Family Alignment Journey in Besa": {
+    image: "/assets/seoPages/familyDecision/joint-family-besa.png",
+    href: "/blog/joint-family-renting-besa-nagpur",
+  },
+  "Finding Shared Priorities in Manish Nagar": {
+    image: "/assets/seoPages/familyDecision/finding-shared-priorities.png",
+    href: "/blog/finding-shared-priorities-in-manish-nagar-a-nuclear-familys-home-buying-story",
+  },
+  "Balancing Safety and Budget in Manewada": {
+    image:
+      "https://reparv-assets.s3.ap-south-1.amazonaws.com/uploads/1783517126039-1000006845.webp",
+    href: "/blog/growing-family-planning-manewada",
+  },
+};
+
+function normalizeStoryImage(image) {
+  if (!image) return "";
+  if (typeof image === "string" && image.startsWith("http")) {
+    return image;
   }
+
+  return getPropertyImage({ frontView: image });
+}
+
+export function getStoryImage(story) {
+  const override = FAMILY_STORY_OVERRIDES[story?.title];
+  const preferredImage = override?.image || story?.image;
+  const imageSrc = normalizeStoryImage(preferredImage);
+
+  if (imageSrc) return imageSrc;
 
   return "/assets/seoPages/familyDecision/hero.svg";
 }
 
 export function getHeroImage(pageData) {
-  if (pageData?.heroProperty) {
-    return getPropertyImage(pageData.heroProperty);
-  }
+  return FAMILY_HERO_IMAGE || "/assets/seoPages/familyDecision/hero.svg";
+}
 
-  if (pageData?.stories?.[0]?.image) {
-    return getStoryImage(pageData.stories[0]);
-  }
+export function applyFamilyStoryOverrides(stories = []) {
+  return stories.map((story) => {
+    const override = FAMILY_STORY_OVERRIDES[story?.title];
+    if (!override) return story;
 
-  return "/assets/seoPages/familyDecision/hero.svg";
+    return {
+      ...story,
+      image: override.image || story.image,
+      href: override.href || story.href,
+    };
+  });
 }
 
 export function buildFamilyPropertiesLink(city = "Nagpur", area = "") {

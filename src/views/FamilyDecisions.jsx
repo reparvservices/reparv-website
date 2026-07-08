@@ -4,6 +4,7 @@ import Hero from "../components/seoPages/FamilyDecisions/Hero.jsx";
 import WhyHard from "../components/seoPages/FamilyDecisions/WhyHard.jsx";
 import WhereDifferent from "../components/seoPages/FamilyDecisions/WhereDifferent.jsx";
 import StoryCard from "../components/seoPages/FamilyDecisions/StoryCard.jsx";
+import AdvertisementCard from "../components/AdvertisementCard";
 
 const stories = [
   {
@@ -74,6 +75,9 @@ export default function FamilyDecisionStoriesPage() {
 
       {/* Common Conflicts */}
       <WhereDifferent />
+      <div className="max-w-[1380px] mx-auto my-5">
+        <AdvertisementCard variant="seoDisplay" />
+      </div>
 
       {/* Stories Section */}
       <section className="bg-[#F8F6FF] px-4 py-14 sm:px-6 lg:px-6 lg:py-20">
@@ -100,6 +104,9 @@ export default function FamilyDecisionStoriesPage() {
           </div>
         </div>
       </section>
+      <div className="max-w-[1380px] mx-auto my-5">
+        <AdvertisementCard variant="seoInFeed" />
+      </div>
     </main>
   );
 }

@@ -96,7 +96,7 @@ export default function VisitPropertiesOnWeekend({
       />
       <WhyWeekendSiteVisitsMatter city={pageData?.city || activeCity} />
       <div className="max-w-[1380px] mx-auto my-5">
-        <AdvertisementCard />
+        <AdvertisementCard variant="seoDisplay" />
       </div>
       <LocalityRealityCheckFramework />
       <NagpurLocalityRealitySnapshots
@@ -111,7 +111,7 @@ export default function VisitPropertiesOnWeekend({
         loading={loading}
       />
       <div className="max-w-[1380px] mx-auto my-5">
-        <AdvertisementCard />
+        <AdvertisementCard variant="seoInFeed" />
       </div>
       <FAQSection
         location={"Reparv Visit Properties On Weekend Page"}

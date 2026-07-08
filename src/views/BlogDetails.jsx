@@ -19,6 +19,39 @@ import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 import Breadcrumbs from "../components/seo/Breadcrumbs";
 
+const IN_ARTICLE_AD_MARKUP = `
+  <div class="reparv-in-article-ad" style="margin:24px 0;">
+    <ins
+      class="adsbygoogle"
+      style="display:block; text-align:center;"
+      data-ad-layout="in-article"
+      data-ad-format="fluid"
+      data-ad-client="ca-pub-7197621532263972"
+      data-ad-slot="7157949603"
+    ></ins>
+  </div>
+`;
+
+function injectInArticleAd(content = "") {
+  if (!content) return "";
+
+  let paragraphCloseCount = 0;
+  const updated = content.replace(/<\/p>/gi, (match) => {
+    paragraphCloseCount += 1;
+    if (paragraphCloseCount === 2) {
+      return `${match}${IN_ARTICLE_AD_MARKUP}`;
+    }
+    return match;
+  });
+
+  // Fallback for short/non-paragraph content
+  if (paragraphCloseCount < 2) {
+    return `${content}${IN_ARTICLE_AD_MARKUP}`;
+  }
+
+  return updated;
+}
+
 function BlogDetails({ initialBlog = null, initialFaqs = null }) {
   const router = useRouter();
 
@@ -107,6 +140,18 @@ function BlogDetails({ initialBlog = null, initialFaqs = null }) {
     }
   }, [blog?.id, URI]);
 
+  const blogContentWithAd = injectInArticleAd(blog?.content || "");
+
+  useEffect(() => {
+    if (!blogContentWithAd || !window.adsbygoogle) return;
+
+    try {
+      window.adsbygoogle.push({});
+    } catch (error) {
+      console.warn("In-article ad init error:", error);
+    }
+  }, [blogContentWithAd]);
+
   return (
     <>
       <div className="w-[1380px] text-xs sm:text-sm space-y-2 mx-auto py-4 px-4">
@@ -164,7 +209,7 @@ function BlogDetails({ initialBlog = null, initialFaqs = null }) {
             </div>
             <div
               className="blog-content prose max-w-none sm:px-4"
-              dangerouslySetInnerHTML={{ __html: blog?.content }}
+              dangerouslySetInnerHTML={{ __html: blogContentWithAd }}
             />
             <div className="w-full sm:p-4">
               <div className="w-full mx-auto py-4 border-b border-y-[#00000033] bg-[white]">

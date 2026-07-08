@@ -90,7 +90,7 @@ export default function TrustedBuilder({
         onViewBuilders={() => scrollToSection("verified-builders")}
       />
       <div className="max-w-[1380px] mx-auto my-5">
-        <AdvertisementCard />
+        <AdvertisementCard variant="seoDisplay" />
       </div>
       <VerifiedBuilders
         builders={pageData?.builders || []}
@@ -104,7 +104,7 @@ export default function TrustedBuilder({
         loading={loading}
       />
       <div className="max-w-[1380px] mx-auto my-5">
-        <AdvertisementCard />
+        <AdvertisementCard variant="seoInFeed" />
       </div>
       <ExploreBuildersByCity
         cities={pageData?.cities || []}

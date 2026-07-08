@@ -8,6 +8,7 @@ import FamilyChecklist from "../components/seoPages/seoPage1/FamilyChecklist.jsx
 import ReparvStandard from "../components/seoPages/seoPage1/ReparvStandard.jsx";
 import CTASection from "../components/seoPages/seoPage1/CtaSection.jsx";
 import Faq from "../components/seoPages/seoPage1/Faq.jsx";
+import AdvertisementCard from "../components/AdvertisementCard";
 export default function SeoPage1({ initialPageData = null }) {
   return (
     <>
@@ -15,9 +16,15 @@ export default function SeoPage1({ initialPageData = null }) {
         <Hero pageData={initialPageData} />
         <HeartOfJourney />
         <FindAStory />
+        <div className="max-w-[1380px] mx-auto my-5">
+          <AdvertisementCard variant="seoDisplay" />
+        </div>
         <FeaturedNarratives />
         <ReparvPath />
         <UniversalFears />
+        <div className="max-w-[1380px] mx-auto my-5">
+          <AdvertisementCard variant="seoInFeed" />
+        </div>
         <FamilyChecklist />
         <ReparvStandard />
         <CTASection /> 

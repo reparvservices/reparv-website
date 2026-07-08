@@ -27,13 +27,13 @@ export default function Verify712({
         <VerifyLandRecord />
         <WhatIs712Utara />
         <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
+          <AdvertisementCard variant="seoDisplay" />
         </div>
         <StepByStep712Guide />
         <WhoShouldVerify712Utara />
         <ExpertVerificationServices />
         <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
+          <AdvertisementCard variant="seoInFeed" />
         </div>
         <UtaraVsPropertyCard />
         <RiskWithout712Verification />

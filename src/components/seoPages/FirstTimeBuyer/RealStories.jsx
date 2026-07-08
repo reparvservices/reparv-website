@@ -3,48 +3,17 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import {
   buildStarterPropertiesLink,
+  FIRST_TIME_BUYER_STORIES,
   formatVerifiedStatValue,
+  getStoryHref,
   getStoryImage,
 } from "@/utils/firstTimeBuyerPage";
 
 const PAGE_CITY = "Nagpur";
 
-const FALLBACK_FEATURED = {
-  tags: ["Joint Family", "Renting"],
-  title: "The Path to Multi-Generational Harmony",
-  clarityMoment:
-    "Area comparison aligned expectations across the family. Feeling aligned mattered more than price.",
-  stressPhase:
-    "Repeated discussions, delays, and growing self-doubt over six months of searching.",
-  href: "/properties?city=Nagpur",
-};
-
-const FALLBACK_STORIES = [
-  {
-    meta: "Nuclear Family · Nagpur · IT Sector",
-    title: "Overcoming Feature Creep",
-    points: [
-      'Realized "Must-haves" vs "Nice-to-haves"',
-      "Balancing commute with community",
-      "Found peace in an older neighbourhood",
-    ],
-    href: "/properties?city=Nagpur",
-  },
-  {
-    meta: "Single Professional · Nagpur",
-    title: "Financial Readiness",
-    points: [
-      "Understanding hidden closing costs",
-      'The "Safe" budget vs "Bank" budget',
-      "Navigating EMI anxiety",
-    ],
-    href: "/emi-calculator",
-  },
-];
-
 export default function RealStories({ pageData = null }) {
-  const featured = pageData?.featuredStory || FALLBACK_FEATURED;
-  const stories = pageData?.stories?.length ? pageData.stories : FALLBACK_STORIES;
+  const featured = FIRST_TIME_BUYER_STORIES.featured;
+  const stories = FIRST_TIME_BUYER_STORIES.stories;
   const affordableHomes = pageData?.stats?.affordableHomes || 0;
   const featuredImage = getStoryImage(featured);
 
@@ -74,11 +43,11 @@ export default function RealStories({ pageData = null }) {
         </div>
 
         <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-6">
-          <div className="md:w-[55%] flex-shrink-0">
+          <div className="md:w-[55%] flex-shrink-0 bg-purple-50 flex items-center justify-center">
             <img
               src={featuredImage}
               alt={featured.title}
-              className="w-full h-full min-h-[300px] object-cover"
+              className="w-full h-full min-h-[300px] object-contain"
               onError={(event) => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = "/assets/seoPages/firstTimeBuyer/leftImage.svg";
@@ -126,25 +95,25 @@ export default function RealStories({ pageData = null }) {
               </p>
             ) : null}
             <Link
-              href={featured.href || buildStarterPropertiesLink(PAGE_CITY)}
+              href={getStoryHref(featured)}
               className="flex items-center gap-1.5 text-purple-700 font-semibold text-sm hover:gap-2.5 transition-all w-fit"
             >
-              Explore Similar Homes <ArrowRight className="w-4 h-4" />
+              View Journey <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
           {stories.map((story) => (
             <div
               key={story.title}
               className="rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col"
             >
-              <div className="relative bg-purple-50 h-44 flex-shrink-0 overflow-hidden">
+              <div className="relative bg-purple-50 h-52 flex-shrink-0 overflow-hidden flex items-center justify-center">
                 <img
                   src={getStoryImage(story)}
                   alt={story.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   onError={(event) => {
                     event.currentTarget.onerror = null;
                     event.currentTarget.src = "/assets/seoPages/seoPage2/keys.jpg";
@@ -175,7 +144,7 @@ export default function RealStories({ pageData = null }) {
                   </p>
                 ) : null}
                 <Link
-                  href={story.href || buildStarterPropertiesLink(PAGE_CITY)}
+                  href={getStoryHref(story)}
                   className="flex items-center gap-1 text-purple-700 font-semibold text-sm hover:gap-2 transition-all w-fit"
                 >
                   View Journey <ArrowUpRight className="w-4 h-4" />

@@ -41,6 +41,10 @@ export function filterBuyerGuides(articles = [], limit = 6) {
 }
 
 export function getStoryImage(story) {
+  if (typeof story?.image === "string" && story.image.startsWith("http")) {
+    return story.image;
+  }
+
   if (story?.image) {
     return getPropertyImage({ frontView: story.image });
   }
@@ -48,16 +52,67 @@ export function getStoryImage(story) {
   return "/assets/seoPages/firstTimeBuyer/leftImage.svg";
 }
 
-export function getHeroImage(pageData) {
-  if (pageData?.heroProperty) {
-    return getPropertyImage(pageData.heroProperty);
-  }
+const HERO_IMAGE = "/assets/seoPages/firstTimeBuyer/hero-family.png";
 
-  if (pageData?.featuredStory?.image) {
-    return getStoryImage(pageData.featuredStory);
-  }
+export function getHeroImage() {
+  return HERO_IMAGE;
+}
 
-  return "/assets/seoPages/firstTimeBuyer/hero.svg";
+export const STORY_BLOG_LINKS = {
+  "The Path to Multi-Generational Harmony":
+    "/blog/joint-family-besa-from-renting-to-their-own-3bhk-flat-in-nagpur",
+  "Overcoming Feature Creep":
+    "/blog/nuclear-family-it-sector-manish-nagar-overcoming-feature-creep",
+  "Financial Readiness":
+    "/blog/single-professional-buys-first-home-in-jaitala-nagpur-reparv-story",
+};
+
+export const FIRST_TIME_BUYER_STORIES = {
+  featured: {
+    tags: ["Joint Family", "Renting"],
+    location: "Besa",
+    title: "The Path to Multi-Generational Harmony",
+    clarityMoment:
+      "Area comparison aligned expectations across the family. Feeling aligned mattered more than price.",
+    stressPhase:
+      "Repeated discussions, delays, and growing self-doubt over six months of searching.",
+    priceRange: "₹42 Lakh - ₹54 Lakh",
+    image:
+      "https://reparv-assets.s3.ap-south-1.amazonaws.com/uploads/1783425905485-From Renting to Their Own 3BHK Flat in Nagpur.webp",
+    href: STORY_BLOG_LINKS["The Path to Multi-Generational Harmony"],
+  },
+  stories: [
+    {
+      meta: "Nuclear Family · Manish Nagar · IT Sector",
+      title: "Overcoming Feature Creep",
+      points: [
+        'Realized "Must-haves" vs "Nice-to-haves"',
+        "Balancing commute with community",
+        "Found peace in an established neighbourhood",
+      ],
+      priceRange: "₹45 Lakh - ₹59 Lakh",
+      image:
+        "https://reparv-assets.s3.ap-south-1.amazonaws.com/uploads/1783429379895-Nuclear Family  IT Sector  Manish Nagar Overcoming Feature Creep.webp",
+      href: STORY_BLOG_LINKS["Overcoming Feature Creep"],
+    },
+    {
+      meta: "Single Professional · Jaitala · First Purchase",
+      title: "Financial Readiness",
+      points: [
+        "Understanding hidden closing costs",
+        'The "Safe" budget vs "Bank" budget',
+        "Navigating EMI anxiety with a clear plan",
+      ],
+      priceRange: "₹23 Lakh - ₹56 Lakh",
+      image:
+        "https://reparv-assets.s3.ap-south-1.amazonaws.com/uploads/1783430467791-Single Professional Buys First Home in Jaitala, Nagpur .webp",
+      href: STORY_BLOG_LINKS["Financial Readiness"],
+    },
+  ],
+};
+
+export function getStoryHref(story) {
+  return STORY_BLOG_LINKS[story?.title] || story?.href || "/first-time-buyer";
 }
 
 export function formatBudgetRange(min, max) {
