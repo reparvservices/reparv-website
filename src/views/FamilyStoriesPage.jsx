@@ -810,13 +810,17 @@ const FALLBACK_STORIES = [
 ];
 
 function StoryCard({ story, reverse }) {
-  const Scene = story.seed % 2 === 0 ? AgnihotriScene : SharmaScene;
-  const storyImage = getStoryImage(story);
+  const seed = Number.isFinite(story?.seed) ? story.seed : 0;
+  const Scene = seed % 2 === 0 ? AgnihotriScene : SharmaScene;
+  const storyImage = getStoryImage(story) || "/assets/seoPages/familyDecision/hero.svg";
+  const meta = Array.isArray(story?.meta) ? story.meta : [];
+  const priorities = Array.isArray(story?.priorities) ? story.priorities : [];
+  const usesFallbackScene = storyImage.includes("hero.svg");
   const storyHref =
-    story.href ||
-    (story.propertySlug
+    story?.href ||
+    (story?.propertySlug
       ? `/property-info/${story.propertySlug}`
-      : buildFamilyPropertiesLink(story.location || "Nagpur", story.location));
+      : buildFamilyPropertiesLink(story?.location || "Nagpur", story?.location));
 
   const imagePanel = (
     <div className="flex flex-col gap-3">
@@ -825,17 +829,17 @@ function StoryCard({ story, reverse }) {
         className="relative rounded-2xl overflow-hidden shadow-[0_2px_16px_rgba(0,0,0,0.08)]"
         style={{
           aspectRatio: "16/10",
-          background: storyImage.includes("hero.svg")
-            ? `linear-gradient(135deg, ${story.gradientFrom} 0%, ${story.gradientTo} 100%)`
+          background: usesFallbackScene
+            ? `linear-gradient(135deg, ${story?.gradientFrom || "#C8DDEF"} 0%, ${story?.gradientTo || "#D8E8F4"} 100%)`
             : "#E8E4F4",
         }}
       >
-        {storyImage.includes("hero.svg") ? (
+        {usesFallbackScene ? (
           <Scene />
         ) : (
           <img
             src={storyImage}
-            alt={story.title}
+            alt={story?.title || "Family story"}
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}
@@ -843,7 +847,7 @@ function StoryCard({ story, reverse }) {
         {/* Play button */}
         <Link
           href={storyHref}
-          aria-label={`Explore homes in ${story.location || "Nagpur"}`}
+          aria-label={`Explore homes in ${story?.location || "Nagpur"}`}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/90 border-none cursor-pointer flex items-center justify-center pl-1 text-[#4500B4] shadow-[0_4px_24px_rgba(0,0,0,0.18)] transition-transform duration-200 hover:scale-110 hover:bg-white z-10"
         >
           <PlayIcon />
@@ -851,14 +855,14 @@ function StoryCard({ story, reverse }) {
 
         {/* Bottom badge */}
         <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm rounded-lg px-3 py-1 text-[12px] font-semibold text-white z-10 tracking-[0.01em]">
-          {story.priceRange
-            ? `${story.priceRange} • ${story.location || "Nagpur"}`
-            : `${story.videoLabel} • ${story.videoDuration}`}
+          {story?.priceRange
+            ? `${story.priceRange} • ${story?.location || "Nagpur"}`
+            : `${story?.videoLabel || "Family Story"} • ${story?.videoDuration || ""}`}
         </div>
       </div>
 
       {/* Caption */}
-      {story.videoCaption && (
+      {story?.videoCaption && (
         <p className="font-jakarta text-[12px] text-slate-400 text-center tracking-[0.01em]">
           {story.videoCaption}
         </p>
@@ -870,9 +874,9 @@ function StoryCard({ story, reverse }) {
     <div className="flex flex-col gap-0 py-2">
       {/* Meta tags */}
       <div className="flex flex-wrap items-center gap-0 mb-3">
-        {story.meta.map((m, i) => (
+        {meta.map((m, i) => (
           <span
-            key={m}
+            key={`${m}-${i}`}
             className="font-jakarta text-[11px] font-semibold uppercase tracking-[0.07em] text-slate-400"
           >
             {i > 0 && <span className="mx-1.5 opacity-50">·</span>}
@@ -883,7 +887,7 @@ function StoryCard({ story, reverse }) {
 
       {/* Title */}
       <h3 className="font-manrope font-semibold text-[24px] leading-8 text-[#4500B4] mb-6 tracking-[-0.01em] lg:text-[34px] lg:leading-[1.15]">
-        {story.title}
+        {story?.title}
       </h3>
 
       {/* Content block (mobile card wrapper) */}
@@ -894,7 +898,7 @@ function StoryCard({ story, reverse }) {
             Different Priorities
           </p>
           <ul className="flex flex-col gap-1 list-none p-0 m-0">
-            {story.priorities.map((p) => (
+            {priorities.map((p) => (
               <li
                 key={p}
                 className="font-jakarta text-[16px] leading-6 text-[#5F5D69] pl-3.5 relative"

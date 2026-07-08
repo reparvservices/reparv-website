@@ -26,8 +26,15 @@ const FAMILY_STORY_OVERRIDES = {
 
 function normalizeStoryImage(image) {
   if (!image) return "";
-  if (typeof image === "string" && image.startsWith("http")) {
-    return image;
+
+  if (typeof image === "string") {
+    if (
+      image.startsWith("http") ||
+      image.startsWith("/") ||
+      image.startsWith("data:")
+    ) {
+      return image;
+    }
   }
 
   return getPropertyImage({ frontView: image });

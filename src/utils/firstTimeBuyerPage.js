@@ -41,8 +41,14 @@ export function filterBuyerGuides(articles = [], limit = 6) {
 }
 
 export function getStoryImage(story) {
-  if (typeof story?.image === "string" && story.image.startsWith("http")) {
-    return story.image;
+  if (typeof story?.image === "string") {
+    if (
+      story.image.startsWith("http") ||
+      story.image.startsWith("/") ||
+      story.image.startsWith("data:")
+    ) {
+      return story.image;
+    }
   }
 
   if (story?.image) {
