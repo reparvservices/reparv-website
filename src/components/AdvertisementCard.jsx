@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef } from "react";
 
 const AD_CLIENT = "ca-pub-7197621532263972";
