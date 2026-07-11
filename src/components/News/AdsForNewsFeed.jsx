@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { initAdSenseSlot, watchAdFill } from "../utils/initAdSense";
+import { initAdSenseSlot, watchAdFill } from "../../utils/initAdSense";
 
 const AD_CLIENT = "ca-pub-7197621532263972";
 const IS_DEV = process.env.NODE_ENV === "development";
