@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import SeoSectionAd from "../components/seocomponents/common/SeoSectionAd";
 import { useAuth } from "../store/auth";
 import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 import {
@@ -739,6 +740,8 @@ export default function FlatsForSale({ initialPageData = null, initialFaqs = [] 
         </section>
       )}
 
+      <SeoSectionAd />
+
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 py-20">
         <div className="text-center mb-12">
           <p className="font-['Manrope'] font-semibold text-xs text-[#5E23DC] uppercase tracking-[1.2px] mb-3">
@@ -833,6 +836,8 @@ export default function FlatsForSale({ initialPageData = null, initialFaqs = [] 
           </div>
         </div>
       </section>
+
+      <SeoSectionAd variant="seoInFeed" />
 
       <section className="max-w-[1408px] mx-auto px-4 mb-16">
         <div className="bg-gradient-to-r from-[#5E23DC] to-[#3B0A91] rounded-[32px] px-10 md:px-16 py-16 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
@@ -970,6 +975,8 @@ export default function FlatsForSale({ initialPageData = null, initialFaqs = [] 
           </div>
         </div>
       </section>
+
+      <SeoSectionAd />
 
       <section className="max-w-[1408px] mx-auto px-4 mb-16 mt-20">
         <div className="bg-[#5E23DC] rounded-[32px] relative min-h-[372px] flex items-center overflow-hidden">

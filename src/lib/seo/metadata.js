@@ -29,7 +29,7 @@ export function resolveOgImageUrl(image) {
     return trimmed;
   }
 
-  if (trimmed.startsWith("/")) {
+  if (trimmed.startsWith("/assets/")) {
     return `${siteUrl}${trimmed}`;
   }
 

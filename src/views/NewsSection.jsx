@@ -12,7 +12,6 @@ import RealEstateToolsAndGuides from "../components/News/RealEstateToolsAndGuide
 import NeverMissUpdates from "../components/News/NeverMissUpdates";
 import { useAuth } from "../store/auth";
 import { getImageURI } from "../utils/helper";
-import AdComponent from "../components/AdsForFeed";
 import AdsForNewsFeed from "../components/News/AdsForNewsFeed";
 
 export default function NewsPage({ initialNews = null }) {
@@ -173,8 +172,6 @@ export default function NewsPage({ initialNews = null }) {
                     />
                   ))}
 
-              {/* ADVERTISEMENT (FIGMA POSITION) */}
-              <AdvertisementCard variant="main" />
             </div>
 
             {/* RIGHT COLUMN */}
@@ -393,7 +390,6 @@ export default function NewsPage({ initialNews = null }) {
                   </p>
                 )}
               </div>
-              <AdvertisementCard variant="sidebar" />
             </aside>
           </div>
         </section>

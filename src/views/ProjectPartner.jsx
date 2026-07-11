@@ -14,7 +14,6 @@ import PriceSummery from "../components/property/PriceSummery.jsx";
 import ContactUsPopup from "../components/projectPartner/ContactUsPopup.jsx";
 import WhatsappShare from "../components/projectPartner/WhatsappShare.jsx";
 import EnquiryPopup from "../components/projectPartner/EnquiryPopup.jsx";
-import AdvertisementCard from "../components/AdvertisementCard.jsx";
 
 const PropertyNavbar = lazy(
   () => import("../components/projectPartner/PropertyNavbar.jsx"),
@@ -159,9 +158,6 @@ export default function ProjectPartner({ initialProjectPartner = null }) {
               <PropertySwiper projectPartner={projectPartner} />
             </Suspense>
           </section>
-          <div className="max-w-[1380px] mx-auto my-5">
-            <AdvertisementCard />
-          </div>
           <section id="propertiesSearch" className="pt-8 sm:pt-10">
             <div className="bg-transparent">
               <Suspense
@@ -187,10 +183,6 @@ export default function ProjectPartner({ initialProjectPartner = null }) {
               </Suspense>
             </div>
           </section>
-
-          <div className="max-w-[1380px] mx-auto my-5">
-            <AdvertisementCard />
-          </div>
 
           {/* Contact Us CTA (centered)
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

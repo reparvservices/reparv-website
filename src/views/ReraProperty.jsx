@@ -12,8 +12,6 @@ import WhyRERAImportant from "../components/seocomponents/reravprojects/WhyRERAI
 import RERAVerificationResult from "../components/seocomponents/reravprojects/ReraVerificationResult";
 import NonRERARisks from "../components/seocomponents/reravprojects/NonReraPropertiesRisk";
 import FAQSection from "../components/FAQSection";
-import AdvertisementCard from "../components/AdvertisementCard";
-
 const RERAProperty = ({ initialArticles = null, initialFaqs = null }) => {
   
   return (
@@ -62,23 +60,14 @@ const RERAProperty = ({ initialArticles = null, initialFaqs = null }) => {
         {/* ================= PAGE SECTIONS ================= */}
         <RegisterdProjects />
         <RERAVerificationResult />
-        <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
-        </div>
         <RERAInfoCards />
         <WhyRERAImportant />
-        <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
-        </div>
         <NonRERARisks />
         <FAQSection
           location={"Reparv Rera Property Page"}
           initialFaqs={initialFaqs}
         />
         <NewsSection initialArticles={initialArticles} />
-        <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
-        </div>
       </section>
     </>
   );

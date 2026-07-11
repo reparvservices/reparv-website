@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import SeoSectionAd from "../components/seocomponents/common/SeoSectionAd";
 import { useAuth } from "../store/auth";
 import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 import {
@@ -647,6 +648,8 @@ export default function NewProjects({ initialPageData = null, initialFaqs = [] }
         </div>
       </section>
 
+      <SeoSectionAd />
+
       <section className="py-20 bg-gray-50">
         <div className="max-w-[1280px] mx-auto px-4">
           <div className="text-center mb-16">
@@ -767,6 +770,8 @@ export default function NewProjects({ initialPageData = null, initialFaqs = [] }
           </div>
         </div>
       </section>
+
+      <SeoSectionAd variant="seoInFeed" />
 
       <section className="py-20 bg-gray-50">
         <div className="max-w-[1280px] mx-auto px-4">
@@ -930,6 +935,8 @@ export default function NewProjects({ initialPageData = null, initialFaqs = [] }
           </div>
         </div>
       </section>
+
+      <SeoSectionAd />
 
       <section className="py-12 bg-[#5E23DC]">
         <div className="max-w-[1280px] mx-auto px-4 flex flex-col lg:flex-row justify-between items-center gap-8">

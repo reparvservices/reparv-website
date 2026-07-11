@@ -6,8 +6,6 @@ import { MdDone } from "react-icons/md";
 import EMICalculator from "../components/seocomponents/emicomponents/EMICalculator";
 import LatestArtical from "../components/seocomponents/common/LatestArtical";
 import HowToUseEmiCalculator from "../components/seocomponents/emicomponents/HowToUseEmiCalculator";
-import AdvertisementCard from "../components/AdvertisementCard";
-
 const EmiCalculator = ({ initialArticles = null }) => {
   const router = useRouter();
 
@@ -106,9 +104,7 @@ const EmiCalculator = ({ initialArticles = null }) => {
               <HowToUseEmiCalculator />
             </div>
           </div>
-          <AdvertisementCard />
           <LatestArtical initialArticles={initialArticles} />
-          <AdvertisementCard />
         </div>
       </section>
     </>

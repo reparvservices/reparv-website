@@ -4,9 +4,9 @@ export const DETAIL_PAGE_REVALIDATE = 3600;
 
 const BUILD_FETCH_OPTIONS = { next: { revalidate: DETAIL_PAGE_REVALIDATE } };
 
-async function buildFetch(path) {
+async function buildFetch(path, options = BUILD_FETCH_OPTIONS) {
   try {
-    const response = await fetch(`${getBackendUrl()}${path}`, BUILD_FETCH_OPTIONS);
+    const response = await fetch(`${getBackendUrl()}${path}`, options);
     if (!response.ok) return [];
     const data = await response.json();
     return Array.isArray(data) ? data : [];
@@ -39,9 +39,10 @@ export async function generateNewsStaticParams() {
 }
 
 export async function generatePropertyStaticParams() {
+  const noStore = { cache: "no-store" };
   const [cityProperties, slugProperties] = await Promise.all([
-    buildFetch("/frontend/all-properties/Nagpur"),
-    buildFetch("/frontend/properties/get-all-by-slug?city=Nagpur"),
+    buildFetch("/frontend/all-properties/Nagpur", noStore),
+    buildFetch("/frontend/properties/get-all-by-slug?city=Nagpur", noStore),
   ]);
 
   const ids = new Set();

@@ -2,7 +2,6 @@
 import React from "react";
 import { IoIosDoneAll } from "react-icons/io";
 import { motion } from "framer-motion";
-import AdvertisementCard from "../components/AdvertisementCard";
 
 const AboutUs = () => {
   const values = [
@@ -169,8 +168,6 @@ const AboutUs = () => {
               </div>
             ))}
           </div>
-
-          <AdvertisementCard />
         </div>
       </div>
     </>

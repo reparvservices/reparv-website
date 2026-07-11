@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useAuth } from "../store/auth";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import AdvertisementCard from "../components/AdvertisementCard";
 import GetDirectionsMap from "../components/contactUs/GetDirectionsMap";
 import { useRouter } from "next/navigation"; 
 
@@ -957,11 +956,6 @@ export default function Support() {
 
       {/* ── MAP ──────────────────────────────────────────── */}
       <GetDirectionsMap />
-
-      {/* ── ADS ──────────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <AdvertisementCard />
-      </div>
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import SeoSectionAd from "../components/seocomponents/common/SeoSectionAd";
 import { useAuth } from "../store/auth";
 import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 import {
@@ -686,6 +687,8 @@ export default function ReadyToMovePropertiesInNagpur({
         </div>
       </section>
 
+      <SeoSectionAd />
+
       <section className="bg-white px-6 py-24 md:px-8 lg:px-12">
         <div className="container mx-auto flex flex-col gap-16">
           <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
@@ -770,6 +773,8 @@ export default function ReadyToMovePropertiesInNagpur({
         </div>
       </section>
 
+      <SeoSectionAd variant="seoInFeed" />
+
       <section className="bg-[#5E23DC] px-6 py-16 md:px-8 lg:px-12">
         <div className="container mx-auto flex flex-col items-start justify-between gap-12 lg:flex-row lg:items-center">
           <div className="flex max-w-2xl flex-col gap-6">
@@ -847,6 +852,8 @@ export default function ReadyToMovePropertiesInNagpur({
           </div>
         </div>
       </section>
+
+      <SeoSectionAd />
 
       <section className="bg-[#F9FAFB] px-6 py-24 md:px-8 lg:px-12">
         <div className="container mx-auto flex flex-col gap-16 lg:flex-row lg:items-stretch">

@@ -8,7 +8,6 @@ import { IoMail } from "react-icons/io5";
 import GetDirectionsMap from "../components/contactUs/GetDirectionsMap";
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import AdvertisementCard from "../components/AdvertisementCard";
 
 const ContactUs = () => {
   const { URI } = useAuth();
@@ -359,7 +358,6 @@ const ContactUs = () => {
         </div>
       </div>
       <GetDirectionsMap />
-      <AdvertisementCard />
     </>
   );
 };

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import FormatPrice from "../components/FormatPrice";
+import SeoSectionAd from "../components/seocomponents/common/SeoSectionAd";
 import { useAuth } from "../store/auth";
 import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 import {
@@ -928,6 +929,8 @@ export default function FindVerifiedProperties({
         </div>
       </section>
 
+      <SeoSectionAd />
+
       {/* ══ BUYING JOURNEY ══════════════════════════════════════════════════ */}
       <section className="bg-[#F9F9FF] py-20 sm:py-24">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
@@ -1080,6 +1083,8 @@ export default function FindVerifiedProperties({
         </div>
       </section>
 
+      <SeoSectionAd variant="seoInFeed" />
+
       {/* ══ PROPERTY INSIGHTS ═══════════════════════════════════════════════ */}
       <section className="bg-[#F9F9FF] py-20 sm:py-24">
         <div className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16">
@@ -1130,6 +1135,8 @@ export default function FindVerifiedProperties({
           </div>
         </div>
       </section>
+
+      <SeoSectionAd />
 
       {/* ══ FAQ ════════════════════════════════════════════════════════════ */}
       <section className="bg-white py-20 sm:py-24">

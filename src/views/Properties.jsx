@@ -12,8 +12,8 @@ import { usePropertyFilter } from "../store/propertyFilter";
 import PropertyCategories from "../components/PropertyCategories";
 import FilterNavbar from "../components/property/FilterNavbar";
 import AdComponent from "../components/AdsForFeed";
-import AdvertisementCard from "../components/AdvertisementCard";
 import PropertySkeleton from "../components/property/PropertySkeleton";
+import AdvertisementCard from "../components/AdvertisementCard";
 
 // Lazy import
 const PropertyCard = React.lazy(
@@ -324,7 +324,9 @@ export default function Properties({ initialProperties = null }) {
                       <PropertyCard property={property} />
 
                       {(index + 1) % 6 === 0 && (
-                        <AdComponent key={`property-ad-${index}`} />
+                        <div key={`property-ad-${index}`} className="col-span-full">
+                          <AdComponent />
+                        </div>
                       )}
                     </React.Fragment>
                   ))
@@ -345,11 +347,10 @@ export default function Properties({ initialProperties = null }) {
                   Load More Properties
                 </button>
               </div>
-              <div className="w-full  hidden md:block h-[1px] mt-5 bg-[#00000033] "></div>
-              <div>
-                <AdvertisementCard />
-                <PropertyCategories />
-                <AdvertisementCard />
+              <div className="w-full hidden md:block h-[1px] mt-5 bg-[#00000033]"></div>
+              <PropertyCategories />
+              <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 mt-4 pb-4">
+                <AdvertisementCard className="mb-0" />
               </div>
             </Suspense>
           </div>

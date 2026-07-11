@@ -79,11 +79,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         {/* Google AdSense */}
-        <Script
+        <script
           async
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7197621532263972"
+          crossOrigin="anonymous"
         />
 
         {/* Google Tag Manager */}

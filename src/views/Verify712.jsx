@@ -41,14 +41,8 @@ export default function Verify712({
           location={"Reparv Verify 7-12 Page"}
           initialFaqs={initialFaqs}
         />
-        <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
-        </div>
         <LatestArtical initialArticles={initialArticles} />
         <VerifyBeforeYouBuyCTA />
-        <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
-        </div>
       </div>
     </>
   );

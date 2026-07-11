@@ -1,41 +1,51 @@
 import { useEffect, useRef, useState } from "react";
+import { initAdSenseSlot, watchAdFill } from "../utils/initAdSense";
+
+const AD_CLIENT = "ca-pub-7197621532263972";
+const IS_DEV = process.env.NODE_ENV === "development";
 
 const AdComponent = ({ onLoad }) => {
   const adRef = useRef(null);
-  const [loaded, setLoaded] = useState(false);
+  const initialized = useRef(false);
+  const [filled, setFilled] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    try {
-      if (window.adsbygoogle && adRef.current) {
-        window.adsbygoogle.push({});
-      }
-    } catch (e) {
-      console.log("Adsense error", e);
-    }
+    const ad = adRef.current;
+    if (!ad || initialized.current) return;
 
-    const timer = setTimeout(() => {
-      if (adRef.current && adRef.current.innerHTML.trim() !== "") {
-        setLoaded(true);
-        onLoad && onLoad(true);
-      }
-    }, 1500);
+    initialized.current = true;
+    initAdSenseSlot();
 
-    return () => clearTimeout(timer);
-  }, []);
+    return watchAdFill(ad, {
+      onFilled: () => {
+        setFilled(true);
+        onLoad?.(true);
+      },
+      onEmpty: () => {
+        if (!IS_DEV) setHidden(true);
+      },
+    });
+  }, [onLoad]);
 
-  // Prevent empty space
-  if (!loaded) return null;
+  if (hidden) return null;
 
   return (
-    <ins
-      ref={adRef}
-      className="adsbygoogle"
-      style={{ display: "block" }}
-      data-ad-format="fluid"
-      data-ad-layout-key="-6m+eh+16-3z+5g"
-      data-ad-client="ca-pub-8914733371473026"
-      data-ad-slot="6779124390"
-    />
+    <div
+      className={`w-full transition-all ${
+        filled ? "my-2" : IS_DEV ? "my-2 max-h-[120px] overflow-hidden" : "my-2"
+      }`}
+    >
+      <ins
+        ref={adRef}
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-format="fluid"
+        data-ad-layout-key="-6m+eh+16-3z+5g"
+        data-ad-client={AD_CLIENT}
+        data-ad-slot="6779124390"
+      />
+    </div>
   );
 };
 

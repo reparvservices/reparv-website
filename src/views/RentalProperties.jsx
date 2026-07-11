@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import SeoSectionAd from "../components/seocomponents/common/SeoSectionAd";
 import { useAuth } from "../store/auth";
 import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 import {
@@ -770,6 +771,8 @@ export default function RentalProperties({ initialPageData = null, initialFaqs =
         </section>
       )}
 
+      <SeoSectionAd />
+
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 py-20">
         <h2 className="font-['Manrope'] text-[30px] font-black text-[#111827] leading-9 text-center mb-14">
           Why Rent Through Reparv?
@@ -817,6 +820,8 @@ export default function RentalProperties({ initialPageData = null, initialFaqs =
           </div>
         </div>
       </section>
+
+      <SeoSectionAd variant="seoInFeed" />
 
       <section className="bg-[#5E23DC] py-24 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white blur-[60px] rounded-full opacity-10 pointer-events-none" />
@@ -962,6 +967,8 @@ export default function RentalProperties({ initialPageData = null, initialFaqs =
           </div>
         </div>
       </section>
+
+      <SeoSectionAd />
 
       <section className="max-w-[1280px] mx-auto px-4 sm:px-8 lg:px-16 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-start">

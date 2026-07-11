@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, lazy, Suspense } from "react";
+import { useState, useMemo, lazy, Suspense, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useAuth } from "../store/auth";
 import { LayoutScrollContext } from "../context/LayoutScrollContext";
 import { useInView } from "react-intersection-observer";
@@ -27,6 +28,13 @@ const CitySelector = lazy(() => import("../components/CitySelector"));
 const AgentWidget = lazy(() => import("../components/agent/AgentWidget"));
 
 export default function SiteLayout({ children }) {
+  const pathname = usePathname();
+  const showGlobalAd = !pathname?.startsWith("/properties");
+  const [globalAdVisible, setGlobalAdVisible] = useState(true);
+
+  useEffect(() => {
+    setGlobalAdVisible(true);
+  }, [pathname]);
   const {
     showSuccess,
     URI,
@@ -91,9 +99,14 @@ export default function SiteLayout({ children }) {
         {/* container */}
         <div className="w-full pt-15 sm:pt-21! sm:bg-[#fafafa]">{children}</div>
 
-        <div className="w-full max-w-[1380px] mx-auto px-4 sm:px-6">
-          <AdvertisementCard />
-        </div>
+        {showGlobalAd && globalAdVisible && (
+          <div className="w-full max-w-[1380px] mx-auto px-4 sm:px-6 pt-2 pb-1">
+            <AdvertisementCard
+              className="mb-2"
+              onEmpty={() => setGlobalAdVisible(false)}
+            />
+          </div>
+        )}
 
         {/* footer */}
         <Footer footerRef={footerRef} />

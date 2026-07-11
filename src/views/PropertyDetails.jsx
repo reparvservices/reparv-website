@@ -20,7 +20,6 @@ import PropertyTab from "../components/property/PropertyTab";
 import PropertyHighlights from "../components/property/PropertyHighlights";
 import FilterNavbar from "../components/property/FilterNavbar";
 import { getImageURI } from "../utils/helper";
-import AdvertisementCard from "../components/AdvertisementCard";
 import Breadcrumbs from "../components/seo/Breadcrumbs";
 // Lazy-loaded components
 const PropertyImageGallery = lazy(
@@ -335,10 +334,6 @@ function PropertyDetails({
               key={propertyInfo?.seoSlug}
             />
           </Suspense>
-        </div>
-
-        <div className="max-w-345 mx-auto my-5">
-          <AdvertisementCard />
         </div>
 
         {/* Show Whatsapp Enquiry Popup */}

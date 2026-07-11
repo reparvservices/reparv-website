@@ -8,7 +8,6 @@ import BlogCard from "../components/blog/BlogCard";
 import NewsLetterBanner from "../components/blog/NewsLetterBanner";
 import { getImageURI } from "../utils/helper";
 import AdComponent from "../components/AdsForFeed";
-import AdvertisementCard from "../components/AdvertisementCard";
 
 const HERO_BG = "linear-gradient(180deg,#F2FDF6 0%,#FFFFFF 50%,#F2FDF6 100%)";
 // subtle body background
@@ -257,21 +256,15 @@ export default function NewBlogs({ initialBlogs = null }) {
               )}
             </section>
 
-            <AdvertisementCard />
-
-            <h2 className="text-center sm:text-left text-3xl md:text-4xl font-extrabold text-[#2D1A4A] sm:mb-10">
+            <h2 className="text-center sm:text-left text-3xl md:text-4xl font-extrabold text-[#2D1A4A] mb-6">
               Latest Articles
             </h2>
 
-            <div className="max-w-[1380px] mx-auto mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div className="max-w-[1100px] mx-auto space-y-5">
               {visible?.slice(3).map((b, index) => (
                 <React.Fragment key={b?.id || index}>
-                  {/* Ad after first blog */}
-                  {index === 0 && <AdComponent key="first-ad" />}
-
                   <BlogCard blogData={b} />
 
-                  {/* Ad after every 4 blogs */}
                   {(index + 1) % 4 === 0 && <AdComponent key={`ad-${index}`} />}
                 </React.Fragment>
               ))}

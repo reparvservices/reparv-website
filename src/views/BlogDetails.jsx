@@ -18,6 +18,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import FAQSection from "../components/FAQSection";
 import AdvertisementCard from "../components/AdvertisementCard";
 import Breadcrumbs from "../components/seo/Breadcrumbs";
+import { initAdSenseSlot } from "../utils/initAdSense";
 
 const IN_ARTICLE_AD_MARKUP = `
   <div class="reparv-in-article-ad" style="margin:24px 0;">
@@ -143,13 +144,8 @@ function BlogDetails({ initialBlog = null, initialFaqs = null }) {
   const blogContentWithAd = injectInArticleAd(blog?.content || "");
 
   useEffect(() => {
-    if (!blogContentWithAd || !window.adsbygoogle) return;
-
-    try {
-      window.adsbygoogle.push({});
-    } catch (error) {
-      console.warn("In-article ad init error:", error);
-    }
+    if (!blogContentWithAd) return;
+    initAdSenseSlot();
   }, [blogContentWithAd]);
 
   return (
@@ -297,12 +293,9 @@ function BlogDetails({ initialBlog = null, initialFaqs = null }) {
             <div className="min-h-[1350px] max-h-[2700px] w-full overflow-y-auto scrollbar-hide">
               <div><AdvertisementCard variant="sidebar" /></div>
               <div className="w-full"><BlogFeatureProperties /></div>
-              <div><AdvertisementCard variant="sidebar" /></div>
-              <div><AdvertisementCard variant="sidebar" /></div>
             </div>
           </div>
         </div>
-        <AdvertisementCard />
         <DreamHomeCTA />
         <FAQSection
           id={blog?.id}

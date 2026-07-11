@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import SeoSectionAd from "../components/seocomponents/common/SeoSectionAd";
 import { useAuth } from "../store/auth";
 import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 import {
@@ -702,6 +703,8 @@ export default function PlotsForSale({ initialPageData = null, initialFaqs = [] 
         </div>
       </section>
 
+      <SeoSectionAd />
+
       <section className="max-w-[1248px] mx-auto px-4 md:px-0 py-6 md:py-8">
         <div className="bg-gradient-to-r from-[#5E23DC] to-[#8347FF] rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
           <div className="flex flex-col gap-2 max-w-[500px]">
@@ -751,6 +754,8 @@ export default function PlotsForSale({ initialPageData = null, initialFaqs = [] 
           </div>
         </div>
       </section>
+
+      <SeoSectionAd variant="seoInFeed" />
 
       <section className="max-w-[1280px] mx-auto px-4 md:px-16 py-16 md:py-20">
         <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-start">
@@ -860,6 +865,8 @@ export default function PlotsForSale({ initialPageData = null, initialFaqs = [] 
           </div>
         </div>
       </section>
+
+      <SeoSectionAd />
 
       <section className="bg-[#F9F9FF] py-16 md:py-24">
         <div className="max-w-[1280px] mx-auto px-4 md:px-4">

@@ -1,23 +1,28 @@
 import { getS3ImageUrl } from "@/lib/env";
 
 export const getImageURI = (path) => {
-  // Fast exit
   if (!path || typeof path !== "string") return "";
 
-  // Absolute URL or local public asset → return as-is
+  const trimmed = path.trim();
+  if (!trimmed) return "";
+
   if (
-    path.startsWith("http://") ||
-    path.startsWith("https://") ||
-    path.startsWith("/") ||
-    path.startsWith("data:")
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://") ||
+    trimmed.startsWith("data:")
   ) {
-    return path;
+    return trimmed;
   }
 
-  const base = getS3ImageUrl();
+  // Local files served from /public (e.g. /assets/...)
+  if (trimmed.startsWith("/assets/")) {
+    return trimmed;
+  }
 
-  // Ensure single slash between base and path
-  return `${base}/${path.replace(/^\/+/, "")}`;
+  const base = getS3ImageUrl().replace(/\/$/, "");
+
+  // API paths like /uploads/foo.jpg or uploads/foo.jpg → S3
+  return `${base}/${trimmed.replace(/^\/+/, "")}`;
 };
 
 export function formatIndianUnit(value) {

@@ -118,9 +118,6 @@ export default function VisitPropertiesOnWeekend({
         initialFaqs={initialFaqs}
       />
       <LatestArtical initialArticles={initialArticles} />
-      <div className="max-w-[1380px] mx-auto my-5">
-        <AdvertisementCard />
-      </div>
     </>
   );
 }

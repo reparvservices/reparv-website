@@ -6,7 +6,6 @@ import { useAuth } from "../store/auth";
 import { FiSearch, FiArrowRight } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa6";
 import NavCard from "../components/NavCard";
-import AdvertisementCard from "../components/AdvertisementCard";
 
 // lazy load heavy components
 const PropertySection = lazy(() => import("../components/PropertySection"));
@@ -188,9 +187,6 @@ const RentalProperty = ({
         >
           <BlogSection blogs={initialBlogs} />
         </Suspense>
-        <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
-        </div>
         <Suspense
           fallback={<div className="text-center">Loading steps...</div>}
         >
@@ -199,9 +195,6 @@ const RentalProperty = ({
             initialFaqs={initialFaqs}
           />
         </Suspense>
-        <div className="max-w-[1380px] mx-auto my-5">
-          <AdvertisementCard />
-        </div>
       </section>
     </>
   );

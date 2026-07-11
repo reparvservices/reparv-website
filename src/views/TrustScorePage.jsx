@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import SeoSectionAd from "../components/seocomponents/common/SeoSectionAd";
 import { useAuth } from "../store/auth";
 import { openAgentAdvisor } from "../utils/openAgentAdvisor";
 import {
@@ -1105,6 +1106,8 @@ export default function TrustScorePage({
         </div>
       </section>
 
+      <SeoSectionAd />
+
       {/* ══ VERIFICATION JOURNEY ══════════════════════════════════════════════ */}
       <section className="bg-white py-14 sm:py-16 lg:py-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1155,6 +1158,8 @@ export default function TrustScorePage({
           </div>
         </div>
       </section>
+
+      <SeoSectionAd variant="seoInFeed" />
 
       {/* ══ SCORE MEANING + GUARANTEE ═════════════════════════════════════════ */}
       <section className="bg-white py-14 sm:py-16 lg:py-20">
@@ -1278,6 +1283,8 @@ export default function TrustScorePage({
           </div>
         </div>
       </section>
+
+      <SeoSectionAd />
 
       {/* ══ TRUST CONSULTATION ═════════════════════════════════════════════════ */}
       <section id="trust-consultation" className="bg-[#F0F3FF] py-12 sm:py-16">

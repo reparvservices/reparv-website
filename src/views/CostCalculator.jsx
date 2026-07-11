@@ -9,9 +9,6 @@ import LatestArtical from "../components/seocomponents/common/LatestArtical";
 import HowReparvCalculatorWorks from "../components/seocomponents/costcomponents/HowReparvCalculatorWorks";
 //import FrequentlyAskedQuestions from "../components/seocomponents/costcomponents/FrequentlyAskedQuestions";
 import FAQSection from "../components/FAQSection";
-import AdvertisementCard from "../components/AdvertisementCard";
-
-
 const CostCalculator = ({ initialArticles = null, initialFaqs = null }) => {
   const router = useRouter();
   
@@ -99,15 +96,12 @@ const CostCalculator = ({ initialArticles = null, initialFaqs = null }) => {
           </div>
          
           <HomeTotalCostCalculator />
-           <AdvertisementCard />
           <HowReparvCalculatorWorks />
-          <AdvertisementCard />
           <FAQSection
             location={"Reparv Cost Calculator Page"}
             initialFaqs={initialFaqs}
           />
           <LatestArtical initialArticles={initialArticles} />
-          <AdvertisementCard />
         </div>
       </section>
     </>
