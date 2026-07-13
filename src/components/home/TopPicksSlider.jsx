@@ -6,6 +6,25 @@ import FormatPrice from "../FormatPrice";
 import { getImageURI } from "../../utils/helper";
 import { motion, AnimatePresence } from "framer-motion";
 
+const FALLBACK_PROPERTY_IMAGE = "/assets/property/propertyPicture.svg";
+
+const getTopPickImage = (property) => {
+  if (property?.topPicksBanner) {
+    return getImageURI(property.topPicksBanner) || FALLBACK_PROPERTY_IMAGE;
+  }
+
+  try {
+    const images = JSON.parse(property?.frontView || "[]");
+    if (images.length > 0) {
+      return getImageURI(images[0]) || FALLBACK_PROPERTY_IMAGE;
+    }
+  } catch {
+    // ignore malformed frontView JSON
+  }
+
+  return FALLBACK_PROPERTY_IMAGE;
+};
+
 const TopPicksSlider = ({ initialProperties = null }) => {
   const router = useRouter();
   const { URI, selectedCity } = useAuth();
@@ -108,7 +127,7 @@ const TopPicksSlider = ({ initialProperties = null }) => {
               <div className="flex gap-4 lg:flex-col">
                 <div className="w-[120px] overflow-hidden">
                   <img
-                    src={"/assets/home/buildingimage.svg"}
+                    src="/assets/seopageassets/turstedbuilder/building.svg"
                     alt="building"
                     loading="lazy"
                     className="w-full object-cover"
@@ -189,8 +208,11 @@ const TopPicksSlider = ({ initialProperties = null }) => {
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentIndex}
-                  src={item?.topPicksBanner || "/assets/home/PropertyPicture.png"}
+                  src={getTopPickImage(item)}
                   alt={item.propertyName}
+                  onError={(e) => {
+                    e.currentTarget.src = FALLBACK_PROPERTY_IMAGE;
+                  }}
                   variants={slideVariants}
                   initial="initial"
                   animate="animate"

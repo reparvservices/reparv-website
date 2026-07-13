@@ -11,7 +11,6 @@ import { useInView } from "react-intersection-observer";
 import { usePropertyFilter } from "../store/propertyFilter";
 import PropertyCategories from "../components/PropertyCategories";
 import FilterNavbar from "../components/property/FilterNavbar";
-import AdComponent from "../components/AdsForFeed";
 import PropertySkeleton from "../components/property/PropertySkeleton";
 import AdvertisementCard from "../components/AdvertisementCard";
 
@@ -325,7 +324,7 @@ export default function Properties({ initialProperties = null }) {
 
                       {(index + 1) % 6 === 0 && (
                         <div key={`property-ad-${index}`} className="col-span-full">
-                          <AdComponent />
+                          <AdvertisementCard variant="seoDisplay" className="mb-0" />
                         </div>
                       )}
                     </React.Fragment>

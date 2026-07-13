@@ -8,6 +8,20 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async redirects() {
+    return [
+      {
+        source: "/property",
+        destination: "/properties",
+        permanent: true,
+      },
+      {
+        source: "/property/:slug",
+        destination: "/property-info/:slug",
+        permanent: true,
+      },
+    ];
+  },
   webpack: (config, { webpack }) => {
     config.plugins.push(
       new webpack.DefinePlugin({
