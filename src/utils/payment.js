@@ -1,6 +1,6 @@
-import { getBackendUrl } from "../lib/env";
+import { getBackendUrl, getRazorpayKeyId } from "../lib/env";
 
-const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+const razorpayKey = getRazorpayKeyId();
 const api = getBackendUrl();
 
 export const handlePayment = async (

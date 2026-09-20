@@ -29,3 +29,19 @@ export function getGoogleClientId() {
     ""
   );
 }
+
+export function getRazorpayKeyId() {
+  return (
+    process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
+    process.env.VITE_RAZORPAY_KEY_ID ||
+    ""
+  );
+}
+
+export function getAiAgentPublicKey() {
+  return (
+    process.env.NEXT_PUBLIC_AI_AGENT_PUBLIC_KEY ||
+    process.env.VITE_AI_AGENT_PUBLIC_KEY ||
+    ""
+  );
+}

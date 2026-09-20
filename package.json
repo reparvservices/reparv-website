@@ -10,21 +10,8 @@
     "start": "next start"
   },
   "homepage": "https://reparv.in",
-  "reactSnap": {
-    "source": "dist",
-    "inlineCss": true,
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
-    ],
-    "minifyHtml": {
-      "collapseWhitespace": true,
-      "removeComments": true
-    }
-  },
   "dependencies": {
     "@react-oauth/google": "^0.13.4",
-    "@tailwindcss/vite": "^4.3.0",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
