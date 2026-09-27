@@ -95,7 +95,7 @@ const EmiCalculator = ({ initialArticles = null }) => {
             <EMICalculator />
             <div className="hidden md:block pb-15">
               <img
-                src="/assets/seopageassets/emicalculator/LoanEMIImage.svg"
+                src="/assets/LoanEMIImage.svg"
                 alt="Image"
                 className="w-full object-cover"
               />

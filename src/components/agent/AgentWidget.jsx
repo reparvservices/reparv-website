@@ -138,7 +138,11 @@ function ChatMessage({ message, index }) {
   const isUser = message.role === "user";
   const displayText = isUser
     ? message.text
-    : getDisplayText(message.text, message.properties);
+    : message.streaming
+      ? message.text // show the reply exactly as it streams in
+      : getDisplayText(message.text, message.properties);
+  // Streaming: tool is running and no text yet
+  const showStatus = !isUser && message.streaming && !displayText && message.status;
 
   return (
     <motion.div
@@ -154,7 +158,14 @@ function ChatMessage({ message, index }) {
             : "rounded-bl-md border border-[#5308E720] bg-[#faf8ff] text-[#1b1b20]"
         }`}
       >
-        {displayText}
+        {showStatus ? (
+          <span className="italic text-[#868686]">{message.status}</span>
+        ) : (
+          displayText
+        )}
+        {!isUser && message.streaming && !showStatus ? (
+          <span className="ml-0.5 inline-block h-3.5 w-[2px] translate-y-0.5 animate-pulse bg-[#8A38F5]" aria-hidden="true" />
+        ) : null}
       </div>
       {message.properties?.length > 0 && (
         <div className="w-full">

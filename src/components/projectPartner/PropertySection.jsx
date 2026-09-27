@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getPropertyEMI } from "../../utils/emi";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -146,7 +147,7 @@ function PropertySection({ projectPartner }) {
             <div className="relative flex flex-col gap-2">
               {Number(property?.likes) > 500 && (
                 <img
-                  src="/assets/projectPartner/popular-tag.png"
+                  src="/assets/property/populerTag.svg"
                   loading="lazy"
                   className="absolute top-[-15px] left-[-8px]"
                 ></img>
@@ -197,12 +198,13 @@ function PropertySection({ projectPartner }) {
                         property.propertyCategory === "RentalFlat" ||
                         property.propertyCategory === "RentalShop" ||
                         property.propertyCategory === "RentalOffice" ||
-                        property.loanAvailability === "No"
+                        property.loanAvailability === "No" ||
+                    !getPropertyEMI(property)
                           ? "hidden"
                           : "flex"
                       } text-black group-hover:text-white gap-1 `}
                     >
-                      EMI <FormatPrice price={property.emi} />
+                      EMI <FormatPrice price={getPropertyEMI(property)} />
                       /m
                     </div>
                     <div className="flex flex-wrap gap-2 text-[10px] md:text-xs font-medium  text-[#00092966] group-hover:text-[#e2e2e2]">
@@ -262,7 +264,7 @@ function PropertySection({ projectPartner }) {
 
               <hr className="text-[#F0EFFB]" />
               <div className="w-full flex px-4 justify-between">
-                <img src="/assets/projectPartner/assured-tag.png" alt="" className="w-30" />
+                <img src="/assets/projectPartner/cardAssuredTag.svg" alt="" className="w-30" />
                 <div className={`flex gap-[8px] items-center justify-center`}>
                   <div
                     onClick={() => {

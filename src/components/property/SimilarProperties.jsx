@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import ViewAllButton from "../home/ViewAllButton";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -124,6 +125,20 @@ function SimilarProperties({
           ))}
         </Swiper>
       </div>
+
+      {properties.length > 0 ? (
+        <ViewAllButton
+          href={
+            String(propertyCategory || "").startsWith("Rental")
+              ? "/properties/type/rental"
+              : String(propertyCategory || "").startsWith("Resale")
+                ? "/properties/type/resale"
+                : "/properties/type/new"
+          }
+          label={`View All Similar Properties${propertyCity ? ` in ${propertyCity}` : ""}`}
+        />
+      ) : null}
+
       {/* Scoped CSS */}
       <style>{`
             .property-swiper .swiper-slide {

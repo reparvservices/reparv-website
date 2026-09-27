@@ -23,7 +23,7 @@ const propertyTypes = [
     title: "Plot for Rent",
     to: "/properties/type/rental",
     type: "RentalPlot",
-    image: "/assets/home/propertyType/RentalPlot.svg",
+    image: "/assets/home/propertyType/OpenLand.svg",
   },
   {
     title: "Rental Shop",
@@ -35,7 +35,7 @@ const propertyTypes = [
     title: "Rental House",
     to: "/properties/type/rental",
     type: "RentalHouse",
-    image: "/assets/home/propertyType/RentalHouse.svg",
+    image: "/assets/home/propertyType/House.svg",
   },
   {
     title: "Rental Office",
@@ -47,25 +47,25 @@ const propertyTypes = [
     title: "Rental Villa",
     to: "/properties/type/rental",
     type: "RentalVilla",
-    image: "/assets/home/propertyType/RentalVilla.svg",
+    image: "/assets/home/propertyType/Villa.svg",
   },
   {
     title: "Rental Godown",
     to: "/properties/type/rental",
     type: "RentalGodown",
-    image: "/assets/home/propertyType/RentalGodown.svg",
+    image: "/assets/home/propertyType/Godown.svg",
   },
   {
     title: "Rental Open Land",
     to: "/properties/type/rental",
     type: "RentalOpenLand",
-    image: "/assets/home/propertyType/RentalOpenLand.svg",
+    image: "/assets/home/propertyType/OpenLand.svg",
   },
   {
     title: "Rental Showroom",
     to: "/properties/type/rental",
     type: "RentalShowroom",
-    image: "/assets/home/propertyType/RentalShowroom.svg",
+    image: "/assets/home/propertyType/ShowRoom.svg",
   },
 ];
 

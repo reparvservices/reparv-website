@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import ViewAllButton from "../../home/ViewAllButton";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -115,6 +116,12 @@ export default function BudgetProperty({ data, loanAmount }) {
             ))}
           </Swiper>
         </div>
+
+        <ViewAllButton
+          href="/properties"
+          label={`View All Properties${selectedCity ? ` in ${selectedCity}` : ""}`}
+          className="sm:mt-6"
+        />
 
         {/* Scoped Swiper Animation */}
         <style>{`

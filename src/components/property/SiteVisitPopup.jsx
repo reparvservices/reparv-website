@@ -1,4 +1,5 @@
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { markPropertyUnlocked } from "../../utils/propertyUnlock";
 import { useState, useEffect } from "react";
 import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../../store/auth";
@@ -102,15 +103,17 @@ export default function SiteVisitPopup() {
     }
   };
 
-  const [otpVerified, setOtpVerified] = useState(false);
+  // OTP proof from the server, valid only for the number that was verified
+  const [otpToken, setOtpToken] = useState("");
+  const [verifiedPhone, setVerifiedPhone] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
 
   const [formError, setFormError] = useState("");
   const [otpMessage, setOtpMessage] = useState("");
   const [otpError, setOtpError] = useState(false);
 
-  const isSameUserNumber =
-    user?.contact && formData.phone && user.contact === formData.phone;
+  // Every booking needs OTP; changing the number requires verifying again
+  const otpVerified = Boolean(otpToken) && verifiedPhone === formData.phone;
 
   const sendOtp = async () => {
     try {
@@ -158,7 +161,8 @@ export default function SiteVisitPopup() {
         throw new Error(data?.message || "Invalid OTP");
       }
 
-      setOtpVerified(true);
+      setOtpToken(data?.verificationToken || "");
+      setVerifiedPhone(formData.phone);
       setOtpMessage("OTP verified successfully");
       setOtpError(false);
       return true;
@@ -181,8 +185,8 @@ export default function SiteVisitPopup() {
       return;
     }
 
-    if (!isSameUserNumber && !otpVerified) {
-      setFormError("Please verify OTP first");
+    if (!otpVerified) {
+      setFormError("Please verify your phone number with OTP first");
       return;
     }
 
@@ -194,14 +198,22 @@ export default function SiteVisitPopup() {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, otpToken }),
       });
 
       const data = await response.json();
 
+      if (response.status === 401 && data?.code === "OTP_REQUIRED") {
+        // Token expired or number changed — ask for a fresh OTP
+        setOtpToken("");
+        setVerifiedPhone("");
+        throw new Error(data.message);
+      }
       if (!response.ok) {
         throw new Error(data?.message || "Failed to submit enquiry");
       }
+      // Show full details for this property from now on
+      markPropertyUnlocked(propertyId);
       router.push("/thank-you");
       setSuccessScreen({
         show: true,
@@ -255,22 +267,11 @@ export default function SiteVisitPopup() {
     }
   }, [property]);
 
-  useEffect(() => {
-    setOtpVerified(isSameUserNumber);
-  }, [isSameUserNumber, formData.phone]);
-
-  useEffect(() => {
-    // When phone changes:
-    if (!isSameUserNumber) {
-      setOtpVerified(false); // force re-verify
-    }
-  }, [formData.phone]);
-
   return (
     <div className="w-full md:max-w-[450px] relative flex flex-col md:flex-row bg-white rounded-tl-2xl rounded-tr-2xl md:rounded-2xl overflow-hidden shadow-xl ">
       <div className="w-full flex flex-col gap-3 justify-center p-6 relative">
         <div className="w-full flex items-center justify-between">
-          <img src="/assets/property/reparvLogo.svg" alt="Reparv Logo" className="h-8" />
+          <img src="/assets/reparvLogo.svg" alt="Reparv Logo" className="h-8" />
           <RxCross2
             onClick={() => setShowSiteVisitPopup(false)}
             className="w-5 h-5 text-xl text-right rounded-full bg-[#FAFAFA] text-black cursor-pointer hover:text-[#076300] active:scale-95"
@@ -314,7 +315,12 @@ export default function SiteVisitPopup() {
               />
             </div>
 
-            {!isSameUserNumber && !otpVerified && (
+            {otpVerified && (
+              <p className="ml-1 -mt-1 text-xs font-medium text-emerald-600">
+                ✓ Phone number verified
+              </p>
+            )}
+            {!otpVerified && (
               <OtpSection
                 phone={formData.phone}
                 onSendOtp={sendOtp}
@@ -329,7 +335,7 @@ export default function SiteVisitPopup() {
           <div className="w-full flex items-center justify-center">
             <button
               type="submit"
-              disabled={!isSameUserNumber && !otpVerified}
+              disabled={!otpVerified}
               className={`w-full sm:w-1/2 bg-[#5E23DC] text-white py-2 rounded-md hover:scale-105 disabled:scale-100 active:scale-100 transition disabled:bg-gray-400 disabled:cursor-not-allowed`}
             >
               Book Site Visit Now

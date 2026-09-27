@@ -195,7 +195,7 @@ export default function Footer() {
               Experience Housing App on Mobile
             </h4>
             <div className="flex gap-4">
-              <img src="/assets/app-store.png" alt="App Store" className="h-10" />
+              <img src="/assets/projectPartner/app-store.png" alt="App Store" className="h-10" />
               <img src="/assets/google-play.png" alt="Google Play" className="h-10" />
             </div>
           </div>
@@ -310,7 +310,7 @@ export default function Footer() {
                     Experience Housing App on Mobile
                   </h4>
                   <div className="flex gap-4">
-                    <img src="/assets/app-store.png" alt="App Store" className="h-10" />
+                    <img src="/assets/projectPartner/app-store.png" alt="App Store" className="h-10" />
                     <img
                       src="/assets/google-play.png"
                       alt="Google Play"

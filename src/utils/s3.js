@@ -19,12 +19,14 @@ export const uploadToS3 = async (file) => {
 
     const { uploadUrl, fileUrl } = await res.json();
     
-    await fetch(uploadUrl, {
+    const upload = await fetch(uploadUrl, {
       method: "PUT",
       headers: { "Content-Type": file.type },
       body: file,
     });
-    
+    if (!upload.ok) throw new Error(`S3 upload failed: ${upload.status}`);
+
+
     return fileUrl;
   } catch (err) {
     console.error("S3 upload failed:", err);

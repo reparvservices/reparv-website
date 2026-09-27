@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import { useRouter } from "next/navigation";
+import ViewAllButton from "./ViewAllButton";
 import { useAuth } from "../../store/auth";
 import PropertyCard from "../property/PropertyCard";
 import { motion } from "framer-motion";
@@ -108,6 +109,15 @@ const TrendingPropertySection = ({ initialProperties = null }) => {
           ))}
         </Swiper>
       </div>
+
+      {/* View all verified properties in the selected city (/properties uses the same city) */}
+      {properties.length > 0 ? (
+        <ViewAllButton
+          href="/properties"
+          label={`View All Properties${selectedCity ? ` in ${selectedCity}` : ""}`}
+        />
+      ) : null}
+
       {/* Scoped CSS */}
       <style>{`
         .property-swiper .swiper-slide {

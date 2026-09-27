@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import ViewAllButton from "./ViewAllButton";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../store/auth";
 import { FiChevronRight } from "react-icons/fi";
@@ -261,6 +262,14 @@ const TopPicksSlider = ({ initialProperties = null }) => {
           </div>
         </div>
       </div>
+
+      {properties?.length > 0 ? (
+        <ViewAllButton
+          href="/properties/type/new"
+          label={`View All New Launches${selectedCity ? ` in ${selectedCity}` : ""}`}
+          className="sm:mt-8 pb-4"
+        />
+      ) : null}
     </section>
   );
 };

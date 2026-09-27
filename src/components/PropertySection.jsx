@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import { useAuth } from "../store/auth";
+import ViewAllButton from "./home/ViewAllButton";
 import PropertyCard from "./property/PropertyCard";
 import { motion } from "framer-motion";
 
@@ -124,6 +125,18 @@ const PropertySection = ({ category, initialProperties = null }) => {
           ))}
         </Swiper>
       </div>
+
+      {filteredByCategory?.length > 0 ? (
+        <ViewAllButton
+          href={
+            { New: "/properties/type/new", Rental: "/properties/type/rental", Resale: "/properties/type/resale" }[
+              category
+            ] || "/properties"
+          }
+          label={`View All${category ? ` ${category}` : ""} Properties${selectedCity ? ` in ${selectedCity}` : ""}`}
+        />
+      ) : null}
+
       {/* Scoped CSS */}
       <style>{`
         .property-swiper .swiper-slide {

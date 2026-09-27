@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import ViewAllButton from "./ViewAllButton";
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -111,6 +112,14 @@ const PropertySection = ({ initialProperties = null }) => {
           ))}
         </Swiper>
       </div>
+
+      {properties.length > 0 ? (
+        <ViewAllButton
+          href="/properties/type/rental"
+          label={`View All Rental Properties${selectedCity ? ` in ${selectedCity}` : ""}`}
+        />
+      ) : null}
+
       {/* Scoped CSS */}
       <style>{`
         .property-swiper .swiper-slide {

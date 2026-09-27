@@ -141,6 +141,20 @@ function SellProperty() {
     { label: "Resale ShowRoom", value: "ResaleShowroom", icon: FaIndustry },
   ];
 
+  const newTypes = [
+    { label: "New Flat", value: "NewFlat", icon: MdApartment },
+    { label: "New Plot", value: "NewPlot", icon: FaCity },
+    { label: "New Shop", value: "NewShop", icon: FaStore },
+    { label: "Row House", value: "RowHouse", icon: GiFamilyHouse },
+    { label: "Farm Land", value: "FarmLand", icon: FaTree },
+    { label: "Farm House", value: "FarmHouse", icon: GiFarmTractor },
+    { label: "Commercial Flat", value: "CommercialFlat", icon: FaBuilding },
+    { label: "Commercial Plot", value: "CommercialPlot", icon: FaCity },
+    { label: "Industrial Space", value: "IndustrialSpace", icon: FaIndustry },
+  ];
+
+  const typesByTab = { rent: rentalTypes, resale: resaleTypes, new: newTypes };
+
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
 
@@ -261,6 +275,11 @@ function SellProperty() {
             if (url) urls.push(url);
           }
 
+          if (urls.length < imageFiles[field].length) {
+            alert("Some images failed to upload. Please try again.");
+            return;
+          }
+
           payload[field] = urls;
         } else {
           payload[field] = [];
@@ -286,8 +305,15 @@ function SellProperty() {
         return;
       }
 
+      if (response.status === 401) {
+        alert("Please log in to list your property.");
+        return;
+      }
+
       if (!response.ok) {
-        throw new Error(`Failed to save property. Status: ${response.status}`);
+        const data = await response.json().catch(() => ({}));
+        alert(data.message || "Failed to save property. Please try again.");
+        return;
       }
 
       alert(
@@ -355,6 +381,18 @@ function SellProperty() {
         ecofriendlyBenefit: "",
       });
 
+      setImageFiles({
+        frontView: [],
+        sideView: [],
+        kitchenView: [],
+        hallView: [],
+        bedroomView: [],
+        bathroomView: [],
+        balconyView: [],
+        nearestLandmark: [],
+        developedAmenities: [],
+      });
+      setPropertyTab("rent");
       setStep(1);
     } catch (err) {
       console.error("Error saving property:", err);
@@ -373,6 +411,8 @@ function SellProperty() {
         "state",
         "city",
         "carpetArea",
+        "projectBy",
+        "contact",
         "totalSalesPrice", // number
         "totalOfferPrice", // number
       ];
@@ -514,6 +554,21 @@ function SellProperty() {
                   >
                     Resale
                   </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPropertyTab("new");
+                      setNewProperty({ ...newProperty, propertyCategory: "" });
+                    }}
+                    className={`px-6 py-2 rounded-lg font-semibold border ${
+                      propertyTab === "new"
+                        ? "bg-[#8A38F5] text-white border-[#8A38F5]"
+                        : "border-gray-300 text-gray-700"
+                    }`}
+                  >
+                    New
+                  </button>
                 </div>
                 {/* PROPERTY TYPE */}
                 <h2 className="text-2xl font-semibold mb-1">Property Type *</h2>
@@ -524,7 +579,7 @@ function SellProperty() {
                   Select the category that best describes your property
                 </p>
                 <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
-                  {(propertyTab === "rent" ? rentalTypes : resaleTypes).map(
+                  {typesByTab[propertyTab].map(
                     (item) => {
                       const Icon = item.icon;
                       const isActive =
@@ -878,7 +933,7 @@ function SellProperty() {
                     }
                     onClick={() => setStep(2)}
                     className={`px-10 py-3 rounded-xl font-semibold text-white shadow ${
-                      Object.values(errors).some(Boolean)
+                      Object.values(errors).some(Boolean) || !nextButton
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-[#8A38F5] active:scale-98"
                     }`}

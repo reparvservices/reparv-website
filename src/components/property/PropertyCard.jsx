@@ -152,7 +152,7 @@ function PropertyCard({ property, top = false }) {
           {/* Popular tag */}
           {property?.likes > 500 && (
             <img
-              src="/assets/projectPartner/popular.png"
+              src="/assets/property/populerTag.svg"
               className="absolute top-[-15px] left-[-8px]"
               alt="Popular"
             />

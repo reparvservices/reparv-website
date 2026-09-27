@@ -4,6 +4,11 @@ const DEFAULT_S3_IMAGE_URL =
 
 /** Single source of truth for API base URL (local via .env or production default). */
 export function getBackendUrl() {
+  // Server-side (SSR) requests may need a different host than the browser,
+  // e.g. in Docker where "localhost" is the website container itself.
+  if (typeof window === "undefined" && process.env.BACKEND_INTERNAL_URL) {
+    return process.env.BACKEND_INTERNAL_URL;
+  }
   return (
     process.env.NEXT_PUBLIC_BACKEND_URL ||
     (typeof import.meta !== "undefined"

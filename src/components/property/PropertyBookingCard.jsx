@@ -1,5 +1,6 @@
 "use client";
 
+import { getPropertyEMI } from "../../utils/emi";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/store/auth";
@@ -268,9 +269,11 @@ Enquiry via Reparv – www.reparv.in`;
     setPropertyCategory(propertyInfo?.propertyCategory);
   };
 
+  // Stored EMI, or the same 9%/20-year estimate the admin panel uses
+  const emiAmount = getPropertyEMI(propertyInfo);
   const showEMI =
     !isRental(propertyInfo?.propertyCategory) &&
-    propertyInfo?.loanAvailability !== "No" && propertyInfo?.emi !== 0;
+    propertyInfo?.loanAvailability !== "No" && Boolean(emiAmount);
 
   const showAvailability =
     (propertyInfo?.availableCount > 0 || propertyInfo?.bookedCount > 0) &&
@@ -426,7 +429,7 @@ Enquiry via Reparv – www.reparv.in`;
                     EMI starts at
                   </p>
                   <p className="text-base font-extrabold text-slate-800 leading-tight">
-                    <FormatPrice price={parseInt(propertyInfo?.emi)} />
+                    <FormatPrice price={emiAmount} />
                     <span className="text-[10px] text-gray-400 font-medium">
                       {" "}
                       /mo
@@ -438,7 +441,7 @@ Enquiry via Reparv – www.reparv.in`;
                 className="flex items-center gap-1 bg-violet-50 hover:bg-violet-100 transition-colors rounded-xl px-2.5 py-2 text-[11px] font-bold text-violet-700 whitespace-nowrap flex-shrink-0"
                 onClick={() =>
                   user?.id
-                    ? navigate("/home-loan-application")
+                    ? router.push("/home-loan-application")
                     : setShowLogin(true)
                 }
               >

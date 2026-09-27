@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getPropertyEMI } from "../utils/emi";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -139,12 +140,13 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
                     property.propertyCategory === "RentalFlat" ||
                     property.propertyCategory === "RentalShop" ||
                     property.propertyCategory === "RentalOffice" ||
-                    property.loanAvailability === "No"
+                    property.loanAvailability === "No" ||
+                    !getPropertyEMI(property)
                       ? "hidden"
                       : "flex"
                   } text-black group-hover:text-white gap-1 items-center justify-center `}
                 >
-                  EMI <FormatPrice price={property.emi} />
+                  EMI <FormatPrice price={getPropertyEMI(property)} />
                   /m
                 </div>
                 <div className="text-black group-hover:text-white flex flex-col gap-1 items-start justify-center ">
@@ -194,7 +196,7 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
 
             <hr className="text-[#F0EFFB] my-2 " />
             <div className="w-full flex px-4 justify-between mb-1">
-              <img src="/assets/property/assuredTag.svg" alt="" className="w-40" />
+              <img src="/assets/property/cardAssuredTag.svg" alt="" className="w-40" />
               <div className={`flex gap-[8px] items-center justidy-center`}>
                 <div
                   onClick={() => {

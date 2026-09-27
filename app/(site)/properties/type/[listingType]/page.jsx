@@ -12,11 +12,8 @@ export function generateMetadata({ params }) {
   });
 }
 
-export default async function Page({ params }) {
-  const initialProperties = await fetchProperties({
-    city: "Nagpur",
-    propertyCategory: params.listingType,
-  });
+export default async function Page() {
+  const initialProperties = await fetchProperties({ city: "Nagpur" });
 
   return <Properties initialProperties={initialProperties} />;
 }

@@ -5,6 +5,7 @@ import { useLayoutScroll } from "../context/LayoutScrollContext";
 import React, { useState, useEffect, lazy, Suspense, useMemo } from "react";
 import { useAuth } from "../store/auth";
 import PropertyBookingCard from "../components/property/PropertyBookingCard";
+import PropertyDetailsLock from "../components/property/PropertyDetailsLock";
 import PropertyOverview from "../components/property/PropertyOverview";
 import PropertyFeatures from "../components/property/PropertyFeatures";
 import { useInView } from "react-intersection-observer";
@@ -49,6 +50,7 @@ function PropertyDetails({
     setPropertyCategory,
     setPropertyId,
     showCallEnquiryPopup,
+    setShowCallEnquiryPopup,
     showWhatsappEnquiryPopup,
     setShowWhatsappEnquiryPopup,
   } = useAuth();
@@ -163,6 +165,14 @@ function PropertyDetails({
     }
   }, [propertyInfo?.propertyid]);
 
+  // Opens the booking popup for this property (also used by the details lock)
+  // (The popup loads its own property images; don't touch this page's gallery state.)
+  const openSiteVisit = () => {
+    setShowSiteVisitPopup(true);
+    setPropertyId(propertyInfo.propertyid);
+    setPropertyCategory(propertyInfo.propertyCategory);
+  };
+
   if (loading) {
     return (
       <div className="w-full h-[60vh] flex items-center justify-center">
@@ -219,6 +229,13 @@ function PropertyDetails({
               <PropertyBookingCard propertyInfo={propertyInfo} />
             </div>
 
+            {/* Full details stay blurred until a site visit is booked */}
+            <PropertyDetailsLock
+              propertyInfo={propertyInfo}
+              onBook={openSiteVisit}
+              onCall={() => setShowCallEnquiryPopup(true)}
+            >
+            <div className="flex flex-col gap-2 sm:gap-4">
             {/* Show Wing Data */}
             {["NewFlat", "CommercialFlat"].includes(
               propertyInfo.propertyCategory,
@@ -266,6 +283,8 @@ function PropertyDetails({
             {activeTab === "Location" && (
               <PropertyLocationMap property={propertyInfo} />
             )}
+            </div>
+            </PropertyDetailsLock>
 
             {/* Property Details 
             {propertyInfo?.propertyDescription && activeTab !== "About" && (
@@ -305,12 +324,7 @@ function PropertyDetails({
         {/* Book Site Visit Button (Mobile) */}
         <div className="fixed z-30 w-full sm:w-auto right-0 bottom-17.5 sm:hidden p-4 rounded-2xl text-white text-md shadow-lg">
           <button
-            onClick={() => {
-              setShowSiteVisitPopup(true);
-              setPropertyImages(JSON.parse(propertyInfo.frontView)[0]);
-              setPropertyId(JSON.parse(propertyInfo.propertyid));
-              setPropertyCategory(propertyInfo.propertyCategory);
-            }}
+            onClick={openSiteVisit}
             className="w-full flex items-center justify-center sm:hidden rounded-md bg-[#8A38F5] shadow-[0px_7px_13px_0px_#8A38F540] text-white font-bold py-3 text-base active:scale-95 cursor-pointer"
           >
             Book Site Visit Now

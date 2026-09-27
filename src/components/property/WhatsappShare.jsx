@@ -46,7 +46,7 @@ Enquiry via Reparv – www.reparv.in`;
       >
         {" "}
         <img
-          src="/assets/property/whatsapp.png"
+          src="/assets/projectPartner/whatsapp.png"
           alt="WhatsApp Chat"
           className="object-contain w-6 h-6 animate-pulse"
         />

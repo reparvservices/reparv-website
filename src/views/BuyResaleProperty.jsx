@@ -25,7 +25,7 @@ const propertyTypes = [
     to: "/properties/type/resale",
     //type: "ResalePlot",
     type: "Resale",
-    image: "/assets/property/resale/ResalePlot.svg",
+    image: "/assets/home/propertyType/OpenLand.svg",
   },
   {
     title: "Resale House",

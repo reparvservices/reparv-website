@@ -63,11 +63,12 @@ export default function SiteVisitPopup({ projectPartner }) {
     source: "Landing Page",
   });
 
-  const [otpVerified, setOtpVerified] = useState(false);
+  // OTP proof from the server, valid only for the number that was verified
+  const [otpToken, setOtpToken] = useState("");
+  const [verifiedPhone, setVerifiedPhone] = useState("");
   const [otpLoading, setOtpLoading] = useState(false);
-
-  const isSameUserNumber =
-    user?.contact && formData.phone && user.contact === formData.phone;
+  // Every booking needs OTP; changing the number requires verifying again
+  const otpVerified = Boolean(otpToken) && verifiedPhone === formData.phone;
 
   const getBudgetByPrice = (price, minArr, maxArr) => {
     if (!price) return { min: "", max: "" };
@@ -119,7 +120,7 @@ export default function SiteVisitPopup({ projectPartner }) {
 
     try {
       setOtpLoading(true);
-      const res = await fetch(`${URI}/frontend/otp/send`, {
+      const res = await fetch(`${URI}/api/user/otp/send`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -138,7 +139,7 @@ export default function SiteVisitPopup({ projectPartner }) {
   const verifyOtp = async (otp) => {
     try {
       setOtpLoading(true);
-      const res = await fetch(`${URI}/frontend/otp/verify`, {
+      const res = await fetch(`${URI}/api/user/otp/verify`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -148,10 +149,11 @@ export default function SiteVisitPopup({ projectPartner }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || "OTP failed");
 
-      setOtpVerified(true);
+      setOtpToken(data?.verificationToken || "");
+      setVerifiedPhone(formData.phone);
       alert("OTP Verified Successfully");
     } catch (err) {
-      alert("Invalid OTP");
+      alert(err.message || "Invalid OTP");
     } finally {
       setOtpLoading(false);
     }
@@ -160,18 +162,18 @@ export default function SiteVisitPopup({ projectPartner }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isSameUserNumber && !otpVerified) {
-      alert("Please verify OTP before submitting");
-      return;
-    }
-
-    setLoading(true);
-    // Contact number validation
+    // Contact number validation (before showing the loader)
     const phoneRegex = /^[6-9]\d{9}$/;
     if (!phoneRegex.test(formData.phone)) {
       alert("Please enter a valid 10-digit mobile number");
       return;
     }
+    if (!otpVerified) {
+      alert("Please verify your phone number with OTP before submitting");
+      return;
+    }
+
+    setLoading(true);
     try {
       const response = await fetch(`${URI}/frontend/enquiry/add`, {
         method: "POST",
@@ -179,11 +181,16 @@ export default function SiteVisitPopup({ projectPartner }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, otpToken }),
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to save property. Status: ${response.status}`);
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401 && data?.code === "OTP_REQUIRED") {
+          setOtpToken("");
+          setVerifiedPhone("");
+        }
+        throw new Error(data?.message || `Failed to book site visit (status ${response.status})`);
       } else {
         router.push("/thank-you");
         setSuccessScreen({
@@ -208,18 +215,11 @@ export default function SiteVisitPopup({ projectPartner }) {
       });
     } catch (err) {
       console.error("Error Booking Property:", err);
+      alert(err.message || "Could not book the site visit. Please try again.");
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (isSameUserNumber) {
-      setOtpVerified(true);
-    } else {
-      setOtpVerified(false);
-    }
-  }, [isSameUserNumber, formData.phone]);
 
   useEffect(() => {
     fetchPropertyInfo();
@@ -319,7 +319,7 @@ export default function SiteVisitPopup({ projectPartner }) {
               />
             </div>
 
-            {!isSameUserNumber && (
+            {!otpVerified && (
               <OtpSection
                 phone={formData.phone}
                 onSendOtp={sendOtp}
@@ -328,18 +328,18 @@ export default function SiteVisitPopup({ projectPartner }) {
               />
             )}
 
-            {isSameUserNumber && (
+            {otpVerified && (
               <p className="text-xs text-green-600 text-center">
-                ✔ Verified via logged-in number
+                ✔ Phone number verified
               </p>
             )}
           </div>
           <div className="w-full flex items-center justify-center">
             <button
               type="submit"
-              disabled={!isSameUserNumber && !otpVerified}
+              disabled={!otpVerified}
               className={`w-full sm:w-1/2 py-2 rounded-md transition cursor-pointer ${
-                isSameUserNumber || otpVerified
+                otpVerified
                   ? "bg-[#5E23DC] text-white hover:scale-105"
                   : "bg-gray-400 text-white cursor-not-allowed"
               }`}

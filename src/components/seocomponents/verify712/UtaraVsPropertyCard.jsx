@@ -90,7 +90,7 @@ export default function UtaraVsPropertyCard() {
 
         {/* IMPORTANT NOTE */}
         <div className="mt-10 bg-[#FFF7E0] border-l-4 border-[#FFC107] p-4 rounded-md flex gap-3">
-          <img src="/assets/seopageassets/verify712/info.svg" alt="info" className="w-4 h-4 mt-1" />
+          <img src="/assets/seopageassets/verify712/info-icon.svg" alt="info" className="w-4 h-4 mt-1" />
           <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
             <strong>Important Note:</strong> If land has been converted from
             agricultural to non-agricultural (NA conversion), you may need both

@@ -7,7 +7,7 @@ const VideoSection = ({videoFor = "reparv"}) => {
   const [showVideo, setShowVideo] = useState(false);
   const [videoLink, setVideoLink] = useState("");
   
-  const [thumbnail, setThumbnail] = useState("/assets/joinOurTeam/salesPartner/videoThumb.svg");
+  const [thumbnail, setThumbnail] = useState("/assets/homeOld/videoThumb.svg");
 
   const formatYouTubeEmbedUrl = (url) => {
     const regex =
@@ -64,7 +64,7 @@ const VideoSection = ({videoFor = "reparv"}) => {
         {/* Thumbnail */}
         {!showVideo && (
           <img
-            src="/assets/joinOurTeam/salesPartner/videoThumb.svg"
+            src="/assets/homeOld/videoThumb.svg"
             alt="Video Thumbnail"
             className="w-full h-full object-cover"
           />

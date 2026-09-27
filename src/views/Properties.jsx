@@ -14,6 +14,14 @@ import FilterNavbar from "../components/property/FilterNavbar";
 import PropertySkeleton from "../components/property/PropertySkeleton";
 import AdvertisementCard from "../components/AdvertisementCard";
 
+// Which New / Rent / Resale tab a property category belongs to
+const LISTING_TYPES = ["new", "rental", "resale"];
+const getListingType = (category = "") => {
+  if (/^Rental/i.test(category) || category === "Lease") return "rental";
+  if (/^Resale/i.test(category)) return "resale";
+  return "new";
+};
+
 // Lazy import
 const PropertyCard = React.lazy(
   () => import("../components/property/PropertyCard"),
@@ -207,7 +215,13 @@ export default function Properties({ initialProperties = null }) {
       const matchesBudget =
         item.totalOfferPrice >= minBudget && item.totalOfferPrice <= maxBudget;
 
-      return matchesBHK && matchesLocation && matchesBudget;
+      const matchesListingType =
+        !LISTING_TYPES.includes(listingTypeParam) ||
+        getListingType(item.propertyCategory) === listingTypeParam;
+
+      return (
+        matchesBHK && matchesLocation && matchesBudget && matchesListingType
+      );
     });
 
     setFilteredProperties(filtered);
@@ -218,6 +232,7 @@ export default function Properties({ initialProperties = null }) {
     minBudget,
     maxBudget,
     selectedBHKType,
+    listingTypeParam,
   ]);
 
   const searchInputRef = useRef(null);

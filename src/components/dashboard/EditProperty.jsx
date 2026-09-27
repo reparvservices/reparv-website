@@ -228,6 +228,20 @@ function EditProperty() {
     { label: "Resale ShowRoom", value: "ResaleShowroom", icon: FaIndustry },
   ];
 
+  const newTypes = [
+    { label: "New Flat", value: "NewFlat", icon: MdApartment },
+    { label: "New Plot", value: "NewPlot", icon: FaCity },
+    { label: "New Shop", value: "NewShop", icon: FaStore },
+    { label: "Row House", value: "RowHouse", icon: GiFamilyHouse },
+    { label: "Farm Land", value: "FarmLand", icon: FaTree },
+    { label: "Farm House", value: "FarmHouse", icon: GiFarmTractor },
+    { label: "Commercial Flat", value: "CommercialFlat", icon: FaBuilding },
+    { label: "Commercial Plot", value: "CommercialPlot", icon: FaCity },
+    { label: "Industrial Space", value: "IndustrialSpace", icon: FaIndustry },
+  ];
+
+  const typesByTab = { rent: rentalTypes, resale: resaleTypes, new: newTypes };
+
   /* ── Option lists for pills / selects ── */
   const ownershipOptions = [
     "Freehold",
@@ -441,6 +455,12 @@ function EditProperty() {
       });
 
       setNewProperty((prev) => ({ ...prev, ...sanitized }));
+
+      // Open the tab that matches the saved category
+      const tab = Object.keys(typesByTab).find((key) =>
+        typesByTab[key].some((t) => t.value === sanitized.propertyCategory),
+      );
+      if (tab) setPropertyTab(tab);
     } catch (err) {
       console.error("Error fetching :", err);
     }
@@ -665,6 +685,21 @@ function EditProperty() {
                   >
                     Resale
                   </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPropertyTab("new");
+                      setNewProperty({ ...newProperty, propertyCategory: "" });
+                    }}
+                    className={`px-6 py-2 rounded-lg font-semibold border ${
+                      propertyTab === "new"
+                        ? "bg-[#8A38F5] text-white border-[#8A38F5]"
+                        : "border-gray-300 text-gray-700"
+                    }`}
+                  >
+                    New
+                  </button>
                 </div>
                 {/* PROPERTY TYPE */}
                 <h2 className="text-2xl font-semibold mb-1">Property Type *</h2>
@@ -675,7 +710,7 @@ function EditProperty() {
                   Select the category that best describes your property
                 </p>
                 <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
-                  {(propertyTab === "rent" ? rentalTypes : resaleTypes).map(
+                  {typesByTab[propertyTab].map(
                     (item) => {
                       const Icon = item.icon;
                       const isActive =

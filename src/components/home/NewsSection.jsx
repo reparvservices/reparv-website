@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
+import ViewAllButton from "./ViewAllButton";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../store/auth";
-import { TbArrowRightDashed } from "react-icons/tb";
 import { getImageURI } from "../../utils/helper";
 
 function NewsSection({ initialArticles = null }) {
@@ -108,13 +108,7 @@ function NewsSection({ initialArticles = null }) {
           </article>
         ))}
       </div>
-      <div
-        onClick={() => router.push(`/blogs`)}
-        className="max-w-[300px] flex gap-2 items-center justify-center mx-auto px-6 py-2 text-sm sm:text-base text-white font-semibold bg-[#5E23DC] rounded-lg hover:scale-102 active:scale-99 cursor-pointer"
-      >
-        Read More Articles{" "}
-        <TbArrowRightDashed className="sm:w-5 sm:h-5"></TbArrowRightDashed>
-      </div>
+      <ViewAllButton href="/blogs" label="View All Articles" className="sm:mt-6" />
     </section>
   );
 }
