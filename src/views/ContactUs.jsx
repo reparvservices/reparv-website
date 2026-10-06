@@ -131,7 +131,7 @@ const ContactUs = () => {
   const embedUrl = useMemo(() => {
     return `https://www.google.com/maps?q=${encodeURIComponent(
       ADDRESS,
-    )}&output=embed`;
+    )}&t=k&output=embed`;
   }, []);
 
   const directionsUrl = useMemo(() => {

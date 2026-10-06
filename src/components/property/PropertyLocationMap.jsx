@@ -11,7 +11,7 @@ const buildMapEmbedUrl = ({ address, location, city, state, pincode }) => {
 
   return `https://www.google.com/maps?q=${encodeURIComponent(
     parts.join(", ")
-  )}&output=embed`;
+  )}&t=k&output=embed`;
 };
 
 const PropertyLocationMap = memo(({ property }) => {
