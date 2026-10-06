@@ -12,7 +12,7 @@ import { useAuth } from "@/store/auth";
 import { usePropertyFilter } from "@/store/propertyFilter";
 import { getImageURI } from "@/utils/helper";
 import { TiLocationOutline } from "react-icons/ti";
-import { FaMapMarkerAlt, FaSatellite, FaMap } from "react-icons/fa";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { IoFilter, IoClose, IoSearchSharp } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 
@@ -69,20 +69,12 @@ const SORT_OPTIONS = [
   { value: "area_high", label: "Area ↓" },
 ];
 
+// Google satellite imagery with road/place labels (lyrs=y = hybrid).
 const TILE = {
-  street: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attr: '©️ <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  },
-  satellite: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attr: '©️ <a href="https://www.esri.com/">Esri</a>',
-  },
-  labels: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attr: "",
-    opacity: 0.4,
-  },
+  url: "https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
+  attr: "© Google Maps",
+  subdomains: ["mt0", "mt1", "mt2", "mt3"],
+  maxZoom: 20,
 };
 
 const DEFAULT_CENTER = [21.1458, 79.0882];
@@ -401,7 +393,6 @@ export default function MapView({ initialProperties = null }) {
   const [showFilters, setShowFilters] = useState(false);
   const [mapReady, setMapReady] = useState(false);
   const [listVisible, setListVisible] = useState(true);
-  const [isSatellite, setIsSatellite] = useState(false);
   const [isMobile, setIsMobile] = useState(() =>
     // Safe SSR guard — window is undefined on server in Next.js
     typeof window !== "undefined" ? window.innerWidth < 640 : false,
@@ -413,8 +404,6 @@ export default function MapView({ initialProperties = null }) {
   const mapElRef = useRef(null);
   const leafletRef = useRef(null);
   const markersRef = useRef([]);
-  const tileRef = useRef(null);
-  const labelRef = useRef(null);
   const circleRef = useRef(null);
   const mapCenterRef = useRef(DEFAULT_CENTER);
   const cityCoordRef = useRef(null);
@@ -521,12 +510,14 @@ export default function MapView({ initialProperties = null }) {
       const map = L.map(mapElRef.current, {
         center: DEFAULT_CENTER,
         zoom: 12,
+        maxZoom: TILE.maxZoom,
         zoomControl: false,
       });
       L.control.zoom({ position: "bottomright" }).addTo(map);
-      tileRef.current = L.tileLayer(TILE.street.url, {
-        attribution: TILE.street.attr,
-        maxZoom: 19,
+      L.tileLayer(TILE.url, {
+        attribution: TILE.attr,
+        subdomains: TILE.subdomains,
+        maxZoom: TILE.maxZoom,
       }).addTo(map);
 
       map.on("moveend", () => {
@@ -550,37 +541,6 @@ export default function MapView({ initialProperties = null }) {
     s.onload = () => boot(window.L);
     document.head.appendChild(s);
   }, []);
-
-  // ── Satellite toggle ───────────────────────────────────────────────────────
-  useEffect(() => {
-    const L = leafletRef.current;
-    const map = mapRef.current;
-    if (!L || !map || !mapReady) return;
-    if (tileRef.current) {
-      map.removeLayer(tileRef.current);
-      tileRef.current = null;
-    }
-    if (labelRef.current) {
-      map.removeLayer(labelRef.current);
-      labelRef.current = null;
-    }
-    if (isSatellite) {
-      tileRef.current = L.tileLayer(TILE.satellite.url, {
-        attribution: TILE.satellite.attr,
-        maxZoom: 19,
-      }).addTo(map);
-      labelRef.current = L.tileLayer(TILE.labels.url, {
-        attribution: "",
-        maxZoom: 19,
-        opacity: TILE.labels.opacity,
-      }).addTo(map);
-    } else {
-      tileRef.current = L.tileLayer(TILE.street.url, {
-        attribution: TILE.street.attr,
-        maxZoom: 19,
-      }).addTo(map);
-    }
-  }, [isSatellite, mapReady]);
 
   // ── Geocode city ───────────────────────────────────────────────────────────
   useEffect(() => {
@@ -879,16 +839,6 @@ export default function MapView({ initialProperties = null }) {
               </>
             )}
           </div>
-
-          {/* Satellite toggle */}
-          <button
-            onClick={() => setIsSatellite((v) => !v)}
-            title={isSatellite ? "Street View" : "Satellite View"}
-            className={`absolute top-3 right-3 w-10 h-10 rounded-xl border shadow-md flex items-center justify-center transition-all z-10
-              ${isSatellite ? "bg-[#8A38F5] border-[#8A38F5] text-white" : "bg-white border-gray-200 text-gray-600 hover:border-[#8A38F5]"}`}
-          >
-            {isSatellite ? <FaMap size={16} /> : <FaSatellite size={16} />}
-          </button>
 
           {/* Recenter */}
           <button
