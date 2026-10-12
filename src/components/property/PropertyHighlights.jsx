@@ -1,4 +1,5 @@
 import React from "react";
+import { areaDisplayFor } from "../../utils/propertyListing";
 import {
   FaBed,
   FaBath,
@@ -37,10 +38,8 @@ function PropertyHighlights({ property }) {
     },
     {
       icon: <FaRulerCombined />,
-      title: isValid(property?.carpetArea)
-        ? `${property.carpetArea} Sq.ft`
-        : null,
-      desc: "Carpet Area",
+      title: areaDisplayFor(property || {}).value || null,
+      desc: areaDisplayFor(property || {}).label,
     },
     {
       icon: <FaCar />,

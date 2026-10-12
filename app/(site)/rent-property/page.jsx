@@ -1,6 +1,7 @@
 export { dynamic } from "@/lib/ssr";
 
-import RentProperty from "@/views/RentProperty";
+// Same Sell / Buy / Rent listing flow as /sell-properties, preselected
+import SellProperty from "@/components/dashboard/SellProperty";
 import { buildPageMetadata, getSeoData } from "@/lib/seo";
 
 export async function generateMetadata() {
@@ -15,5 +16,5 @@ export async function generateMetadata() {
 }
 
 export default function Page() {
-  return <RentProperty />;
+  return <SellProperty initialListingType="Rent" />;
 }

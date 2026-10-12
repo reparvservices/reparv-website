@@ -110,7 +110,7 @@ function PropertyCard({ property, top = false }) {
       >
         {/* Hot Deal */}
         {property?.hotDeal === "Active" && (
-          <div className="absolute w-[65px] h-[40px] p-2 top-[10px] right-[10px] flex gap-1 items-center justify-center bg-red-600 rounded-md">
+          <div className="absolute z-10 w-[65px] h-[40px] p-2 top-[10px] right-[10px] flex gap-1 items-center justify-center bg-red-600 rounded-md">
             <FaFire className="text-white" />
             <span className="text-white text-xs font-semibold">Hot Deal</span>
           </div>
@@ -118,7 +118,7 @@ function PropertyCard({ property, top = false }) {
 
         {/* Approved Badge */}
         {approvedBy === "Active" && (
-          <span className="absolute top-3 left-3 bg-[#8A38F5] text-white font-bold text-[10px] px-2 py-1 rounded-md">
+          <span className="absolute z-10 top-3 left-3 bg-[#8A38F5] text-white font-bold text-[10px] px-2 py-1 rounded-md">
             Reparv Assured
           </span>
         )}
@@ -126,7 +126,7 @@ function PropertyCard({ property, top = false }) {
         {/* Recommended Badge */}
         {property?.recommended && (
           <span
-            className={`absolute ${
+            className={`absolute z-10 ${
               approvedBy ? "top-10" : "top-3"
             } left-3 bg-[#8A38F5] text-white font-bold text-[10px] px-2 py-1 rounded-md`}
           >
@@ -136,6 +136,7 @@ function PropertyCard({ property, top = false }) {
 
         {/* Image */}
 
+        {/* Image fills the card, centered */}
         <img
           src={frontImage}
           alt={property?.seoSlug || property?.propertyName}
@@ -145,7 +146,7 @@ function PropertyCard({ property, top = false }) {
           }}
           loading="lazy"
           decoding="async"
-          className="object-contain h-[180px] bg-[#00000020] w-full"
+          className="block h-[180px] w-full object-cover object-center bg-[#00000020]"
         />
 
         <div className="relative flex flex-col gap-2">

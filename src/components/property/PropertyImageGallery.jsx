@@ -213,6 +213,7 @@ export default function PropertyImageGallery({ property }) {
           target="_blank"
           rel="noopener noreferrer"
         >
+          {/* Image fills the frame, centered */}
           <img
             src={getImageURI(activeImages[currentIndex])}
             alt={
@@ -223,7 +224,7 @@ export default function PropertyImageGallery({ property }) {
                   }`
             }
             loading="lazy"
-            className="w-full h-[250px] sm:h-[390px] lg:h-[450px] xl:h-[500px] rounded-2xl object-contain bg-[#00000020]"
+            className="block w-full h-[250px] sm:h-[390px] lg:h-[450px] xl:h-[500px] rounded-2xl object-cover object-center bg-[#00000020]"
           />
         </Link>
 

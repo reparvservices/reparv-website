@@ -11,6 +11,8 @@ import { FaHeart } from "react-icons/fa";
 import { RiBuildingLine } from "react-icons/ri";
 import { useAuth } from "../../store/auth";
 import { getImageURI } from "../../utils/helper";
+import ListingBadges from "./ListingBadges";
+import { categoryLabel } from "../../utils/propertyListing";
 
 export default function ListingCard({ property, delProperty }) {
   const { URI, setShowSharePopup, setPropertySlug } = useAuth();
@@ -64,10 +66,11 @@ export default function ListingCard({ property, delProperty }) {
         <p className="flex items-center gap-1 text-[#868686] mt-1">
           <TiLocationOutline className="w-5 h-5" /> {property?.address}
         </p>
+        <ListingBadges property={property} className="mt-2" />
 
         <div className="flex gap-4 text-sm text-[#868686] mt-3">
           <div className="flex items-center gap-2">
-            <RiBuildingLine /> {property?.propertyCategory}
+            <RiBuildingLine /> {categoryLabel(property?.propertyCategory)}
           </div>
           <span className="flex items-center gap-2">
             <BiArea /> {property?.carpetArea + " sq.ft"}

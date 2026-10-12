@@ -1,4 +1,5 @@
 import React from "react";
+import { areaModeFor, areaDisplayFor } from "../../utils/propertyListing";
 
 const PropertyOverview = ({ propertyInfo }) => {
   const formatArrayValue = (value) => {
@@ -8,9 +9,12 @@ const PropertyOverview = ({ propertyInfo }) => {
   return value;
 };
 
-  const hideExtraDetails = ["NewPlot", "CommercialPlot", "RentalLand"].includes(
-    propertyInfo?.propertyCategory,
-  );
+  // Plots and agriculture land have no floors / furnishing / parking
+  const hideExtraDetails =
+    ["NewPlot", "CommercialPlot", "RentalLand"].includes(
+      propertyInfo?.propertyCategory,
+    ) || areaModeFor(propertyInfo || {}) !== "built";
+  const area = areaDisplayFor(propertyInfo || {});
 
   const leftColumn = [
     {
@@ -37,7 +41,7 @@ const PropertyOverview = ({ propertyInfo }) => {
   ].filter(Boolean);
 
   const rightColumn = [
-    { label: "Carpet Area", value: propertyInfo.carpetArea + " sq.ft" },
+    { label: area.label, value: area.value },
 
     // Floor hidden for plots/land
     !hideExtraDetails && {

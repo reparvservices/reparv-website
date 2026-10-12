@@ -11,6 +11,8 @@ import { BiArea } from "react-icons/bi";
 import { RiBuildingLine } from "react-icons/ri";
 import { useAuth } from "../../store/auth";
 import { getImageURI } from "../../utils/helper";
+import ListingBadges from "./ListingBadges";
+import { categoryLabel } from "../../utils/propertyListing";
 
 export default function ListingCardMobile({ property, delProperty }) {
   const { URI } = useAuth();
@@ -74,11 +76,13 @@ export default function ListingCardMobile({ property, delProperty }) {
           {property?.address || "Property Location"}
         </p>
 
+        <ListingBadges property={property} />
+
         {/* FEATURES */}
         <div className="flex flex-wrap gap-4 text-sm text-gray-500">
           <div className="flex items-center gap-1">
             <RiBuildingLine />
-            {property?.propertyCategory || "-"}
+            {categoryLabel(property?.propertyCategory) || "-"}
           </div>
 
           <span className="flex items-center gap-1">

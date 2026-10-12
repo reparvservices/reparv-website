@@ -4,7 +4,6 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../store/auth";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
-import { LuGitCompareArrows } from "react-icons/lu";
 import { IoMdImages } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { TiLocationOutline } from "react-icons/ti";
@@ -12,17 +11,10 @@ import { FaChevronDown } from "react-icons/fa";
 import {
   FaLightbulb,
   FaLock,
-  FaHome,
   FaRupeeSign,
   FaUser,
   FaPhone,
-  FaBuilding,
-  FaStore,
   FaKey,
-  FaWarehouse,
-  FaIndustry,
-  FaTree,
-  FaCity,
   FaArrowLeft,
   FaCar,
   FaCompass,
@@ -34,13 +26,18 @@ import {
   FaCoins,
   FaMapMarkedAlt,
   FaCalendarAlt,
-  FaRulerCombined,
   FaLayerGroup,
   FaBuilding as FaBuildingIcon,
 } from "react-icons/fa";
 import { MdApartment, MdSmartphone, MdElevator } from "react-icons/md";
-import { GiFarmTractor, GiFamilyHouse } from "react-icons/gi";
 import { uploadToS3 } from "../../utils/s3";
+import ListingClassification from "./ListingClassification";
+import PropertyBasicDetails, { requiredAreaField } from "./PropertyBasicDetails";
+import {
+  classificationFromProperty,
+  propertyTabFor,
+  areaModeFor,
+} from "../../utils/propertyListing";
 import Loader from "../Loader";
 import {
   SectionHeader,
@@ -87,7 +84,8 @@ function EditProperty() {
   const { id } = useParams();
   const { URI, setLoading, setShowAlert } = useAuth();
   const [step, setStep] = useState(1);
-  const [propertyTab, setPropertyTab] = useState("rent");
+  // New Launch / Resale: follows the loaded category until the user picks one
+  const [conditionChoice, setCondition] = useState(null);
 
   const [nextButton, setNextButton] = useState(false);
   const [errors, setErrors] = useState({
@@ -140,6 +138,8 @@ function EditProperty() {
 
   const [newProperty, setNewProperty] = useState({
     propertyCategory: "",
+    listingType: "Sell",
+    propertyKind: "Residential",
     propertyName: "",
     carpetArea: "",
     totalSalesPrice: "",
@@ -202,45 +202,18 @@ function EditProperty() {
     ecofriendlyBenefit: [],
   });
 
-  const rentalTypes = [
-    { label: "Rental Flat", value: "RentalFlat", icon: MdApartment },
-    { label: "Rental Villa", value: "RentalVilla", icon: FaTree },
-    { label: "Rental Shop", value: "RentalShop", icon: FaStore },
-    { label: "Rental Office", value: "RentalOffice", icon: FaBuilding },
-    { label: "Rental House", value: "RentalHouse", icon: FaHome },
-    { label: "Rental Godown", value: "RentalGodown", icon: FaCity },
-    { label: "Rental Land", value: "RentalOpenLand", icon: FaTree },
-    { label: "Rental ShowRoom", value: "RentalShowroom", icon: FaIndustry },
-  ];
-
-  const resaleTypes = [
-    { label: "Resale Flat", value: "ResaleFlat", icon: MdApartment },
-    { label: "Resale Villa", value: "ResalelVilla", icon: FaTree },
-    { label: "Resale Shop", value: "ResaleShop", icon: FaStore },
-    { label: "Resale Office", value: "ResaleOffice", icon: FaBuilding },
-    {
-      label: "Resale Farm House",
-      value: "ResaleFarmHouse",
-      icon: GiFarmTractor,
-    },
-    { label: "Resale Godown", value: "ResaleGodown", icon: FaCity },
-    { label: "Resale Bunglow", value: "ResaleBunglow", icon: FaBuilding },
-    { label: "Resale ShowRoom", value: "ResaleShowroom", icon: FaIndustry },
-  ];
-
-  const newTypes = [
-    { label: "New Flat", value: "NewFlat", icon: MdApartment },
-    { label: "New Plot", value: "NewPlot", icon: FaCity },
-    { label: "New Shop", value: "NewShop", icon: FaStore },
-    { label: "Row House", value: "RowHouse", icon: GiFamilyHouse },
-    { label: "Farm Land", value: "FarmLand", icon: FaTree },
-    { label: "Farm House", value: "FarmHouse", icon: GiFarmTractor },
-    { label: "Commercial Flat", value: "CommercialFlat", icon: FaBuilding },
-    { label: "Commercial Plot", value: "CommercialPlot", icon: FaCity },
-    { label: "Industrial Space", value: "IndustrialSpace", icon: FaIndustry },
-  ];
-
-  const typesByTab = { rent: rentalTypes, resale: resaleTypes, new: newTypes };
+  const classification = {
+    ...classificationFromProperty(newProperty),
+    ...(newProperty.listingType ? { listingType: newProperty.listingType } : {}),
+    ...(newProperty.propertyKind ? { propertyKind: newProperty.propertyKind } : {}),
+    condition:
+      conditionChoice ?? classificationFromProperty(newProperty).condition,
+    propertyCategory: newProperty.propertyCategory,
+  };
+  const propertyTab = propertyTabFor(classification);
+  // Floors / furnishing / parking only apply to built properties (not plots or land)
+  const isBuiltArea = areaModeFor(newProperty) === "built";
+  const isBuy = classification.listingType === "Buy";
 
   /* ── Option lists for pills / selects ── */
   const ownershipOptions = [
@@ -456,11 +429,6 @@ function EditProperty() {
 
       setNewProperty((prev) => ({ ...prev, ...sanitized }));
 
-      // Open the tab that matches the saved category
-      const tab = Object.keys(typesByTab).find((key) =>
-        typesByTab[key].some((t) => t.value === sanitized.propertyCategory),
-      );
-      if (tab) setPropertyTab(tab);
     } catch (err) {
       console.error("Error fetching :", err);
     }
@@ -543,7 +511,7 @@ function EditProperty() {
         "address",
         "state",
         "city",
-        "carpetArea",
+        requiredAreaField(newProperty),
         "totalSalesPrice", // number
         "totalOfferPrice", // number
       ];
@@ -649,101 +617,20 @@ function EditProperty() {
           <form onSubmit={addOrUpdate} className="w-full">
             {step === 1 && (
               <>
-                {/* PROPERTY TYPE */}
-                <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-black">
-                  What type of property are you selling?{" "}
-                  <span className="text-red-500">*</span>
-                </h2>
-                {/* PROPERTY MAIN TABS */}
-                <div className="flex gap-3 mb-6">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPropertyTab("rent");
-                      setNewProperty({ ...newProperty, propertyCategory: "" });
-                    }}
-                    className={`px-6 py-2 rounded-lg font-semibold border ${
-                      propertyTab === "rent"
-                        ? "bg-[#8A38F5] text-white border-[#8A38F5]"
-                        : "border-gray-300 text-gray-700"
-                    }`}
-                  >
-                    Rent
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPropertyTab("resale");
-                      setNewProperty({ ...newProperty, propertyCategory: "" });
-                    }}
-                    className={`px-6 py-2 rounded-lg font-semibold border ${
-                      propertyTab === "resale"
-                        ? "bg-[#8A38F5] text-white border-[#8A38F5]"
-                        : "border-gray-300 text-gray-700"
-                    }`}
-                  >
-                    Resale
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setPropertyTab("new");
-                      setNewProperty({ ...newProperty, propertyCategory: "" });
-                    }}
-                    className={`px-6 py-2 rounded-lg font-semibold border ${
-                      propertyTab === "new"
-                        ? "bg-[#8A38F5] text-white border-[#8A38F5]"
-                        : "border-gray-300 text-gray-700"
-                    }`}
-                  >
-                    New
-                  </button>
-                </div>
-                {/* PROPERTY TYPE */}
-                <h2 className="text-2xl font-semibold mb-1">Property Type *</h2>
-                <p
-                  className="text-sm hidden sm:block mb-5"
-                  style={{ color: GRAY }}
-                >
-                  Select the category that best describes your property
-                </p>
-                <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
-                  {typesByTab[propertyTab].map(
-                    (item) => {
-                      const Icon = item.icon;
-                      const isActive =
-                        newProperty.propertyCategory === item.value;
-
-                      return (
-                        <button
-                          type="button"
-                          key={item.value}
-                          onClick={() =>
-                            setNewProperty({
-                              ...newProperty,
-                              propertyCategory: item.value,
-                            })
-                          }
-                          className={`flex flex-col sm:flex-row items-start sm:items-center gap-2 px-3 py-2 rounded-lg border text-sm transition
-                             ${
-                               isActive
-                                 ? "bg-[#8A38F5] text-white font-bold border-[#8A38F5]"
-                                 : "border-[#D9D9D9] text-[#868686] hover:border-[#8A38F5]"
-                             }
-                            `}
-                        >
-                          <Icon
-                            size={16}
-                            color={isActive ? "#FFFFFF" : "#868686"}
-                          />
-                          {item.label}
-                        </button>
-                      );
-                    },
-                  )}
-                </div>
+                {/* SELL / BUY / RENT + PROPERTY TYPE */}
+                <ListingClassification
+                  value={classification}
+                  onChange={({ listingType, condition: nextCondition, propertyKind, propertyCategory }) => {
+                    setCondition(nextCondition);
+                    const next = { ...newProperty, listingType, propertyKind, propertyCategory };
+                    // Area inputs differ by type (sq.ft vs "2.5 Acre") — reset when that changes
+                    if (areaModeFor(next) !== areaModeFor(newProperty)) {
+                      next.builtUpArea = "";
+                      next.carpetArea = "";
+                    }
+                    setNewProperty(next);
+                  }}
+                />
 
                 {/* PROPERTY Name */}
                 <div className="mb-8 max-w-[350px]">
@@ -944,56 +831,12 @@ function EditProperty() {
                   </div>
                 </div>
 
-                {/* Property Area */}
-                <div className="mb-8 max-w-[400px]">
-                  <h3 className="flex items-center gap-2 text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-black">
-                    <LuGitCompareArrows color={PURPLE} /> Property Area{" "}
-                    <span className="text-red-500">*</span>
-                  </h3>
-
-                  <div className="flex gap-3 text-black">
-                    <input
-                      type="number"
-                      placeholder="Enter carpet area"
-                      value={newProperty?.carpetArea}
-                      onChange={(e) => {
-                        setNewProperty({
-                          ...newProperty,
-                          carpetArea: e.target.value,
-                        });
-                      }}
-                      className="w-full rounded-lg px-4 py-2 border outline-none text-black"
-                      style={{ borderColor: "#E0E0E0" }}
-                    />
-                    <select
-                      disabled
-                      className="rounded-lg px-4 py-2 border appearance-none"
-                      style={{ borderColor: "#E0E0E0" }}
-                    >
-                      <option>sq.ft</option>
-                    </select>
-                  </div>
-                  <p className="text-xs mt-2 ml-1" style={{ color: GRAY }}>
-                    Enter the total carpet area
-                  </p>
-                </div>
-
-                {/* Built Up Area */}
-                <div className="mb-8 max-w-[400px]">
-                  <FieldLabel>Built Up Area (sq.ft)</FieldLabel>
-                  <FieldInput
-                    type="number"
-                    icon={<FaRulerCombined />}
-                    placeholder="Enter built up area"
-                    value={newProperty.builtUpArea}
-                    onChange={(e) =>
-                      setNewProperty({
-                        ...newProperty,
-                        builtUpArea: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                {/* AREA + DETAILS — change with Residential / Commercial / Agriculture */}
+                <PropertyBasicDetails
+                  newProperty={newProperty}
+                  setNewProperty={setNewProperty}
+                  showDetails={false}
+                />
 
                 {/* PRICING */}
                 <div className="mb-8">
@@ -1004,7 +847,7 @@ function EditProperty() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium">
-                        {propertyTab === "rent" ? "Rent" : "Selling Price"}{" "}
+                        {isBuy ? "Maximum Budget" : propertyTab === "rent" ? "Rent" : "Selling Price"}{" "}
                         <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -1024,8 +867,7 @@ function EditProperty() {
 
                     <div>
                       <label className="text-sm font-medium">
-                        Expected Offer{" "}
-                        {propertyTab === "rent" ? "Rent" : "Price"}{" "}
+                        {isBuy ? "Preferred Budget" : `Expected Offer ${propertyTab === "rent" ? "Rent" : "Price"}`}{" "}
                         <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -1184,6 +1026,8 @@ function EditProperty() {
                         }
                       />
                     </div>
+                    {isBuiltArea && (
+                      <>
                     <div>
                       <FieldLabel>Built Year</FieldLabel>
                       <FieldInput
@@ -1229,6 +1073,8 @@ function EditProperty() {
                         }
                       />
                     </div>
+                      </>
+                    )}
                   </Grid2>
 
                   <div className="mt-4">
@@ -1253,6 +1099,8 @@ function EditProperty() {
                     />
                   </div>
 
+                  {isBuiltArea && (
+                    <>
                   <div className="mt-4">
                     <FieldLabel>Furnishing</FieldLabel>
                     <PillSelect
@@ -1277,6 +1125,8 @@ function EditProperty() {
                       }
                     />
                   </div>
+                    </>
+                  )}
 
                   <div className="mt-4">
                     <FieldLabel>Water Supply</FieldLabel>
