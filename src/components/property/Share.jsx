@@ -11,6 +11,8 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../store/auth";
 import { addVisitor } from "../../utils/analytics";
+import { getImageURI } from "../../utils/helper";
+import { isPropertyUnlocked } from "../../utils/propertyUnlock";
 
 function Share() {
   const { URI, setShowSharePopup } = useAuth();
@@ -28,7 +30,6 @@ function Share() {
       if (!response.ok) throw new Error("Failed to fetch property info.");
       const data = await response.json();
       setPropertyInfo(data);
-      console.log(data);
       //setPropertyCategory(data.propertyCategory);
     } catch (err) {
       console.error("Error fetching property info:", err);
@@ -53,25 +54,40 @@ function Share() {
     propertyInfo?.seoSlug || id
   }`;
 
-  // Build formatted WhatsApp message
+  // WhatsApp message (approved Reparv format). The brochure line is only
+  // included once this visitor has unlocked the property (booked a site
+  // visit), so sharing can't be used to get around the lock.
   const buildPropertyShareText = (property) => {
-    return ` Hello 👋
-             I found this property on Reparv and I'm interested.
-
-             🏠 Property : ${property?.propertyName}
-               
-             Property Link: ${propertyUrl}   
-
-             Please share more details and site visit availability.
-
-             Enquiry via Reparv – www.reparv.in`;
+    const lines = [
+      "🏡 *New Property Listing on Reparv*",
+      "",
+      "Hello! 👋",
+      "",
+      "We found a property that might interest you.",
+      "",
+      `🏠 *Property:* ${property?.propertyName || "Property"}`,
+      "",
+      `🔗 *View Property:* ${propertyUrl}`,
+    ];
+    if (property?.brochureFile && isPropertyUnlocked(property?.propertyid)) {
+      lines.push("", `📄 *Property Brochure:* ${getImageURI(property.brochureFile)}`);
+    }
+    lines.push(
+      "",
+      "Interested in learning more or scheduling a site visit? Contact us, and our team will be happy to assist you.",
+      "",
+      "*Reparv – Discover Properties. Find Your Place.*",
+      "",
+      "🌐 www.reparv.in",
+    );
+    return lines.join("\n");
   };
 
   // WhatsApp share
   const handleWhatsAppShare = () => {
     trackShare();
     const text = encodeURIComponent(buildPropertyShareText(propertyInfo));
-    window.open(`https://wa.me/?text=${text}`, "_blank");
+    window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank"); // wa.me breaks emojis on WhatsApp Web
   };
 
   // Facebook share

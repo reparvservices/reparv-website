@@ -1,31 +1,27 @@
 "use client"
 
-import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { FiMoreVertical, FiEdit2, FiShare2, FiTrash2 } from "react-icons/fi";
 import { TiLocationOutline } from "react-icons/ti";
 import { BiArea } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
-import { HiOutlineMail } from "react-icons/hi";
 import { FaHeart } from "react-icons/fa";
 import { RiBuildingLine } from "react-icons/ri";
-import { useAuth } from "../../store/auth";
 import { getImageURI } from "../../utils/helper";
 import ListingBadges from "./ListingBadges";
-import { categoryLabel } from "../../utils/propertyListing";
+import { categoryLabel, listingStatusFor } from "../../utils/propertyListing";
 
 export default function ListingCard({ property, delProperty }) {
-  const { URI, setShowSharePopup, setPropertySlug } = useAuth();
-  const router = useRouter();
-  const imageURI = import.meta.env.VITE_S3_IMAGE_URL;
-
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
 
-  const statusColor = {
-    Active: "text-green-500",
-    Pending: "text-orange-500",
+  const statusStyle = {
+    Live: "bg-green-50 text-green-700 border-green-200",
+    "Under Review": "bg-orange-50 text-orange-700 border-orange-200",
+    Rejected: "bg-red-50 text-red-600 border-red-200",
+    Inactive: "bg-gray-100 text-gray-600 border-gray-200",
   };
+  const status = listingStatusFor(property);
 
   // Close popup when clicking outside
   useEffect(() => {
@@ -47,24 +43,25 @@ export default function ListingCard({ property, delProperty }) {
             const images = JSON.parse(property?.frontView || "[]");
             return images.length > 0
               ? `${getImageURI(images[0])}`
-              : "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+              : "/assets/property/propertyPicture.svg";
           } catch {
-            return "https://images.unsplash.com/photo-1600585154340-be6161a56a0c";
+            return "/assets/property/propertyPicture.svg";
           }
         })()}
         alt={property?.seoSlug || property?.propertyName}
         onError={(e) => {
           e.currentTarget.src = "/assets/property/propertyPicture.svg";
         }}
-        className="w-40 h-28 object-cover rounded-lg"
+        className="w-40 h-28 shrink-0 object-cover rounded-lg bg-gray-100"
       />
 
       {/* Details */}
-      <div className="flex-1">
-        <h3 className="font-bold text-base">{property?.propertyName}</h3>
+      <div className="flex-1 min-w-0">
+        <h3 className="font-bold text-base truncate">{property?.propertyName}</h3>
 
-        <p className="flex items-center gap-1 text-[#868686] mt-1">
-          <TiLocationOutline className="w-5 h-5" /> {property?.address}
+        <p className="flex items-center gap-1 text-sm text-[#868686] mt-1">
+          <TiLocationOutline className="w-5 h-5 shrink-0" />
+          <span className="truncate">{property?.address}</span>
         </p>
         <ListingBadges property={property} className="mt-2" />
 
@@ -72,20 +69,22 @@ export default function ListingCard({ property, delProperty }) {
           <div className="flex items-center gap-2">
             <RiBuildingLine /> {categoryLabel(property?.propertyCategory)}
           </div>
-          <span className="flex items-center gap-2">
-            <BiArea /> {property?.carpetArea + " sq.ft"}
-          </span>
+          {property?.carpetArea ? (
+            <span className="flex items-center gap-2">
+              <BiArea /> {property.carpetArea} sq.ft
+            </span>
+          ) : null}
         </div>
 
         <div className="flex gap-6 text-xs mt-3">
-          <span className="flex items-center gap-1 text-[#2196F3]">
-            <AiOutlineEye /> {property?.views || "0"}
+          <span className="flex items-center gap-1 text-gray-600" title="Views">
+            <AiOutlineEye className="text-[#2196F3]" /> {property?.views || "0"} views
           </span>
-          <span className="flex items-center gap-1 text-[#04972B]">
-            <HiOutlineMail /> {property?.share || "0"}
+          <span className="flex items-center gap-1 text-gray-600" title="Shares">
+            <FiShare2 className="text-[#04972B]" /> {property?.share || "0"} shares
           </span>
-          <span className="flex items-center gap-1 text-[#FF9800]">
-            <FaHeart /> {property?.likes || "0"}
+          <span className="flex items-center gap-1 text-gray-600" title="Saved by users">
+            <FaHeart className="text-[#FF9800]" /> {property?.likes || "0"} saved
           </span>
         </div>
       </div>
@@ -104,10 +103,13 @@ export default function ListingCard({ property, delProperty }) {
 
           {/* 3 Dot Menu */}
           <div className="relative" ref={menuRef}>
-            <FiMoreVertical
+            <button
               onClick={() => setOpenMenu(!openMenu)}
-              className="cursor-pointer text-xl"
-            />
+              aria-label="More actions"
+              className="p-1.5 rounded-md hover:bg-gray-100"
+            >
+              <FiMoreVertical className="text-xl" />
+            </button>
 
             {openMenu && (
               <div className="absolute right-0 top-8 w-36 bg-white border border-[#D9D9D9] rounded-lg shadow-lg z-50 overflow-hidden">
@@ -136,13 +138,16 @@ export default function ListingCard({ property, delProperty }) {
           </div>
         </div>
 
-        {property?.status && (
-          <span
-            className={`text-sm font-medium ${statusColor[property?.status]}`}
-          >
-            {property?.status}
-          </span>
-        )}
+        <span
+          title={
+            status === "Under Review"
+              ? "Our team is verifying this listing. It will be visible to buyers once approved."
+              : undefined
+          }
+          className={`px-2.5 py-0.5 rounded-full border text-xs font-semibold ${statusStyle[status]}`}
+        >
+          {status}
+        </span>
       </div>
     </div>
   );

@@ -30,7 +30,10 @@ import {
   FaBuilding as FaBuildingIcon,
 } from "react-icons/fa";
 import { MdApartment, MdSmartphone, MdElevator } from "react-icons/md";
-import { uploadToS3 } from "../../utils/s3";
+import { uploadToS3, uploadToS3WithProgress } from "../../utils/s3";
+import PropertyVideoFields from "./PropertyVideoFields";
+import PropertyBrochureField from "./PropertyBrochureField";
+import { validateVideoLinks } from "../../utils/videoLinks";
 import ListingClassification from "./ListingClassification";
 import PropertyBasicDetails, { requiredAreaField } from "./PropertyBasicDetails";
 import {
@@ -136,6 +139,14 @@ function EditProperty() {
 
   const [imageFiles, setImageFiles] = useState(EMPTY_IMAGES);
 
+  // Videos: a newly picked file, plus the saved values to detect changes
+  const [video, setVideo] = useState(null);
+  const [mediaErrors, setMediaErrors] = useState({});
+  const [savedMedia, setSavedMedia] = useState({ propertyVideo: "", videoLink: "", instagramReelLink: "", brochureFile: "" });
+  const [brochure, setBrochure] = useState(null);
+  const [brochureError, setBrochureError] = useState("");
+  const [submitStatus, setSubmitStatus] = useState("");
+
   const [newProperty, setNewProperty] = useState({
     propertyCategory: "",
     listingType: "Sell",
@@ -213,7 +224,6 @@ function EditProperty() {
   const propertyTab = propertyTabFor(classification);
   // Floors / furnishing / parking only apply to built properties (not plots or land)
   const isBuiltArea = areaModeFor(newProperty) === "built";
-  const isBuy = classification.listingType === "Buy";
 
   /* ── Option lists for pills / selects ── */
   const ownershipOptions = [
@@ -428,6 +438,16 @@ function EditProperty() {
       });
 
       setNewProperty((prev) => ({ ...prev, ...sanitized }));
+      const media = {
+        propertyVideo: sanitized.propertyVideo || "",
+        videoLink: sanitized.videoLink || "",
+        instagramReelLink: sanitized.instagramReelLink || "",
+        brochureFile: sanitized.brochureFile || "",
+      };
+      setSavedMedia(media);
+      setNewProperty((prev) => ({ ...prev, ...media }));
+      setVideo(null);
+      setBrochure(null);
 
     } catch (err) {
       console.error("Error fetching :", err);
@@ -436,11 +456,24 @@ function EditProperty() {
 
   const addOrUpdate = async (e) => {
     e.preventDefault();
+
+    const linkErrors = validateVideoLinks(newProperty);
+    setMediaErrors((prev) => ({ ...prev, ...linkErrors }));
+    if (Object.keys(linkErrors).length) return;
+
     setLoading(true);
 
     try {
       // 1 Prepare a copy of property data
       const payload = { ...newProperty };
+
+      // Only send video fields that changed, so older listings whose saved
+      // links use other formats can still be edited
+      ["propertyVideo", "videoLink", "instagramReelLink", "brochureFile"].forEach((key) => {
+        const value = String(newProperty[key] || "").trim();
+        if (value === savedMedia[key]) delete payload[key];
+        else payload[key] = value;
+      });
 
       const imageFields = Object.keys(EMPTY_IMAGES);
 
@@ -459,6 +492,23 @@ function EditProperty() {
           payload[field] = payload[field] || [];
         }
       }
+
+      // Upload a newly picked video
+      if (video) {
+        setSubmitStatus("Uploading video... 0%");
+        payload.propertyVideo = await uploadToS3WithProgress(video.file, {
+          folder: "uploads/videos",
+          onProgress: (pct) => setSubmitStatus(`Uploading video... ${pct}%`),
+        });
+      }
+      if (brochure) {
+        setSubmitStatus("Uploading brochure... 0%");
+        payload.brochureFile = await uploadToS3WithProgress(brochure, {
+          folder: "uploads/brochures",
+          onProgress: (pct) => setSubmitStatus(`Uploading brochure... ${pct}%`),
+        });
+      }
+      setSubmitStatus("Saving...");
 
       // 3 Determine endpoint
       const endpoint = newProperty.propertyid
@@ -480,7 +530,8 @@ function EditProperty() {
       }
 
       if (!response.ok) {
-        throw new Error(`Failed to save property. Status: ${response.status}`);
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data?.message || `Failed to save property. Status: ${response.status}`);
       }
 
       setShowAlert({
@@ -497,9 +548,10 @@ function EditProperty() {
       setStep(1);
     } catch (err) {
       console.error("Error saving property:", err);
-      alert("Please check empty fields or try again later.");
+      alert(err?.message || "Please check empty fields or try again later.");
     } finally {
       setLoading(false);
+      setSubmitStatus("");
     }
   };
 
@@ -551,7 +603,7 @@ function EditProperty() {
           onClick={() => {
             router.back();
           }}
-          className="w-5 h-5"
+          className="cursor-pointer w-5 h-5"
         />
         <span className="w-full text-base sm:text-lg font-bold text-center">
           Add Basic Details
@@ -847,7 +899,7 @@ function EditProperty() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium">
-                        {isBuy ? "Maximum Budget" : propertyTab === "rent" ? "Rent" : "Selling Price"}{" "}
+                        {propertyTab === "rent" ? "Rent" : "Selling Price"}{" "}
                         <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -867,7 +919,7 @@ function EditProperty() {
 
                     <div>
                       <label className="text-sm font-medium">
-                        {isBuy ? "Preferred Budget" : `Expected Offer ${propertyTab === "rent" ? "Rent" : "Price"}`}{" "}
+                        {`Expected Offer ${propertyTab === "rent" ? "Rent" : "Price"}`}{" "}
                         <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -1576,6 +1628,28 @@ function EditProperty() {
                   ))}
                 </div>
 
+                <PropertyVideoFields
+                  video={video}
+                  onVideoChange={setVideo}
+                  savedVideoUrl={newProperty.propertyVideo}
+                  onRemoveSaved={() => setNewProperty((prev) => ({ ...prev, propertyVideo: "" }))}
+                  links={{ videoLink: newProperty.videoLink, instagramReelLink: newProperty.instagramReelLink }}
+                  onLinksChange={(patch) => setNewProperty((prev) => ({ ...prev, ...patch }))}
+                  errors={mediaErrors}
+                  setErrors={setMediaErrors}
+                  disabled={!!submitStatus}
+                />
+
+                <PropertyBrochureField
+                  file={brochure}
+                  savedUrl={newProperty.brochureFile}
+                  onFileChange={setBrochure}
+                  onRemoveSaved={() => setNewProperty((prev) => ({ ...prev, brochureFile: "" }))}
+                  error={brochureError}
+                  setError={setBrochureError}
+                  disabled={!!submitStatus}
+                />
+
                 {/* STEP ACTIONS */}
                 <div className="flex gap-4 justify-between mt-10">
                   <button
@@ -1589,10 +1663,11 @@ function EditProperty() {
                   <Loader />
                   <button
                     type="submit"
-                    className="w-full sm:w-[290px] px-10 py-2 sm:py-3 rounded-lg font-semibold text-white shadow-[0px_4px_11px_2px_#8A38F540] active:scale-98"
+                    disabled={!!submitStatus}
+                    className="w-full sm:w-[290px] px-10 py-2 sm:py-3 rounded-lg font-semibold text-white shadow-[0px_4px_11px_2px_#8A38F540] active:scale-98 disabled:opacity-70"
                     style={{ backgroundColor: PURPLE }}
                   >
-                    Submit
+                    {submitStatus || "Save Changes"}
                   </button>
                 </div>
               </>

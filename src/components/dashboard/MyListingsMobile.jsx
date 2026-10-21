@@ -156,7 +156,7 @@ export default function MyListingsMobile() {
 
   useEffect(() => {
     if (window.innerWidth >= 768) {
-      router.push("/dashboard");
+      router.replace("/dashboard?tab=listings");
     }
   }, []);
 

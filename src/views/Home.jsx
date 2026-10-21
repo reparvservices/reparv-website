@@ -6,16 +6,13 @@ import HomeImage from "../components/home/HomeImage";
 import SectionSkeleton from "../components/SectionSkeleton";
 import AssociatedWith from "@/components/home/AssociatedWith";
 
-const PropertyOnRentSection = lazy(
-  () => import("../components/home/PropertyOnRentSection"),
-);
 const TrendingPropertySection = lazy(
   () => import("../components/home/TrendingPropertySection"),
 );
+const AgentsSection = lazy(() => import("../components/home/AgentsSection"));
 const PropertySection = lazy(
   () => import("../components/home/PropertySection"),
 );
-const LoanSection = lazy(() => import("../components/home/LoanSection"));
 const CustomerReviewSection = lazy(
   () => import("../components/home/CustomerReviewSection"),
 );
@@ -54,13 +51,7 @@ function Home({
           show: { transition: { staggerChildren: 0.08 } },
         }}
       >
-        <HomeImage />
-
-        <Suspense fallback={<SectionSkeleton height="260px" />}>
-          <motion.div variants={item}>
-            <PropertyOnRentSection />
-          </motion.div>
-        </Suspense>
+        <HomeImage trendingProperties={initialTrendingProperties ?? []} />
 
         <Suspense fallback={<SectionSkeleton height="320px" />}>
           <motion.div variants={item}>
@@ -70,9 +61,9 @@ function Home({
           </motion.div>
         </Suspense>
 
-        <Suspense fallback={<SectionSkeleton height="240px" />}>
+        <Suspense fallback={<SectionSkeleton height="420px" />}>
           <motion.div variants={item}>
-            <LoanSection />
+            <AgentsSection />
           </motion.div>
         </Suspense>
 

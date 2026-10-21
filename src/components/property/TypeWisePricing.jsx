@@ -4,6 +4,7 @@ import { useAuth } from "../../store/auth";
 import FormatPrice from "../FormatPrice";
 import BrochureAndVideo from "./BrochureAndVideo";
 import { IoShareSocial } from "react-icons/io5";
+import { Locked } from "./PropertyLock";
 
 function TypeWisePricing({
   propertyId,
@@ -156,7 +157,7 @@ function TypeWisePricing({
                 <div>
                   <div className="text-[#00000066] text-xs">{label}</div>
                   <div className="font-normal text-black whitespace-pre-line">
-                    {value}
+                    <Locked>{value}</Locked>
                   </div>
                 </div>
               </div>

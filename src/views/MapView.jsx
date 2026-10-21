@@ -9,12 +9,23 @@ import React, {
 } from "react";
 import Link from "next/link";
 import { useAuth } from "@/store/auth";
-import { usePropertyFilter } from "@/store/propertyFilter";
 import { getImageURI } from "@/utils/helper";
 import { TiLocationOutline } from "react-icons/ti";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { IoFilter, IoClose, IoSearchSharp } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
+import MapFilterBar from "@/components/mapView/MapFilterBar";
+import {
+  EMPTY_FILTERS,
+  applyFilters,
+  bhkCounts,
+  categoryCounts,
+  haversine,
+  idOf,
+  isRentalProperty,
+  normalizeCoords,
+  prettyCategory,
+} from "@/components/mapView/mapFilters";
 
 // ─── Leaflet CSS (injected once, outside component) ───────────────────────────
 if (
@@ -31,44 +42,6 @@ if (
 // ─── Constants (module-level, never re-created) ───────────────────────────────
 const FALLBACK_IMG = "/assets/property/propertyPicture.svg";
 
-const RENTAL_CATEGORIES = ["RentalFlat", "RentalOffice", "RentalShop"];
-
-const CATEGORY_OPTIONS = [
-  "NewFlat",
-  "NewPlot",
-  "NewShop",
-  "RentalFlat",
-  "RentalShop",
-  "RentalHouse",
-  "RentalOffice",
-  "RowHouse",
-  "Lease",
-  "FarmLand",
-  "FarmHouse",
-  "CommercialFlat",
-  "CommercialPlot",
-  "IndustrialSpace",
-  "Resale",
-  "ResaleFlat",
-  "ResaleHouse",
-  "ResaleShop",
-  "ResaleOffice",
-  "ResaleFarmLand",
-  "ResaleRowHouse",
-  "ResaleGodown",
-  "ResaleBunglow",
-  ,
-];
-
-const SORT_OPTIONS = [
-  { value: "", label: "Relevance" },
-  { value: "latest", label: "Latest" },
-  { value: "price_low", label: "Price ↑" },
-  { value: "price_high", label: "Price ↓" },
-  { value: "area_low", label: "Area ↑" },
-  { value: "area_high", label: "Area ↓" },
-];
-
 // Google satellite imagery with road/place labels (lyrs=y = hybrid).
 const TILE = {
   url: "https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
@@ -78,32 +51,40 @@ const TILE = {
 };
 
 const DEFAULT_CENTER = [21.1458, 79.0882];
+const MAX_PIN_DISTANCE_KM = 150;
+
+// Median of all listing coordinates — a stand-in city centre until geocoding returns.
+function medianCenter(list) {
+  const lats = [];
+  const lngs = [];
+  for (const p of list) {
+    const lat = parseFloat(p.latitude);
+    const lng = parseFloat(p.longitude);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+      lats.push(lat);
+      lngs.push(lng);
+    }
+  }
+  if (!lats.length) return null;
+  const mid = (arr) => arr.sort((a, b) => a - b)[arr.length >> 1];
+  return [mid(lats), mid(lngs)];
+}
 
 // ─── Pure helpers (module-level) ──────────────────────────────────────────────
 function formatPrice(price, isRental) {
   if (!price) return "N/A";
-  if (isRental) return `₹${Number(price).toLocaleString("en-IN")} ⁠`;
-  if (price >= 1e7) return `₹${(price / 1e7).toFixed(2)} Cr ⁠`;
-  if (price >= 1e5) return `₹${(price / 1e5).toFixed(2)} L ⁠`;
-  return `₹${Number(price).toLocaleString("en-IN")} ⁠`;
+  if (isRental) return `₹${Number(price).toLocaleString("en-IN")}/mo`;
+  if (price >= 1e7) return `₹${(price / 1e7).toFixed(2)} Cr`;
+  if (price >= 1e5) return `₹${(price / 1e5).toFixed(2)} L`;
+  return `₹${Number(price).toLocaleString("en-IN")}`;
 }
 
 function shortPrice(price) {
   if (!price) return "N/A";
-  if (price >= 1e7) return `₹${(price / 1e7).toFixed(1)}Cr ⁠`;
-  if (price >= 1e5) return `₹${(price / 1e5).toFixed(1)}L ⁠`;
-  return `₹${Number(price).toLocaleString("en-IN")} ⁠`;
-}
-
-function haversine(lat1, lng1, lat2, lng2) {
-  const R = 6371,
-    toR = Math.PI / 180;
-  const dLat = (lat2 - lat1) * toR,
-    dLng = (lng2 - lng1) * toR;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1 * toR) * Math.cos(lat2 * toR) * Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  if (price >= 1e7) return `₹${(price / 1e7).toFixed(1)}Cr`;
+  if (price >= 1e5) return `₹${(price / 1e5).toFixed(1)}L`;
+  if (price >= 1e3) return `₹${Math.round(price / 1e3)}k`;
+  return `₹${Number(price).toLocaleString("en-IN")}`;
 }
 
 function getPropertyImage(property) {
@@ -112,24 +93,6 @@ function getPropertyImage(property) {
     if (imgs.length > 0) return getImageURI(imgs[0]);
   } catch {}
   return FALLBACK_IMG;
-}
-
-function sortProperties(data, sortBy) {
-  const arr = [...data];
-  switch (sortBy) {
-    case "latest":
-      return arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    case "price_low":
-      return arr.sort((a, b) => a.totalOfferPrice - b.totalOfferPrice);
-    case "price_high":
-      return arr.sort((a, b) => b.totalOfferPrice - a.totalOfferPrice);
-    case "area_low":
-      return arr.sort((a, b) => a.builtUpArea - b.builtUpArea);
-    case "area_high":
-      return arr.sort((a, b) => b.builtUpArea - a.builtUpArea);
-    default:
-      return arr;
-  }
 }
 
 async function geocodeCity(city) {
@@ -146,9 +109,7 @@ async function geocodeCity(city) {
 }
 
 function buildPopupHTML(property) {
-  const isRental = RENTAL_CATEGORIES.includes(
-    property?.propertyCategory?.trim(),
-  );
+  const isRental = isRentalProperty(property);
   const price = formatPrice(property?.totalOfferPrice, isRental);
   const oldPrice = formatPrice(property?.totalSalesPrice, isRental);
   const imgSrc = getPropertyImage(property);
@@ -168,7 +129,7 @@ function buildPopupHTML(property) {
           ${(property?.propertyName || "Property").slice(0, 40)}${(property?.propertyName?.length || 0) > 40 ? "…" : ""}
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <span style="background:#8a38f520;color:#8A38F5;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;">${property?.propertyCategory || ""}</span>
+          <span style="background:#8a38f520;color:#8A38F5;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;">${prettyCategory(property?.propertyCategory || "")}</span>
           <div style="text-align:right;">
             <div style="font-size:10px;color:#868686;text-decoration:line-through;">${oldPrice}</div>
             <div style="font-size:14px;font-weight:800;color:#111;">${price}</div>
@@ -203,9 +164,7 @@ const BottomDrawerCard = React.memo(function BottomDrawerCard({
   property,
   onClose,
 }) {
-  const isRental = RENTAL_CATEGORIES.includes(
-    property?.propertyCategory?.trim(),
-  );
+  const isRental = isRentalProperty(property);
   const price = formatPrice(property?.totalOfferPrice, isRental);
   const oldPrice = formatPrice(property?.totalSalesPrice, isRental);
   const imgSrc = getPropertyImage(property);
@@ -261,7 +220,7 @@ const BottomDrawerCard = React.memo(function BottomDrawerCard({
             {property?.propertyName}
           </p>
           <span className="inline-block bg-[#8a38f515] text-[#8A38F5] text-[9px] font-bold px-2 py-0.5 rounded-full mb-2">
-            {property?.propertyCategory}
+            {prettyCategory(property?.propertyCategory || "")}
           </span>
           <div>
             <div className="text-[10px] text-gray-400 line-through leading-none">
@@ -292,9 +251,7 @@ const MapPropertyCard = React.memo(function MapPropertyCard({
   isSelected,
   onClick,
 }) {
-  const isRental = RENTAL_CATEGORIES.includes(
-    property?.propertyCategory?.trim(),
-  );
+  const isRental = isRentalProperty(property);
   const price = formatPrice(property?.totalOfferPrice, isRental);
   const oldPrice = formatPrice(property?.totalSalesPrice, isRental);
   const imgSrc = getPropertyImage(property);
@@ -342,7 +299,7 @@ const MapPropertyCard = React.memo(function MapPropertyCard({
         </div>
         <div className="flex items-center justify-between mt-1 gap-1">
           <span className="shrink-0 bg-[#8a38f512] text-[#8A38F5] text-[8px] font-bold px-1.5 py-0.5 rounded-full truncate max-w-[80px]">
-            {property?.propertyCategory || ""}
+            {prettyCategory(property?.propertyCategory || "")}
           </span>
           <div className="text-right shrink-0">
             {oldPrice !== "N/A" && (
@@ -379,25 +336,21 @@ const SkeletonCard = React.memo(function SkeletonCard() {
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function MapView({ initialProperties = null }) {
   const { URI, selectedCity, propertyType, setPropertyType } = useAuth();
-  const { selectedBHKType, setSelectedBHKType, minBudget, maxBudget } =
-    usePropertyFilter();
 
   // ── UI state ───────────────────────────────────────────────────────────────
-  const [properties, setProperties] = useState(initialProperties ?? []);
+  const [properties, setProperties] = useState(() =>
+    (initialProperties ?? []).map(normalizeCoords),
+  );
   const [loading, setLoading] = useState(initialProperties === null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(propertyType || "");
-  const [selectedBHK, setSelectedBHK] = useState(selectedBHKType || "");
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [selectedProperty, setSelectedProperty] = useState(null);
-  const [showFilters, setShowFilters] = useState(false);
   const [mapReady, setMapReady] = useState(false);
   const [listVisible, setListVisible] = useState(true);
   const [isMobile, setIsMobile] = useState(() =>
     // Safe SSR guard — window is undefined on server in Next.js
     typeof window !== "undefined" ? window.innerWidth < 640 : false,
   );
-  const [kmRange, setKmRange] = useState(50);
+  const [cityCoord, setCityCoord] = useState(null);
 
   // ── Refs — map state that must NEVER trigger React re-renders ────────────
   const mapRef = useRef(null);
@@ -407,6 +360,10 @@ export default function MapView({ initialProperties = null }) {
   const circleRef = useRef(null);
   const mapCenterRef = useRef(DEFAULT_CENTER);
   const cityCoordRef = useRef(null);
+  // The server pre-renders Nagpur; any other city must be fetched client-side.
+  const skipInitialFetch = useRef(
+    initialProperties !== null && (!selectedCity || selectedCity === "Nagpur"),
+  );
 
   // ── Mobile detection (resize only) ────────────────────────────────────────
   useEffect(() => {
@@ -415,15 +372,12 @@ export default function MapView({ initialProperties = null }) {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // ── Fetch properties ───────────────────────────────────────────────────────
+  // ── Fetch properties (by city; every other filter runs client-side) ───────
   const fetchProperties = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
       if (selectedCity?.trim()) params.set("city", selectedCity.trim());
-      if (selectedCategory.trim())
-        params.set("propertyCategory", selectedCategory.trim());
-      if (selectedBHK.trim()) params.set("propertyType", selectedBHK.trim());
       const res = await fetch(
         `${URI}/frontend/properties/get-all-by-slug?${params}`,
         {
@@ -433,60 +387,77 @@ export default function MapView({ initialProperties = null }) {
         },
       );
       const data = await res.json();
-      setProperties(Array.isArray(data) ? data : []);
+      setProperties(Array.isArray(data) ? data.map(normalizeCoords) : []);
     } catch (err) {
       console.error("MapView fetch:", err);
       setProperties([]);
     } finally {
       setLoading(false);
     }
-  }, [URI, selectedCity, selectedCategory, selectedBHK]);
+  }, [URI, selectedCity]);
 
   useEffect(() => {
-    if (initialProperties !== null) return;
+    if (skipInitialFetch.current) {
+      skipInitialFetch.current = false;
+      return;
+    }
     fetchProperties();
-  }, [fetchProperties, initialProperties]);
+  }, [fetchProperties]);
+
+  // A category picked elsewhere on the site (auth store) pre-selects that type,
+  // shown as a removable pill, if this city has any of it.
+  useEffect(() => {
+    if (!propertyType || !properties.length) return;
+    const exists = properties.some(
+      (p) => String(p.propertyCategory).trim() === propertyType,
+    );
+    if (exists) setFilters((f) => ({ ...f, category: propertyType }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [properties]);
+
+  const updateFilters = useCallback(
+    (next) => {
+      setFilters(next);
+      setSelectedProperty(null);
+      if (next.category !== propertyType) setPropertyType(next.category);
+    },
+    [propertyType, setPropertyType],
+  );
 
   // ── Derived lists (memoized) ───────────────────────────────────────────────
-  const filteredProperties = useMemo(() => {
-    const term = searchTerm.toLowerCase().trim();
-    const center = cityCoordRef.current || mapCenterRef.current;
-    const out = properties.filter((p) => {
-      if (term) {
-        const hit =
-          p?.propertyName?.toLowerCase().includes(term) ||
-          p?.city?.toLowerCase().includes(term) ||
-          p?.location?.toLowerCase().includes(term) ||
-          p?.address?.toLowerCase().includes(term) ||
-          p?.propertyCategory?.toLowerCase().includes(term);
-        if (!hit) return false;
-      }
-      if (
-        maxBudget &&
-        !(p.totalOfferPrice >= minBudget && p.totalOfferPrice <= maxBudget)
-      )
-        return false;
-      if (p.latitude && p.longitude) {
-        if (
-          haversine(
-            center[0],
-            center[1],
-            parseFloat(p.latitude),
-            parseFloat(p.longitude),
-          ) > kmRange
-        )
-          return false;
-      }
-      return true;
-    });
-    return sortProperties(out, sortBy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [properties, searchTerm, sortBy, minBudget, maxBudget, kmRange]);
-
-  const mappableProperties = useMemo(
-    () => filteredProperties.filter((p) => p.latitude && p.longitude),
-    [filteredProperties],
+  const center = useMemo(
+    () => cityCoord || medianCenter(properties),
+    [cityCoord, properties],
   );
+  const filteredProperties = useMemo(
+    () => applyFilters(properties, filters, center),
+    [properties, filters, center],
+  );
+  const categoryOptions = useMemo(
+    () => categoryCounts(properties, filters, center),
+    [properties, filters, center],
+  );
+  const bhkOptions = useMemo(
+    () => bhkCounts(properties, filters, center),
+    [properties, filters, center],
+  );
+
+  // Some listings carry wrong coordinates (other countries, 0,0). Keep pins
+  // near the city so one bad record can't zoom the map out to the world; those
+  // listings still appear in the list.
+  const mappableProperties = useMemo(() => {
+    const withCoords = filteredProperties.filter(
+      (p) =>
+        Number.isFinite(parseFloat(p.latitude)) &&
+        Number.isFinite(parseFloat(p.longitude)),
+    );
+    if (!center) return withCoords;
+    return withCoords.filter(
+      (p) =>
+        haversine(center[0], center[1], parseFloat(p.latitude), parseFloat(p.longitude)) <=
+        MAX_PIN_DISTANCE_KM,
+    );
+  }, [filteredProperties, center]);
 
   // ── Safe flyTo ─────────────────────────────────────────────────────────────
   const safeFlyTo = (map, latlng, zoom, opts) => {
@@ -504,8 +475,10 @@ export default function MapView({ initialProperties = null }) {
   // ── Init Leaflet (runs once, client-only) ──────────────────────────────────
   useEffect(() => {
     const boot = (L) => {
-      leafletRef.current = L;
+      // Keep the Leaflet instance that built the map; layers made by another
+      // copy of the library can't be measured against it.
       if (!mapElRef.current || mapRef.current) return;
+      leafletRef.current = L;
 
       const map = L.map(mapElRef.current, {
         center: DEFAULT_CENTER,
@@ -536,10 +509,16 @@ export default function MapView({ initialProperties = null }) {
       boot(window.L);
       return;
     }
-    const s = document.createElement("script");
-    s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-    s.onload = () => boot(window.L);
-    document.head.appendChild(s);
+    // Effects can run twice (React Strict Mode) before the script loads —
+    // reuse the pending tag instead of loading Leaflet a second time.
+    let s = document.getElementById("leaflet-js");
+    if (!s) {
+      s = document.createElement("script");
+      s.id = "leaflet-js";
+      s.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      document.head.appendChild(s);
+    }
+    s.addEventListener("load", () => boot(window.L));
   }, []);
 
   // ── Geocode city ───────────────────────────────────────────────────────────
@@ -549,8 +528,8 @@ export default function MapView({ initialProperties = null }) {
       if (!coords) return;
       cityCoordRef.current = coords;
       mapCenterRef.current = coords;
-      const map = mapRef.current;
-      if (map) safeFlyTo(map, coords, 12, { duration: 1.2 });
+      // The markers effect re-runs on the new centre and frames the map.
+      setCityCoord(coords);
     });
   }, [selectedCity]); // eslint-disable-line
 
@@ -567,12 +546,12 @@ export default function MapView({ initialProperties = null }) {
       circleRef.current = null;
     }
 
-    const center = cityCoordRef.current || mapCenterRef.current;
+    const circleCenter = center || mapCenterRef.current;
 
     const draw = () => {
       try {
-        circleRef.current = L.circle(center, {
-          radius: kmRange * 1000,
+        if (filters.radius) circleRef.current = L.circle(circleCenter, {
+          radius: filters.radius * 1000,
           color: "#8A38F5",
           weight: 1.5,
           opacity: 0.5,
@@ -582,7 +561,12 @@ export default function MapView({ initialProperties = null }) {
         }).addTo(map);
       } catch {}
 
-      if (!mappableProperties.length) return;
+      if (!mappableProperties.length) {
+        try {
+          map.setView(circleCenter, 12);
+        } catch {}
+        return;
+      }
 
       const bounds = [];
       mappableProperties.forEach((prop) => {
@@ -590,7 +574,7 @@ export default function MapView({ initialProperties = null }) {
         const lng = parseFloat(prop.longitude);
         if (isNaN(lat) || isNaN(lng)) return;
 
-        const isSel = selectedProperty?._id === prop._id;
+        const isSel = idOf(selectedProperty) === idOf(prop);
         const icon = makePriceIcon(L, prop?.totalOfferPrice, isSel);
         const m = L.marker([lat, lng], { icon }).addTo(map);
 
@@ -636,19 +620,14 @@ export default function MapView({ initialProperties = null }) {
     if (map._loaded) draw();
     else map.whenReady(draw);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mappableProperties, selectedProperty, mapReady, isMobile, kmRange]);
+  }, [mappableProperties, selectedProperty, mapReady, isMobile, filters.radius, center]);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
   const clearFilters = useCallback(() => {
-    setSelectedCategory("");
-    setSelectedBHK("");
-    setSortBy("");
-    setSearchTerm("");
+    setFilters(EMPTY_FILTERS);
     setPropertyType("");
-    setSelectedBHKType("");
     setSelectedProperty(null);
-    setKmRange(50);
-  }, [setPropertyType, setSelectedBHKType]);
+  }, [setPropertyType]);
 
   const recenter = useCallback(() => {
     const map = mapRef.current;
@@ -668,24 +647,15 @@ export default function MapView({ initialProperties = null }) {
     } catch {}
   }, [mappableProperties]);
 
-  const handleCategoryClick = useCallback(
-    (cat) => {
-      const next = selectedCategory === cat ? "" : cat;
-      setSelectedCategory(next);
-      setPropertyType(next);
-    },
-    [selectedCategory, setPropertyType],
-  );
-
   const handleCardClick = useCallback((property) => {
     setSelectedProperty((prev) =>
-      prev?._id === property._id ? null : property,
+      idOf(prev) === idOf(property) ? null : property,
     );
   }, []);
 
   const handleMobileCardClick = useCallback(
     (property) => {
-      const next = selectedProperty?._id === property._id ? null : property;
+      const next = idOf(selectedProperty) === idOf(property) ? null : property;
       setSelectedProperty(next);
       if (next?.latitude && next?.longitude) {
         safeFlyTo(
@@ -699,112 +669,20 @@ export default function MapView({ initialProperties = null }) {
     [selectedProperty],
   ); // eslint-disable-line
 
-  const activeFilterCount = useMemo(
-    () => [selectedCategory, selectedBHK].filter(Boolean).length,
-    [selectedCategory, selectedBHK],
-  );
-
   // ─── JSX ──────────────────────────────────────────────────────────────────
   return (
     <div className="relative w-full flex flex-col overflow-hidden bg-[#f8f3fb] min-h-[80vh]">
-      {/* ── FILTER BAR ──────────────────────────────────────────────────── */}
-      <div className="shrink-0 z-[10] bg-white border-b border-gray-200 shadow-sm">
-        {/* Row 1 */}
-        <div className="flex items-center gap-2 px-3 py-2 sm:px-4">
-          <div className="flex-1 flex items-center gap-2 bg-[#f8f3fb] border border-gray-200 rounded-xl px-3 py-2">
-            <IoSearchSharp className="text-[#8A38F5] shrink-0" size={16} />
-            <input
-              type="text"
-              placeholder="Search property, location..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-transparent text-sm outline-none text-gray-800 placeholder-gray-400"
-            />
-            {searchTerm && (
-              <button
-                onClick={() => setSearchTerm("")}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <IoClose size={14} />
-              </button>
-            )}
-          </div>
-
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="hidden sm:block text-sm border border-gray-200 bg-[#f8f3fb] rounded-xl px-3 py-2 outline-none text-gray-700 font-medium cursor-pointer"
-          >
-            {SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-
-          <button
-            onClick={() => setShowFilters((v) => !v)}
-            className={`relative flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold border transition-all
-              ${showFilters || activeFilterCount > 0 ? "bg-[#8A38F5] text-white border-[#8A38F5]" : "bg-white text-gray-700 border-gray-200 hover:border-[#8A38F5]"}`}
-          >
-            <IoFilter size={15} />
-            <span className="hidden sm:inline">Filters</span>
-            {activeFilterCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
-                {activeFilterCount}
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={() => setListVisible((v) => !v)}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold border border-gray-200 bg-white text-gray-700 hover:border-[#8A38F5] transition-all"
-          >
-            {listVisible ? "Hide List" : "Show List"}
-          </button>
-        </div>
-
-        {/* Row 2: Category chips */}
-        <div
-          className={`flex items-center gap-2 px-3 pb-2 overflow-x-auto scrollbar-hide sm:px-4 ${showFilters ? "flex-wrap" : ""}`}
-        >
-          {CATEGORY_OPTIONS.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => handleCategoryClick(cat)}
-              className={`shrink-0 text-xs font-semibold px-3 py-1 rounded-full border transition-all
-                ${selectedCategory === cat ? "bg-[#8A38F5] text-white border-[#8A38F5]" : "bg-white text-gray-600 border-gray-200 hover:border-[#8A38F5] hover:text-[#8A38F5]"}`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Row 3: KM radius */}
-        <div className="flex items-center gap-3 px-3 pb-2.5 sm:px-4">
-          <span className="text-xs text-gray-500 font-medium shrink-0">
-            Radius:
-          </span>
-          <input
-            type="range"
-            min={1}
-            max={200}
-            step={1}
-            value={kmRange}
-            onChange={(e) => setKmRange(Number(e.target.value))}
-            className="flex-1 h-1.5 rounded-full accent-[#8A38F5] cursor-pointer"
-          />
-          <span className="text-xs font-bold text-[#8A38F5] shrink-0 w-14 text-right">
-            {kmRange} km
-          </span>
-          <button
-            onClick={clearFilters}
-            className="text-xs text-gray-400 hover:text-gray-600 font-medium shrink-0"
-          >
-            Reset
-          </button>
-        </div>
-      </div>
+      <MapFilterBar
+        filters={filters}
+        onChange={updateFilters}
+        onReset={clearFilters}
+        categories={categoryOptions}
+        bhk={bhkOptions}
+        resultCount={filteredProperties.length}
+        listVisible={listVisible}
+        onToggleList={() => setListVisible((v) => !v)}
+        showListToggle={!isMobile}
+      />
 
       {/* ── BODY ────────────────────────────────────────────────────────── */}
       <div className="relative flex-1 flex flex-col sm:flex-row overflow-hidden">
@@ -893,9 +771,9 @@ export default function MapView({ initialProperties = null }) {
               ) : (
                 filteredProperties.map((property) => (
                   <MapPropertyCard
-                    key={property._id || property.seoSlug}
+                    key={idOf(property)}
                     property={property}
-                    isSelected={selectedProperty?._id === property._id}
+                    isSelected={idOf(selectedProperty) === idOf(property)}
                     onClick={() => handleCardClick(property)}
                   />
                 ))
@@ -934,17 +812,7 @@ export default function MapView({ initialProperties = null }) {
                 {mappableProperties.length} on map
               </p>
             </div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="text-xs border border-gray-200 rounded-lg px-2 py-1 outline-none font-semibold"
-            >
-              {SORT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
+
           </div>
 
           <div className="px-3 py-2 space-y-2 pb-6">
@@ -958,9 +826,9 @@ export default function MapView({ initialProperties = null }) {
             ) : (
               filteredProperties.map((property) => (
                 <MapPropertyCard
-                  key={property._id || property.seoSlug}
+                  key={idOf(property)}
                   property={property}
-                  isSelected={selectedProperty?._id === property._id}
+                  isSelected={idOf(selectedProperty) === idOf(property)}
                   onClick={() => handleMobileCardClick(property)}
                 />
               ))

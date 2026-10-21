@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import useLogout from "../../hooks/useLogout";
 import { useAuth } from "../../store/auth";
 import { FaChevronRight } from "react-icons/fa6";
 import {
@@ -20,7 +20,7 @@ import { getImageURI } from "../../utils/helper";
 
 const Profile = () => {
   const router = useRouter();
-  const { delTokenInCookie, URI, user } = useAuth();
+  const { URI, user } = useAuth();
   const ImageUri = import.meta.env.VITE_S3_IMAGE_URL;
 
   const [countData, setCountData] = useState({});
@@ -43,27 +43,7 @@ const Profile = () => {
     }
   };
 
-  const userLogout = async () => {
-    try {
-      await axios.post(URI + "/user/logout", {}, { withCredentials: true });
-
-      // Clear local auth data
-      localStorage.removeItem("guestUser");
-      localStorage.removeItem("accessToken"); // if you stored it
-
-      delTokenInCookie(); // optional if backend already clears
-
-      // Navigate first
-      router.replace("/");
-
-      // Reload after navigation (guaranteed clean state)
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-    } catch (error) {
-      console.log("Logout failed:", error);
-    }
-  };
+  const userLogout = useLogout();
 
   useEffect(() => {
     fetchCountData();
@@ -71,15 +51,13 @@ const Profile = () => {
 
   // Redirect to dashboard on md and above
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        router.push("/dashboard");
-      }
+    const media = window.matchMedia("(min-width: 768px)");
+    const redirectIfDesktop = () => {
+      if (media.matches) router.replace("/dashboard?tab=profile");
     };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    redirectIfDesktop();
+    media.addEventListener("change", redirectIfDesktop);
+    return () => media.removeEventListener("change", redirectIfDesktop);
   }, [router]);
 
   return (

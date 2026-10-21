@@ -2,46 +2,63 @@
 
 import Link from "next/link";
 import NavLink from "../components/NavLinkNext.jsx";
-import { usePathname, useRouter } from "next/navigation";
-import React, { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { IoMdMenu } from "react-icons/io";
-import { RxCross2 } from "react-icons/rx";
 import { useAuth } from "../store/auth";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { PiBuildingOfficeFill, PiMapPinAreaBold } from "react-icons/pi";
 import { TbArrowNarrowRightDashed } from "react-icons/tb";
 import { FaChevronRight } from "react-icons/fa6";
-import { FaAppStoreIos } from "react-icons/fa";
+import { FaAppStoreIos, FaHistory, FaCalculator } from "react-icons/fa";
+import { FiExternalLink } from "react-icons/fi";
 import { AiFillHome } from "react-icons/ai";
-import { FaArrowTrendUp } from "react-icons/fa6";
-import { FaHistory } from "react-icons/fa";
-import { FaCalculator } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import UserDropdown from "../components/UserDropdown";
 import { motion, AnimatePresence } from "framer-motion";
 
-function Navbar() {
-  const {
-    URI,
-    user,
-    setShowLogin,
-    selectedCity,
-    setSelectedCity,
-    showCitySelector,
-    setShowCitySelector,
-  } = useAuth();
+const PARTNERS_URL = "https://partners.reparv.in/";
+const PLAY_STORE_URL =
+  "https://play.google.com/store/apps/details?id=com.reparvcustomer";
 
-  const router = useRouter();
-  const pathname = usePathname();
+const DESKTOP_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/properties", label: "Properties" },
+  { href: "/about-us", label: "About Us", className: "hidden xl:flex" },
+  { href: "/contact-us", label: "Contact Us", className: "hidden xl:flex" },
+];
+
+const SIDEBAR_LINKS = [
+  { to: "/", label: "Home" },
+  { to: "/properties", label: "Properties" },
+  { to: "/about-us", label: "About Us" },
+  { to: "/contact-us", label: "Contact Us" },
+  { to: "/blogs", label: "Blogs" },
+  { to: "/news", label: "News" },
+  { to: PARTNERS_URL, label: "Partners", external: true },
+];
+
+const SIDEBAR_BORDER_STYLE = {
+  borderImageSource:
+    "linear-gradient(90deg, #8A38F5 2.88%, #DABEFF 23.08%, #8A38F5 81.15%)",
+  borderImageSlice: 1,
+};
+
+function Navbar() {
+  const { user, setShowLogin, selectedCity, setShowCitySelector } = useAuth();
 
   const [showSidebar, setShowSidebar] = useState(false);
-  const getNavLinkClass = (path) => {
-    return pathname === path ? "font-bold text-[#5E23DC]" : "";
+
+  // Let NavLink handle navigation; only intercept to ask guests to log in.
+  const requireLogin = (e) => {
+    if (!user) {
+      e.preventDefault();
+      setShowLogin(true);
+    }
   };
 
   return (
     <div className="navbar z-30 fixed w-full h-15 sm:h-22 flex items-center justify-center bg-white shadow-[0px_2px_10px_0px_#00000026]">
-      <div className="w-full max-w-[1440px] h-15 sm:h-22 px-8 lg:px-20 flex gap-5 items-center justify-between">
+      <div className="w-full max-w-[1440px] h-15 sm:h-22 px-8 lg:px-10 2xl:px-20 flex gap-5 items-center justify-between">
         {/* Mobile Sidebar */}
         <AnimatePresence>
           {showSidebar && (
@@ -89,39 +106,56 @@ function Navbar() {
 
                 <div className="w-full h-screen flex flex-col items-center justify-between">
                   <div className="w-full flex flex-col gap-3 px-2 font-bold text-[white]">
-                    {[
-                      { to: "/", label: "Home" },
-                      { to: "/properties", label: "Properties" },
-                      { to: "/about-us", label: "About Us" },
-                      { to: "/contact-us", label: "Contact Us" },
-                      { to: "/blogs", label: "Blogs" },
-                      { to: "/news", label: "News" },
-                    ].map((item, index) => (
-                      <motion.div
-                        key={item.to}
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.08 }}
-                      >
-                        <NavLink
-                          href={item.to}
-                          onClick={() => setShowSidebar(false)}
-                          className="w-full flex gap-2 items-center justify-between"
-                        >
+                    {SIDEBAR_LINKS.map((item, index) => {
+                      const content = (
+                        <>
                           <div
                             className="w-full py-3 border-b rounded-xl"
-                            style={{
-                              borderImageSource:
-                                "linear-gradient(90deg, #8A38F5 2.88%, #DABEFF 23.08%, #8A38F5 81.15%)",
-                              borderImageSlice: 1,
-                            }}
+                            style={SIDEBAR_BORDER_STYLE}
                           >
                             <span className="ml-4">{item.label}</span>
                           </div>
-                          <FaChevronRight className="mr-4" />
-                        </NavLink>
-                      </motion.div>
-                    ))}
+                          {item.external ? (
+                            <FiExternalLink className="mr-4 shrink-0" />
+                          ) : (
+                            <FaChevronRight className="mr-4 shrink-0" />
+                          )}
+                        </>
+                      );
+                      const linkClass =
+                        "w-full flex gap-2 items-center justify-between";
+
+                      return (
+                        <motion.div
+                          key={item.to}
+                          initial={{ opacity: 0, x: 30 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.08 }}
+                        >
+                          {item.external ? (
+                            <a
+                              href={item.to}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => setShowSidebar(false)}
+                              className={linkClass}
+                            >
+                              {content}
+                            </a>
+                          ) : (
+                            <NavLink
+                              href={item.to}
+                              onClick={() => setShowSidebar(false)}
+                              className={({ isActive }) =>
+                                `${linkClass} ${isActive ? "text-[#FFE27A]" : ""}`
+                              }
+                            >
+                              {content}
+                            </NavLink>
+                          )}
+                        </motion.div>
+                      );
+                    })}
                   </div>
 
                   {/* App Download Section */}
@@ -136,17 +170,14 @@ function Navbar() {
                         Download Reparv App
                       </h2>
 
-                      <div
-                        onClick={() =>
-                          window.open(
-                            "https://play.google.com/store/apps/details?id=com.reparvcustomer",
-                            "_blank",
-                          )
-                        }
+                      <a
+                        href={PLAY_STORE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex gap-2 p-1 rounded-lg border cursor-pointer hover:scale-[1.02] transition"
                       >
                         <img
-                          src="/public/assets/playStore.png"
+                          src="/assets/playStore.png"
                           alt="Play Store"
                           className="h-8"
                         />
@@ -158,7 +189,7 @@ function Navbar() {
                             Google Play
                           </h2>
                         </div>
-                      </div>
+                      </a>
 
                       <div className="flex gap-2 p-1 rounded-lg border">
                         <FaAppStoreIos className="w-8 h-8 text-[#5323DC]" />
@@ -243,14 +274,7 @@ function Navbar() {
 
           <NavLink
             href="/activities"
-            onClick={(e) => {
-              if (!user) {
-                e.preventDefault();
-                setShowLogin(true);
-              } else {
-                router.push("/activities");
-              }
-            }}
+            onClick={requireLogin}
             className={({ isActive }) =>
               `relative w-full h-full flex flex-col gap-1 items-center justify-center text-xs 
              ${isActive ? "text-[#5E23DC]" : "text-[#868686]"}
@@ -276,7 +300,7 @@ function Navbar() {
           </NavLink>
 
           <NavLink
-            to="/properties"
+            href="/properties"
             className={({ isActive }) =>
               `relative w-full h-full flex flex-col gap-1 items-center justify-center text-xs 
              ${isActive ? "text-[#5E23DC]" : "text-[#868686]"}
@@ -329,14 +353,7 @@ function Navbar() {
 
           <NavLink
             href="/profile"
-            onClick={(e) => {
-              if (!user) {
-                e.preventDefault();
-                setShowLogin(true);
-              } else {
-                router.push("/profile");
-              }
-            }}
+            onClick={requireLogin}
             className={({ isActive }) =>
               `relative w-full h-full flex flex-col gap-1 items-center justify-center text-xs 
              ${isActive ? "text-[#5E23DC]" : "text-[#868686]"}
@@ -363,7 +380,7 @@ function Navbar() {
         </div>
 
         {/* Desktop Navbar */}
-        <div className="flex items-center justify-end">
+        <div className="shrink-0 flex items-center justify-end">
           <Link href="/">
             <img
               src="/assets/reparvLogo.svg"
@@ -379,10 +396,10 @@ function Navbar() {
             setShowCitySelector(true);
             //router.push("/properties");
           }}
-          className={`selectCity min-w-[50px] max-w-[210px] relative py-2 rounded-lg px-4 cursor-pointer`}
+          className={`selectCity shrink-0 min-w-[50px] max-w-[210px] relative py-2 rounded-lg px-4 cursor-pointer`}
         >
           <div className="flex lg:gap-1 items-center justify-center text-xs sm:text-base font-bold text-[#5E23DC] lg:p-1 ">
-            <PiMapPinAreaBold className="w-4 h-4 sm:w-6 sm:h-6 mr-1" />
+            <PiMapPinAreaBold className="shrink-0 w-4 h-4 sm:w-6 sm:h-6 mr-1" />
             <span className="block whitespace-nowrap font-bold text-[#5E23DC] ">
               {selectedCity
                 ? selectedCity.length > 12
@@ -390,7 +407,7 @@ function Navbar() {
                   : selectedCity
                 : "Select City"}
             </span>
-            <RiArrowDropDownLine className="w-5 h-5 sm:w-6 sm:h-6 text-[#5E23DC]" />
+            <RiArrowDropDownLine className="shrink-0 w-5 h-5 sm:w-6 sm:h-6 text-[#5E23DC]" />
           </div>
         </div>
 
@@ -399,59 +416,59 @@ function Navbar() {
             onClick={() => {
               setShowSidebar(true);
             }}
-            className="w-7 h-7 font-semibold cursor-pointer hover:text-[#076300] active:scale-95"
+            className="w-7 h-7 font-semibold cursor-pointer hover:text-[#5E23DC] active:scale-95"
           />
         </div>
 
-        <div className="navlink hidden md:flex items-center justify-start gap-5 lg:gap-6 xl:gap-9 2xl:gap-12 text-md font-semibold xl:text-base leading-[30px] tracking-[1px] lg:tracking-[0.1em] text-[#110229]">
-          <NavLink href="/" className={`${getNavLinkClass("/")}`}>
-            Home
-          </NavLink>
-          <NavLink
-            href="/properties"
-            className={`${getNavLinkClass("/properties")} flex gap-1`}
-          >
-            Properties
-          </NavLink>
+        <nav className="navlink shrink-0 hidden md:flex items-center justify-start gap-4 lg:gap-2 xl:gap-3 2xl:gap-9 text-md font-semibold xl:text-base leading-[30px] tracking-[1px] lg:tracking-[0.1em] text-[#110229]">
+          {DESKTOP_LINKS.map((item) => (
+            <NavLink
+              key={item.href}
+              href={item.href}
+              className={({ isActive }) =>
+                `${item.className ?? "flex"} whitespace-nowrap lg:mx-1.5 transition-colors hover:text-[#5E23DC] ${
+                  isActive ? "font-bold text-[#5E23DC]" : ""
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
 
-          <NavLink
-            href="/about-us"
-            className={`${getNavLinkClass("/about-us")} hidden xl:flex gap-1 `}
-          >
-            About Us
-          </NavLink>
-
-          <NavLink
-            href="/contact-us"
-            className={`${getNavLinkClass(
-              "/contact-us",
-            )} hidden xl:flex gap-1 `}
-          >
-            Contact Us
-          </NavLink>
-
-          <div className="relative min-w-45 flex items-center justify-center p-4">
+          <div className="relative min-w-36 flex items-center justify-center p-4">
             <img
               src="/assets/home/ButtonBack.svg"
-              alt="Button"
-              className="absolute w-full"
+              alt=""
+              className="absolute w-full pointer-events-none"
             />
-            <div
-              onClick={() => {
-                window.open(
-                  "https://play.google.com/store/apps/details?id=com.reparvcustomer",
-                  "_blank",
-                );
-                setShowSidebar(false);
-              }}
-              className="px-4 py-2 z-10 flex items-center justify-center cursor-pointer text-sm font-medium text-white bg-[#8A38F5] rounded-full hover:opacity-90 transition active:scale-98"
+            <a
+              href={PARTNERS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 z-10 flex items-center justify-center whitespace-nowrap text-sm font-medium text-white bg-[#8A38F5] border-2 border-[#8A38F5] rounded-full hover:opacity-90 transition active:scale-98"
+            >
+              Partners
+            </a>
+          </div>
+
+          <div className="relative min-w-45 hidden lg:flex items-center justify-center p-4">
+            <img
+              src="/assets/home/ButtonBack.svg"
+              alt=""
+              className="absolute w-full pointer-events-none"
+            />
+            <a
+              href={PLAY_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 z-10 flex items-center justify-center whitespace-nowrap text-sm font-medium text-white bg-[#8A38F5] border-2 border-[#8A38F5] rounded-full hover:opacity-90 transition active:scale-98"
             >
               Download App
-            </div>
+            </a>
           </div>
 
           <UserDropdown />
-        </div>
+        </nav>
       </div>
     </div>
   );

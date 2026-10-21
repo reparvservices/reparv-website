@@ -1,5 +1,6 @@
 import React from "react";
 import { areaModeFor, areaDisplayFor } from "../../utils/propertyListing";
+import { Locked } from "./PropertyLock";
 
 const PropertyOverview = ({ propertyInfo }) => {
   const formatArrayValue = (value) => {
@@ -69,7 +70,9 @@ const PropertyOverview = ({ propertyInfo }) => {
       className={`${value? "flex" : "hidden"} justify-between items-center py-4 border-b border-gray-200`}
     >
       <span className="text-gray-500 text-sm">{label}</span>
-      <span className="text-black font-semibold text-sm">{value || "—"}</span>
+      <span className="text-black font-semibold text-sm text-right">
+        <Locked>{value || "—"}</Locked>
+      </span>
     </div>
   );
 

@@ -261,7 +261,7 @@ function BlogDetails({ initialBlog = null, initialFaqs = null }) {
                 onClick={() => {
                   router.push("/blogs");
                 }}
-                className="bg-white max-w-[400px] flex flex-col gap-5 py-10 px-8 text-black rounded-xl shadow-lg "
+                className="cursor-pointer bg-white max-w-[400px] flex flex-col gap-5 py-10 px-8 text-black rounded-xl shadow-lg "
               >
                 <h2 className="font-bold text-2xl">Search Blog</h2>
                 <div className="w-full h-[50px] px-4 flex items-center gap-2 rounded-lg border border-[#8A38F5] text-[#868686]">

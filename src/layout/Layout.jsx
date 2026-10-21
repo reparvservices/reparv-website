@@ -92,7 +92,7 @@ export default function SiteLayout({ children }) {
 
   return (
     <LayoutScrollContext.Provider value={scrollContext}>
-      <div className="layout w-full flex flex-col bg-white overflow-hidden ">
+      <div className="layout w-full flex flex-col bg-white overflow-clip ">
         {/* Desktop Navbar And Mobile SideBar */}
         <Navbar />
 

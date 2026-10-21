@@ -204,7 +204,7 @@ export default function PropertySlider({ projectPartner }) {
                           setEnquirySource("Landing Page");
                           router.push(`/property-info/${p.seoSlug} `);
                         }}
-                        className="w-full h-[200px] md:h-[250px] lg:h-[300px] rounded-xl overflow-hidden shadow-lg"
+                        className="cursor-pointer w-full h-[200px] md:h-[250px] lg:h-[300px] rounded-xl overflow-hidden shadow-lg"
                       >
                         <img
                           src={(() => {

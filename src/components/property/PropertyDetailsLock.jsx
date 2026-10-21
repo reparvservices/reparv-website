@@ -15,6 +15,7 @@ import {
   consumeJustUnlocked,
   PROPERTY_UNLOCKED_EVENT,
 } from "../../utils/propertyUnlock";
+import { PropertyLockProvider } from "./PropertyLock";
 
 const FLAT_CATEGORIES = ["NewFlat", "CommercialFlat"];
 const PLOT_CATEGORIES = ["NewPlot", "CommercialPlot"];
@@ -34,26 +35,24 @@ function unlockItems(propertyInfo = {}) {
   const items = [];
   const types = parseList(propertyInfo.propertyType).filter(Boolean);
 
+  items.push(types.length ? `Prices for ${types.join(", ")}` : "Complete price breakup");
   if (FLAT_CATEGORIES.includes(propertyInfo.propertyCategory)) {
-    items.push("Wing & floor-wise available flats");
+    items.push("Available flats by wing & floor");
   } else if (PLOT_CATEGORIES.includes(propertyInfo.propertyCategory)) {
-    items.push("Plot-wise availability and sizes");
+    items.push("Available plots & sizes");
   }
-  items.push(types.length ? `Price breakup for ${types.join(", ")}` : "Detailed price breakup");
-  if (propertyInfo.brochureFile) items.push("Project brochure (PDF)");
-  if (propertyInfo.videoLink) items.push("Walkthrough video");
-  items.push("Highlights, amenities & full description");
-  if (propertyInfo.latitude && propertyInfo.longitude) items.push("Exact location on the map");
+  items.push("Exact address & map");
+  if (propertyInfo.brochureFile) items.push("Brochure");
   return items;
 }
 
 /**
- * Blurs the full property details until the visitor books a site visit
- * (OTP-verified) for this property.
+ * Hides the property's values (prices, areas, flats, exact location…) until the
+ * visitor books a site visit (OTP-verified) for this property. Headings and labels
+ * stay readable, so the page looks complete, not broken.
  *  - onBook: opens the site visit popup (unlocks on success)
- *  - onCall: opens the call-back popup (does not unlock)
  */
-export default function PropertyDetailsLock({ propertyInfo, onBook, onCall, children }) {
+export default function PropertyDetailsLock({ propertyInfo, onBook, children }) {
   const propertyId = propertyInfo?.propertyid;
   const [unlocked, setUnlocked] = useState(false);
   const [showUnlockedNote, setShowUnlockedNote] = useState(false);
@@ -74,14 +73,16 @@ export default function PropertyDetailsLock({ propertyInfo, onBook, onCall, chil
     };
   }, [propertyId]);
 
-  if (unlocked) {
-    return (
-      <>
-        {showUnlockedNote ? (
+  const lock = useMemo(() => ({ locked: !unlocked, unlock: onBook }), [unlocked, onBook]);
+
+  return (
+    <PropertyLockProvider value={lock}>
+      {unlocked ? (
+        showUnlockedNote ? (
           <div className="mx-2 sm:mx-6 flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
             <FiCheckCircle className="mt-0.5 shrink-0 text-emerald-600" size={18} />
             <p className="flex-1">
-              <strong>Full details unlocked.</strong> Thanks for booking a site visit — our
+              <strong>Full details unlocked.</strong> Thanks for booking a site visit. Our
               property expert will call you to confirm the time.
             </p>
             <button
@@ -93,89 +94,62 @@ export default function PropertyDetailsLock({ propertyInfo, onBook, onCall, chil
               <FiX size={16} />
             </button>
           </div>
-        ) : null}
-        {children}
-      </>
-    );
-  }
-
-  return (
-    <div className="relative mx-2 sm:mx-0">
-      {/* Peek: structure is recognisable, text is not readable */}
-      <div
-        className="blur-[5px] opacity-80 pointer-events-none select-none max-h-[760px] overflow-hidden"
-        aria-hidden="true"
-      >
-        {children}
-      </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-b from-transparent to-white" />
-
-      {/* Card stays in view while scrolling past the locked area */}
-      <div className="absolute inset-0 flex justify-center px-3 sm:px-6">
-        <div className="sticky top-28 lg:top-40 h-fit w-full max-w-lg pt-10 sm:pt-16">
-          <div className="overflow-hidden rounded-2xl border border-[#8A38F5]/15 bg-white shadow-[0px_16px_48px_rgba(94,35,220,0.20)]">
-            <div className="flex items-center gap-3 bg-gradient-to-r from-[#5E23DC] to-[#8A38F5] px-5 py-4 text-white">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/30">
+        ) : null
+      ) : (
+        <section
+          aria-label="Unlock property details"
+          className="mx-2 sm:mx-0 overflow-hidden rounded-2xl border border-[#8A38F5]/15 bg-white shadow-[0px_8px_28px_rgba(94,35,220,0.10)]"
+        >
+          <div className="flex flex-col gap-4 p-4 sm:p-5 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-start gap-3 min-w-0">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#5E23DC] to-[#8A38F5] text-white shadow-md">
                 <FiLock size={18} />
               </span>
               <div className="min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-white/75">
-                  Exclusive details
-                </p>
-                <h3 className="truncate text-base sm:text-lg font-bold">
-                  Unlock {propertyInfo?.propertyName || "this property"}
+                <h3 className="text-base sm:text-lg font-bold text-gray-900">
+                  Prices & exact details are reserved for visitors
                 </h3>
+                <p className="mt-0.5 text-sm text-gray-500">
+                  Book a free site visit to unlock everything on this page instantly.
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-1.5">
+                  {items.map((item) => (
+                    <li
+                      key={item}
+                      className="inline-flex items-center gap-1 rounded-full bg-[#F6F1FF] px-2.5 py-1 text-xs font-medium text-[#5E23DC]"
+                    >
+                      <FiCheck size={11} strokeWidth={3} /> {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            <div className="px-5 pt-4 pb-5">
-              <p className="text-sm text-gray-600">
-                Book a free site visit and get instant access to:
-              </p>
-              <ul className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
-                {items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-[13px] text-gray-800">
-                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#EFE7FF] text-[#8A38F5]">
-                      <FiCheck size={11} strokeWidth={3} />
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
+            <div className="shrink-0 md:w-[230px]">
               <button
                 type="button"
                 onClick={onBook}
-                className="mt-5 w-full rounded-xl bg-[#8A38F5] py-3 text-sm sm:text-base font-bold text-white shadow-[0px_7px_13px_0px_#8A38F540] transition hover:bg-[#7a2ee6] active:scale-[0.98]"
+                className="w-full rounded-xl bg-[#8A38F5] px-5 py-3 text-sm font-bold text-white shadow-[0px_7px_13px_0px_#8A38F540] transition hover:bg-[#7a2ee6] active:scale-[0.98]"
               >
-                Book Free Site Visit &amp; Unlock
+                Book Free Site Visit
               </button>
-
-              {onCall ? (
-                <button
-                  type="button"
-                  onClick={onCall}
-                  className="mt-2 w-full rounded-xl py-2 text-sm font-semibold text-[#5E23DC] hover:bg-[#F6F1FF]"
-                >
-                  Prefer to talk? Request a call back
-                </button>
-              ) : null}
-
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-gray-100 pt-3 text-[11px] text-gray-500">
-                <span className="inline-flex items-center gap-1">
-                  <FiGift size={12} /> 100% free
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <FiShield size={12} /> OTP verified
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <FiPhoneCall size={12} /> Expert call back
-                </span>
-              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 border-t border-gray-100 bg-[#FCFAFF] px-4 py-2 text-[11px] text-gray-500 md:justify-start">
+            <span className="inline-flex items-center gap-1">
+              <FiGift size={12} /> 100% free, no brokerage
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <FiShield size={12} /> OTP verified
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <FiPhoneCall size={12} /> Expert call back
+            </span>
+          </div>
+        </section>
+      )}
+      {children}
+    </PropertyLockProvider>
   );
 }

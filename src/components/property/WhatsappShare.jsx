@@ -42,7 +42,7 @@ Enquiry via Reparv – www.reparv.in`;
         onClick={() => {
           setShowWhatsappEnquiryPopup(true);
         }}
-        className="w-full text-[#8A38F5] text-base font-semibold flex items-center justify-center gap-2 border border-[#8A38F5] px-4 py-3 rounded-2xl"
+        className="cursor-pointer w-full text-[#8A38F5] text-base font-semibold flex items-center justify-center gap-2 border border-[#8A38F5] px-4 py-3 rounded-2xl"
       >
         {" "}
         <img

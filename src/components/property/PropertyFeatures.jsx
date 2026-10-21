@@ -11,6 +11,7 @@ import { BiSolidCctv } from "react-icons/bi";
 import { FaParking, FaCouch, FaHome, FaMoneyBillWave } from "react-icons/fa";
 import { GiGreenhouse, GiSmartphone } from "react-icons/gi";
 import { BsLayers } from "react-icons/bs";
+import { Locked } from "./PropertyLock";
 
 const PropertyFeatures = ({ propertyInfo }) => {
   const [activeTab, setActiveTab] = useState("amenities");
@@ -81,7 +82,7 @@ const PropertyFeatures = ({ propertyInfo }) => {
                 {items.map((item, i) => (
                   <div key={i} className="flex gap-1">
                     <span>{i + 1})</span>
-                    <span>{item}</span>
+                    <Locked>{item}</Locked>
                   </div>
                 ))}
               </div>

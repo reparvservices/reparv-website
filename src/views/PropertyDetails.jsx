@@ -6,6 +6,8 @@ import React, { useState, useEffect, lazy, Suspense, useMemo } from "react";
 import { useAuth } from "../store/auth";
 import PropertyBookingCard from "../components/property/PropertyBookingCard";
 import PropertyDetailsLock from "../components/property/PropertyDetailsLock";
+import PropertyVideos from "../components/property/PropertyVideos";
+import PropertyBrochure from "../components/property/PropertyBrochure";
 import PropertyOverview from "../components/property/PropertyOverview";
 import PropertyFeatures from "../components/property/PropertyFeatures";
 import { useInView } from "react-intersection-observer";
@@ -50,7 +52,6 @@ function PropertyDetails({
     setPropertyCategory,
     setPropertyId,
     showCallEnquiryPopup,
-    setShowCallEnquiryPopup,
     showWhatsappEnquiryPopup,
     setShowWhatsappEnquiryPopup,
   } = useAuth();
@@ -233,7 +234,6 @@ function PropertyDetails({
             <PropertyDetailsLock
               propertyInfo={propertyInfo}
               onBook={openSiteVisit}
-              onCall={() => setShowCallEnquiryPopup(true)}
             >
             <div className="flex flex-col gap-2 sm:gap-4">
             {/* Show Wing Data */}
@@ -283,8 +283,14 @@ function PropertyDetails({
             {activeTab === "Location" && (
               <PropertyLocationMap property={propertyInfo} />
             )}
+
+            {/* Brochure download (locked like the rest of the details) */}
+            <PropertyBrochure propertyInfo={propertyInfo} />
             </div>
             </PropertyDetailsLock>
+
+            {/* Walkthrough video, YouTube and Instagram reel (public) */}
+            <PropertyVideos propertyInfo={propertyInfo} />
 
             {/* Property Details 
             {propertyInfo?.propertyDescription && activeTab !== "About" && (

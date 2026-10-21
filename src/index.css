@@ -5,6 +5,28 @@
 @import "swiper/css/pagination";
 @import "leaflet/dist/leaflet.css";
 
+/* Tailwind v4 resets buttons to cursor: default — restore pointer for clickable controls */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary,
+  select,
+  label[for],
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="file"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
 * {
   box-sizing: border-box;
   scroll-behavior: smooth;

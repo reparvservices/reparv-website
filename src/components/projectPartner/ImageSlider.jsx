@@ -103,7 +103,7 @@ export default function ImageSlider() {
             setShowCitySelector(true);
             router.push("/properties");
           }}
-          className={`selectCity ${
+          className={`cursor-pointer selectCity ${
             pathname !== "/check-eligibility"
               ? "sm:inline-block"
               : "hidden"

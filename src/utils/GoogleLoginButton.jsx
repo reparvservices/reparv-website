@@ -2,13 +2,35 @@
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getBackendUrl } from "../lib/env";
 
 const API_BASE = getBackendUrl();
 
+// Google renders its button inside a cross-origin iframe (max 400px wide),
+// so it can't be clicked from code. We lay the real button invisibly on top
+// of our styled button and stretch it to cover the full width.
+const GOOGLE_BUTTON_MAX_WIDTH = 400;
+
 const GoogleLoginButton = ({ onSuccess, onError }) => {
-  const googleBtnRef = useRef(null);
+  const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => setContainerWidth(el.offsetWidth);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const googleWidth = Math.min(
+    containerWidth || GOOGLE_BUTTON_MAX_WIDTH,
+    GOOGLE_BUTTON_MAX_WIDTH,
+  );
+  const scaleX = containerWidth ? containerWidth / googleWidth : 1;
 
   const handleSuccess = async (credentialResponse) => {
     try {
@@ -45,27 +67,34 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
   };
 
   return (
-    <div className="w-full relative">
-      <div className="absolute inset-0 opacity-0">
-        <GoogleLogin
-          onSuccess={handleSuccess}
-          onError={() => onError?.("Google login failed")}
-          useOneTap={false}
-        />
-      </div>
-
-      <button
-        onClick={() =>
-          googleBtnRef.current?.querySelector("div")?.click()
-        }
-        className="flex items-center justify-center gap-3 w-full
-                   border border-gray-300 rounded-lg py-2
-                   hover:bg-gray-100 transition
+    <div ref={containerRef} className="group w-full relative">
+      {/* Visible styled button (clicks pass to the Google button above it) */}
+      <div
+        aria-hidden="true"
+        className="flex items-center justify-center gap-3 w-full h-10
+                   border border-gray-300 rounded-lg
+                   group-hover:bg-gray-100 transition
                    text-sm text-gray-700 font-medium"
       >
         <FcGoogle size={22} />
         Continue with Google
-      </button>
+      </div>
+
+      {/* Real Google button, invisible, covering the styled button */}
+      <div
+        className="absolute inset-0 z-10 opacity-[0.01] overflow-hidden cursor-pointer"
+        style={{ transform: `scaleX(${scaleX})`, transformOrigin: "left" }}
+      >
+        {containerWidth > 0 && (
+          <GoogleLogin
+            onSuccess={handleSuccess}
+            onError={() => onError?.("Google login failed")}
+            useOneTap={false}
+            size="large"
+            width={String(Math.floor(googleWidth))}
+          />
+        )}
+      </div>
     </div>
   );
 };

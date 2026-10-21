@@ -140,7 +140,7 @@ export default function PropertySwiper({ projectPartner }) {
                   setEnquirySource("Landing Page");
                   router.push(`/property-info/${property.seoSlug} `);
                 }}
-                className="bg-white rounded-xl shadow-sm border border-[#E6E6E6] overflow-hidden flex flex-col h-full"
+                className="cursor-pointer bg-white rounded-xl shadow-sm border border-[#E6E6E6] overflow-hidden flex flex-col h-full"
               >
                 {/* Image */}
                 <div

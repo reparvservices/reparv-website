@@ -2,15 +2,16 @@ import { useAuth } from "../../store/auth";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { MdOutlinePlayCircleOutline } from "react-icons/md";
 import { getImageURI } from "../../utils/helper";
+import { usePropertyLock } from "./PropertyLock";
 
 function BrochureAndVideo({ brochureFile, videoLink }) {
   const { URI, setVideoURL, setShowPlayVideo } = useAuth();
+  const { locked, unlock } = usePropertyLock();
 
   return (
     <div className={`flex gap-[8px] items-center justidy-center`}>
       <div
         onClick={() => {
-          //window.open(URI + property?.videoFile, "_blank");
           setVideoURL(videoLink);
           setShowPlayVideo(true);
         }}
@@ -26,6 +27,7 @@ function BrochureAndVideo({ brochureFile, videoLink }) {
       <div
         onClick={() => {
           if (!brochureFile) return;
+          if (locked) return unlock(); // brochure is unlocked by booking a site visit
 
           const link = document.createElement("a");
           link.href = getImageURI(brochureFile);
@@ -36,7 +38,7 @@ function BrochureAndVideo({ brochureFile, videoLink }) {
           link.click();
           document.body.removeChild(link);
         }}
-        className={`${
+        className={`cursor-pointer ${
           brochureFile ? "block" : "hidden"
         } text-white bg-[#8A38F5] rounded-lg cursor-pointer relative overflow-hidden`}
       >

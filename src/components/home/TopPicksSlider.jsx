@@ -28,13 +28,29 @@ const getTopPickImage = (property) => {
 
 const TopPicksSlider = ({ initialProperties = null }) => {
   const router = useRouter();
-  const { URI, selectedCity } = useAuth();
+  const {
+    URI,
+    selectedCity,
+    setPropertyId,
+    setPropertyCategory,
+    setPropertyImage,
+    setEnquirySource,
+    setShowSiteVisitPopup,
+  } = useAuth();
 
   const [properties, setProperties] = useState(initialProperties ?? []);
   const [isPaused, setIsPaused] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const item = properties[currentIndex];
+
+  const openSiteVisit = () => {
+    setPropertyId(item?.propertyid);
+    setPropertyCategory(item?.propertyCategory);
+    setPropertyImage(getTopPickImage(item));
+    setEnquirySource("Onsite");
+    setShowSiteVisitPopup(true);
+  };
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === properties.length - 1 ? 0 : prev + 1));
@@ -199,12 +215,12 @@ const TopPicksSlider = ({ initialProperties = null }) => {
                bg-[#1A003D]/30 rounded-[28px]"
             />
 
-            {/* Main Card */}
+            {/* Main Card — new launch advertisement */}
             <div
               onClick={() => {
                 router.push(`/property-info/${item?.seoSlug}`);
               }}
-              className="relative z-10 border-t border-t-[#C8C8C8] rounded-[28px] overflow-hidden"
+              className="cursor-pointer relative z-10 h-[420px] sm:h-[440px] lg:h-[450px] border-t border-t-[#C8C8C8] rounded-[28px] overflow-hidden"
             >
               <AnimatePresence mode="wait">
                 <motion.img
@@ -218,36 +234,124 @@ const TopPicksSlider = ({ initialProperties = null }) => {
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="w-full lg:h-[450px]
-               object-cover rounded-[28px]"
+                  className="w-full h-full object-cover rounded-[28px] transition-transform duration-700 group-hover:scale-[1.03]"
                 />
               </AnimatePresence>
 
-              {/* Overlay */}
-              <div
-                className="absolute inset-0 z-20 rounded-[28px] p-8
-                 hidden flex-col justify-end text-white"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(241, 230, 255, 0) 0%, rgba(26, 0, 61, 0.4) 100%)",
-                }}
-              >
-                <h3 className="text-xl sm:text-2xl font-bold">
-                  {item.propertyName}
-                </h3>
-                <p className="text-xs sm:text-sm opacity-90">{item.address}</p>
-
-                <p className="mt-3 font-semibold">
-                  <FormatPrice price={item.totalOfferPrice / 100000} /> Lac
-                  {" - "}
-                  <FormatPrice price={item.totalSalesPrice / 100000} /> Lac
-                </p>
-
-                <p className="text-xs sm:text-sm mt-1 opacity-90">
-                  {item.propertyType?.join(", ")}
-                </p>
+              {/* Ad badges */}
+              <div className="absolute top-4 left-4 right-4 z-20 flex items-start justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur px-3 py-1 text-[11px] sm:text-xs font-bold tracking-wide text-[#5E23DC] shadow">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8A38F5]" />
+                  FEATURED AD
+                </span>
+                <span className="relative inline-flex items-center rounded-full bg-gradient-to-r from-[#FF6B00] to-[#FF2E63] px-3 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-sm font-extrabold tracking-wider text-white shadow-lg">
+                  <span className="absolute inset-0 rounded-full bg-[#FF2E63] animate-ping opacity-30" />
+                  <span className="relative">🚀 NEW LAUNCH</span>
+                </span>
               </div>
+
+              {/* Ad overlay */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`ad-${currentIndex}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.2 } }}
+                  exit={{ opacity: 0, y: 10, transition: { duration: 0.2 } }}
+                  className="absolute inset-x-0 bottom-0 z-20 rounded-b-[28px] p-4 sm:p-6 lg:p-8 pt-24 sm:pt-28 text-white"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(26, 0, 61, 0) 0%, rgba(26, 0, 61, 0.75) 45%, rgba(26, 0, 61, 0.95) 100%)",
+                  }}
+                >
+                  <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                    {item.propertyType?.slice(0, 3).map((type) => (
+                      <span
+                        key={type}
+                        className="rounded-md bg-white/15 border border-white/25 px-2 py-0.5 text-[11px] sm:text-xs font-semibold"
+                      >
+                        {type}
+                      </span>
+                    ))}
+                    {item.reraRegistered?.trim() ? (
+                      <span className="rounded-md bg-[#00C16A]/90 px-2 py-0.5 text-[11px] sm:text-xs font-semibold">
+                        ✓ RERA Registered
+                      </span>
+                    ) : null}
+                    {item.propertyApprovedBy?.trim() ? (
+                      <span className="rounded-md bg-white/15 border border-white/25 px-2 py-0.5 text-[11px] sm:text-xs font-semibold">
+                        {item.propertyApprovedBy.trim()} Approved
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight">
+                    {item.propertyName}
+                  </h3>
+                  <p className="text-xs sm:text-sm opacity-80 line-clamp-1">
+                    📍 {[item.location, item.city].filter(Boolean).join(", ") || item.address}
+                  </p>
+
+                  <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+                    {Number(item.totalOfferPrice) > 0 ? (
+                      <div>
+                        <p className="text-[11px] sm:text-xs uppercase tracking-wider opacity-75">
+                          Launch Price Starting
+                        </p>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-2xl sm:text-3xl font-extrabold">
+                            ₹<FormatPrice price={item.totalOfferPrice / 100000} /> L*
+                          </span>
+                          {Number(item.totalSalesPrice) > Number(item.totalOfferPrice) ? (
+                            <span className="text-sm line-through opacity-60">
+                              ₹<FormatPrice price={item.totalSalesPrice / 100000} /> L
+                            </span>
+                          ) : null}
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-lg font-bold">Price on Request</p>
+                    )}
+
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openSiteVisit();
+                        }}
+                        className="flex-1 sm:flex-none rounded-xl bg-white text-[#5E23DC] px-4 sm:px-5 py-2.5 text-sm font-bold shadow active:scale-[0.98] transition hover:bg-[#FAF8FF]"
+                      >
+                        Book Site Visit
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/property-info/${item?.seoSlug}`);
+                        }}
+                        className="flex-1 sm:flex-none rounded-xl bg-[#8A38F5] border border-white/30 text-white px-4 sm:px-5 py-2.5 text-sm font-bold shadow active:scale-[0.98] transition hover:bg-[#7a2ee0]"
+                      >
+                        Explore →
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
+
+            {/* Slide indicators */}
+            {properties.length > 1 ? (
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-1.5">
+                {properties.map((p, i) => (
+                  <button
+                    key={p.propertyid ?? i}
+                    onClick={() => setCurrentIndex(i)}
+                    aria-label={`Show ad ${i + 1}`}
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === currentIndex ? "w-6 bg-[#8A38F5]" : "w-1.5 bg-[#8A38F5]/30"
+                    }`}
+                  />
+                ))}
+              </div>
+            ) : null}
 
             {/* Arrow */}
             <button

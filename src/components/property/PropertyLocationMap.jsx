@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from "react";
 import { MdLocationOn } from "react-icons/md";
+import { Locked, LockedBlock, usePropertyLock } from "./PropertyLock";
 
 /**
  * Build Google Maps embed URL from property fields
@@ -27,6 +28,9 @@ const PropertyLocationMap = memo(({ property }) => {
     .filter(Boolean)
     .join(", ");
 
+  const { locked } = usePropertyLock();
+  const area = [location, city].filter(Boolean).join(", ");
+
   const embedUrl = useMemo(
     () =>
       buildMapEmbedUrl({
@@ -49,16 +53,19 @@ const PropertyLocationMap = memo(({ property }) => {
         <MdLocationOn className="text-[#8A38F5] text-2xl mt-1" />
         <div>
           <p className="font-medium text-black">
-            {address || location || city || "Address not specified"}
+            {locked ? area || "Address not specified" : address || location || city || "Address not specified"}
           </p>
 
           {fullAddress && (
-            <p className="text-gray-500 text-sm mt-1">{fullAddress}</p>
+            <p className="text-gray-500 text-sm mt-1">
+              <Locked>{fullAddress}</Locked>
+            </p>
           )}
         </div>
       </div>
 
       {/* Map */}
+      <LockedBlock label="Book a free site visit to see the exact location">
       <div className="relative w-full h-[300px] sm:h-[350px] rounded-xl overflow-hidden bg-gray-100">
         {embedUrl ? (
           <iframe
@@ -75,6 +82,7 @@ const PropertyLocationMap = memo(({ property }) => {
           </div>
         )}
       </div>
+      </LockedBlock>
     </section>
   );
 });

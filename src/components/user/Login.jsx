@@ -9,7 +9,7 @@ import { getBackendUrl } from "../../lib/env";
 const API_BASE = getBackendUrl();
 
 function Login() {
-  const { showLogin, setShowLogin, setShowAgreement } = useAuth();
+  const { showLogin, setShowLogin, setShowAgreement, setUser } = useAuth();
 
   const [mode, setMode] = useState("LOGIN");
   const [step, setStep] = useState("INPUT");
@@ -138,7 +138,9 @@ function Login() {
 
   /* ---------------- GOOGLE LOGIN ---------------- */
   const handleGoogleSuccess = (data) => {
-    // JWT already issued by backend
+    // JWT already issued by backend; GoogleLoginButton saved it to localStorage,
+    // so update the shared auth state to reflect the login without a reload
+    if (data?.user) setUser(data.user);
     setShowLogin(false);
   };
 

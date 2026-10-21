@@ -110,7 +110,7 @@ const PropertySearch = ({
       {/* Results Dropdown */}
       {showResults && filteredResults.length > 0 && (
         <div className="absolute mt-2 w-full bg-white rounded-xl shadow-2xl max-h-80 overflow-y-auto z-[9999] animate-fadeIn">
-          <div onClick={()=>{setShowResults(false);}} className="w-full p-4 flex items-center justify-center text-sm text-[#8A38F5] hover:text-white hover:bg-[#8A38F5] font-bold ">
+          <div onClick={()=>{setShowResults(false);}} className="cursor-pointer w-full p-4 flex items-center justify-center text-sm text-[#8A38F5] hover:text-white hover:bg-[#8A38F5] font-bold ">
             Show All
           </div>
           {filteredResults.map((property, index) => (

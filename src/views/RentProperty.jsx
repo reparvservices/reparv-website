@@ -395,7 +395,7 @@ function RentProperty() {
             onClick={() => {
               router.back();
             }}
-            className="w-5 h-5"
+            className="cursor-pointer w-5 h-5"
           />
           <span className="w-full text-base sm:text-lg font-bold text-center">
             Add Basic Details

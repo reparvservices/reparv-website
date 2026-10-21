@@ -63,7 +63,7 @@ function NewsSection() {
           <article
             key={item.id}
             onClick={() => router.push(`/blog/${item.seoSlug}`)}
-            className="
+            className="cursor-pointer 
               bg-white 
               rounded-2xl 
               border 

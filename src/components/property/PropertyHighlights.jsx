@@ -1,5 +1,6 @@
 import React from "react";
 import { areaDisplayFor } from "../../utils/propertyListing";
+import { Locked } from "./PropertyLock";
 import {
   FaBed,
   FaBath,
@@ -30,11 +31,13 @@ function PropertyHighlights({ property }) {
       icon: <FaBed />,
       title: isValid(property?.bedroomView) ? "Bedrooms" : null,
       desc: "Spacious rooms",
+      isLabel: true,
     },
     {
       icon: <FaBath />,
       title: isValid(property?.bathroomView) ? "Bathrooms" : null,
       desc: "Modern fixtures",
+      isLabel: true,
     },
     {
       icon: <FaRulerCombined />,
@@ -93,7 +96,9 @@ function PropertyHighlights({ property }) {
             </div>
 
             <div className="flex flex-col gap-1 items-center text-center">
-              <p className="text-sm sm:text-base font-semibold">{item.title}</p>
+              <p className="text-sm sm:text-base font-semibold">
+                {item.isLabel ? item.title : <Locked>{item.title}</Locked>}
+              </p>
               <p className="text-sm sm:text-base text-[#868686]">{item.desc}</p>
             </div>
           </div>

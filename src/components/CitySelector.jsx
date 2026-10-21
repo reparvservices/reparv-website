@@ -175,7 +175,7 @@ export default function CitySelector() {
                 //setShowCitySelector(false);
                 setActiveCity(city);
               }}
-              className={`${
+              className={`cursor-pointer ${
                 activeCity === city
                   ? "bg-[#8A38F5] text-white font-semibold"
                   : ""

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../store/auth";
+import { Locked, usePropertyLock } from "./PropertyLock";
 
 function WingData({ propertyInfo }) {
   const { URI, setLoading, setPropertyInfoId, setShowWingInfoPopup } =
     useAuth();
+  const { locked, unlock } = usePropertyLock();
   const [wings, setWings] = useState();
   const [activeWing, setActiveWing] = useState(null);
 
@@ -78,6 +80,7 @@ function WingData({ propertyInfo }) {
                   <div
                     key={i}
                     onClick={() => {
+                      if (locked) return unlock();
                       if (row.status === "Available") {
                         setPropertyInfoId(row.propertyinfoid);
                         setShowWingInfoPopup(true);
@@ -97,7 +100,7 @@ function WingData({ propertyInfo }) {
                   }
                 `}
                   >
-                    {"Flat "+ row.flatno}
+                    Flat <Locked>{row.flatno}</Locked>
                   </div>
                 ))}
               </div>

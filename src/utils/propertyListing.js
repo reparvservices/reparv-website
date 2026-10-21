@@ -11,13 +11,12 @@ import {
 } from "react-icons/fa";
 import { BsShopWindow } from "react-icons/bs";
 
-/* Listing flow: Sell / Buy / Rent → Residential / Commercial / Agriculture → category.
+/* Listing flow: Sell / Rent → Residential / Commercial / Agriculture → category.
  * propertyCategory values are unchanged so the rest of the form (and the
  * website filters) keep working; listingType / propertyKind are stored too. */
 
 export const LISTING_TYPES = [
   { key: "Sell", label: "Sell", hint: "List a property for sale" },
-  { key: "Buy", label: "Buy", hint: "Post a property you want to buy" },
   { key: "Rent", label: "Rent", hint: "List a property for rent" },
 ];
 
@@ -27,7 +26,7 @@ export const PROPERTY_KINDS = [
   { key: "Agriculture", label: "Agriculture / Land" },
 ];
 
-// Sell & Buy: new launch or resale (maps to the existing category groups)
+// Sell: new launch or resale (maps to the existing category groups)
 export const SALE_CONDITIONS = [
   { key: "new", label: "New Launch" },
   { key: "resale", label: "Resale" },
@@ -241,4 +240,38 @@ export const areaDisplayFor = (property = {}) => {
     label: "Carpet Area",
     value: property.carpetArea ? `${property.carpetArea} sq.ft` : "",
   };
+};
+
+/**
+ * What the owner should see for a listing: new listings are saved as
+ * approve = "Not Approved" and stay hidden until an admin approves them.
+ */
+export const listingStatusFor = (property = {}) => {
+  if (property.status && property.status !== "Active") return "Inactive";
+  if (property.approve === "Approved") return "Live";
+  if (property.approve === "Rejected") return "Rejected";
+  return "Under Review";
+};
+
+/* Configuration (BHK) — same values the website BHK filters use */
+export const BHK_OPTIONS = [
+  "1 RK",
+  "1 BHK",
+  "2 BHK",
+  "2.5 BHK",
+  "3 BHK",
+  "3.5 BHK",
+  "4 BHK",
+  "5 BHK",
+  "Above 5 BHK",
+  "Pent House",
+  "Studio Apartment",
+  "Duplex Apartment",
+];
+
+/** BHK is asked for residential built property (flat, house, villa, bungalow, row house) */
+export const needsConfiguration = ({ propertyKind, propertyCategory }) => {
+  if (!propertyCategory) return false;
+  const kind = propertyKind || kindOfCategory(propertyCategory);
+  return kind === "Residential" && areaModeFor({ propertyKind: kind, propertyCategory }) === "built";
 };

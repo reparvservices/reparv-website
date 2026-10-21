@@ -16,7 +16,7 @@ const tabCls = (active) =>
   }`;
 
 /**
- * Sell / Buy / Rent → (New Launch / Resale) → Residential / Commercial /
+ * Sell / Rent → (New Launch / Resale) → Residential / Commercial /
  * Agriculture → category. Same flow as the partner portal and app.
  *
  * value    : { listingType, condition, propertyKind, propertyCategory }
@@ -42,11 +42,11 @@ export default function ListingClassification({ value, onChange }) {
 
   return (
     <div className="mb-6 sm:mb-8">
-      {/* Sell / Buy / Rent */}
+      {/* Sell / Rent */}
       <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-black">
         What do you want to do? <span className="text-red-500">*</span>
       </h2>
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-6 max-w-[560px]">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6 max-w-[420px]">
         {LISTING_TYPES.map(({ key, label, hint }) => {
           const active = value.listingType === key;
           return (
@@ -73,11 +73,11 @@ export default function ListingClassification({ value, onChange }) {
         })}
       </div>
 
-      {/* New Launch / Resale (Sell & Buy) */}
+      {/* New Launch / Resale (Sell only) */}
       {value.listingType !== "Rent" && (
         <>
           <h3 className="text-base sm:text-lg font-semibold mb-3 text-black">
-            {value.listingType === "Buy" ? "Looking for" : "Property is"}
+            Property is
           </h3>
           <div className="flex flex-wrap gap-3 mb-6">
             {SALE_CONDITIONS.map(({ key, label }) => (

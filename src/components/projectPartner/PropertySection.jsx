@@ -142,7 +142,7 @@ function PropertySection({ projectPartner }) {
                 e.target.src = `/assets/property/propertyPicture.svg`;
               }}
               loading="lazy"
-              className="object-cover h-[250px] w-full bg-[#00000020]"
+              className="cursor-pointer object-cover h-[250px] w-full bg-[#00000020]"
             />
             <div className="relative flex flex-col gap-2">
               {Number(property?.likes) > 500 && (
@@ -272,7 +272,7 @@ function PropertySection({ projectPartner }) {
                       setVideoURL(property?.videoLink);
                       setShowPlayVideo(true);
                     }}
-                    className={`${
+                    className={`cursor-pointer ${
                       property?.videoLink ? "block" : "hidden"
                     } relative overflow-hidden p-[5px] z-10 text-white bg-[#107c0b] rounded-lg cursor-pointer`}
                   >
@@ -290,7 +290,7 @@ function PropertySection({ projectPartner }) {
                       link.click();
                       document.body.removeChild(link);
                     }}
-                    className={`${
+                    className={`cursor-pointer ${
                       property?.brochureFile ? "block" : "hidden"
                     } p-[5px] text-white bg-[#107c0b] rounded-lg cursor-pointer relative overflow-hidden`}
                   >

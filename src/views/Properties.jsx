@@ -13,6 +13,7 @@ import PropertyCategories from "../components/PropertyCategories";
 import FilterNavbar from "../components/property/FilterNavbar";
 import PropertySkeleton from "../components/property/PropertySkeleton";
 import AdvertisementCard from "../components/AdvertisementCard";
+import { kindOfCategory } from "../utils/propertyListing";
 
 // Which New / Rent / Resale tab a property category belongs to
 const LISTING_TYPES = ["new", "rental", "resale"];
@@ -20,6 +21,17 @@ const getListingType = (category = "") => {
   if (/^Rental/i.test(category) || category === "Lease") return "rental";
   if (/^Resale/i.test(category)) return "resale";
   return "new";
+};
+
+// /properties/type/{listingType} → does this property belong on that page?
+// "buy" = new + resale, "commercial" = any commercial category (sale or rent)
+const matchesListingTypeParam = (category, listingType) => {
+  if (listingType === "buy") return getListingType(category) !== "rental";
+  if (listingType === "commercial")
+    return kindOfCategory(category) === "Commercial";
+  if (LISTING_TYPES.includes(listingType))
+    return getListingType(category) === listingType;
+  return true;
 };
 
 // Lazy import
@@ -215,9 +227,10 @@ export default function Properties({ initialProperties = null }) {
       const matchesBudget =
         item.totalOfferPrice >= minBudget && item.totalOfferPrice <= maxBudget;
 
-      const matchesListingType =
-        !LISTING_TYPES.includes(listingTypeParam) ||
-        getListingType(item.propertyCategory) === listingTypeParam;
+      const matchesListingType = matchesListingTypeParam(
+        item.propertyCategory,
+        listingTypeParam,
+      );
 
       return (
         matchesBHK && matchesLocation && matchesBudget && matchesListingType
@@ -267,7 +280,7 @@ export default function Properties({ initialProperties = null }) {
               onClick={() => {
                 setShowFilterPopup(true);
               }}
-              className="filterIcon p-[12px] bg-white border border-gray-300 rounded-md flex sm:hidden items-center justify-center shadow"
+              className="cursor-pointer filterIcon p-[12px] bg-white border border-gray-300 rounded-md flex sm:hidden items-center justify-center shadow"
             >
               <IoFilter />
             </div>

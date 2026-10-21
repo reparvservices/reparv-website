@@ -9,7 +9,7 @@ const AppDownloadSection = () => {
           "_blank"
         );
       }}
-      className="flex flex-col items-center p-4 md:p-8 gap-6 pb-10 md:pb-15"
+      className="cursor-pointer flex flex-col items-center p-4 md:p-8 gap-6 pb-10 md:pb-15"
     >
       {/* Mobile */}
       <img

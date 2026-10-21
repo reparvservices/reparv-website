@@ -244,7 +244,7 @@ export default function HomeLoanForm() {
       <section className="min-h-screen bg-[#FAF8FF] lg:bg-white">
         {/* Back Navigation */}
         <div className="lg:hidden w-full h-[40px] sm:h-[50px] flex items-center gap-4 px-4 py-2 my-2 sm:my-4 rounded-lg bg-white">
-          <FaArrowLeft onClick={() => router.back()} className="w-5 h-5" />
+          <FaArrowLeft onClick={() => router.back()} className="cursor-pointer w-5 h-5" />
           <span className="w-full text-base sm:text-lg font-bold text-center">
             Home Loan Application
           </span>

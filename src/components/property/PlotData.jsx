@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../store/auth";
+import { Locked, usePropertyLock } from "./PropertyLock";
 
 function PlotData({ propertyInfo }) {
   const { URI, setLoading, setPropertyInfoId, setShowPlotInfoPopup } =
     useAuth();
+  const { locked, unlock } = usePropertyLock();
   const [plots, setPlots] = useState([]);
   const [activeKhasra, setActiveKhasra] = useState(null);
 
@@ -79,6 +81,7 @@ function PlotData({ propertyInfo }) {
                   <div
                     key={i}
                     onClick={() => {
+                      if (locked) return unlock();
                       if (row.status === "Available") {
                         setPropertyInfoId(row.propertyinfoid);
                         setShowPlotInfoPopup(true);
@@ -98,7 +101,7 @@ function PlotData({ propertyInfo }) {
                       flex items-center justify-center px-2 py-1 text-[12px] lg:text-sm font-semibold rounded-lg border transition-all text-gray-400 border-gray-300
                     `}
                   >
-                    {"Plot " + row.plotno}
+                    Plot <Locked>{row.plotno}</Locked>
                   </div>
                 ))}
               </div>

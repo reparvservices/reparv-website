@@ -89,7 +89,7 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
               e.target.onerror = null;
               e.target.src = `/assets/property/PropertyPicture.svg`;
             }}
-            className="object-cover h-[200px] w-full bg-[#00000020]"
+            className="cursor-pointer object-cover h-[200px] w-full bg-[#00000020]"
           />
           <div className="relative flex flex-col gap-2">
             {property.likes > 500 && (
@@ -222,7 +222,7 @@ function OtherProperties({ propertyCity, propertyCategory, propertyId }) {
                     link.click();
                     document.body.removeChild(link);
                   }}
-                  className={`${
+                  className={`cursor-pointer ${
                     property?.brochureFile ? "block" : "hidden"
                   } p-[5px] text-white bg-[#107c0b] rounded-lg cursor-pointer relative overflow-hidden`}
                 >
