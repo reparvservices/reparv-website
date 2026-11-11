@@ -187,7 +187,7 @@ export default function ComingSoonModal({ onClose }) {
           ══════════════════════════════════════ */}
           <div className="w-full hidden md:block md:flex-1 relative min-h-[540px] overflow-hidden">
             {/* photo */}
-            <img
+            <img loading="lazy" decoding="async"
               src="../assets/LeftSideCinematicVisual.svg"
               alt="Smart luxury skyscraper"
               className="absolute inset-0 w-full h-full object-cover"
@@ -200,7 +200,7 @@ export default function ComingSoonModal({ onClose }) {
               MOBILE — full image hero (top section)
           ══════════════════════════════════════ */}
           <div className="hidden relative min-h-50 max-h-60 overflow-hidden rounded-t-3xl">
-            <img
+            <img loading="lazy" decoding="async"
               src="../assets/LeftSideCinematicVisual.svg"
               alt="Smart luxury skyscraper"
               className="absolute inset-0 w-full h-full object-cover object-top"

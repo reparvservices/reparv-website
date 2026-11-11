@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import ViewAllButton from "./ViewAllButton";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -8,10 +8,14 @@ import { useAuth } from "../../store/auth";
 import PropertyCard from "../property/PropertyCard";
 import { motion } from "framer-motion";
 
+const HOME_CARD_LIMIT = 12;
+const SSR_CITY = "Nagpur";
+
 const PropertySection = ({ initialProperties = null }) => {
   const router = useRouter();
   const { URI, selectedCity } = useAuth();
   const [properties, setProperties] = useState(initialProperties ?? []);
+  const loadedCity = useRef(initialProperties !== null ? SSR_CITY : null);
 
   const mobileCard = {
     hidden: { opacity: 0, y: 30, scale: 0.96 },
@@ -52,9 +56,12 @@ const PropertySection = ({ initialProperties = null }) => {
   };
 
   useEffect(() => {
-    if (initialProperties !== null) return;
+    if (loadedCity.current === selectedCity) return;
+    loadedCity.current = selectedCity;
     fetchData();
-  }, [selectedCity, initialProperties]);
+  }, [selectedCity]);
+
+  const visible = properties.slice(0, HOME_CARD_LIMIT);
 
   return (
     <section className="w-full max-w-[1440px] mx-auto px-4 lg:py-10">
@@ -71,7 +78,7 @@ const PropertySection = ({ initialProperties = null }) => {
 
       {/* Mobile Horizontal Scroll */}
       <div className="sm:hidden overflow-x-auto scrollbar-hide flex gap-4 px-1 snap-x snap-mandatory">
-        {properties.map((property) => (
+        {visible.map((property) => (
           <motion.div
             key={property.propertyid}
             variants={mobileCard}
@@ -105,7 +112,7 @@ const PropertySection = ({ initialProperties = null }) => {
             1380: { slidesPerView: 4.3 },
           }}
         >
-          {properties.map((property) => (
+          {visible.map((property) => (
             <SwiperSlide key={property.propertyid} className="my-15">
               <PropertyCard property={property} />
             </SwiperSlide>

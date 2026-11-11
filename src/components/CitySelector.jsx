@@ -209,7 +209,7 @@ export default function CitySelector() {
                 activeCity === city.name ? "ring-2 ring-[#8A38F5]" : ""
               }`}
             >
-              <img
+              <img loading="lazy" decoding="async"
                 src={city.image}
                 alt={city.name}
                 className={`w-40 sm:w-50 h-[90px] sm:h-[130px] rounded-[12px] object-cover shadow-sm `}

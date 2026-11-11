@@ -42,7 +42,7 @@ export default function DashboardSidebar({ activeTab, onSelectTab }) {
     <aside className="w-full bg-white rounded-2xl shadow-sm p-5 flex flex-col gap-5">
       {/* User */}
       <div className="flex items-center gap-3">
-        <img
+        <img loading="lazy" decoding="async"
           src={user?.userimage ? getImageURI(user.userimage) : "/assets/user/UserIcon.svg"}
           alt="user"
           className="w-14 h-14 shrink-0 rounded-full object-cover border-2 border-[#5323DC]"

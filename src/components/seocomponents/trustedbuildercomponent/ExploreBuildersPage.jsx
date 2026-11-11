@@ -155,7 +155,7 @@ function TrustCard({ icon, title, text }) {
   return (
     <div className="bg-[#F9F7FF] rounded-2xl p-6 text-left">
       <div className="w-11 h-11 rounded-lg bg-[#E3CEFF] flex items-center justify-center mb-4">
-        <img src={icon} alt={title} className="w-5 h-5" />
+        <img loading="lazy" decoding="async" src={icon} alt={title} className="w-5 h-5" />
       </div>
       <h4 className="font-semibold mb-2">{title}</h4>
       <p className="text-sm text-gray-700 leading-relaxed">{text}</p>
@@ -167,7 +167,7 @@ function BottomCard({ icon, title, text }) {
   return (
     <div className="bg-[#F9F7FF] rounded-2xl p-6 text-center">
       <div className="w-14 h-14 mx-auto rounded-full bg-white shadow flex items-center justify-center mb-4">
-        <img src={icon} alt={title} className="w-6 h-6" />
+        <img loading="lazy" decoding="async" src={icon} alt={title} className="w-6 h-6" />
       </div>
       <h4 className="font-semibold mb-2">{title}</h4>
       <p className="text-sm text-gray-600 leading-relaxed">{text}</p>

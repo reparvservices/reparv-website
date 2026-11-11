@@ -48,7 +48,7 @@ const RERAProperty = ({ initialArticles = null, initialFaqs = null }) => {
 
             {/* RIGHT IMAGE – DESKTOP ONLY */}
             <div className="hidden lg:flex justify-end">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/seopageassets/reparvproperties/banner-image.svg"
                 alt="Reparv Property Illustration"
                 className="w-full max-w-md xl:max-w-lg object-contain"

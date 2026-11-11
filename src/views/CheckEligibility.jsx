@@ -262,7 +262,7 @@ export default function CheckEligibility() {
         <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-purple-500/30 blur-[120px]" />
         <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
         <div className="relative z-10 flex items-end justify-center pl-10 pb-8">
-          <img
+          <img loading="lazy" decoding="async"
             src="/assets/homeLoan/leftImage.svg"
             alt="Loan eligibility"
             className="w-[320px]"

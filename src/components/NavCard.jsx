@@ -28,7 +28,7 @@ function NavCard({ cardData }) {
       </div>
       {/* Image Section */}
       <div className="w-full flex items-center justify-center overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async"
           src={cardData?.image || "/assets/home/propertyType/NewFlat.svg"}
           alt={cardData?.title}
           className="w-[100%] object-cover"

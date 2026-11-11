@@ -81,7 +81,7 @@ export default function ContactUsPopup({ projectPartner }) {
           >
             Contact Us
           </h3>
-          <img
+          <img loading="lazy" decoding="async"
             src={getImageURI(projectPartner?.businessLogo)}
             alt="Reparv Logo"
             className={`${

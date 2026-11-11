@@ -90,7 +90,7 @@ function Select({ label, required }) {
 function WarningBanner({ icon, text }) {
   return (
     <div className="flex gap-3 items-start bg-[#FFF6E0] border-l-4 border-[#FFC107] rounded-md px-4 py-3">
-      <img src={icon} alt="info" className="w-4 h-4 mt-0.5" />
+      <img loading="lazy" decoding="async" src={icon} alt="info" className="w-4 h-4 mt-0.5" />
       <p className="text-sm text-gray-700 leading-relaxed">
         <span className="font-semibold text-gray-800">Important:</span> {text}
       </p>

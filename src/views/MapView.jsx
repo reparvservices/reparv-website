@@ -178,7 +178,7 @@ const BottomDrawerCard = React.memo(function BottomDrawerCard({
       </div>
       <div className="flex gap-3 px-4 pb-2 pt-1">
         <div className="relative shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-gray-100">
-          <img
+          <img loading="lazy" decoding="async"
             src={imgSrc}
             onError={(e) => {
               e.currentTarget.onerror = null;
@@ -266,7 +266,7 @@ const MapPropertyCard = React.memo(function MapPropertyCard({
         }`}
     >
       <div className="relative shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-gray-100">
-        <img
+        <img loading="lazy" decoding="async"
           src={imgSrc}
           onError={(e) => {
             e.currentTarget.onerror = null;

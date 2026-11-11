@@ -107,7 +107,7 @@ function FAQSection({ id, location, initialFaqs = null }) {
         <div className="w-full grid md:grid-cols-2 gap-10">
           {/* LEFT SIDE ILLUSTRATION */}
           <div className="hidden md:flex items-center ">
-            <img
+            <img loading="lazy" decoding="async"
               src="/assets/FAQLeftImage.svg"
               alt="FAQ Image"
               className="w-full object-cover"

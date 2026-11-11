@@ -1275,7 +1275,7 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
                             index === 0 ? "border-[#8A38F5] ring-2 ring-[#8A38F5]/30" : "border-[#D9D9D9]"
                           }`}
                         >
-                          <img
+                          <img loading="lazy" decoding="async"
                             src={photo.preview}
                             alt={`Property photo ${index + 1}`}
                             className="w-full h-[140px] xl:h-[180px] object-cover"

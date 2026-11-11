@@ -55,7 +55,7 @@ export default function Enquiries({ enquiries }) {
             >
               {/* Left */}
               <div className="flex items-center gap-4 min-w-0">
-                <img
+                <img loading="lazy" decoding="async"
                   src={getPropertyImage(item)}
                   alt={item?.propertyName || "Property"}
                   onError={(e) => {

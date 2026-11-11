@@ -284,7 +284,7 @@ export default function AssociatedWith() {
 
       {/* Temperory Used Image */}
       <div className="max-w-4xl mx-auto px-4 py-1 bg-white shadow rounded-lg overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async"
           src="/assets/home/associatedWith.svg"
           alt="COEP Institute"
           className="w-full max-w-xl md:max-w-3xl mx-auto h-auto object-cover"

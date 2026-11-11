@@ -78,15 +78,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Google AdSense */}
-        <script
+        <link rel="preconnect" href="https://reparv-assets.s3.ap-south-1.amazonaws.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://aws-api.reparv.in" />
+
+        {/* Google AdSense — loaded after the page is idle so it never blocks rendering */}
+        <Script
+          id="adsense"
+          strategy="lazyOnload"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7197621532263972"
           crossOrigin="anonymous"
         />
 
         {/* Google Tag Manager */}
-        <Script id="gtm" strategy="afterInteractive">
+        <Script id="gtm" strategy="lazyOnload">
           {`
             (function(w,d,s,l,i){
               w[l]=w[l]||[];
@@ -102,7 +107,7 @@ export default function RootLayout({ children }) {
         </Script>
 
         {/* Microsoft Clarity */}
-        <Script id="clarity" strategy="afterInteractive">
+        <Script id="clarity" strategy="lazyOnload">
           {`
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

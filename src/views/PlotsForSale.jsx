@@ -105,7 +105,7 @@ function PlotCard({ property }) {
         className="relative rounded-2xl overflow-hidden flex-shrink-0 block"
         style={{ height: "202px" }}
       >
-        <img
+        <img loading="lazy" decoding="async"
           src={getPropertyImage(property)}
           alt={getPlotTitle(property)}
           className="w-full h-full object-cover"
@@ -521,7 +521,7 @@ export default function PlotsForSale({ initialPageData = null, initialFaqs = [] 
                   marginTop: 40,
                 }}
               >
-                <img
+                <img loading="lazy" decoding="async"
                   src={heroImage}
                   alt={`Plots for sale in ${PAGE_CITY}`}
                   className="w-full h-full object-cover"
@@ -856,7 +856,7 @@ export default function PlotsForSale({ initialPageData = null, initialFaqs = [] 
               </div>
             </div>
             <div className="hidden md:flex items-center justify-center flex-shrink-0 z-10">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/seoPages/plotsForSale/hero.svg"
                 alt="Reparv plots app"
                 className="w-48 h-48 object-contain opacity-90"

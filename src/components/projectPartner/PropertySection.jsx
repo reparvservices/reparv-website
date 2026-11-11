@@ -121,7 +121,7 @@ function PropertySection({ projectPartner }) {
               <FaFire className="text-white" />
               <span className="text-white text-xs font-semibold">Hot Deal</span>
             </div>
-            <img
+            <img loading="lazy" decoding="async"
               onClick={() => {
                 setEnquirySource("Landing Page");
                 router.push(`/property-info/${property.seoSlug} `);
@@ -264,7 +264,7 @@ function PropertySection({ projectPartner }) {
 
               <hr className="text-[#F0EFFB]" />
               <div className="w-full flex px-4 justify-between">
-                <img src="/assets/projectPartner/cardAssuredTag.svg" alt="" className="w-30" />
+                <img loading="lazy" decoding="async" src="/assets/projectPartner/cardAssuredTag.svg" alt="" className="w-30" />
                 <div className={`flex gap-[8px] items-center justify-center`}>
                   <div
                     onClick={() => {
@@ -303,7 +303,7 @@ function PropertySection({ projectPartner }) {
               </div>
 
               <div className="w-full flex flex-wrap gap-2 items-center justify-start py-1 pb-4 px-3 rounded-bl-lg rounded-br-lg address text-[10px] md:text-xs font-normal text-[#808080] group-hover:text-[#e2e2e2] border-t-1 border-[#F0EFFB]">
-                <img src="/assets/projectPartner/location-icon.png" alt="location" />
+                <img loading="lazy" decoding="async" src="/assets/projectPartner/location-icon.png" alt="location" />
                 <div className="flex flex-col items-start">
                   <p className="text-[#808080] ">
                     {property?.location?.length > 25

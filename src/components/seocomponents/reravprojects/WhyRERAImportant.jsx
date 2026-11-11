@@ -88,7 +88,7 @@ function InfoCard({ icon, title, description }) {
   return (
     <div className="border border-[#E5E5E5] rounded-2xl p-6 sm:p-8 bg-white">
       <div className="w-12 h-12 rounded-lg bg-[#8A38F5] flex items-center justify-center mb-5">
-        <img src={icon} alt={title} className="w-6 h-6" />
+        <img loading="lazy" decoding="async" src={icon} alt={title} className="w-6 h-6" />
       </div>
 
       <h4 className="text-lg sm:text-xl font-bold mb-3">{title}</h4>
@@ -103,7 +103,7 @@ function CheckItem({ icon, title, text }) {
   return (
     <div className="flex gap-4 items-start">
       <div className="w-8 h-8 rounded-md bg-white/20 flex items-center justify-center flex-shrink-0">
-        <img src={icon} alt="check" className="w-4 h-4" />
+        <img loading="lazy" decoding="async" src={icon} alt="check" className="w-4 h-4" />
       </div>
 
       <div>

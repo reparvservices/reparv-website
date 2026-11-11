@@ -187,7 +187,7 @@ function ProjectCard({ project }) {
       style={{ boxShadow: "0 10px 30px rgba(94,35,220,0.04)" }}
     >
       <div className="relative h-56 overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async"
           src={getProjectImage(project)}
           alt={project.name}
           className="w-full h-full object-cover"
@@ -698,7 +698,7 @@ export default function NewProjects({ initialPageData = null, initialFaqs = [] }
                   key={location.name}
                   className="relative rounded-2xl overflow-hidden h-80 flex flex-col justify-end cursor-pointer group"
                 >
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={getProjectImage(location)}
                     alt={location.name}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

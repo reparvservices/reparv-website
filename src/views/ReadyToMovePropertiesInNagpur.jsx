@@ -185,7 +185,7 @@ function PropertyCard({ property }) {
   return (
     <div className="w-full max-w-[317px] rounded-2xl bg-white shadow-[6px_4px_23px_1px_rgba(63,45,98,0.15)]">
       <div className="relative h-[211px] w-full overflow-hidden rounded-t-2xl bg-gradient-to-br from-[#DDD5FF] to-[#EBE5FF]">
-        <img
+        <img loading="lazy" decoding="async"
           src={getPropertyImage(property)}
           alt={getReadyHomeTitle(property)}
           className="h-full w-full object-cover"
@@ -252,7 +252,7 @@ function AreaCard({ area }) {
   return (
     <div className="flex w-full max-w-[290px] flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)]">
       <div className="relative h-32 w-full overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async"
           src={getAreaImage(area)}
           alt={area.name}
           className="h-full w-full object-cover"
@@ -998,7 +998,7 @@ export default function ReadyToMovePropertiesInNagpur({
                     <div key={home.propertyid || home.title} className="flex items-center gap-2 rounded-lg border border-gray-100 p-2">
                       <div className="h-10 w-10 overflow-hidden rounded-lg bg-gradient-to-br from-[#DDD5FF] to-[#C9B8FF]">
                         {home.frontView ? (
-                          <img src={getPropertyImage({ frontView: home.frontView })} alt="" className="h-full w-full object-cover" />
+                          <img loading="lazy" decoding="async" src={getPropertyImage({ frontView: home.frontView })} alt="" className="h-full w-full object-cover" />
                         ) : null}
                       </div>
                       <div className="flex-1">

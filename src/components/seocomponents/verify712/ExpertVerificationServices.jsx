@@ -40,7 +40,7 @@ export default function ExpertVerificationServices() {
             {/* CTA */}
             <div className="mt-10">
               <button className="w-full sm:w-auto flex items-center justify-center gap-3 bg-white text-[#5B2DD8] font-semibold px-6 py-3 rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:opacity-95 transition">
-                <img src="/assets/seopageassets/verify712/headset.svg" alt="" className="w-5 h-5" />
+                <img loading="lazy" decoding="async" src="/assets/seopageassets/verify712/headset.svg" alt="" className="w-5 h-5" />
                 Request Expert Verification
               </button>
             </div>
@@ -48,7 +48,7 @@ export default function ExpertVerificationServices() {
 
           {/* RIGHT IMAGE (DESKTOP ONLY) */}
           <div className="hidden lg:flex justify-end">
-            <img
+            <img loading="lazy" decoding="async"
               src="/assets/seopageassets/verify712/expert-image.svg"
               alt="Expert Verification"
               className="max-w-[420px] w-full"
@@ -68,7 +68,7 @@ function Feature({ icon, title, text }) {
   return (
     <div className="flex gap-4 items-start">
       <div className="w-11 h-11 rounded-lg bg-white/20 flex items-center justify-center shrink-0">
-        <img src={icon} alt="" className="w-5 h-5" />
+        <img loading="lazy" decoding="async" src={icon} alt="" className="w-5 h-5" />
       </div>
 
       <div>

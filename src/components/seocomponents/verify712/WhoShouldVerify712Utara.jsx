@@ -95,7 +95,7 @@ export default function WhoShouldVerify712Utara() {
               <div
                 className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center ${item.bg}`}
               >
-                <img src={item.icon} alt={item.title} className="w-7 h-7" />
+                <img loading="lazy" decoding="async" src={item.icon} alt={item.title} className="w-7 h-7" />
               </div>
 
               <h3 className="text-lg font-bold mt-5">{item.title}</h3>
@@ -124,7 +124,7 @@ export default function WhoShouldVerify712Utara() {
               className="flex items-center gap-4 bg-white rounded-xl p-5 shadow-[0_10px_30px_#8A38F529]"
             >
               <div className="w-12 h-12 rounded-lg bg-[#EFE7FF] flex items-center justify-center">
-                <img src={doc.icon} alt={doc.title} className="w-6 h-6" />
+                <img loading="lazy" decoding="async" src={doc.icon} alt={doc.title} className="w-6 h-6" />
               </div>
 
               <div>

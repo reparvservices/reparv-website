@@ -364,7 +364,7 @@ export default function ReduceEmi() {
             {/* Right — illustration + float card */}
             <div className="flex-1 max-w-[712px] w-full relative pb-8 lg:pb-0">
               <div className="rounded-3xl h-[400px] flex items-center justify-center shadow-[0_10px_30px_rgba(94,35,220,0.10)] overflow-hidden">
-                <img
+                <img loading="lazy" decoding="async"
                   src="/assets/seoPages/reduceEmi/hero.svg"
                   alt="hero image"
                   className="w-full h-full object-cover"
@@ -805,7 +805,7 @@ export default function ReduceEmi() {
             {/* Illustration */}
             <div className="flex-shrink-0">
               <div className="w-[350px] h-[350px] rounded-2xl bg-gradient-to-br from-[#E2E8F8] to-[#C7D2F0] flex items-center justify-center">
-                <img src="/assets/seoPages/ReduceEmi/image.svg" alt="reducing emi image" className="w-full h-full object-cover" />
+                <img loading="lazy" decoding="async" src="/assets/seoPages/ReduceEmi/image.svg" alt="reducing emi image" className="w-full h-full object-cover" />
               </div>
             </div>
 

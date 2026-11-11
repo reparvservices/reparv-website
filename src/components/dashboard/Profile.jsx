@@ -77,7 +77,7 @@ const Profile = () => {
 
       {/* User Info */}
       <div className="w-full flex items-center gap-4 my-4">
-        <img
+        <img loading="lazy" decoding="async"
           src={user?.userimage ? getImageURI(user?.userimage) : "/assets/user/UserIcon.svg"}
           alt="user"
           className="w-16 h-16 rounded-full border-2 border-[#5323DC] "

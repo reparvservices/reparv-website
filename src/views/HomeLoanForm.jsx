@@ -255,7 +255,7 @@ export default function HomeLoanForm() {
           <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-purple-500/30 blur-[120px]" />
           <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent" />
           <div className="relative z-10 w-full flex items-end justify-center pl-10">
-            <img src={leftImage} alt="image" className="w-[400px]" />
+            <img loading="lazy" decoding="async" src={leftImage} alt="image" className="w-[400px]" />
           </div>
           <div className="relative z-10 w-full flex items-end justify-center pr-10 pb-10">
             <div className="w-full flex flex-col">

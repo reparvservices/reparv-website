@@ -120,7 +120,7 @@ const PropertySearch = ({
               className="flex gap-2 sm:gap-4 px-4 py-3 cursor-pointer hover:bg-[#5E23DC30] transition-all duration-200"
             >
               <div>
-                <img
+                <img loading="lazy" decoding="async"
                   src={getFrontImage(property.frontView)}
                   alt={property.propertyName}
                   className="w-15 h-10 rounded-md object-cover"

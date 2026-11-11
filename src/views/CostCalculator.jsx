@@ -87,7 +87,7 @@ const CostCalculator = ({ initialArticles = null, initialFaqs = null }) => {
 
             {/* RIGHT IMAGE */}
             <div className="hidden lg:flex justify-center lg:justify-end">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/seopageassets/costcalculator/banner-image.svg"
                 alt="EMI Calculator Illustration"
                 className="w-full object-cover"

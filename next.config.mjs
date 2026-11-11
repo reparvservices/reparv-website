@@ -36,11 +36,6 @@ const nextConfig = {
             process.env.VITE_BACKEND_URL ||
             DEFAULT_BACKEND_URL,
         ),
-        "import.meta.env.VITE_RAZORPAY_KEY_ID": JSON.stringify(
-          process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
-            process.env.VITE_RAZORPAY_KEY_ID ||
-            "",
-        ),
         "import.meta.env.VITE_S3_IMAGE_URL": JSON.stringify(
           process.env.NEXT_PUBLIC_S3_IMAGE_URL ||
             process.env.VITE_S3_IMAGE_URL ||

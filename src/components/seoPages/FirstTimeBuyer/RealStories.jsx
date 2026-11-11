@@ -44,7 +44,7 @@ export default function RealStories({ pageData = null }) {
 
         <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden border border-gray-100 shadow-sm mb-6">
           <div className="md:w-[55%] flex-shrink-0 bg-purple-50 flex items-center justify-center">
-            <img
+            <img loading="lazy" decoding="async"
               src={featuredImage}
               alt={featured.title}
               className="w-full h-full min-h-[300px] object-contain"
@@ -110,7 +110,7 @@ export default function RealStories({ pageData = null }) {
               className="rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col"
             >
               <div className="relative bg-purple-50 h-52 flex-shrink-0 overflow-hidden flex items-center justify-center">
-                <img
+                <img loading="lazy" decoding="async"
                   src={getStoryImage(story)}
                   alt={story.title}
                   className="w-full h-full object-contain"

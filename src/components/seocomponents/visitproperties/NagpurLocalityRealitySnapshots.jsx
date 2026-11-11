@@ -41,7 +41,7 @@ export default function NagpurLocalityRealitySnapshots({
                 key={item.title}
                 className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition"
               >
-                <img
+                <img loading="lazy" decoding="async"
                   src={getLocalityImage(item)}
                   alt={item.title}
                   className="w-full h-[180px] object-cover"
@@ -58,7 +58,7 @@ export default function NagpurLocalityRealitySnapshots({
 
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2 text-[#4B3CC4]">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src="/assets/seopageassets/visitproperties/profile.svg"
                         alt=""
                         className="w-4 h-4"
@@ -69,7 +69,7 @@ export default function NagpurLocalityRealitySnapshots({
                     </div>
 
                     <div className="flex items-center gap-2 text-[#4B3CC4]">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src="/assets/seopageassets/visitproperties/clock.svg"
                         alt=""
                         className="w-4 h-4"

@@ -235,7 +235,7 @@ export default function NewsDetailsPage({
 
             {/* IMAGE */}
             <div className="w-full rounded-[12px] overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src={
                   getImageURI(news?.image) ||
                   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
@@ -298,7 +298,7 @@ export default function NewsDetailsPage({
               {/* HERO IMAGE */}
 
               <div className="relative">
-                <img
+                <img loading="lazy" decoding="async"
                   src={
                     getImageURI(news?.image) ||
                     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"

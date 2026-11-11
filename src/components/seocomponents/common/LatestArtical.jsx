@@ -77,7 +77,7 @@ function LatestArtical({ initialArticles = null }) {
           >
             {/* Image */}
             <div className="w-full max-h-[60%] bg-[#00000015] rounded-2xl overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src={
                   getImageURI(item?.image) ||
                   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"

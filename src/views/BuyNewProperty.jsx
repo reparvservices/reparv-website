@@ -141,7 +141,7 @@ const BuyNewProperty = ({
           {/* Right Illustration */}
           <div className="relative col-span-2 flex justify-center lg:justify-end">
             <div className="flex items-center justify-center">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/property/cityView.svg"
                 alt="City Illustration"
                 className="max-w-full max-h-full object-cover"
@@ -160,8 +160,8 @@ const BuyNewProperty = ({
           </p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-            {propertyTypes.map((item) => (
-              <NavCard cardData={item} />
+            {propertyTypes.map((item, index) => (
+              <NavCard key={item.id ?? item.title ?? index} cardData={item} />
             ))}
           </div>
         </div>

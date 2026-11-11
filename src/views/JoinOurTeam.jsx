@@ -91,7 +91,7 @@ function JoinOurTeam() {
     <div className="joinOurTeam w-full max-w-7xl mx-auto p-4 sm:p-6">
       <div className="w-full my-4 gap-6 flex items-center justify-center">
         <div className="image hidden sm:flex w-[45%]">
-          <img src="/assets/joinOurTeam/image.svg" alt="" className="w-full object-cover" />
+          <img loading="lazy" decoding="async" src="/assets/joinOurTeam/image.svg" alt="" className="w-full object-cover" />
         </div>
 
         <div className="w-full sm:w-[55%] sm:p-4 sm:px-6 flex flex-col md:gap-6 gap-2">
@@ -103,7 +103,7 @@ function JoinOurTeam() {
             guidance. Unlock your potential and take the first step toward
             rewarding growth!
           </p>
-          <img
+          <img loading="lazy" decoding="async"
             src="/assets/joinOurTeam/responsiveImage.svg"
             alt=""
             className="w-full sm:hidden block object-cover"
@@ -129,7 +129,7 @@ function JoinOurTeam() {
               <div className="absolute top-[-1px] left-0 w-[150px] h-[1px] bg-gradient-to-r from-[#0BB501] to-transparent"></div>
               <div className="absolute top-[-1px] left-[-1px] w-[1px] h-[150px] bg-gradient-to-b from-[#0BB501] to-transparent"></div>
               <div className="text-green-600 text-4xl mb-2">
-                <img src={benefit.icon} className="w-15 h-15" alt="" />
+                <img loading="lazy" decoding="async" src={benefit.icon} className="w-15 h-15" alt="" />
               </div>
               <h4 className="text-xl sm:text-2xl font-semibold text-black ">
                 {benefit.title}
@@ -154,7 +154,7 @@ function JoinOurTeam() {
 
         <div className="max-w-7xl mx-auto mt-4 md:mt-12 flex flex-col lg:flex-row items-center justify-center md:gap-15">
           <div className="sm:w-[50%] xl:block hidden md:block lg:hidden lg:w-[340px] lg:h-[497px] h-full">
-            <img
+            <img loading="lazy" decoding="async"
               src="/assets/joinOurTeam/formImage.svg"
               alt="Professional Person"
               className="w-full xl:w-[340px] xl:h-[490px] rounded-lg shadow-md object-cover"

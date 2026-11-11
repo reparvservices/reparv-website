@@ -136,7 +136,7 @@ const CustomerReviewSection = ({ initialReviews = null }) => {
                     overflow-hidden
                   "
                   >
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={
                         review.clientimage
                           ? getImageURI(review.clientimage)

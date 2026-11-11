@@ -28,7 +28,7 @@ export default function LatestNewsCard({
         px-2
         "
       >
-        <img
+        <img loading="lazy" decoding="async"
           src={image}
           alt="Bengaluru skyline"
           className="w-[96px] h-[96px] rounded-[14px] object-cover flex-shrink-0"

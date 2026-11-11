@@ -173,7 +173,7 @@ function PropertyCard({ property }) {
     <div className="bg-white rounded-2xl shadow-[0_4px_24px_rgba(63,45,98,0.13)] overflow-hidden flex flex-col">
       <div className="relative">
         <div className="h-44 sm:h-52 bg-gradient-to-br from-amber-700 via-amber-600 to-amber-500 overflow-hidden">
-          <img
+          <img loading="lazy" decoding="async"
             src={getPropertyImage(property)}
             alt={getTrustedTitle(property)}
             className="h-full w-full object-cover"
@@ -911,7 +911,7 @@ export default function TrustScorePage({
               <div className="relative rounded-2xl overflow-visible">
                 {/* Building photo placeholder */}
                 <div className="w-[80%] md:w-full h-52 sm:h-64 lg:h-100 rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden mx-auto">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={heroImage}
                     alt={heroProperty?.propertyName || "Trusted property in Nagpur"}
                     className="w-full h-full object-cover"

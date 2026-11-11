@@ -85,7 +85,7 @@ export default function StepByStep712Guide() {
                   <div className="flex items-start gap-3 bg-[#E2FFEA] rounded-xl px-4 py-4">
                     {/* LEFT ICON */}
                     <div className="flex-shrink-0 rounded-full flex items-center justify-center">
-                      <img src={rightIcon} alt="note" className="w-4 h-4" />
+                      <img loading="lazy" decoding="async" src={rightIcon} alt="note" className="w-4 h-4" />
                     </div>
 
                     {/* TEXT */}
@@ -101,7 +101,7 @@ export default function StepByStep712Guide() {
                 {/* IMAGE – 70% */}
                 <div className="flex-1 lg:flex-[2]">
                   <div className="border border-[#868686] rounded-xl overflow-hidden ">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={step.image}
                       alt={step.title}
                       className="w-full h-auto object-contain"

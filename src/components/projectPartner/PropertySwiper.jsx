@@ -150,7 +150,7 @@ export default function PropertySwiper({ projectPartner }) {
                   }}
                   className="w-full h-[220px] sm:h-[260px] md:h-[260px] lg:h-[300px] cursor-pointer"
                 >
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={(() => {
                       try {
                         const images = JSON.parse(property.frontView || "[]");

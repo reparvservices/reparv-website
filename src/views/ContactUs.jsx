@@ -103,25 +103,25 @@ const ContactUs = () => {
       title: "Location",
       activity: "Visit at Us",
       desc: "Nagpur, Chandrapur",
-      icon: <img src="/assets/contactUs/Icon1.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img loading="lazy" decoding="async" src="/assets/contactUs/Icon1.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
     {
       title: "24*7 Service",
       activity: "Call Us on",
       desc: "+91 801 0881 965",
-      icon: <img src="/assets/contactUs/Icon2.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img loading="lazy" decoding="async" src="/assets/contactUs/Icon2.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
     {
       title: "Drop a line",
       activity: "Email Us on",
       desc: "contact@reparv.in",
-      icon: <img src="/assets/contactUs/Icon3.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img loading="lazy" decoding="async" src="/assets/contactUs/Icon3.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
     {
       title: "Office Hours",
       activity: "Opening Time",
       desc: "Mon-Fri:  9AM-6PM",
-      icon: <img src="/assets/contactUs/Icon4.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
+      icon: <img loading="lazy" decoding="async" src="/assets/contactUs/Icon4.svg" alt="icon" className="w-8 md:w-15 object-cover" />,
     },
   ];
 
@@ -223,7 +223,7 @@ const ContactUs = () => {
                 className="bg-[#8A38F5] text-white rounded-2xl p-4 md:p-10 max-w-[450px]"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src="/assets/contactUs/Icon5.svg"
                     alt="Icon"
                     className="w-5 md:w-8 object-cover"
@@ -264,7 +264,7 @@ const ContactUs = () => {
               </motion.div>
 
               {/* PERSON IMAGE */}
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/contactUs/ContactUsLeftImage.svg"
                 alt="Customer Support Reparv"
                 className="absolute pointer-events-none bottom-[-24px] lg:bottom-[-40px] right-0 sm:right-[20%] lg:right-1/2 w-[70%] sm:w-[60%] md:w-[60%] lg:w-[450px]"

@@ -145,7 +145,7 @@ function TimelineCard({ step, align, mobile }) {
     >
       <div className="bg-white shadow-lg rounded-xl px-5 py-4 flex items-center gap-3 min-w-[240px]">
         <div className="w-9 h-9 rounded-full bg-[#EDE4FF] flex items-center justify-center">
-          <img src={step.icon} alt="" className="w-4 h-4" />
+          <img loading="lazy" decoding="async" src={step.icon} alt="" className="w-4 h-4" />
         </div>
         <div>
           <p className="text-sm font-semibold text-black">Timeline</p>

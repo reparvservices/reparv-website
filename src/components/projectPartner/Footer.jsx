@@ -165,7 +165,7 @@ export default function Footer() {
 
       {/* MOBILE: Banner First + Full Width */}
       <div className="lg:hidden px-4 py-8 border-t border-[#333333]">
-        <img
+        <img loading="lazy" decoding="async"
           src="/assets/projectPartner/footer-banner.png"
           alt="Come home to Greatness"
           className="w-full rounded-md shadow-lg"
@@ -195,13 +195,13 @@ export default function Footer() {
               Experience Housing App on Mobile
             </h4>
             <div className="flex gap-4">
-              <img src="/assets/projectPartner/app-store.png" alt="App Store" className="h-10" />
-              <img src="/assets/google-play.png" alt="Google Play" className="h-10" />
+              <img loading="lazy" decoding="async" src="/assets/projectPartner/app-store.png" alt="App Store" className="h-10" />
+              <img loading="lazy" decoding="async" src="/assets/google-play.png" alt="Google Play" className="h-10" />
             </div>
           </div>
           <div className="flex gap-5 items-start">
             <div className="w-16 h-16 bg-white p-1 rounded flex-shrink-0">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/projectPartner/qrcode.png"
                 alt="QR Code"
                 className="w-full h-full object-contain"
@@ -232,7 +232,7 @@ export default function Footer() {
           <div className="grid grid-cols-12 gap-10 items-start">
             {/* Banner - ~30% width */}
             <div className="col-span-4">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/projectPartner/footer-banner.png"
                 alt="Come home to Greatness"
                 className="w-full rounded-md shadow-lg"
@@ -310,8 +310,8 @@ export default function Footer() {
                     Experience Housing App on Mobile
                   </h4>
                   <div className="flex gap-4">
-                    <img src="/assets/projectPartner/app-store.png" alt="App Store" className="h-10" />
-                    <img
+                    <img loading="lazy" decoding="async" src="/assets/projectPartner/app-store.png" alt="App Store" className="h-10" />
+                    <img loading="lazy" decoding="async"
                       src="/assets/google-play.png"
                       alt="Google Play"
                       className="h-10"
@@ -320,7 +320,7 @@ export default function Footer() {
                 </div>
                 <div className="flex gap-5 items-start">
                   <div className="w-16 h-16 bg-white p-1 rounded flex-shrink-0">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src="/assets/projectPartner/qrcode.png"
                       alt="QR Code"
                       className="w-full h-full object-contain"

@@ -44,7 +44,7 @@ export default function FeaturedProjects({
                 className="bg-white rounded-2xl shadow-[0_12px_40px_#00000014] overflow-hidden flex flex-col"
               >
                 <div className="relative h-[200px]">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={getPropertyImage(project)}
                     alt={project.propertyName}
                     className="w-full h-full object-cover"
@@ -61,7 +61,7 @@ export default function FeaturedProjects({
                   </p>
 
                   <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src="/assets/seopageassets/turstedbuilder/location.svg"
                       alt=""
                       className="w-4 h-4"

@@ -62,7 +62,7 @@ function Footer({ footerRef }) {
         <div className="w-full max-w-[1380px] mx-auto flex flex-col gap-8 py-10 px-8 lg:px-10">
           <div className="flex items-center justify-between gap-6">
             <Link href="/" aria-label="Reparv home">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/footerLogo.svg"
                 alt="Reparv Logo"
                 className="w-[160px]"
@@ -123,7 +123,7 @@ function Footer({ footerRef }) {
         <div className="flex flex-col gap-6 max-w-md mx-auto">
           <div className="flex items-center justify-between gap-4">
             <Link href="/" aria-label="Reparv home">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/footerLogo.svg"
                 alt="Reparv logo"
                 className="w-[140px]"

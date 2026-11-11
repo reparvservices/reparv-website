@@ -25,7 +25,7 @@ function UserDropdown() {
       title={user ? user.fullname || "My Profile" : "Login"}
       className="w-[95px] h-[45px] flex items-center justify-center gap-2 border border-[#5E23DC] rounded-full active:scale-95 hover:bg-[#F4EDFF] transition"
     >
-      <img
+      <img loading="lazy" decoding="async"
         src={avatar || "/assets/user/UserIcon.svg"}
         alt=""
         onError={(e) => {

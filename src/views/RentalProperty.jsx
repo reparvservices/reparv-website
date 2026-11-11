@@ -139,7 +139,7 @@ const RentalProperty = ({
           {/* Right Illustration */}
           <div className="relative col-span-2 flex justify-center lg:justify-end">
             <div className="flex items-center justify-center">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/property/cityView.svg"
                 alt="City Illustration"
                 className="max-w-full max-h-full object-cover"
@@ -159,13 +159,13 @@ const RentalProperty = ({
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {propertyTypes.map((item, index) => (
-              <NavCard cardData={item} />
+              <NavCard key={item.id ?? item.title ?? index} cardData={item} />
             ))}
           </div>
         </div>
 
         <div className="mx-auto">
-          <img
+          <img loading="lazy" decoding="async"
             src="/assets/property/RentalPg.svg"
             alt="Rental Pg Card"
             className="w-full mx-auto max-w-[1100px] object-cover hover:scale-102 duration-500 transition-all cursor-pointer "

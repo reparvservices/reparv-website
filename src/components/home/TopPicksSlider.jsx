@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import ViewAllButton from "./ViewAllButton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../store/auth";
 import { FiChevronRight } from "react-icons/fi";
 import FormatPrice from "../FormatPrice";
@@ -26,6 +26,8 @@ const getTopPickImage = (property) => {
   return FALLBACK_PROPERTY_IMAGE;
 };
 
+const SSR_CITY = "Nagpur";
+
 const TopPicksSlider = ({ initialProperties = null }) => {
   const router = useRouter();
   const {
@@ -39,6 +41,7 @@ const TopPicksSlider = ({ initialProperties = null }) => {
   } = useAuth();
 
   const [properties, setProperties] = useState(initialProperties ?? []);
+  const loadedCity = useRef(initialProperties !== null ? SSR_CITY : null);
   const [isPaused, setIsPaused] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -95,7 +98,8 @@ const TopPicksSlider = ({ initialProperties = null }) => {
   }, [properties, isPaused]);
 
   useEffect(() => {
-    if (initialProperties !== null) return;
+    if (loadedCity.current === selectedCity) return;
+    loadedCity.current = selectedCity;
     const fetchData = async () => {
       try {
         const res = await fetch(
@@ -103,13 +107,14 @@ const TopPicksSlider = ({ initialProperties = null }) => {
           { credentials: "include" }
         );
         const data = await res.json();
-        setProperties(data);
+        setProperties(Array.isArray(data) ? data : []);
+        setCurrentIndex(0);
       } catch (e) {
         console.error(e);
       }
     };
     fetchData();
-  }, [selectedCity, initialProperties, URI]);
+  }, [selectedCity, URI]);
 
   if (!item) return null;
 

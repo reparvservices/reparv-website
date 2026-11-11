@@ -21,7 +21,7 @@ function WhatsappShare({ projectPartner }) {
         onClick={handleWhatsAppClick}
         className="w-10 md:w-15 h-10 md:h-15 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/50 active:scale-95 transition transform hover:scale-110"
       >
-        <img
+        <img loading="lazy" decoding="async"
           src="/assets/projectPartner/whatsapp.png"
           alt="WhatsApp Chat"
           className="object-contain w-10 md:w-25 h-10 md:h-15 animate-pulse"

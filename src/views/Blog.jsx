@@ -88,7 +88,7 @@ export default function NewBlogs({ initialBlogs = null }) {
         {/* HERO */}
         <section className="relative w-full h-[250px] sm:h-[300px] md:h-[450px] lg:h-[500px] overflow-hidden">
           {/* Background Image */}
-          <img
+          <img loading="lazy" decoding="async"
             src="/assets/blog/BlogBack.svg"
             alt="Blog Hero"
             className="absolute inset-0 w-full h-full object-cover rounded-bl-4xl rounded-br-4xl sm:rounded-bl-none sm:rounded-br-none"

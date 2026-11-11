@@ -107,7 +107,7 @@ export default function EnquiryPopup({ projectPartner }) {
           >
             Enquiry Now
           </h3>
-          <img
+          <img loading="lazy" decoding="async"
             src={getImageURI(projectPartner?.businessLogo)}
             alt={projectPartner?.fullname}
             className={`${

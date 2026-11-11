@@ -10,7 +10,7 @@ const AboutUs = () => {
       title: "Truth",
       desc: "Real estate transactions are challenging, but the Reparv platform solves them with honesty and efficiency.",
       icon: (
-        <img src="/assets/aboutUs/Icon1.svg" alt="icon" className="w-18 object-cover mr-14 mb-14" />
+        <img loading="lazy" decoding="async" src="/assets/aboutUs/Icon1.svg" alt="icon" className="w-18 object-cover mr-14 mb-14" />
       ),
     },
     {
@@ -18,7 +18,7 @@ const AboutUs = () => {
       title: "Trust",
       desc: "Trust in real estate transactions is often uncertain, but Reparv has established a seamless process to solve this problem effortlessly.",
       icon: (
-        <img src="/assets/aboutUs/Icon2.svg" alt="icon" className="h-18 object-cover mr-14 mb-14" />
+        <img loading="lazy" decoding="async" src="/assets/aboutUs/Icon2.svg" alt="icon" className="h-18 object-cover mr-14 mb-14" />
       ),
     },
     {
@@ -26,7 +26,7 @@ const AboutUs = () => {
       title: "Transparency",
       desc: "The lack of a trackable, technology-driven system keeps most real estate processes manual, making understanding a major challenge.",
       icon: (
-        <img src="/assets/aboutUs/Icon3.svg" alt="icon" className="h-18 object-cover mr-14 mb-14" />
+        <img loading="lazy" decoding="async" src="/assets/aboutUs/Icon3.svg" alt="icon" className="h-18 object-cover mr-14 mb-14" />
       ),
     },
   ];

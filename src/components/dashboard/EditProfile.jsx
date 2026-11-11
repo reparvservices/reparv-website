@@ -289,7 +289,7 @@ export default function EditProfile() {
       {/* ================= PHOTO ================= */}
       <div className="flex items-center gap-5 mb-8">
         <div className="relative shrink-0">
-          <img
+          <img loading="lazy" decoding="async"
             src={avatarSrc}
             alt="Profile"
             onError={(e) => {

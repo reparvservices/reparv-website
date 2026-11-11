@@ -78,7 +78,7 @@ function BlogCard({ blogData }) {
           <span className="absolute bottom-3 left-3 bg-[#E53935] text-white text-[11px] font-bold px-2.5 py-1 rounded">
             BLOG
           </span>
-          <img
+          <img loading="lazy" decoding="async"
             src="/assets/reparvLogo.svg"
             alt="Reparv"
             className="absolute top-3 right-3 w-8 h-8 rounded bg-white/90 p-0.5"

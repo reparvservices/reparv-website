@@ -16,7 +16,12 @@ export async function fetchBlogs() {
       SSR_FETCH_OPTIONS,
     );
     if (!response.ok) return [];
-    return await response.json();
+    const blogs = await response.json();
+    // List views never render the article body; dropping it keeps the
+    // serialized page payload (and HTML size) small.
+    return Array.isArray(blogs)
+      ? blogs.map(({ content, ...rest }) => rest) // eslint-disable-line no-unused-vars
+      : blogs;
   } catch (error) {
     console.error("SSR fetchBlogs error:", error);
     return [];
@@ -265,6 +270,31 @@ export async function fetchAdvertisements(city = "Nagpur") {
   }
 }
 
+// Home-page cards only render a handful of fields. Sending whole database rows
+// (long descriptions, SEO text, benefit copy) made the home HTML several MB.
+const HOME_PROPERTY_FIELDS = [
+  "propertyid", "propertycityid", "id", "seoSlug", "propertyName",
+  "propertyCategory", "propertyType", "listingType", "propertyKind",
+  "frontView", "image", "webp", "totalOfferPrice", "totalSalesPrice",
+  "location", "address", "city", "state", "pincode",
+  "distanceFromCityCenter", "hotDeal", "recommended", "reparvAssured",
+  "reraRegistered", "reraStatus", "propertyApprovedBy", "likes", "views",
+  "projectBy", "topPicksBanner", "businessLogo", "tittle", "client",
+  "message", "description", "carpetArea", "builtUpArea", "latitude",
+  "longitude", "emi", "furnishing", "status",
+];
+
+function slimProperties(list) {
+  if (!Array.isArray(list)) return list;
+  return list.map((item) => {
+    const copy = {};
+    for (const key of HOME_PROPERTY_FIELDS) {
+      if (item?.[key] !== undefined) copy[key] = item[key];
+    }
+    return copy;
+  });
+}
+
 export async function fetchHomePageData(city = "Nagpur") {
   const [
     allProperties,
@@ -284,14 +314,14 @@ export async function fetchHomePageData(city = "Nagpur") {
     fetchAdvertisements(city),
   ]);
 
-  const rentalProperties = allProperties.filter((item) =>
-    item.propertyCategory?.startsWith("Rental"),
+  const rentalProperties = slimProperties(
+    allProperties.filter((item) => item.propertyCategory?.startsWith("Rental")),
   );
 
   return {
     rentalProperties,
-    trendingProperties,
-    topPicks,
+    trendingProperties: slimProperties(trendingProperties),
+    topPicks: slimProperties(topPicks),
     blogs,
     testimonials,
     faqs,
@@ -307,7 +337,7 @@ export async function fetchPropertyLandingPageData(faqLocation) {
   ]);
 
   return {
-    initialProperties: properties,
+    initialProperties: slimProperties(properties),
     initialBlogs: blogs,
     initialFaqs: faqs,
   };

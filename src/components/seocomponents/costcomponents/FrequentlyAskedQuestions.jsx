@@ -21,7 +21,7 @@ export default function FrequentlyAskedQuestions() {
           <div className="hidden lg:block relative h-[460px]">
             {/* TOP LEFT IMAGE */}
             <div className="absolute top-0 left-0 bg-[#F3EDFF] rounded-3xl p-5 max-w-[300px]">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/seopageassets/costcalculator/faq1.svg"
                 alt="FAQ illustration"
                 className="w-full max-w-[240px] mx-auto"
@@ -30,7 +30,7 @@ export default function FrequentlyAskedQuestions() {
 
             {/* BOTTOM RIGHT IMAGE */}
             <div className="absolute bottom-0 right-0 bg-[#EDE5FF] rounded-3xl p-5 max-w-[340px]">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/seopageassets/costcalculator/faq2.svg"
                 alt="FAQ discussion illustration"
                 className="w-full max-w-[280px] mx-auto"

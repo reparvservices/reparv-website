@@ -91,14 +91,14 @@ export default function VerifiedBuilders({
                   className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col"
                 >
                   <div className="relative h-[200px]">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={getBuilderImage(builder)}
                       alt={name}
                       className="w-full h-full object-cover"
                     />
 
                     <div className="absolute top-3 left-3 bg-[#7C3AED] text-white text-xs px-3 py-1 rounded-full flex items-center gap-1">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src="/assets/seopageassets/turstedbuilder/verified-badge.svg"
                         alt=""
                         className="w-3 h-3"
@@ -109,7 +109,7 @@ export default function VerifiedBuilders({
 
                   <div className="p-4 flex flex-col flex-1">
                     <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src="/assets/seopageassets/turstedbuilder/location.svg"
                         alt=""
                         className="w-4 h-4"
@@ -122,7 +122,7 @@ export default function VerifiedBuilders({
                     <div className="flex justify-between text-xs text-[#7C3AED] mb-4">
                       {experience ? (
                         <div className="flex items-center gap-1">
-                          <img
+                          <img loading="lazy" decoding="async"
                             src="/assets/seopageassets/turstedbuilder/calender.svg"
                             alt=""
                             className="w-4 h-4"
@@ -133,7 +133,7 @@ export default function VerifiedBuilders({
                         <span />
                       )}
                       <div className="flex items-center gap-1">
-                        <img
+                        <img loading="lazy" decoding="async"
                           src="/assets/seopageassets/turstedbuilder/projects.svg"
                           alt=""
                           className="w-4 h-4"

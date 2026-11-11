@@ -73,7 +73,7 @@ function FlatCard({ property }) {
   return (
     <div className="bg-white shadow-[0px_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden flex-shrink-0 w-64 sm:w-auto hover:shadow-lg transition-shadow">
       <div className="relative h-48 bg-gradient-to-br from-slate-300 to-slate-400">
-        <img
+        <img loading="lazy" decoding="async"
           src={getPropertyImage(property)}
           alt={property?.propertyName}
           className="w-full h-full object-cover"
@@ -113,7 +113,7 @@ function ProjectCard({ project }) {
   return (
     <div className="flex flex-col gap-1 flex-shrink-0 w-72 sm:w-auto hover:shadow-md transition-shadow">
       <div className="relative h-56 bg-gradient-to-br from-violet-300 to-violet-600 rounded-2xl overflow-hidden">
-        <img
+        <img loading="lazy" decoding="async"
           src={getProjectImage(project)}
           alt={project?.name}
           className="w-full h-full object-cover"
@@ -558,7 +558,7 @@ export default function FlatsForSale({ initialPageData = null, initialFaqs = [] 
 
             <div className="w-full lg:w-[458px] flex-shrink-0 relative">
               <div className="w-full relative rounded-2xl shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] h-[400px] overflow-hidden">
-                <img
+                <img loading="lazy" decoding="async"
                   src={heroImage}
                   alt={`Flats for sale in ${PAGE_CITY}`}
                   className="w-full h-full object-cover rounded-2xl"
@@ -985,7 +985,7 @@ export default function FlatsForSale({ initialPageData = null, initialFaqs = [] 
               <div className="absolute bottom-0 left-0 w-96 h-72 bg-gradient-radial from-[#D9BDFF] to-[#8A38F5] blur-[38px] rounded-full" />
             </div>
             <div className="absolute right-10 bottom-10 w-64 opacity-90">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/seopageassets/visitproperties/banner-image.svg"
                 alt="Reparv app preview"
                 className="w-full object-contain"

@@ -1607,7 +1607,7 @@ function EditProperty() {
                               key={index}
                               className="relative rounded-lg overflow-hidden border border-[#D9D9D9]"
                             >
-                              <img
+                              <img loading="lazy" decoding="async"
                                 src={URL.createObjectURL(img)}
                                 alt="property"
                                 className="w-full lg:max-h-[140px] xl:max-h-[180px] object-cover"

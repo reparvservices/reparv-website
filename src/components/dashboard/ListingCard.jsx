@@ -37,7 +37,7 @@ export default function ListingCard({ property, delProperty }) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-[#D9D9D9] flex gap-5 relative">
       {/* Image */}
-      <img
+      <img loading="lazy" decoding="async"
         src={(() => {
           try {
             const images = JSON.parse(property?.frontView || "[]");

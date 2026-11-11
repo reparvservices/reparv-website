@@ -79,7 +79,7 @@ export default function Step3Documents({ formData, setFormData, fieldRefs }) {
 
         <div className={uploadBox}>
           {formData.panImage ? (
-            <img
+            <img loading="lazy" decoding="async"
               src={URL.createObjectURL(formData.panImage)}
               alt="PAN Preview"
               className="w-40 h-24 object-cover rounded-md"
@@ -138,7 +138,7 @@ export default function Step3Documents({ formData, setFormData, fieldRefs }) {
         {/* Aadhaar Front */}
         <div className={uploadBox}>
           {formData.aadhaarFrontImage ? (
-            <img
+            <img loading="lazy" decoding="async"
               src={URL.createObjectURL(formData.aadhaarFrontImage)}
               alt="Aadhaar Front"
               className="w-40 h-24 object-cover rounded-md"
@@ -172,7 +172,7 @@ export default function Step3Documents({ formData, setFormData, fieldRefs }) {
         {/* Aadhaar Back */}
         <div className={uploadBox}>
           {formData.aadhaarBackImage ? (
-            <img
+            <img loading="lazy" decoding="async"
               src={URL.createObjectURL(formData.aadhaarBackImage)}
               alt="Aadhaar Back"
               className="w-40 h-24 object-cover rounded-md"

@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -8,10 +8,14 @@ import ViewAllButton from "./home/ViewAllButton";
 import PropertyCard from "./property/PropertyCard";
 import { motion } from "framer-motion";
 
+const CARD_LIMIT = 16;
+const SSR_CITY = "Nagpur";
+
 const PropertySection = ({ category, initialProperties = null }) => {
   const router = useRouter();
   const { URI, selectedCity } = useAuth();
   const [properties, setProperties] = useState(initialProperties ?? []);
+  const loadedCity = useRef(initialProperties !== null ? SSR_CITY : null);
 
   const mobileCard = {
     hidden: { opacity: 0, y: 30, scale: 0.96 },
@@ -23,7 +27,7 @@ const PropertySection = ({ category, initialProperties = null }) => {
     },
   };
 
-  const filteredByCategory = properties?.filter((item) => {
+  const filteredByCategory = (properties ?? []).filter((item) => {
     if (!category) return true;
 
     const cat = item?.propertyCategory || "";
@@ -41,7 +45,7 @@ const PropertySection = ({ category, initialProperties = null }) => {
     }
 
     return true;
-  });
+  }).slice(0, CARD_LIMIT);
 
   // fetch Properties
   const fetchData = async () => {
@@ -60,16 +64,17 @@ const PropertySection = ({ category, initialProperties = null }) => {
       if (!response.ok) throw new Error("Failed to fetch properties.");
 
       const data = await response.json();
-      setProperties(data);
+      setProperties(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching:", err);
     }
   };
 
   useEffect(() => {
-    if (initialProperties !== null) return;
+    if (loadedCity.current === selectedCity) return;
+    loadedCity.current = selectedCity;
     fetchData();
-  }, [selectedCity, initialProperties]);
+  }, [selectedCity]);
 
   return (
     <section className="w-full max-w-[1650px] mx-auto px-4 lg:py-10">
@@ -86,7 +91,7 @@ const PropertySection = ({ category, initialProperties = null }) => {
       <div className="sm:hidden overflow-x-auto scrollbar-hide flex gap-4 px-1 snap-x snap-mandatory">
         {filteredByCategory.map((property) => (
           <motion.div
-            key={property.id}
+            key={property.propertyid ?? property.id}
             variants={mobileCard}
             initial="hidden"
             whileInView="show"

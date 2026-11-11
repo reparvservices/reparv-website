@@ -131,7 +131,7 @@ export default function PropertyVideoFields({
           />
           {errors.videoLink && <p className="text-xs text-red-500 mt-1">{errors.videoLink}</p>}
           {ytId && (
-            <img
+            <img loading="lazy" decoding="async"
               src={`https://img.youtube.com/vi/${ytId}/mqdefault.jpg`}
               alt="YouTube preview"
               className="mt-2 w-full aspect-video rounded-lg object-cover border border-[#D9D9D9]"

@@ -60,7 +60,7 @@ function RiskCard({ title, description, icon }) {
     <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#FF3B30] shadow-sm hover:shadow-md transition">
       {/* ICON */}
       <div className="w-12 h-12 rounded-xl bg-[#FFE8E6] flex items-center justify-center mb-4">
-        <img src={icon} alt={title} className="w-6 h-6" />
+        <img loading="lazy" decoding="async" src={icon} alt={title} className="w-6 h-6" />
       </div>
 
       {/* TITLE */}

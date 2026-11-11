@@ -328,7 +328,7 @@ export default function HomeLoanPrepayment() {
           <div className="w-full sm:max-w-xs lg:w-[532px] lg:max-w-[532px] flex-shrink-0 flex items-center justify-center">
             <div className="w-full flex md:mt-15 items-center justify-center rounded-2xl overflow-hidden md:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
               <div className="text-white relative overflow-hidden w-full flex items-center justify-center">
-                <img src="/assets/seoPages/HomeLoanPrePayment/hero.svg" alt="hero image" className="w-full bg-cover" />
+                <img loading="lazy" decoding="async" src="/assets/seoPages/HomeLoanPrePayment/hero.svg" alt="hero image" className="w-full bg-cover" />
               </div>
             </div>
           </div>
@@ -720,7 +720,7 @@ export default function HomeLoanPrepayment() {
 
             {/* Right: image */}
             <div className="w-full lg:w-[624px] flex-shrink-0 rounded-3xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] h-72 sm:h-96 lg:h-[632px] bg-gradient-to-br from-amber-100 via-orange-100 to-yellow-50 flex items-center justify-center">
-              <img src="/assets/seoPages/HomeLoanPrePayment/image.svg" alt="image" />
+              <img loading="lazy" decoding="async" src="/assets/seoPages/HomeLoanPrePayment/image.svg" alt="image" />
             </div>
           </div>
         </div>

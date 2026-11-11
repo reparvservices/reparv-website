@@ -114,7 +114,7 @@ function Step({ number, title, subtitle, description, image, align }) {
       {/* RIGHT SIDE: Image first */}
       {isRight && (
         <div className="flex justify-center mb-6">
-          <img src={image} alt={title} className="max-w-[260px]" />
+          <img loading="lazy" decoding="async" src={image} alt={title} className="max-w-[260px]" />
         </div>
       )}
 
@@ -139,7 +139,7 @@ function Step({ number, title, subtitle, description, image, align }) {
       {/* LEFT SIDE: Image last */}
       {!isRight && (
         <div className="flex justify-center">
-          <img src={image} alt={title} className="max-w-[260px]" />
+          <img loading="lazy" decoding="async" src={image} alt={title} className="max-w-[260px]" />
         </div>
       )}
     </div>
@@ -149,7 +149,7 @@ function Step({ number, title, subtitle, description, image, align }) {
 function MobileStep({ number, title, subtitle, description, image }) {
   return (
     <div className="text-center">
-      <img src={image} alt={title} className="mx-auto mb-6 max-w-[260px]" />
+      <img loading="lazy" decoding="async" src={image} alt={title} className="mx-auto mb-6 max-w-[260px]" />
 
       <span className="inline-flex w-10 h-10 rounded-full bg-[#EDE9FE] text-[#7C3AED] font-bold items-center justify-center mb-3">
         {number}

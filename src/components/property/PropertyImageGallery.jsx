@@ -285,7 +285,7 @@ export default function PropertyImageGallery({ property }) {
             />
           ) : (
             <div className="relative w-full h-full rounded-xl overflow-hidden">
-              <img
+              <img loading="lazy" decoding="async"
                 src={
                   videoPoster ||
                   getImageURI(activeImages[currentIndex])
@@ -358,7 +358,7 @@ export default function PropertyImageGallery({ property }) {
                     : "border-gray-200"
                 }`}
               >
-                <img
+                <img loading="lazy" decoding="async"
                   src={getImageURI(firstImage)}
                   alt={label}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"

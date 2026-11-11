@@ -137,7 +137,7 @@ function PropertyCard({ property, top = false }) {
         {/* Image */}
 
         {/* Image fills the card, centered */}
-        <img
+        <img loading="lazy" decoding="async"
           src={frontImage}
           alt={property?.seoSlug || property?.propertyName}
           onError={(e) => {
@@ -152,7 +152,7 @@ function PropertyCard({ property, top = false }) {
         <div className="relative flex flex-col gap-2">
           {/* Popular tag */}
           {property?.likes > 500 && (
-            <img
+            <img loading="lazy" decoding="async"
               src="/assets/property/populerTag.svg"
               className="absolute top-[-15px] left-[-8px]"
               alt="Popular"

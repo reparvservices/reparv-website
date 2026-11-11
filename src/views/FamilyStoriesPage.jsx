@@ -235,7 +235,7 @@ function Hero({ pageData }) {
 
         {/* Hero Image — desktop only */}
         <div className="hidden lg:block rounded-2xl overflow-hidden shadow-[0_10px_30px_rgba(94,35,220,0.04)]">
-          <img
+          <img loading="lazy" decoding="async"
             src={heroImage}
             alt={`Family-friendly homes in ${city}`}
             className="w-full h-[380px] object-cover rounded-2xl"
@@ -244,7 +244,7 @@ function Hero({ pageData }) {
 
         {/* Hero Image — mobile (shown below text, matching Figma) */}
         <div className="block lg:hidden rounded-xl overflow-hidden shadow-[0_10px_30px_rgba(94,35,220,0.04)]">
-          <img
+          <img loading="lazy" decoding="async"
             src={heroImage}
             alt={`Family-friendly homes in ${city}`}
             className="w-full h-[262px] object-cover"
@@ -837,7 +837,7 @@ function StoryCard({ story, reverse }) {
         {usesFallbackScene ? (
           <Scene />
         ) : (
-          <img
+          <img loading="lazy" decoding="async"
             src={storyImage}
             alt={story?.title || "Family story"}
             className="absolute inset-0 w-full h-full object-cover"

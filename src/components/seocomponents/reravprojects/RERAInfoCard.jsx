@@ -36,7 +36,7 @@ function InfoCard({ icon, title, description }) {
     <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-[0_12px_40px_#8A38F529] h-full">
       {/* SVG ICON */}
       <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-[#EFE7FF] mb-6">
-        <img src={icon} alt={title} className="w-6 h-6 object-contain" />
+        <img loading="lazy" decoding="async" src={icon} alt={title} className="w-6 h-6 object-contain" />
       </div>
 
       {/* TITLE */}

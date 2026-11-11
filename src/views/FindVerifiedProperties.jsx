@@ -276,7 +276,7 @@ function PropertyCard({ property }) {
   return (
     <div className="bg-white rounded-2xl shadow-[6px_4px_23px_1px_rgba(63,45,98,0.15)] overflow-hidden flex-shrink-0 w-72 sm:w-auto hover:shadow-xl transition-shadow">
       <div className="relative h-48 bg-[#00000010]">
-        <img
+        <img loading="lazy" decoding="async"
           src={getPropertyImage(property)}
           alt={property?.propertyName}
           className="w-full h-full object-cover"
@@ -383,7 +383,7 @@ function InsightCard({ tag, title, desc, href, image }) {
     <div className="bg-white rounded-3xl shadow-[0px_10px_30px_rgba(94,35,220,0.04)] overflow-hidden hover:shadow-lg transition-shadow">
       <div className="h-44 bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center overflow-hidden">
         {image ? (
-          <img src={image} alt={title} className="w-full h-full object-cover" />
+          <img loading="lazy" decoding="async" src={image} alt={title} className="w-full h-full object-cover" />
         ) : (
           <svg
             className="w-14 h-14 text-white/50"
@@ -767,7 +767,7 @@ export default function FindVerifiedProperties({
               <div className="relative rounded-[32px] overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)]">
                 {/* Main building image */}
                 <div className="w-full h-[320px] sm:h-[400px] lg:h-[550px] flex items-center justify-center relative">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src="/assets/seoPages/verifiedProperties/hero.svg"
                     alt="hero image"
                     className="w-full h-full object-cover"
@@ -901,7 +901,7 @@ export default function FindVerifiedProperties({
             {/* Right — image with stats overlay */}
             <div className="relative">
               <div className="rounded-[48px] overflow-hidden h-[400px] lg:h-[516px] flex items-center justify-center relative">
-                <img src="/assets/seoPages/verifiedProperties/image.svg" alt="hero image" className="w-full h-full object-cover" />
+                <img loading="lazy" decoding="async" src="/assets/seoPages/verifiedProperties/image.svg" alt="hero image" className="w-full h-full object-cover" />
               </div>
               {/* Stats overlay — bottom-left */}
               <div className="absolute -bottom-5 -left-5 bg-white border border-[#E8DDFF] rounded-3xl p-8 shadow-[0_10px_30px_rgba(94,35,220,0.04)]">

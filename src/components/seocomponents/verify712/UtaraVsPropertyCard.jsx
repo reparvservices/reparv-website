@@ -90,7 +90,7 @@ export default function UtaraVsPropertyCard() {
 
         {/* IMPORTANT NOTE */}
         <div className="mt-10 bg-[#FFF7E0] border-l-4 border-[#FFC107] p-4 rounded-md flex gap-3">
-          <img src="/assets/seopageassets/verify712/info-icon.svg" alt="info" className="w-4 h-4 mt-1" />
+          <img loading="lazy" decoding="async" src="/assets/seopageassets/verify712/info-icon.svg" alt="info" className="w-4 h-4 mt-1" />
           <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
             <strong>Important Note:</strong> If land has been converted from
             agricultural to non-agricultural (NA conversion), you may need both
@@ -118,7 +118,7 @@ function UsageCard({ icon, title, items, bg, border, listIcon }) {
         className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
         style={{ backgroundColor: border }}
       >
-        <img src={icon} alt={title} className="w-5 h-5" />
+        <img loading="lazy" decoding="async" src={icon} alt={title} className="w-5 h-5" />
       </div>
 
       <h3 className="text-lg sm:text-xl font-bold mb-4">{title}</h3>
@@ -126,7 +126,7 @@ function UsageCard({ icon, title, items, bg, border, listIcon }) {
       <ul className="space-y-3">
         {items.map((item) => (
           <li key={item} className="flex gap-3">
-            <img src={listIcon} alt="" className="w-4 h-4 mt-1" />
+            <img loading="lazy" decoding="async" src={listIcon} alt="" className="w-4 h-4 mt-1" />
             <span className="text-sm sm:text-base text-gray-700">{item}</span>
           </li>
         ))}

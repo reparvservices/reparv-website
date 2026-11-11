@@ -105,7 +105,7 @@ function RentalCard({ property, index = 0 }) {
   return (
     <div className="bg-white border border-[rgba(203,195,216,0.1)] shadow-[0px_10px_30px_rgba(94,35,220,0.04)] rounded-3xl overflow-hidden flex-shrink-0 w-72 sm:w-auto hover:shadow-lg transition-shadow">
       <Link href={`/property-info/${property?.seoSlug}`} className="relative h-56 block">
-        <img
+        <img loading="lazy" decoding="async"
           src={getPropertyImage(property)}
           alt={getRentalTitle(property)}
           className="w-full h-full object-cover"
@@ -1060,7 +1060,7 @@ export default function RentalProperties({ initialPageData = null, initialFaqs =
             </Link>
           </div>
           <div className="absolute right-0 top-0 bottom-0 w-[45%] hidden lg:flex items-center justify-center">
-            <img
+            <img loading="lazy" decoding="async"
               src="/assets/seoPages/rentalProperties/image.svg"
               alt="Reparv rental app"
               className="w-56 h-56 object-contain opacity-90"

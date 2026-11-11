@@ -71,7 +71,7 @@ function InfoCard({ icon, title, items, bg, border, description, listIcon }) {
         className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
         style={{ backgroundColor: border }}
       >
-        <img src={icon} alt={title} className="w-5 h-5" />
+        <img loading="lazy" decoding="async" src={icon} alt={title} className="w-5 h-5" />
       </div>
 
       {/* TITLE */}
@@ -88,7 +88,7 @@ function InfoCard({ icon, title, items, bg, border, description, listIcon }) {
       <ul className="space-y-3">
         {items.map((item) => (
           <li key={item} className="flex items-start gap-3">
-            <img src={listIcon} alt="" className="w-4 h-4 mt-1 flex-shrink-0" />
+            <img loading="lazy" decoding="async" src={listIcon} alt="" className="w-4 h-4 mt-1 flex-shrink-0" />
             <span className="text-sm sm:text-base text-gray-700">{item}</span>
           </li>
         ))}

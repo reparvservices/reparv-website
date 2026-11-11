@@ -83,7 +83,7 @@ const EmiCalculator = ({ initialArticles = null }) => {
 
             {/* RIGHT IMAGE */}
             <div className="hidden lg:flex justify-center lg:justify-end">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/seopageassets/emicalculator/Back.svg"
                 alt="EMI Calculator Illustration"
                 className="relative w-full object-cover"
@@ -94,7 +94,7 @@ const EmiCalculator = ({ initialArticles = null }) => {
           <div id="calculator">
             <EMICalculator />
             <div className="hidden md:block pb-15">
-              <img
+              <img loading="lazy" decoding="async"
                 src="/assets/LoanEMIImage.svg"
                 alt="Image"
                 className="w-full object-cover"

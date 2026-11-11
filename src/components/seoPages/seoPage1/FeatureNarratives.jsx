@@ -38,7 +38,7 @@ export default function FeaturedNarratives() {
             >
               {/* Image */}
               <div className="w-full md:w-1/2 flex-shrink-0 rounded-xl overflow-hidden">
-                <img
+                <img loading="lazy" decoding="async"
                   src={n.image}
                   alt={n.name}
                   className="w-full h-[340px] object-cover rounded-2xl"

@@ -32,7 +32,7 @@ export default function ExploreBuildersByCity({
               className="border border-[#D0D0D0] rounded-2xl p-8 bg-white hover:shadow-md transition text-center"
             >
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#F4EEFF] flex items-center justify-center">
-                <img
+                <img loading="lazy" decoding="async"
                   src={getCityIcon(city.name)}
                   alt={city.name}
                   className="w-9 h-9"

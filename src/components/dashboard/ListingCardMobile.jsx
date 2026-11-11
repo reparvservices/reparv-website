@@ -39,7 +39,7 @@ export default function ListingCardMobile({ property, delProperty }) {
     <div className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden">
       {/* IMAGE */}
       <div className="relative">
-        <img
+        <img loading="lazy" decoding="async"
           src={imageSrc}
           alt={property?.seoSlug || property?.propertyName}
           className="w-full h-44 object-cover"

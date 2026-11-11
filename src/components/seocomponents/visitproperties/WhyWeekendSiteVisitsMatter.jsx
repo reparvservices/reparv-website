@@ -64,7 +64,7 @@ export default function WhyWeekendSiteVisitsMatter({ city = "your city" }) {
                 {/* IMAGE */}
                 <div className={reverse ? "lg:order-2" : ""}>
                   <div className="rounded-2xl overflow-hidden shadow-md">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={item.image}
                       alt={item.title}
                       className="w-full h-full object-cover"
@@ -89,7 +89,7 @@ export default function WhyWeekendSiteVisitsMatter({ city = "your city" }) {
                   {/* CHECK NOTE */}
                   <div className="flex items-start gap-3 bg-[#F6F2FF] rounded-lg px-4 py-3">
                     <div className="w-6 h-6 rounded-full  flex items-center justify-center mt-0.5">
-                      <img src="/assets/seopageassets/visitproperties/check.svg" alt="" className="w-5 h-5" />
+                      <img loading="lazy" decoding="async" src="/assets/seopageassets/visitproperties/check.svg" alt="" className="w-5 h-5" />
                     </div>
                     <p className="text-xs sm:text-sm font-medium text-[#3F2D62]">
                       {item.note}

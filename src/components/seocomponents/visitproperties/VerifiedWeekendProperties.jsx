@@ -50,7 +50,7 @@ export default function VerifiedWeekendProperties({
                   className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden"
                 >
                   <div className="relative">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={getPropertyImage(property)}
                       alt={property.propertyName}
                       className="w-full h-[200px] object-cover"
@@ -63,7 +63,7 @@ export default function VerifiedWeekendProperties({
 
                   <div className="p-4 space-y-3">
                     <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src="/assets/seopageassets/visitproperties/location.svg"
                         alt=""
                         className="w-4 h-4"
@@ -100,7 +100,7 @@ export default function VerifiedWeekendProperties({
 
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-2 text-sm min-w-0">
-                        <img
+                        <img loading="lazy" decoding="async"
                           src="/assets/seopageassets/visitproperties/profile.svg"
                           alt=""
                           className="w-5 h-5 flex-shrink-0"

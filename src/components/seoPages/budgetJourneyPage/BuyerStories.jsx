@@ -94,7 +94,7 @@ export default function BuyerStories({ pageData = null }) {
               } flex items-center justify-center shadow-md relative overflow-hidden`}
             >
               {s.image ? (
-                <img
+                <img loading="lazy" decoding="async"
                   src={s.image}
                   alt={s.name}
                   className="absolute inset-0 w-full h-full object-cover"
