@@ -348,7 +348,7 @@ export default function RentalProperties({ initialPageData = null, initialFaqs =
       {
         label: "PROPERTY TYPE",
         key: "type",
-        options: ["Any", ...propertyTypeOptions.filter((item) => item !== "Commercial"), "House", "PG"],
+        options: [...new Set(["Any", ...propertyTypeOptions.filter((item) => item !== "Commercial"), "House", "PG"])],
       },
       {
         label: "BUDGET (MONTHLY)",

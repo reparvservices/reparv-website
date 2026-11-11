@@ -175,6 +175,11 @@ export default function FilterSidebar({ type }) {
 
   const fetchLocations = async () => {
     try {
+      // The API needs a property category and a city; without them it answers 400.
+      if (!selectedType?.trim() || !selectedCity?.trim()) {
+        setLocations([]);
+        return;
+      }
       const queryParams = [];
 
       if (selectedType && selectedType.trim() !== "") {

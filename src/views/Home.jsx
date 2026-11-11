@@ -9,7 +9,6 @@ import AssociatedWith from "@/components/home/AssociatedWith";
 const TrendingPropertySection = lazy(
   () => import("../components/home/TrendingPropertySection"),
 );
-const AgentsSection = lazy(() => import("../components/home/AgentsSection"));
 const PropertySection = lazy(
   () => import("../components/home/PropertySection"),
 );
@@ -62,12 +61,6 @@ function Home({
             <TrendingPropertySection
               initialProperties={initialTrendingProperties}
             />
-          </motion.div>
-        </Suspense>
-
-        <Suspense fallback={<SectionSkeleton height="420px" />}>
-          <motion.div variants={item}>
-            <AgentsSection />
           </motion.div>
         </Suspense>
 

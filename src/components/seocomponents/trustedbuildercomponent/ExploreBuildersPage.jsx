@@ -110,12 +110,12 @@ export default function BuilderTrustFlow() {
               text="Every builder meets our stringent quality standards and industry best practices"
             />
             <BottomCard
-              icon="/assets/seopageassets/turstedbuilder/expert.svg"
+              icon="/assets/seopageassets/turstedbuilder/review.svg"
               title="Expert Support"
               text="Dedicated relationship managers to guide you through every step of your journey"
             />
             <BottomCard
-              icon="/assets/seopageassets/turstedbuilder/secure.svg"
+              icon="/assets/seopageassets/turstedbuilder/protection.svg"
               title="Secure Transactions"
               text="Protected communication channels and secure documentation process"
             />

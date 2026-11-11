@@ -66,7 +66,7 @@ const AboutUs = () => {
                 className="w-full object-cover"
               />
               <motion.img
-                src="/assets/aboutUs/VerifiedTag.svg"
+                src="/assets/aboutUs/tag.svg"
                 alt="Verified Tag"
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}

@@ -304,11 +304,11 @@ const TopPicksSlider = ({ initialProperties = null }) => {
                         </p>
                         <div className="flex items-baseline gap-2">
                           <span className="text-2xl sm:text-3xl font-extrabold">
-                            ₹<FormatPrice price={item.totalOfferPrice / 100000} /> L*
+                            <FormatPrice price={item.totalOfferPrice / 100000} /> L*
                           </span>
                           {Number(item.totalSalesPrice) > Number(item.totalOfferPrice) ? (
                             <span className="text-sm line-through opacity-60">
-                              ₹<FormatPrice price={item.totalSalesPrice / 100000} /> L
+                              <FormatPrice price={item.totalSalesPrice / 100000} /> L
                             </span>
                           ) : null}
                         </div>
