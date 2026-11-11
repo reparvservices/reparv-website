@@ -38,6 +38,20 @@ export default function PropertyImageGallery({ property }) {
     balconyView: "Balcony",
     nearestLandmark: "Landmark",
     developedAmenities: "Amenities",
+    interiorView: "Interior",
+    entranceView: "Entrance",
+    roadView: "Road View",
+    parkingView: "Parking",
+    officeArea: "Office Area",
+    cabinView: "Cabin",
+    washroomView: "Washroom",
+    warehouseArea: "Warehouse Area",
+    loadingArea: "Loading Area",
+    showroomInterior: "Showroom Interior",
+    displayArea: "Display Area",
+    terraceSitout: "Terrace / Sit-out",
+    farmGardenArea: "Farm / Garden Area",
+    extraImages: "More Photos",
   };
 
   // ── Parse Images ─────────────────────────────────────
@@ -327,7 +341,9 @@ export default function PropertyImageGallery({ property }) {
           ref={scrollRef}
           className="flex gap-3 overflow-x-auto scrollbar-hide bg-white p-4 rounded-xl"
         >
-          {Object.entries(imageCategories).map(([key, label]) => {
+          {Object.entries(imageCategories)
+            .filter(([key]) => imagesByCategory[key]?.length > 0)
+            .map(([key, label]) => {
             const firstImage = imagesByCategory[key]?.[0];
 
             if (!firstImage) return null;

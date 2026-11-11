@@ -252,6 +252,19 @@ export async function fetchTestimonials() {
   }
 }
 
+// Live sponsored ads for a city. Returns null on failure so the client refetches.
+export async function fetchAdvertisements(city = "Nagpur") {
+  try {
+    const data = await fetchJson(
+      `/frontend/advertisements?city=${encodeURIComponent(city)}`,
+    );
+    return Array.isArray(data) ? data : null;
+  } catch (error) {
+    console.error("SSR fetchAdvertisements error:", error);
+    return null;
+  }
+}
+
 export async function fetchHomePageData(city = "Nagpur") {
   const [
     allProperties,
@@ -260,6 +273,7 @@ export async function fetchHomePageData(city = "Nagpur") {
     blogs,
     testimonials,
     faqs,
+    advertisements,
   ] = await Promise.all([
     fetchAllProperties(city),
     fetchTrendingProperties(city),
@@ -267,6 +281,7 @@ export async function fetchHomePageData(city = "Nagpur") {
     fetchBlogs(),
     fetchTestimonials(),
     fetchFaqs("Reparv Home Page"),
+    fetchAdvertisements(city),
   ]);
 
   const rentalProperties = allProperties.filter((item) =>
@@ -280,6 +295,7 @@ export async function fetchHomePageData(city = "Nagpur") {
     blogs,
     testimonials,
     faqs,
+    advertisements,
   };
 }
 

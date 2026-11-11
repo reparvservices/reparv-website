@@ -26,6 +26,7 @@ export default async function Page() {
       initialBlogs={homeData.blogs}
       initialTestimonials={homeData.testimonials}
       initialFaqs={homeData.faqs}
+      initialAds={homeData.advertisements}
     />
   );
 }

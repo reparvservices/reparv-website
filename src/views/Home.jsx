@@ -13,6 +13,9 @@ const AgentsSection = lazy(() => import("../components/home/AgentsSection"));
 const PropertySection = lazy(
   () => import("../components/home/PropertySection"),
 );
+const AdvertisementSection = lazy(
+  () => import("../components/home/AdvertisementSection"),
+);
 const CustomerReviewSection = lazy(
   () => import("../components/home/CustomerReviewSection"),
 );
@@ -40,6 +43,7 @@ function Home({
   initialBlogs = null,
   initialTestimonials = null,
   initialFaqs = null,
+  initialAds = null,
 }) {
   return (
     <>
@@ -70,6 +74,13 @@ function Home({
         <Suspense fallback={<SectionSkeleton height="320px" />}>
           <motion.div variants={item}>
             <PropertySection initialProperties={initialRentalProperties} />
+          </motion.div>
+        </Suspense>
+
+        {/* Sponsored real-estate ads, managed in Admin → Promotions → Advertisements */}
+        <Suspense fallback={null}>
+          <motion.div variants={item}>
+            <AdvertisementSection initialAds={initialAds} />
           </motion.div>
         </Suspense>
 
