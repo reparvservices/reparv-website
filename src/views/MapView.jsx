@@ -273,7 +273,6 @@ const MapPropertyCard = React.memo(function MapPropertyCard({
             e.currentTarget.src = FALLBACK_IMG;
           }}
           alt={property?.propertyName}
-          loading="lazy"
           className="w-full h-full object-cover"
         />
         {property?.hotDeal === "Active" && (

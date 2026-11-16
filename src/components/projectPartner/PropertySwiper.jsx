@@ -163,7 +163,6 @@ export default function PropertySwiper({ projectPartner }) {
                     })()}
                     alt={property.propertyName}
                     className="w-full h-full object-cover block"
-                    loading="lazy"
                   />
                 </div>
 

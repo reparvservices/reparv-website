@@ -141,7 +141,6 @@ function PropertySection({ projectPartner }) {
                 e.target.onerror = null;
                 e.target.src = `/assets/property/propertyPicture.svg`;
               }}
-              loading="lazy"
               className="cursor-pointer object-cover h-[250px] w-full bg-[#00000020]"
             />
             <div className="relative flex flex-col gap-2">

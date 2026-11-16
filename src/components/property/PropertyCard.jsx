@@ -144,8 +144,6 @@ function PropertyCard({ property, top = false }) {
             e.currentTarget.onerror = null;
             e.currentTarget.src = "/assets/property/propertyPicture.svg";
           }}
-          loading="lazy"
-          decoding="async"
           className="block h-[180px] w-full object-cover object-center bg-[#00000020]"
         />
 
