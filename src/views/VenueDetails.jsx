@@ -5,11 +5,37 @@ import Link from "next/link";
 import { TiLocationOutline } from "react-icons/ti";
 import { RiBuildingLine } from "react-icons/ri";
 import { FiUsers, FiHome, FiCheckCircle, FiArrowLeft } from "react-icons/fi";
+import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin, FaGlobe } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import FormatPrice from "../components/FormatPrice";
 import AdvertisementCard from "../components/AdvertisementCard";
 
 const PLAY_STORE = "https://play.google.com/store/apps/details?id=com.reparvcustomer";
 const FALLBACK_IMAGE = "/assets/property/propertyPicture.svg";
+
+const SOCIALS = [
+  { key: "youtube", label: "YouTube", Icon: FaYoutube },
+  { key: "instagram", label: "Instagram", Icon: FaInstagram },
+  { key: "facebook", label: "Facebook", Icon: FaFacebook },
+  { key: "x", label: "X", Icon: FaXTwitter },
+  { key: "linkedin", label: "LinkedIn", Icon: FaLinkedin },
+  { key: "website", label: "Website", Icon: FaGlobe },
+];
+
+/** YouTube video id from watch / youtu.be / shorts / embed links, else null. */
+function youtubeId(url) {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") return u.pathname.slice(1) || null;
+    if (host.endsWith("youtube.com")) {
+      if (u.searchParams.get("v")) return u.searchParams.get("v");
+      const m = u.pathname.match(/^\/(shorts|embed|live)\/([\w-]+)/);
+      return m ? m[2] : null;
+    }
+  } catch {}
+  return null;
+}
 
 function Row({ label, value }) {
   if (!value) return null;
@@ -35,15 +61,15 @@ function BookingCard({ venue }) {
   const weekend = venue.weekend_price && Number(venue.weekend_price) > Number(venue.base_price);
   const tiles = [
     { Icon: FiUsers, label: `${venue.capacity} Guests` },
-    { Icon: FiHome, label: venue.bedrooms ? `${venue.bedrooms} Bedrooms` : venue.type },
-    { Icon: RiBuildingLine, label: venue.type },
+    { Icon: FiHome, label: venue.bedrooms ? `${venue.bedrooms} Bedrooms` : venue.type_label || venue.type },
+    { Icon: RiBuildingLine, label: venue.type_label || venue.type },
   ];
   return (
     <div className="relative w-full max-w-[460px] bg-white rounded-2xl p-4 sm:p-5 flex flex-col gap-3 font-sans">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight">{venue.title}</h2>
-          <p className="text-xs font-bold text-violet-600 mt-0.5 capitalize">{venue.type} in {venue.city}</p>
+          <p className="text-xs font-bold text-violet-600 mt-0.5 capitalize">{venue.type_label || venue.type} in {venue.city}</p>
         </div>
         <div className="flex-shrink-0 bg-violet-50 border border-violet-100 rounded-xl px-2.5 py-1.5 text-[9px] font-bold text-slate-700 uppercase tracking-wide">
           Reparv Assured
@@ -164,7 +190,7 @@ export default function VenueDetails({ venue }) {
             <Card title="Overview">
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
                 <div>
-                  <Row label="Venue Type" value={venue.type} />
+                  <Row label="Venue Type" value={venue.type_label || venue.type} />
                   <Row label="Capacity" value={`${venue.capacity} guests`} />
                   <Row label="Bedrooms" value={venue.bedrooms ? String(venue.bedrooms) : ""} />
                   <Row label="Pricing" value={unit} />
@@ -177,6 +203,44 @@ export default function VenueDetails({ venue }) {
                 </div>
               </div>
             </Card>
+
+            {(venue.videos?.length > 0 || youtubeId(venue.social_links?.youtube)) ? (
+              <Card title="Videos">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {youtubeId(venue.social_links?.youtube) ? (
+                    <iframe
+                      className="w-full aspect-video rounded-xl"
+                      src={`https://www.youtube-nocookie.com/embed/${youtubeId(venue.social_links.youtube)}`}
+                      title={`${venue.title} video`}
+                      loading="lazy"
+                      allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : null}
+                  {venue.videos?.map((src) => (
+                    <video key={src} src={src} controls preload="metadata" className="w-full aspect-video rounded-xl bg-black" />
+                  ))}
+                </div>
+              </Card>
+            ) : null}
+
+            {SOCIALS.some(({ key }) => venue.social_links?.[key]) ? (
+              <Card title="Follow this venue">
+                <div className="flex flex-wrap gap-3">
+                  {SOCIALS.filter(({ key }) => venue.social_links?.[key]).map(({ key, label, Icon }) => (
+                    <a
+                      key={key}
+                      href={venue.social_links[key]}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className="flex items-center gap-2 rounded-full border border-[#8A38F5] px-4 py-2 text-sm font-semibold text-[#8A38F5] hover:bg-purple-50"
+                    >
+                      <Icon /> {label}
+                    </a>
+                  ))}
+                </div>
+              </Card>
+            ) : null}
 
             {venue.amenities?.length ? (
               <Card title="Amenities">
