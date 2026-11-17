@@ -23,6 +23,7 @@ const PLAY_STORE_URL =
 const DESKTOP_LINKS = [
   { href: "/", label: "Home" },
   { href: "/properties", label: "Properties" },
+  { href: "/venues", label: "Venues" },
   { href: "/about-us", label: "About Us", className: "hidden xl:flex" },
   { href: "/contact-us", label: "Contact Us", className: "hidden xl:flex" },
 ];
@@ -30,6 +31,7 @@ const DESKTOP_LINKS = [
 const SIDEBAR_LINKS = [
   { to: "/", label: "Home" },
   { to: "/properties", label: "Properties" },
+  { to: "/venues", label: "Venues" },
   { to: "/about-us", label: "About Us" },
   { to: "/contact-us", label: "Contact Us" },
   { to: "/blogs", label: "Blogs" },

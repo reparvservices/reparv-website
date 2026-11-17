@@ -82,6 +82,7 @@ export const FOOTER_HOME_LOAN_LINKS = [
   { title: "Buy Resale Property", href: "/buy-resale-property" },
   { title: "Rent Property", href: "/rent-property" },
   { title: "Sell Property", href: "/sell-old-property" },
+  { title: "Book Villas & Halls", href: "/venues" },
 ];
 
 export const FOOTER_LEGAL_LINKS = [

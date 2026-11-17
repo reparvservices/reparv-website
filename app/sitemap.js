@@ -35,7 +35,6 @@ const STATIC_PAGES = [
     changeFrequency: "daily",
   }).filter((page) => page.path !== ""),
   { path: "/map-view", priority: 0.7, changeFrequency: "weekly" },
-  { path: "/venues", priority: 0.7, changeFrequency: "daily" },
   { path: "/rental-property", priority: 0.8, changeFrequency: "weekly" },
   ...linksToPages(FOOTER_HOME_LOAN_LINKS, {
     priority: 0.8,
