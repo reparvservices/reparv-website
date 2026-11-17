@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" fill="none">
+  <ellipse cx="130" cy="165" rx="112" ry="9" fill="#EDE3FF"/>
+  <!-- tree left -->
+  <rect x="26" y="108" width="7" height="50" rx="3" fill="#8A5CF6"/>
+  <circle cx="30" cy="96" r="22" fill="#B79BFF"/>
+  <circle cx="44" cy="108" r="14" fill="#CDB9FF"/>
+  <!-- villa body -->
+  <rect x="62" y="82" width="136" height="76" rx="4" fill="#FFFFFF" stroke="#7029E8" stroke-width="3"/>
+  <!-- roof -->
+  <path d="M52 86 L130 36 L208 86 Z" fill="#7029E8"/>
+  <path d="M70 84 L130 46 L190 84 Z" fill="#8A5CF6"/>
+  <!-- chimney -->
+  <rect x="168" y="42" width="12" height="24" rx="2" fill="#5B2BC9"/>
+  <!-- door -->
+  <rect x="116" y="112" width="28" height="46" rx="14" fill="#7029E8"/>
+  <circle cx="138" cy="136" r="2.4" fill="#EDE3FF"/>
+  <!-- windows -->
+  <rect x="76" y="100" width="28" height="26" rx="3" fill="#EDE3FF" stroke="#7029E8" stroke-width="2.5"/>
+  <line x1="90" y1="100" x2="90" y2="126" stroke="#7029E8" stroke-width="2"/>
+  <line x1="76" y1="113" x2="104" y2="113" stroke="#7029E8" stroke-width="2"/>
+  <rect x="156" y="100" width="28" height="26" rx="3" fill="#EDE3FF" stroke="#7029E8" stroke-width="2.5"/>
+  <line x1="170" y1="100" x2="170" y2="126" stroke="#7029E8" stroke-width="2"/>
+  <line x1="156" y1="113" x2="184" y2="113" stroke="#7029E8" stroke-width="2"/>
+  <!-- round attic window -->
+  <circle cx="130" cy="72" r="9" fill="#EDE3FF" stroke="#FFFFFF" stroke-width="3"/>
+  <!-- pool -->
+  <rect x="206" y="140" width="40" height="18" rx="9" fill="#9ED8FF"/>
+  <path d="M212 148 q6 -5 12 0 t12 0" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+  <!-- bunting -->
+  <path d="M62 90 Q96 106 130 90 T198 90" stroke="#FFB38A" stroke-width="2" fill="none"/>
+  <path d="M78 98 l4 9 l4 -9 Z M104 101 l4 9 l4 -9 Z M150 101 l4 9 l4 -9 Z M176 98 l4 9 l4 -9 Z" fill="#FFB38A"/>
+</svg>

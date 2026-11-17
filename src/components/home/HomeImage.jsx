@@ -12,15 +12,14 @@ import PropertyActionCard from './hero/PropertyActionCard';
 export default function HomeImage({ trendingProperties = [] }) {
   const router = useRouter();
 
-  const { user, setShowLogin, selectedCity, setShowComingSoonModal } =
-    useAuth();
+  const { selectedCity, setShowComingSoonModal } = useAuth();
 
   const cards = [
     {
-      to: user ? '/sell-properties' : 'no',
-      title: 'List Property',
-      description: 'Post your property and reach genuine buyers or tenants.',
-      image: '/assets/home/hero/list-property.webp',
+      to: '/venues',
+      title: 'Book Villas & Halls',
+      description: 'Stay or host an event at verified villas, halls and venues.',
+      image: '/assets/home/hero/venues.svg',
     },
     {
       to: '/properties/type/buy',
@@ -117,9 +116,7 @@ export default function HomeImage({ trendingProperties = [] }) {
             title={card.title}
             description={card.description}
             image={card.image}
-            onClick={() =>
-              card.to === 'no' ? setShowLogin(true) : router.push(card.to)
-            }
+            onClick={() => router.push(card.to)}
           />
         ))}
       </div>

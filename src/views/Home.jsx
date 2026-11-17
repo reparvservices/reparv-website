@@ -12,7 +12,9 @@ const TrendingPropertySection = lazy(
 const PropertySection = lazy(
   () => import("../components/home/PropertySection"),
 );
-const VenueSection = lazy(() => import("../components/home/VenueSection"));
+const ListPropertySection = lazy(
+  () => import("../components/home/ListPropertySection"),
+);
 const AdvertisementSection = lazy(
   () => import("../components/home/AdvertisementSection"),
 );
@@ -71,10 +73,10 @@ function Home({
           </motion.div>
         </Suspense>
 
-        {/* Bookable villas, halls and venues (partners add them; admin approves) */}
+        {/* Owners and agents: list a property */}
         <Suspense fallback={<SectionSkeleton height="320px" />}>
           <motion.div variants={item}>
-            <VenueSection />
+            <ListPropertySection />
           </motion.div>
         </Suspense>
 
