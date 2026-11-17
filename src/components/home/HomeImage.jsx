@@ -16,12 +16,6 @@ export default function HomeImage({ trendingProperties = [] }) {
 
   const cards = [
     {
-      to: '/venues',
-      title: 'Book Villas & Halls',
-      description: 'Stay or host an event at verified villas, halls and venues.',
-      image: '/assets/home/hero/venues.svg',
-    },
-    {
       to: '/properties/type/buy',
       title: 'Buy Properties',
       description: 'Explore properties that match your needs.',
@@ -38,6 +32,12 @@ export default function HomeImage({ trendingProperties = [] }) {
       title: 'Commercial Properties',
       description: 'Discover shops, offices and commercial spaces for your business.',
       image: '/assets/home/hero/commercial-property.webp',
+    },
+    {
+      to: '/venues',
+      title: 'Book Villas & Halls',
+      description: 'Stay or host an event at verified villas, halls and venues.',
+      image: '/assets/home/hero/venues.svg',
     },
   ];
 
