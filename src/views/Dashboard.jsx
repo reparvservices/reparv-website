@@ -6,11 +6,13 @@ import DashboardSidebar, { DASHBOARD_TABS } from "../components/dashboard/Dashbo
 import EditProfile from "../components/dashboard/EditProfile";
 import MyListings from "../components/dashboard/MyListings";
 import HomeLoan from "../components/dashboard/HomeLoan";
+import MyBookings from "../components/dashboard/MyBookings";
 import { useAuth } from "../store/auth";
 
 const TAB_CONTENT = {
   profile: EditProfile,
   listings: MyListings,
+  bookings: MyBookings,
   "home-loan": HomeLoan,
 };
 
@@ -18,6 +20,7 @@ const TAB_CONTENT = {
 const MOBILE_ROUTES = {
   profile: "/profile",
   listings: "/my-listings",
+  bookings: "/my-bookings",
   "home-loan": "/home-loan",
 };
 

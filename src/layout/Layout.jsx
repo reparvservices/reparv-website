@@ -228,7 +228,8 @@ export default function SiteLayout({ children }) {
         )}
 
         {/* Show Coming Soon Screen */}
-        {showComingSoonModal && <ComingSoonModal onClose={handleCloseModal} />}
+        {/* Coming Soon modal hidden for now */}
+        {false && showComingSoonModal && <ComingSoonModal onClose={handleCloseModal} />}
 
         {/* AI Agent Widget */}
         <Suspense fallback={null}>

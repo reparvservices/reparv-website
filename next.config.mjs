@@ -5,6 +5,8 @@ const DEFAULT_S3_IMAGE_URL =
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  // Lets a second dev server (e.g. browser tests) use its own build folder; unchanged by default
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,

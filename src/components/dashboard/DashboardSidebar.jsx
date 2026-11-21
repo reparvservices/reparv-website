@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoChevronForward, IoLogOutOutline } from "react-icons/io5";
-import { FaUserEdit, FaPlus } from "react-icons/fa";
+import { FaUserEdit, FaPlus, FaRegCalendarCheck } from "react-icons/fa";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { RiBankLine } from "react-icons/ri";
 import { useAuth } from "../../store/auth";
@@ -13,6 +13,7 @@ import useLogout from "../../hooks/useLogout";
 export const DASHBOARD_TABS = [
   { key: "profile", label: "Edit Profile", icon: <FaUserEdit /> },
   { key: "listings", label: "My Listings", icon: <HiOutlineClipboardList /> },
+  { key: "bookings", label: "My Bookings", icon: <FaRegCalendarCheck /> },
   { key: "home-loan", label: "Home Loan", icon: <RiBankLine /> },
 ];
 

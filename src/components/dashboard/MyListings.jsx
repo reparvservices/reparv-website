@@ -9,6 +9,7 @@ import { HiOutlineHome, HiOutlineEye, HiOutlineHeart } from "react-icons/hi";
 import { BiMessageRoundedDots } from "react-icons/bi";
 import ListingCard from "./ListingCard";
 import Enquiries from "./Enquiries";
+import MyVenues from "./MyVenues";
 import { listingStatusFor } from "../../utils/propertyListing";
 
 import {
@@ -358,6 +359,7 @@ export default function MyListings() {
                   key={item.propertyid}
                   property={item}
                   delProperty={delProperty}
+                  onPaid={fetchData}
                 />
               ))}
               {hasMoreListings && (
@@ -373,6 +375,9 @@ export default function MyListings() {
             </div>
           )}
         </section>
+
+        {/* ================= VENUES ================= */}
+        <MyVenues />
 
         {/* ================= PERFORMANCE CHARTS ================= */}
         {listings.length > 0 && (

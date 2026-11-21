@@ -20,10 +20,15 @@ export const LISTING_TYPES = [
   { key: "Rent", label: "Rent", hint: "List a property for rent" },
 ];
 
+// Venue Booking (villas, halls, farmhouses, event spaces) is a property type too, but it is
+// priced per night / slot and saved through the venue API instead of the property API.
+export const VENUE_KIND = "Venue";
+
 export const PROPERTY_KINDS = [
   { key: "Residential", label: "Residential" },
   { key: "Commercial", label: "Commercial" },
   { key: "Agriculture", label: "Agriculture / Land" },
+  { key: VENUE_KIND, label: "Venue Booking" },
 ];
 
 // Sell: new launch or resale (maps to the existing category groups)
@@ -36,7 +41,13 @@ const NEW_CATEGORIES = [
   { label: "New Flat", value: "NewFlat", icon: MdApartment, kind: "Residential" },
   { label: "New Plot", value: "NewPlot", icon: FaCity, kind: "Residential" },
   { label: "Row House", value: "RowHouse", icon: FaHome, kind: "Residential" },
+  { label: "Studio", value: "Studio", icon: FaHome, kind: "Residential" },
+  { label: "Penthouse", value: "Penthouse", icon: GiFamilyHouse, kind: "Residential" },
+  { label: "Independent Floor", value: "IndependentFloor", icon: FaBuilding, kind: "Residential" },
   { label: "New Shop", value: "NewShop", icon: FaStore, kind: "Commercial" },
+  { label: "Office Space", value: "OfficeSpace", icon: FaBuilding, kind: "Commercial" },
+  { label: "Showrooms", value: "Showrooms", icon: BsShopWindow, kind: "Commercial" },
+  { label: "Warehouse", value: "Warehouse", icon: FaWarehouse, kind: "Commercial" },
   { label: "Commercial Flat", value: "CommercialFlat", icon: FaBuilding, kind: "Commercial" },
   { label: "Commercial Plot", value: "CommercialPlot", icon: FaCity, kind: "Commercial" },
   { label: "Industrial Space", value: "IndustrialSpace", icon: FaIndustry, kind: "Commercial" },
@@ -54,6 +65,7 @@ const RESALE_CATEGORIES = [
   { label: "Resale Office", value: "ResaleOffice", icon: FaBuilding, kind: "Commercial" },
   { label: "Resale Godown", value: "ResaleGodown", icon: FaWarehouse, kind: "Commercial" },
   { label: "Resale ShowRoom", value: "ResaleShowroom", icon: BsShopWindow, kind: "Commercial" },
+  { label: "Resale Farm Land", value: "ResaleFarmLand", icon: FaTree, kind: "Agriculture" },
   { label: "Resale Farm House", value: "ResaleFarmHouse", icon: GiFarmTractor, kind: "Agriculture" },
 ];
 
@@ -247,6 +259,7 @@ export const areaDisplayFor = (property = {}) => {
  * approve = "Not Approved" and stay hidden until an admin approves them.
  */
 export const listingStatusFor = (property = {}) => {
+  if (property.fee_status === "pending") return "Payment Pending"; // listing fee not paid yet
   if (property.status && property.status !== "Active") return "Inactive";
   if (property.approve === "Approved") return "Live";
   if (property.approve === "Rejected") return "Rejected";
@@ -275,3 +288,38 @@ export const needsConfiguration = ({ propertyKind, propertyCategory }) => {
   const kind = propertyKind || kindOfCategory(propertyCategory);
   return kind === "Residential" && areaModeFor({ propertyKind: kind, propertyCategory }) === "built";
 };
+
+/* ── Photos: same sections and limits as the partner and admin apps ────────── */
+
+export const MAX_PHOTOS_PER_SECTION = 5;
+export const MAX_EXTRA_PHOTOS = 10;
+export const maxPhotosFor = (key) =>
+  key === "extraImages" ? MAX_EXTRA_PHOTOS : MAX_PHOTOS_PER_SECTION;
+
+const S = (key, label, required) => ({ key, label, required: !!required });
+const FRONT = S("frontView", "Front View", true);
+const EXTRA = S("extraImages", "Extra / Other");
+const RESIDENTIAL_SECTIONS = [FRONT, S("sideView", "Side View"), S("hallView", "Hall"), S("kitchenView", "Kitchen"), S("bedroomView", "Bedroom"), S("bathroomView", "Bathroom"), S("balconyView", "Balcony"), EXTRA];
+const PLOT_SECTIONS = [FRONT, S("nearestLandmark", "Nearest Landmark"), S("developedAmenities", "Developed Amenities"), EXTRA];
+const FARMHOUSE_SECTIONS = [FRONT, S("sideView", "Side View"), S("hallView", "Hall"), S("kitchenView", "Kitchen"), S("bathroomView", "Bathroom"), S("terraceSitout", "Terrace / Sit-out"), S("farmGardenArea", "Farm / Garden Area"), EXTRA];
+const SHOP_SECTIONS = [FRONT, S("interiorView", "Interior"), S("entranceView", "Entrance"), S("roadView", "Road View"), S("parkingView", "Parking"), EXTRA];
+const OFFICE_SECTIONS = [FRONT, S("officeArea", "Office Area"), S("cabinView", "Cabin"), S("washroomView", "Washroom"), S("parkingView", "Parking"), EXTRA];
+const WAREHOUSE_SECTIONS = [FRONT, S("warehouseArea", "Warehouse Area"), S("loadingArea", "Loading Area"), S("washroomView", "Washroom"), S("parkingView", "Parking"), EXTRA];
+const SHOWROOM_SECTIONS = [FRONT, S("showroomInterior", "Showroom Interior"), S("entranceView", "Entrance"), S("displayArea", "Display Area"), S("roadView", "Road View"), S("parkingView", "Parking"), S("washroomView", "Washroom"), EXTRA];
+
+const SECTION_GROUPS = [
+  [PLOT_SECTIONS, ["NewPlot", "CommercialPlot", "ResalePlot", "RentalPlot", "FarmLand", "ResaleFarmLand", "RentalOpenLand"]],
+  [FARMHOUSE_SECTIONS, ["FarmHouse", "ResaleFarmHouse"]],
+  [SHOP_SECTIONS, ["NewShop", "Shop", "ResaleShop", "RentalShop"]],
+  [OFFICE_SECTIONS, ["OfficeSpace", "CommercialFlat", "ResaleOffice", "RentalOffice"]],
+  [WAREHOUSE_SECTIONS, ["Warehouse", "IndustrialSpace", "ResaleGodown", "RentalGodown", "RentalWarehouse"]],
+  [SHOWROOM_SECTIONS, ["Showrooms", "ResaleShowroom", "ResaleShowRoom", "RentalShowroom", "RentalShowRoom"]],
+];
+
+export const imageSectionsFor = (category) =>
+  SECTION_GROUPS.find(([, ids]) => ids.includes(category))?.[0] ?? RESIDENTIAL_SECTIONS;
+
+const ALL_SECTIONS = [RESIDENTIAL_SECTIONS, ...SECTION_GROUPS.map(([sections]) => sections)].flat();
+export const ALL_IMAGE_SECTIONS = ALL_SECTIONS.filter(
+  (sec, i) => ALL_SECTIONS.findIndex((o) => o.key === sec.key) === i,
+);

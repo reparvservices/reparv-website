@@ -158,7 +158,8 @@ export default function PropertyBasicDetails({
                     style={BORDER}
                   >
                     <option value="">Select</option>
-                    {f.options.map((o) => (
+                    {/* an older listing may hold a value that is not in the standard list: keep it visible */}
+                    {[...f.options, ...(newProperty?.[f.key] && !f.options.includes(newProperty[f.key]) ? [newProperty[f.key]] : [])].map((o) => (
                       <option key={o} value={o}>
                         {o}
                       </option>

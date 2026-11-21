@@ -27,6 +27,7 @@ import {
 
 import Enquiries from "./Enquiries";
 import ListingCardMobile from "./ListingCardMobile";
+import MyVenues from "./MyVenues";
 import { aggregateChartData } from "../../utils/chart.js";
 
 // ===== DUMMY DB-LIKE DATA =====
@@ -255,6 +256,7 @@ export default function MyListingsMobile() {
                 key={item.id}
                 property={item}
                 delProperty={delProperty}
+                onPaid={fetchData}
               />
             ))}
             {/* Load more Properties Button */}
@@ -270,6 +272,8 @@ export default function MyListingsMobile() {
             </div>
           </div>
         )}
+
+        <MyVenues />
 
         <div id="enquiries">
           {enquiries?.length > 0 && <Enquiries enquiries={enquiries} />}

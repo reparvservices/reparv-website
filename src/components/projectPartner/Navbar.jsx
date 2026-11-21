@@ -218,9 +218,10 @@ function Navbar({ projectPartner }) {
             <option value="https://play.google.com/store/apps/details?id=com.reparvnewsalesapp">
               Sales App
             </option>
+            {/* Territory App option hidden for now
             <option value="https://play.google.com/store/apps/details?id=com.newreparvterritory_app">
               Territory App
-            </option>
+            </option> */}
           </select>
           {/* Dropdown Arrow */}
           <RiArrowDropDownLine size={24} />

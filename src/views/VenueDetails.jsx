@@ -9,8 +9,8 @@ import { FaYoutube, FaInstagram, FaFacebook, FaLinkedin, FaGlobe } from "react-i
 import { FaXTwitter } from "react-icons/fa6";
 import FormatPrice from "../components/FormatPrice";
 import AdvertisementCard from "../components/AdvertisementCard";
+import VenueBookingForm from "../components/venue/VenueBookingForm";
 
-const PLAY_STORE = "https://play.google.com/store/apps/details?id=com.reparvcustomer";
 const FALLBACK_IMAGE = "/assets/property/propertyPicture.svg";
 
 const SOCIALS = [
@@ -113,17 +113,7 @@ function BookingCard({ venue }) {
         ) : null}
       </div>
 
-      <a
-        href={PLAY_STORE}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-full flex items-center justify-center rounded-md bg-[#8A38F5] shadow-[0px_7px_13px_0px_#8A38F540] text-white font-bold py-3 text-base active:scale-95"
-      >
-        Book in the Reparv App
-      </a>
-      <p className="text-[11px] text-gray-400 text-center">
-        Choose dates and pay securely in the Reparv app.
-      </p>
+      <VenueBookingForm venue={venue} />
     </div>
   );
 }

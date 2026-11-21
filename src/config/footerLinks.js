@@ -20,7 +20,7 @@ export const FOOTER_PARTNER_LINKS = [
     external: true,
   },
   { title: "Sales Partner", href: "/sales-partner" },
-  { title: "Territory Partner", href: "/territory-partner" },
+  // { title: "Territory Partner", href: "/territory-partner" },
   { title: "Join Our Team", href: "/join-our-team" },
 ];
 

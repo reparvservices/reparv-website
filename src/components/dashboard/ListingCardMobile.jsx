@@ -13,8 +13,9 @@ import { useAuth } from "../../store/auth";
 import { getImageURI } from "../../utils/helper";
 import ListingBadges from "./ListingBadges";
 import { categoryLabel } from "../../utils/propertyListing";
+import PayListingFee from "./PayListingFee";
 
-export default function ListingCardMobile({ property, delProperty }) {
+export default function ListingCardMobile({ property, delProperty, onPaid }) {
   const { URI } = useAuth();
   const ImageUri = import.meta.env.VITE_S3_IMAGE_URL;
   const router = useRouter();
@@ -77,6 +78,7 @@ export default function ListingCardMobile({ property, delProperty }) {
         </p>
 
         <ListingBadges property={property} />
+        <PayListingFee property={property} onPaid={onPaid} className="mt-2" />
 
         {/* FEATURES */}
         <div className="flex flex-wrap gap-4 text-sm text-gray-500">

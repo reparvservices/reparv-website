@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../store/auth";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { IoMdImages } from "react-icons/io";
-import { RxCross2 } from "react-icons/rx";
 import { TiLocationOutline } from "react-icons/ti";
 import { FaChevronDown } from "react-icons/fa";
 import {
@@ -21,7 +20,13 @@ import {
 import { MdApartment } from "react-icons/md";
 import { uploadToS3, uploadToS3WithProgress } from "../../utils/s3";
 import PropertyVideoFields from "./PropertyVideoFields";
+import PhotoSections, { emptyPhotos } from "./PhotoSections";
+import PropertyFeatures, { FEATURE_DEFAULTS } from "./PropertyFeatures";
+import VenueForm from "./VenueForm";
+import { venueApi } from "../../lib/venueApi";
 import PropertyBrochureField from "./PropertyBrochureField";
+import ListingFeeBox from "./ListingFeeBox";
+import { listingFeeApi, payListingFee } from "../../lib/listingFeeApi";
 import { validateVideoLinks } from "../../utils/videoLinks";
 import ListingClassification from "./ListingClassification";
 import PropertyBasicDetails, { requiredAreaField } from "./PropertyBasicDetails";
@@ -32,6 +37,8 @@ import {
   BASIC_DETAIL_KEYS,
   BHK_OPTIONS,
   needsConfiguration,
+  imageSectionsFor,
+  VENUE_KIND,
 } from "../../utils/propertyListing";
 import { MdNotes } from "react-icons/md";
 
@@ -44,14 +51,12 @@ const LocationPicker = dynamic(() => import("./LocationPicker"), {
 const PURPLE = "#8A38F5";
 const GRAY = "#868686";
 
-const MAX_PHOTOS = 3;
-const MAX_PHOTO_BYTES = 15 * 1024 * 1024; // before compression
 const PHOTO_MAX_EDGE = 1600; // px, longest side after compression
 
 const PROPERTY_NAME_REGEX = /^[A-Za-z0-9\s\-&.,'()/]+$/;
 const OWNER_NAME_REGEX = /^[A-Za-z\s.]+$/;
 const PHONE_REGEX = /^[6-9]\d{9}$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PINCODE_REGEX = /^[1-9]\d{5}$/;
 const MAX_DESCRIPTION = 3000;
 
@@ -64,7 +69,7 @@ const STEPS = [
 ];
 const STEP_FIELDS = {
   1: ["propertyCategory", "propertyName"],
-  2: ["address", "location", "pincode", "state", "city"],
+  2: ["address", "location", "pincode", "state", "city", "latitude"],
   3: ["area", "propertyType", "totalSalesPrice", "totalOfferPrice", "propertyDescription", "projectBy", "contact", "email"],
 };
 const stepOfField = (field) => Number(Object.keys(STEP_FIELDS).find((n) => STEP_FIELDS[n].includes(field))) || 1;
@@ -140,6 +145,7 @@ const EMPTY_PROPERTY = (listingType) => ({
   email: "",
   videoLink: "",
   instagramReelLink: "",
+  ...FEATURE_DEFAULTS,
 });
 
 function SellProperty({ initialListingType = "Sell", initialCondition = "new" }) {
@@ -149,11 +155,12 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
   const [condition, setCondition] = useState(initialCondition);
   const [newProperty, setNewProperty] = useState(() => EMPTY_PROPERTY(initialListingType));
   const [errors, setErrors] = useState({});
-  const [photos, setPhotos] = useState([]); // [{ file, preview }]
+  const [photos, setPhotos] = useState(emptyPhotos); // { sectionKey: [{ file, preview }] }
   const [photoError, setPhotoError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("");
   const [submitError, setSubmitError] = useState("");
+  const [feeQuote, setFeeQuote] = useState(null); // free, or the fee to pay at submit
   const [nameStatus, setNameStatus] = useState("idle"); // idle | checking | available | taken
   const [video, setVideo] = useState(null); // { file, preview }
   const [mediaErrors, setMediaErrors] = useState({});
@@ -186,6 +193,20 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
   };
   const propertyTab = propertyTabFor(classification);
   const isRent = propertyTab === "rent";
+  const isVenue = classification.propertyKind === VENUE_KIND;
+
+  // A venue is saved through the venue API (draft, then submitted for admin approval)
+  const saveVenue = async (body, submit) => {
+    await venueApi(URI).save(null, body, submit);
+    setShowAlert({
+      show: true,
+      type: "success",
+      title: submit ? "Venue submitted" : "Venue saved",
+      message: "Your venue is under review. It will go live for bookings once our team approves it.",
+    });
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    router.push(isMobile ? "/my-listings" : "/dashboard?tab=listings");
+  };
   const showConfiguration = needsConfiguration(newProperty);
 
   const priceLabels = isRent
@@ -284,54 +305,6 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
     };
   }, [URI, newProperty.propertyName, isLoggedIn]);
 
-  /* ---------------- PHOTOS ---------------- */
-  useEffect(() => {
-    return () => photos.forEach((p) => URL.revokeObjectURL(p.preview));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handlePhotoSelect = (event) => {
-    const files = Array.from(event.target.files || []);
-    event.target.value = "";
-    setPhotoError("");
-
-    const valid = [];
-    for (const file of files) {
-      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
-        setPhotoError("Only JPG, PNG or WEBP photos are allowed");
-        continue;
-      }
-      if (file.size > MAX_PHOTO_BYTES) {
-        setPhotoError("Each photo must be smaller than 15 MB");
-        continue;
-      }
-      valid.push(file);
-    }
-
-    const room = MAX_PHOTOS - photos.length;
-    if (valid.length > room) {
-      setPhotoError(`You can add up to ${MAX_PHOTOS} photos`);
-    }
-    const added = valid.slice(0, Math.max(room, 0)).map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-    }));
-    if (added.length) setPhotos((prev) => [...prev, ...added]);
-  };
-
-  const removePhoto = (index) => {
-    setPhotos((prev) => {
-      URL.revokeObjectURL(prev[index].preview);
-      return prev.filter((_, i) => i !== index);
-    });
-    setPhotoError("");
-  };
-
-  const makeCover = (index) => {
-    setPhotos((prev) => [prev[index], ...prev.filter((_, i) => i !== index)]);
-  };
-
-  /* ---------------- VALIDATION ---------------- */
   const validateDetails = () => {
     const e = {};
     const p = newProperty;
@@ -346,8 +319,9 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
     else if (nameStatus === "taken") e.propertyName = "This name is already used. Try adding the area or building number";
 
     if (!p.address.trim()) e.address = "Address is required";
-    if (!p.location.trim()) e.location = "Locality is required";
-    if (p.pincode && !PINCODE_REGEX.test(p.pincode)) e.pincode = "Enter a valid 6-digit pincode";
+    // Same rules as the admin and partner panels: pincode and a map pin are required, locality is optional
+    if (!PINCODE_REGEX.test(String(p.pincode || ""))) e.pincode = "Enter a valid 6-digit pincode";
+    if (!p.latitude || !p.longitude) e.latitude = "Please pin the location on the map";
     if (!p.state) e.state = "Select a state";
     if (!p.city) e.city = "Select a city";
 
@@ -380,6 +354,7 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
     "pincode",
     "state",
     "city",
+    "latitude",
     "area",
     "propertyType",
     "totalSalesPrice",
@@ -487,8 +462,8 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
       setTimeout(() => focusFirstError(errs), 50);
       return;
     }
-    if (photos.length === 0) {
-      setPhotoError("Add at least 1 photo of the property");
+    if (!(photos.frontView || []).length) {
+      setPhotoError("Add at least 1 Front View photo of the property");
       return;
     }
     const mediaErrs = validateVideoLinks(newProperty);
@@ -539,29 +514,23 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
         if (!shownDetails.has(k)) delete payload[k];
       });
 
-      // Upload photos (first photo is the cover)
-      const urls = [];
-      for (let i = 0; i < photos.length; i++) {
-        setSubmitStatus(`Uploading photo ${i + 1} of ${photos.length}...`);
-        const file = await compressImage(photos[i].file);
-        const url = await uploadToS3(file);
-        if (!url) throw new Error("A photo failed to upload. Please check your connection and try again.");
-        urls.push(url);
+      // Upload photos section by section (the first Front View photo is the cover)
+      const shownSections = new Set(imageSectionsFor(newProperty.propertyCategory).map((sec) => sec.key));
+      const toUpload = Object.entries(photos).filter(([section, list]) => shownSections.has(section) && list.length);
+      const total = toUpload.reduce((n, [, list]) => n + list.length, 0);
+      let done = 0;
+      for (const [section, list] of toUpload) {
+        const urls = [];
+        for (const item of list) {
+          done += 1;
+          setSubmitStatus(`Uploading photo ${done} of ${total}...`);
+          const file = await compressImage(item.file);
+          const url = await uploadToS3(file);
+          if (!url) throw new Error("A photo failed to upload. Please check your connection and try again.");
+          urls.push(url);
+        }
+        payload[section] = urls;
       }
-      [
-        "frontView",
-        "sideView",
-        "kitchenView",
-        "hallView",
-        "bedroomView",
-        "bathroomView",
-        "balconyView",
-        "nearestLandmark",
-        "developedAmenities",
-      ].forEach((field) => {
-        payload[field] = [];
-      });
-      payload.frontView = urls;
 
       // Optional walkthrough video + links
       if (video) {
@@ -604,14 +573,40 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
       if (!response.ok) throw new Error(data.message || "Failed to save. Please try again.");
 
       discardDraft();
-      setShowAlert({
-        show: true,
-        type: "success",
-        title: "Listing submitted",
-        message: `Your property is under review. It will be visible to ${
-          isRent ? "tenants" : "buyers"
-        } once our team verifies it.`,
-      });
+
+      if (data.payment_required) {
+        // The listing is saved but hidden until the listing fee is paid
+        setSubmitStatus("Opening payment...");
+        try {
+          await payListingFee(listingFeeApi(URI), data.id, { description: `Listing fee: ${propertyName}` });
+          setShowAlert({
+            show: true,
+            type: "success",
+            title: "Payment received",
+            message: `Your property is under review. It will be visible to ${
+              isRent ? "tenants" : "buyers"
+            } once our team verifies it.`,
+          });
+        } catch (payErr) {
+          setShowAlert({
+            show: true,
+            type: "info",
+            title: "Listing saved, payment pending",
+            message: payErr.dismissed
+              ? "Your listing is saved but not submitted yet. Pay the listing fee from My Listings to send it for review."
+              : `${payErr.message} Your listing is saved. You can pay from My Listings to send it for review.`,
+          });
+        }
+      } else {
+        setShowAlert({
+          show: true,
+          type: "success",
+          title: "Listing submitted",
+          message: `Your property is under review. It will be visible to ${
+            isRent ? "tenants" : "buyers"
+          } once our team verifies it.`,
+        });
+      }
 
       const isMobile = window.matchMedia("(max-width: 767px)").matches;
       router.push(isMobile ? "/my-listings" : "/dashboard?tab=listings");
@@ -747,6 +742,26 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
             </div>
           )}
 
+          {isVenue ? (
+            <>
+              <h2 className="text-xl sm:text-2xl font-bold text-black mb-6">List your venue</h2>
+              <ListingClassification
+                allowVenue
+                value={classification}
+                onChange={({ listingType, condition: nextCondition, propertyKind, propertyCategory }) => {
+                  setCondition(nextCondition);
+                  setNewProperty({ ...newProperty, listingType, propertyKind, propertyCategory });
+                }}
+              />
+              <VenueForm
+                embedded
+                setBusy={setSubmitting}
+                onCancel={() => setNewProperty({ ...newProperty, propertyKind: "Residential", propertyCategory: "" })}
+                onSave={saveVenue}
+              />
+            </>
+          ) : (
+          <>
           {/* Stepper */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2 text-xs font-semibold">
@@ -805,6 +820,7 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
                 {/* SELL / BUY / RENT + PROPERTY TYPE */}
                 <div id="field-propertyCategory">
                   <ListingClassification
+                allowVenue
                     value={classification}
                     onChange={({ listingType, condition: nextCondition, propertyKind, propertyCategory }) => {
                       setCondition(nextCondition);
@@ -938,7 +954,7 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
 
                     <div id="field-location" className="w-full col-span-2 lg:col-span-3">
                       <label className="block text-sm font-medium mb-1 ml-1">
-                        Locality / Area <span className="text-red-500">*</span>
+                        Locality / Area
                       </label>
                       <input
                         type="text"
@@ -982,13 +998,17 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
 
                   <div className="mt-6">
                     <label className="block text-sm font-medium mb-2 ml-1">
-                      Pin on Map <span className="text-gray-400 font-normal">(recommended)</span>
+                      Pin on Map <span className="text-red-500">*</span>
                     </label>
                     <LocationPicker
                       latitude={newProperty.latitude}
                       longitude={newProperty.longitude}
-                      onChange={(latitude, longitude) => set({ latitude, longitude })}
+                      onChange={(latitude, longitude) => {
+                        set({ latitude, longitude });
+                        clearError("latitude");
+                      }}
                     />
+                    {errors.latitude && <p className="text-xs text-red-500 mt-1 ml-1">{errors.latitude}</p>}
                     <p className="text-xs mt-1 ml-1" style={{ color: GRAY }}>
                       Listings with a map pin appear on Map View and in &quot;near me&quot; searches.
                     </p>
@@ -1122,6 +1142,9 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
                   </div>
                 </div>
 
+                {/* CHARGES, SPECIFICATIONS, FEATURES, BENEFITS (same as the partner and admin forms) */}
+                <PropertyFeatures value={newProperty} onChange={set} builtUp={areaModeFor(newProperty) === "built"} />
+
                 {/* CONTACT */}
                 <div className="mb-8">
                   <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-1 text-black">
@@ -1235,78 +1258,23 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
                     <IoMdImages color={PURPLE} /> Property Photos <span className="text-red-500">*</span>
                   </h3>
                   <p className="text-sm mb-4" style={{ color: GRAY }}>
-                    Add 1 to {MAX_PHOTOS} clear photos. The first photo is the cover shown in search results.
+                    Add photos for each section. A Front View photo is required, and the first one is the cover shown in
+                    search results. Large photos are compressed automatically.
                   </p>
 
-                  {photos.length < MAX_PHOTOS && (
-                    <label
-                      className={`block border-2 border-dashed rounded-xl p-6 text-center bg-white hover:bg-[#F7F3FF] transition ${
-                        photoError ? "border-red-400" : "border-[#8A38F5]"
-                      } ${submitting ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
-                    >
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/jpeg,image/png,image/webp"
-                        onChange={handlePhotoSelect}
-                        disabled={submitting}
-                        className="hidden"
-                      />
-                      <div className="flex flex-col items-center gap-2 sm:gap-3">
-                        <IoMdImages size={30} color={PURPLE} />
-                        <p className="font-semibold text-black">
-                          {photos.length ? "Add more photos" : "Click to upload photos"}
-                        </p>
-                        <span className="text-xs" style={{ color: GRAY }}>
-                          JPG, PNG or WEBP · {photos.length}/{MAX_PHOTOS} added · large photos are compressed automatically
-                        </span>
-                      </div>
-                    </label>
-                  )}
+                  <PhotoSections
+                    category={newProperty.propertyCategory}
+                    photos={photos}
+                    onChange={(next) => {
+                      setPhotos(next);
+                      setPhotoError("");
+                    }}
+                    disabled={submitting}
+                    error={photoError}
+                    onError={setPhotoError}
+                  />
 
-                  {photoError && <p className="text-sm text-red-500 mt-2">{photoError}</p>}
-
-                  {photos.length > 0 && (
-                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                      {photos.map((photo, index) => (
-                        <div
-                          key={photo.preview}
-                          className={`relative rounded-lg overflow-hidden border ${
-                            index === 0 ? "border-[#8A38F5] ring-2 ring-[#8A38F5]/30" : "border-[#D9D9D9]"
-                          }`}
-                        >
-                          <img loading="lazy" decoding="async"
-                            src={photo.preview}
-                            alt={`Property photo ${index + 1}`}
-                            className="w-full h-[140px] xl:h-[180px] object-cover"
-                          />
-                          {index === 0 ? (
-                            <span className="absolute bottom-1 left-1 rounded bg-[#8A38F5] px-2 py-0.5 text-[11px] font-semibold text-white">
-                              Cover
-                            </span>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={() => makeCover(index)}
-                              disabled={submitting}
-                              className="absolute bottom-1 left-1 rounded bg-white/90 px-2 py-0.5 text-[11px] font-semibold text-[#5323DC] shadow"
-                            >
-                              Make cover
-                            </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => removePhoto(index)}
-                            disabled={submitting}
-                            aria-label="Remove photo"
-                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 shadow"
-                          >
-                            <RxCross2 />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {photoError && <p className="text-sm text-red-500 mt-3">{photoError}</p>}
                 </div>
 
                 <PropertyVideoFields
@@ -1325,6 +1293,12 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
                   error={brochureError}
                   setError={setBrochureError}
                   disabled={submitting}
+                />
+
+                <ListingFeeBox
+                  category={newProperty.propertyCategory}
+                  listingType={isRent ? "Rent" : "Sell"}
+                  onQuote={setFeeQuote}
                 />
 
                 {submitError && (
@@ -1349,12 +1323,14 @@ function SellProperty({ initialListingType = "Sell", initialCondition = "new" })
                     disabled={submitting}
                     className="w-full sm:w-[290px] px-6 py-3 rounded-lg font-semibold text-white bg-[#8A38F5] shadow-[0px_4px_11px_2px_#8A38F540] active:scale-98 disabled:opacity-70"
                   >
-                    {submitting ? submitStatus || "Submitting..." : "Submit for Verification"}
+                    {submitting ? submitStatus || "Submitting..." : feeQuote?.payment_required ? `Submit & pay ₹${Number(feeQuote.fee.total).toLocaleString("en-IN")}` : "Submit for Verification"}
                   </button>
                 </div>
               </>
             )}
           </form>
+          </>
+          )}
         </section>
       </div>
     </div>

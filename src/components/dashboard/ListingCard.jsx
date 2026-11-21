@@ -10,14 +10,16 @@ import { RiBuildingLine } from "react-icons/ri";
 import { getImageURI } from "../../utils/helper";
 import ListingBadges from "./ListingBadges";
 import { categoryLabel, listingStatusFor } from "../../utils/propertyListing";
+import PayListingFee from "./PayListingFee";
 
-export default function ListingCard({ property, delProperty }) {
+export default function ListingCard({ property, delProperty, onPaid }) {
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef(null);
 
   const statusStyle = {
     Live: "bg-green-50 text-green-700 border-green-200",
     "Under Review": "bg-orange-50 text-orange-700 border-orange-200",
+    "Payment Pending": "bg-amber-50 text-amber-800 border-amber-300",
     Rejected: "bg-red-50 text-red-600 border-red-200",
     Inactive: "bg-gray-100 text-gray-600 border-gray-200",
   };
@@ -64,6 +66,7 @@ export default function ListingCard({ property, delProperty }) {
           <span className="truncate">{property?.address}</span>
         </p>
         <ListingBadges property={property} className="mt-2" />
+        <PayListingFee property={property} onPaid={onPaid} className="mt-2" />
 
         <div className="flex gap-4 text-sm text-[#868686] mt-3">
           <div className="flex items-center gap-2">

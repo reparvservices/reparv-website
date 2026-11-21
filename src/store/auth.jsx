@@ -94,7 +94,8 @@ export const AuthProvider = ({ children }) => {
       !lastDismissedAt ||
       Date.now() - Number(lastDismissedAt) >= COMING_SOON_MODAL_COOLDOWN_MS;
 
-    if (shouldShow) {
+    // Coming Soon popup disabled for now (no auto-open on load).
+    if (false && shouldShow) {
       setShowComingSoonModal(true);
     }
   }, []);

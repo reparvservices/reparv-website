@@ -59,12 +59,31 @@ export default function EditProfile() {
     };
   }, [imagePreview]);
 
+  // Fill the form from the details saved in this browser when the server can't return the profile
+  const fillFromSavedLogin = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("guestUser") || "null");
+      if (!saved) return;
+      const next = { ...EMPTY_PROFILE };
+      Object.keys(next).forEach((key) => {
+        next[key] = saved?.[key] ?? "";
+      });
+      setProfile(next);
+      setSavedProfile(next);
+    } catch {
+      /* nothing saved */
+    }
+  };
+
   const fetchProfile = async () => {
     try {
       const res = await fetch(`${URI}/user/profile`, {
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Failed to fetch profile");
+      if (!res.ok) {
+        fillFromSavedLogin();
+        return;
+      }
       const data = await res.json();
       const next = { ...EMPTY_PROFILE };
       Object.keys(next).forEach((key) => {
@@ -74,7 +93,7 @@ export default function EditProfile() {
       setSavedProfile(next);
     } catch (err) {
       console.error(err);
-      setError("Could not load your profile. Please refresh the page.");
+      fillFromSavedLogin();
     } finally {
       setProfileLoaded(true);
     }

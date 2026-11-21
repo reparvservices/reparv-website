@@ -6,6 +6,7 @@ import {
   SALE_CONDITIONS,
   categoriesFor,
   categoryLabel,
+  VENUE_KIND,
 } from "../../utils/propertyListing";
 
 const tabCls = (active) =>
@@ -22,7 +23,7 @@ const tabCls = (active) =>
  * value    : { listingType, condition, propertyKind, propertyCategory }
  * onChange : fn(nextValue) — upper-level changes clear an invalid category
  */
-export default function ListingClassification({ value, onChange }) {
+export default function ListingClassification({ value, onChange, allowVenue = false }) {
   const update = (patch) => {
     const next = { ...value, ...patch };
     if (!("propertyCategory" in patch)) {
@@ -34,6 +35,7 @@ export default function ListingClassification({ value, onChange }) {
     onChange(next);
   };
 
+  const isVenue = value.propertyKind === VENUE_KIND;
   const types = categoriesFor(value);
   // Keep an older/unlisted stored category visible in edit mode
   const showStored =
@@ -42,11 +44,13 @@ export default function ListingClassification({ value, onChange }) {
 
   return (
     <div className="mb-6 sm:mb-8">
-      {/* Sell / Rent */}
-      <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-black">
-        What do you want to do? <span className="text-red-500">*</span>
-      </h2>
-      <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6 max-w-[420px]">
+      {/* Sell / Rent (a venue is booked, so it has neither) */}
+      {!isVenue && (
+        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-black">
+          What do you want to do? <span className="text-red-500">*</span>
+        </h2>
+      )}
+      <div className={`${isVenue ? "hidden" : "grid"} grid-cols-2 gap-2 sm:gap-3 mb-6 max-w-[420px]`}>
         {LISTING_TYPES.map(({ key, label, hint }) => {
           const active = value.listingType === key;
           return (
@@ -74,7 +78,7 @@ export default function ListingClassification({ value, onChange }) {
       </div>
 
       {/* New Launch / Resale (Sell only) */}
-      {value.listingType !== "Rent" && (
+      {!isVenue && value.listingType !== "Rent" && (
         <>
           <h3 className="text-base sm:text-lg font-semibold mb-3 text-black">
             Property is
@@ -99,7 +103,7 @@ export default function ListingClassification({ value, onChange }) {
         Property Type <span className="text-red-500">*</span>
       </h3>
       <div className="flex flex-wrap gap-3 mb-6">
-        {PROPERTY_KINDS.map(({ key, label }) => (
+        {PROPERTY_KINDS.filter(({ key }) => allowVenue || key !== VENUE_KIND).map(({ key, label }) => (
           <button
             key={key}
             type="button"
@@ -111,7 +115,8 @@ export default function ListingClassification({ value, onChange }) {
         ))}
       </div>
 
-      {/* Category */}
+      {/* Category (a venue picks its own type inside the venue form) */}
+      {!isVenue && (<>
       <h3 className="text-base sm:text-lg font-semibold mb-1 text-black">
         Category <span className="text-red-500">*</span>
       </h3>
@@ -146,6 +151,7 @@ export default function ListingClassification({ value, onChange }) {
           );
         })}
       </div>
+      </>)}
     </div>
   );
 }

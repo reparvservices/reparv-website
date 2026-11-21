@@ -5,7 +5,6 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../store/auth";
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import { IoMdImages } from "react-icons/io";
-import { RxCross2 } from "react-icons/rx";
 import { TiLocationOutline } from "react-icons/ti";
 import { FaChevronDown } from "react-icons/fa";
 import {
@@ -33,6 +32,8 @@ import { MdApartment, MdSmartphone, MdElevator } from "react-icons/md";
 import { uploadToS3, uploadToS3WithProgress } from "../../utils/s3";
 import PropertyVideoFields from "./PropertyVideoFields";
 import PropertyBrochureField from "./PropertyBrochureField";
+import PhotoSections, { emptyPhotos } from "./PhotoSections";
+import { getImageURI } from "../../utils/helper";
 import { validateVideoLinks } from "../../utils/videoLinks";
 import ListingClassification from "./ListingClassification";
 import PropertyBasicDetails, { requiredAreaField } from "./PropertyBasicDetails";
@@ -40,7 +41,13 @@ import {
   classificationFromProperty,
   propertyTabFor,
   areaModeFor,
+  imageSectionsFor,
+  ALL_IMAGE_SECTIONS,
+  BHK_OPTIONS,
+  needsConfiguration,
 } from "../../utils/propertyListing";
+import PropertyFeatures, { FEATURE_DEFAULTS } from "./PropertyFeatures";
+import { MdNotes } from "react-icons/md";
 import Loader from "../Loader";
 import {
   SectionHeader,
@@ -58,29 +65,10 @@ import {
 const PURPLE = "#8A38F5";
 const GRAY = "#868686";
 
-const EMPTY_IMAGES = {
-  frontView: [],
-  sideView: [],
-  kitchenView: [],
-  hallView: [],
-  bedroomView: [],
-  bathroomView: [],
-  balconyView: [],
-  nearestLandmark: [],
-  developedAmenities: [],
-};
-
-const IMAGE_CATEGORIES = [
-  { key: "frontView", label: "Front View" },
-  { key: "sideView", label: "Side View" },
-  { key: "kitchenView", label: "Kitchen View" },
-  { key: "hallView", label: "Hall View" },
-  { key: "bedroomView", label: "Bedroom View" },
-  { key: "bathroomView", label: "Bathroom View" },
-  { key: "balconyView", label: "Balcony View" },
-  { key: "nearestLandmark", label: "Nearest Landmark" },
-  { key: "developedAmenities", label: "Developed Amenities" },
-];
+// Same rules as the add form (SellProperty), so a listing can be edited with what it was created with
+const PROPERTY_NAME_REGEX = /^[A-Za-z0-9\s\-&.,'()/]+$/;
+const OWNER_NAME_REGEX = /^[A-Za-z\s.]+$/;
+const MAX_DESCRIPTION = 3000;
 
 function EditProperty() {
   const router = useRouter();
@@ -98,22 +86,23 @@ function EditProperty() {
     email: "",
   });
 
-  const nameRegex = /^[A-Za-z\s]+$/;
   const phoneRegex = /^[6-9]\d{9}$/;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
   const validateField = (name, value) => {
     let error = "";
 
     switch (name) {
       case "propertyName":
-        if (!nameRegex.test(value)) {
-          error = "Only letters allowed (no numbers)";
+        if (value.trim().length < 3) {
+          error = "Use at least 3 characters";
+        } else if (!PROPERTY_NAME_REGEX.test(value)) {
+          error = "Use letters, numbers, spaces and - & . , ' ( ) / only";
         }
         break;
 
       case "projectBy":
-        if (!nameRegex.test(value)) {
+        if (!OWNER_NAME_REGEX.test(value)) {
           error = "Owner name must contain only letters";
         }
         break;
@@ -137,7 +126,11 @@ function EditProperty() {
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
-  const [imageFiles, setImageFiles] = useState(EMPTY_IMAGES);
+  const [photos, setPhotos] = useState(emptyPhotos); // new photos: { sectionKey: [{ file, preview }] }
+  const [savedPhotos, setSavedPhotos] = useState({}); // stored photos: { sectionKey: [url] }
+  const [storedPhotos, setStoredPhotos] = useState({}); // the same photos exactly as stored: { sectionKey: [value] }
+  const [removedSaved, setRemovedSaved] = useState({}); // { sectionKey: [saved photo index] } marked for removal
+  const [photoError, setPhotoError] = useState("");
 
   // Videos: a newly picked file, plus the saved values to detect changes
   const [video, setVideo] = useState(null);
@@ -152,6 +145,8 @@ function EditProperty() {
     listingType: "Sell",
     propertyKind: "Residential",
     propertyName: "",
+    propertyDescription: "",
+    propertyType: "", // configuration (BHK), one value
     carpetArea: "",
     totalSalesPrice: "",
     totalOfferPrice: "",
@@ -213,6 +208,8 @@ function EditProperty() {
     ecofriendlyBenefit: [],
   });
 
+  const showConfiguration = needsConfiguration(newProperty);
+
   const classification = {
     ...classificationFromProperty(newProperty),
     ...(newProperty.listingType ? { listingType: newProperty.listingType } : {}),
@@ -222,144 +219,9 @@ function EditProperty() {
     propertyCategory: newProperty.propertyCategory,
   };
   const propertyTab = propertyTabFor(classification);
-  // Floors / furnishing / parking only apply to built properties (not plots or land)
-  const isBuiltArea = areaModeFor(newProperty) === "built";
-
-  /* ── Option lists for pills / selects ── */
-  const ownershipOptions = [
-    "Freehold",
-    "Leasehold",
-    "Co-operative Society",
-    "Power of Attorney",
-  ];
-  const facingOptions = [
-    "East",
-    "West",
-    "North",
-    "South",
-    "North-East",
-    "North-West",
-    "South-East",
-    "South-West",
-  ];
-  const furnishingOptions = [
-    "Unfurnished",
-    "Semi-Furnished",
-    "Fully-Furnished",
-  ];
-  const yesNoOptions = ["Yes", "No"];
-  const parkingOptions = ["None", "Two Wheeler", "Four Wheeler", "Both"];
-  const waterSupplyOptions = [
-    "24/7",
-    "Limited Hours",
-    "Tanker Supply",
-    "Borewell",
-  ];
-  const powerBackupOptions = ["Full", "Partial", "None"];
-
-  const locationFeatureOptions = [
-    "Near School",
-    "Near Hospital",
-    "Near Market",
-    "Near Railway Station",
-    "Near Bus Stop",
-    "Near Airport",
-    "Near Mall",
-    "Near Park",
-  ];
-  const amenitiesFeatureOptions = [
-    "Gym",
-    "Swimming Pool",
-    "Clubhouse",
-    "Children's Play Area",
-    "Garden",
-    "Lift",
-    "Power Backup",
-    "Security",
-    "Indoor Games",
-    "Jogging Track",
-    "Community Hall",
-    "CCTV",
-  ];
-  const smartHomeFeatureOptions = [
-    "Smart Locks",
-    "Smart Lighting",
-    "Video Door Phone",
-    "Home Automation",
-    "Smart Thermostat",
-  ];
-  const propertyStatusFeatureOptions = [
-    "Ready to Move",
-    "Under Construction",
-    "New Launch",
-    "Resale",
-  ];
-
-  const securityBenefitOptions = [
-    "24x7 Security Guard",
-    "CCTV Surveillance",
-    "Gated Community",
-    "Fire Safety",
-  ];
-  const primeLocationBenefitOptions = [
-    "Prime Location",
-    "Well Connected",
-    "Close to IT Hub",
-    "Close to Highway",
-  ];
-  const rentalIncomeBenefitOptions = [
-    "High Rental Demand",
-    "Good Rental Yield",
-    "Furnished for Rent",
-  ];
-  const qualityBenefitOptions = [
-    "Premium Construction",
-    "Branded Fittings",
-    "Earthquake Resistant",
-  ];
-  const capitalAppreciationBenefitOptions = [
-    "High Growth Area",
-    "Upcoming Infrastructure",
-    "Investment Hotspot",
-  ];
-  const ecofriendlyBenefitOptions = [
-    "Solar Panels",
-    "Rainwater Harvesting",
-    "Green Building",
-    "EV Charging",
-  ];
 
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-
-  // Property Image Selector
-  const handleImageChange = (event, category) => {
-    const files = Array.from(event.target.files);
-
-    setImageFiles((prev) => {
-      const existing = prev[category] || [];
-      const newFiles = [...existing, ...files];
-
-      if (newFiles.length > 3) {
-        alert("You can only upload up to 3 images per category.");
-        return { ...prev, [category]: newFiles.slice(0, 3) }; // keep only 3
-      }
-
-      return { ...prev, [category]: newFiles };
-    });
-
-    // reset input so same file can be selected again
-    event.target.value = "";
-  };
-
-  // Property Image Remove
-  const removeImage = (category, index) => {
-    setImageFiles((prev) => {
-      const updated = [...prev[category]];
-      updated.splice(index, 1);
-      return { ...prev, [category]: updated };
-    });
-  };
 
   // **Fetch States from API**
   const fetchStates = async () => {
@@ -437,7 +299,39 @@ function EditProperty() {
         sanitized[field] = Array.isArray(val) ? val : [];
       });
 
+      // The configuration (BHK) is stored as a list; this form edits one value
+      const storedType = Array.isArray(sanitized.propertyType)
+        ? sanitized.propertyType[0] || ""
+        : String(sanitized.propertyType || "");
+      sanitized.propertyType = storedType;
+      // A database NULL must not reach the inputs
+      Object.keys(sanitized).forEach((k) => {
+        if (sanitized[k] === null) sanitized[k] = Array.isArray(FEATURE_DEFAULTS[k]) ? [] : "";
+      });
+
       setNewProperty((prev) => ({ ...prev, ...sanitized }));
+      const parseList = (value) => {
+        let v = value;
+        for (let n = 0; n < 3 && typeof v === "string"; n++) {
+          try {
+            v = JSON.parse(v || "[]");
+          } catch {
+            return [];
+          }
+        }
+        return Array.isArray(v) ? v.filter(Boolean) : [];
+      };
+      setStoredPhotos(Object.fromEntries(ALL_IMAGE_SECTIONS.map((sec) => [sec.key, parseList(data[sec.key])])));
+      setRemovedSaved({});
+      setPhotos((prev) => {
+        Object.values(prev || {}).flat().forEach((ph) => URL.revokeObjectURL(ph.preview));
+        return emptyPhotos();
+      });
+      setSavedPhotos(
+        Object.fromEntries(
+          ALL_IMAGE_SECTIONS.map((sec) => [sec.key, parseList(data[sec.key]).map((u) => getImageURI(u)).filter(Boolean)]),
+        ),
+      );
       const media = {
         propertyVideo: sanitized.propertyVideo || "",
         videoLink: sanitized.videoLink || "",
@@ -454,6 +348,23 @@ function EditProperty() {
     }
   };
 
+  const keptOf = (key) => (storedPhotos[key] || []).length - (removedSaved[key] || []).length;
+  const frontWouldBeEmpty = (storedPhotos.frontView || []).length > 0 && keptOf("frontView") + (photos.frontView?.length || 0) === 0;
+
+  // Mark a saved photo for removal (or take the mark off again); applied when the form is saved
+  const toggleSavedPhoto = (key, index) => {
+    const marked = (removedSaved[key] || []).includes(index);
+    if (!marked && key === "frontView" && keptOf("frontView") - 1 + (photos.frontView?.length || 0) < 1) {
+      setPhotoError("A listing needs at least one front view photo. Add a new one first, then remove this one.");
+      return;
+    }
+    setPhotoError("");
+    setRemovedSaved((prev) => {
+      const list = prev[key] || [];
+      return { ...prev, [key]: list.includes(index) ? list.filter((i) => i !== index) : [...list, index] };
+    });
+  };
+
   const addOrUpdate = async (e) => {
     e.preventDefault();
 
@@ -461,11 +372,18 @@ function EditProperty() {
     setMediaErrors((prev) => ({ ...prev, ...linkErrors }));
     if (Object.keys(linkErrors).length) return;
 
+    if (frontWouldBeEmpty) {
+      setPhotoError("A listing needs at least one front view photo. Add a new one before saving.");
+      return;
+    }
+
     setLoading(true);
 
     try {
       // 1 Prepare a copy of property data
       const payload = { ...newProperty };
+      if (showConfiguration && newProperty.propertyType) payload.propertyType = [newProperty.propertyType];
+      else delete payload.propertyType; // not asked for this type: keep what is stored
 
       // Only send video fields that changed, so older listings whose saved
       // links use other formats can still be edited
@@ -475,23 +393,25 @@ function EditProperty() {
         else payload[key] = value;
       });
 
-      const imageFields = Object.keys(EMPTY_IMAGES);
-
-      // 2 Upload images directly to S3
-      for (const field of imageFields) {
-        if (imageFiles[field] && imageFiles[field].length > 0) {
-          const urls = [];
-
-          for (const file of imageFiles[field]) {
-            const url = await uploadToS3(file);
-            if (url) urls.push(url);
-          }
-
-          payload[field] = urls;
-        } else {
-          payload[field] = payload[field] || [];
+      // 2 Upload new photos. New photos are added to the saved ones that stay; a saved photo marked for
+      // removal is left out. A section nothing was done to is not sent, so the server keeps it.
+      const shown = new Set(imageSectionsFor(newProperty.propertyCategory).map((sec) => sec.key));
+      ALL_IMAGE_SECTIONS.forEach((sec) => delete payload[sec.key]);
+      const replacePhotos = [];
+      for (const { key: field } of ALL_IMAGE_SECTIONS) {
+        const list = photos[field] || [];
+        const gone = removedSaved[field] || [];
+        if (!shown.has(field) || (!list.length && !gone.length)) continue;
+        const urls = [];
+        for (const item of list) {
+          const url = await uploadToS3(item.file);
+          if (!url) throw new Error("A photo failed to upload. Please check your connection and try again.");
+          urls.push(url);
         }
+        payload[field] = [...(storedPhotos[field] || []).filter((_, i) => !gone.includes(i)), ...urls];
+        replacePhotos.push(field);
       }
+      if (replacePhotos.length) payload.replacePhotos = replacePhotos;
 
       // Upload a newly picked video
       if (video) {
@@ -694,7 +614,7 @@ function EditProperty() {
                     type="text"
                     value={newProperty.propertyName}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/[^A-Za-z\s]/g, "");
+                      const value = e.target.value.replace(/[^A-Za-z0-9\s\-&.,'()/]/g, "");
                       setNewProperty({ ...newProperty, propertyName: value });
                       validateField("propertyName", value);
                     }}
@@ -883,12 +803,43 @@ function EditProperty() {
                   </div>
                 </div>
 
-                {/* AREA + DETAILS — change with Residential / Commercial / Agriculture */}
+                {/* AREA + DETAILS: the same fields as when the listing was created (change with the property type) */}
                 <PropertyBasicDetails
                   newProperty={newProperty}
                   setNewProperty={setNewProperty}
-                  showDetails={false}
+                  showDetails={true}
                 />
+
+                {/* CONFIGURATION (BHK): residential flats / houses only */}
+                {showConfiguration && (
+                  <div className="mb-8">
+                    <h3 className="flex items-center gap-2 text-lg sm:text-xl md:text-2xl font-semibold mb-1 text-black">
+                      <MdApartment color={PURPLE} /> Configuration
+                    </h3>
+                    <p className="text-xs mb-3 ml-1" style={{ color: GRAY }}>
+                      Buyers filter by this, so pick the closest match
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {[...new Set([...(newProperty.propertyType ? [newProperty.propertyType] : []), ...BHK_OPTIONS])].map((option) => {
+                        const active = newProperty.propertyType === option;
+                        return (
+                          <button
+                            key={option}
+                            type="button"
+                            onClick={() => setNewProperty({ ...newProperty, propertyType: option })}
+                            className={`px-3 py-1.5 rounded-lg border text-sm transition ${
+                              active
+                                ? "bg-[#8A38F5] text-white border-[#8A38F5] font-semibold"
+                                : "border-[#D9D9D9] text-gray-700 hover:border-[#8A38F5]"
+                            }`}
+                          >
+                            {option}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* PRICING */}
                 <div className="mb-8">
@@ -940,499 +891,36 @@ function EditProperty() {
                       </p>
                     </div>
                   </div>
-
-                  {/* Additional pricing breakdown */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                    <div>
-                      <FieldLabel>Stamp Duty</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        placeholder="₹ 00"
-                        value={newProperty.stampDuty}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            stampDuty: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Registration Fee</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        placeholder="₹ 00"
-                        value={newProperty.registrationFee}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            registrationFee: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>GST</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        placeholder="₹ 00"
-                        value={newProperty.gst}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            gst: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Advocate Fee</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        placeholder="₹ 00"
-                        value={newProperty.advocateFee}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            advocateFee: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>MSEB / Water Charges</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        placeholder="₹ 00"
-                        value={newProperty.msebWater}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            msebWater: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Maintenance</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        placeholder="₹ 00"
-                        value={newProperty.maintenance}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            maintenance: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Other Charges</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        placeholder="₹ 00"
-                        value={newProperty.other}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            other: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <FieldLabel>Tags (comma separated)</FieldLabel>
-                      <FieldInput
-                        placeholder="e.g. spacious, well-lit, corner-plot"
-                        value={newProperty.tags}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            tags: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
                 </div>
 
-                {/* PROPERTY SPECIFICATIONS */}
+                {/* DESCRIPTION */}
                 <div className="mb-8">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4 text-black">
-                    <FaBuildingIcon color={PURPLE} /> Property Specifications
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-1 text-black">
+                    <MdNotes color={PURPLE} /> Description{" "}
+                    <span className="text-base text-gray-400 font-normal">(optional)</span>
                   </h3>
-
-                  <Grid2>
-                    <div>
-                      <FieldLabel>Possession Date</FieldLabel>
-                      <FieldInput
-                        type="date"
-                        icon={<FaCalendarAlt />}
-                        value={newProperty.possessionDate}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            possessionDate: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    {isBuiltArea && (
-                      <>
-                    <div>
-                      <FieldLabel>Built Year</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        icon={<FaCalendarAlt />}
-                        placeholder="e.g. 2015"
-                        value={newProperty.builtYear}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            builtYear: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Total Floors</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        icon={<FaLayerGroup />}
-                        placeholder="e.g. 10"
-                        value={newProperty.totalFloors}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            totalFloors: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Floor No.</FieldLabel>
-                      <FieldInput
-                        type="number"
-                        icon={<FaLayerGroup />}
-                        placeholder="e.g. 3"
-                        value={newProperty.floorNo}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            floorNo: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                      </>
-                    )}
-                  </Grid2>
-
-                  <div className="mt-4">
-                    <FieldLabel>Ownership Type</FieldLabel>
-                    <PillSelect
-                      options={ownershipOptions}
-                      value={newProperty.ownershipType}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, ownershipType: val })
-                      }
-                    />
-                  </div>
-
-                  <div className="mt-4">
-                    <FieldLabel>Property Facing</FieldLabel>
-                    <PillSelect
-                      options={facingOptions}
-                      value={newProperty.propertyFacing}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, propertyFacing: val })
-                      }
-                    />
-                  </div>
-
-                  {isBuiltArea && (
-                    <>
-                  <div className="mt-4">
-                    <FieldLabel>Furnishing</FieldLabel>
-                    <PillSelect
-                      options={furnishingOptions}
-                      value={newProperty.furnishing}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, furnishing: val })
-                      }
-                    />
-                  </div>
-
-                  <div className="mt-4">
-                    <FieldLabel>Parking Availability</FieldLabel>
-                    <PillSelect
-                      options={parkingOptions}
-                      value={newProperty.parkingAvailability}
-                      onChange={(val) =>
-                        setNewProperty({
-                          ...newProperty,
-                          parkingAvailability: val,
-                        })
-                      }
-                    />
-                  </div>
-                    </>
-                  )}
-
-                  <div className="mt-4">
-                    <FieldLabel>Water Supply</FieldLabel>
-                    <PillSelect
-                      options={waterSupplyOptions}
-                      value={newProperty.waterSupply}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, waterSupply: val })
-                      }
-                    />
-                  </div>
-
-                  <div className="mt-4">
-                    <FieldLabel>Power Backup</FieldLabel>
-                    <PillSelect
-                      options={powerBackupOptions}
-                      value={newProperty.powerBackup}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, powerBackup: val })
-                      }
-                    />
-                  </div>
-
-                  <Grid2>
-                    <div className="mt-4">
-                      <FieldLabel>RERA Registered</FieldLabel>
-                      <PillSelect
-                        options={yesNoOptions}
-                        value={newProperty.reraRegistered}
-                        onChange={(val) =>
-                          setNewProperty({
-                            ...newProperty,
-                            reraRegistered: val,
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="mt-4">
-                      <FieldLabel>Loan Availability</FieldLabel>
-                      <PillSelect
-                        options={yesNoOptions}
-                        value={newProperty.loanAvailability}
-                        onChange={(val) =>
-                          setNewProperty({
-                            ...newProperty,
-                            loanAvailability: val,
-                          })
-                        }
-                      />
-                    </div>
-                  </Grid2>
+                  <p className="text-xs mb-3 ml-1" style={{ color: GRAY }}>
+                    Highlight what makes it special: nearby schools, metro, view, recent renovation, society amenities.
+                  </p>
+                  <textarea
+                    rows={5}
+                    maxLength={MAX_DESCRIPTION}
+                    value={newProperty.propertyDescription ?? ""}
+                    onChange={(e) => setNewProperty({ ...newProperty, propertyDescription: e.target.value })}
+                    placeholder="e.g. Spacious east-facing 2 BHK, 5 minutes from the metro station, 24x7 water and power backup."
+                    className="w-full px-4 py-2 rounded-lg border outline-none focus:border-[#8A38F5] resize-y border-[#E0E0E0]"
+                  />
+                  <p className="text-xs mt-1 ml-1 text-right" style={{ color: GRAY }}>
+                    {(newProperty.propertyDescription ?? "").length}/{MAX_DESCRIPTION}
+                  </p>
                 </div>
 
-                {/* FEATURE HIGHLIGHTS */}
-                <div className="mb-8">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4 text-black">
-                    <FaCouch color={PURPLE} /> Feature Highlights
-                  </h3>
-
-                  <div className="mb-4">
-                    <FieldLabel>Location Features</FieldLabel>
-                    <PillMultiSelect
-                      options={locationFeatureOptions}
-                      value={newProperty.locationFeature}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, locationFeature: val })
-                      }
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <FieldLabel>Amenities</FieldLabel>
-                    <PillMultiSelect
-                      options={amenitiesFeatureOptions}
-                      value={newProperty.amenitiesFeature}
-                      onChange={(val) =>
-                        setNewProperty({
-                          ...newProperty,
-                          amenitiesFeature: val,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <FieldLabel>Smart Home Features</FieldLabel>
-                    <PillMultiSelect
-                      options={smartHomeFeatureOptions}
-                      value={newProperty.smartHomeFeature}
-                      onChange={(val) =>
-                        setNewProperty({
-                          ...newProperty,
-                          smartHomeFeature: val,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <Grid3>
-                    <div>
-                      <FieldLabel>Size / Area Highlight</FieldLabel>
-                      <FieldInput
-                        placeholder="e.g. Spacious 3BHK"
-                        value={newProperty.sizeAreaFeature}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            sizeAreaFeature: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Parking Highlight</FieldLabel>
-                      <FieldInput
-                        placeholder="e.g. Covered Parking"
-                        value={newProperty.parkingFeature}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            parkingFeature: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Terrace Highlight</FieldLabel>
-                      <FieldInput
-                        placeholder="e.g. Private Terrace"
-                        value={newProperty.terraceFeature}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            terraceFeature: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </Grid3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                    <div>
-                      <FieldLabel>Age of Property</FieldLabel>
-                      <FieldInput
-                        placeholder="e.g. 5 years old"
-                        value={newProperty.ageOfPropertyFeature}
-                        onChange={(e) =>
-                          setNewProperty({
-                            ...newProperty,
-                            ageOfPropertyFeature: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <FieldLabel>Property Status</FieldLabel>
-                      <PillSelect
-                        options={propertyStatusFeatureOptions}
-                        value={newProperty.propertyStatusFeature}
-                        onChange={(val) =>
-                          setNewProperty({
-                            ...newProperty,
-                            propertyStatusFeature: val,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* BENEFITS */}
-                <div className="mb-8">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4 text-black">
-                    <FaShieldAlt color={PURPLE} /> Benefits & Highlights
-                  </h3>
-
-                  <div className="mb-4">
-                    <FieldLabel>Security</FieldLabel>
-                    <PillMultiSelect
-                      options={securityBenefitOptions}
-                      value={newProperty.securityBenefit}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, securityBenefit: val })
-                      }
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <FieldLabel>Prime Location</FieldLabel>
-                    <PillMultiSelect
-                      options={primeLocationBenefitOptions}
-                      value={newProperty.primeLocationBenefit}
-                      onChange={(val) =>
-                        setNewProperty({
-                          ...newProperty,
-                          primeLocationBenefit: val,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <FieldLabel>Rental Income</FieldLabel>
-                    <PillMultiSelect
-                      options={rentalIncomeBenefitOptions}
-                      value={newProperty.rentalIncomeBenefit}
-                      onChange={(val) =>
-                        setNewProperty({
-                          ...newProperty,
-                          rentalIncomeBenefit: val,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <FieldLabel>Quality</FieldLabel>
-                    <PillMultiSelect
-                      options={qualityBenefitOptions}
-                      value={newProperty.qualityBenefit}
-                      onChange={(val) =>
-                        setNewProperty({ ...newProperty, qualityBenefit: val })
-                      }
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <FieldLabel>Capital Appreciation</FieldLabel>
-                    <PillMultiSelect
-                      options={capitalAppreciationBenefitOptions}
-                      value={newProperty.capitalAppreciationBenefit}
-                      onChange={(val) =>
-                        setNewProperty({
-                          ...newProperty,
-                          capitalAppreciationBenefit: val,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <div className="mb-4">
-                    <FieldLabel>Eco-Friendly</FieldLabel>
-                    <PillMultiSelect
-                      options={ecofriendlyBenefitOptions}
-                      value={newProperty.ecofriendlyBenefit}
-                      onChange={(val) =>
-                        setNewProperty({
-                          ...newProperty,
-                          ecofriendlyBenefit: val,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
+                {/* CHARGES, SPECIFICATIONS, FEATURES, BENEFITS: the same block the add form, admin and partner forms use */}
+                <PropertyFeatures
+                  value={newProperty}
+                  onChange={(patch) => setNewProperty((prev) => ({ ...prev, ...patch }))}
+                  builtUp={areaModeFor(newProperty) === "built"}
+                />
 
                 {/* CONTACT */}
                 <div className="mb-8">
@@ -1450,7 +938,7 @@ function EditProperty() {
                         value={newProperty.projectBy}
                         onChange={(e) => {
                           const value = e.target.value.replace(
-                            /[^A-Za-z\s]/g,
+                            /[^A-Za-z\s.]/g,
                             "",
                           );
                           setNewProperty({ ...newProperty, projectBy: value });
@@ -1564,68 +1052,28 @@ function EditProperty() {
               <>
                 {/* IMAGE UPLOAD SECTION */}
                 <div className="mb-8">
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-4 text-black">
-                    <IoMdImages color={PURPLE} /> Upload Property Images
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-2 mb-1 text-black">
+                    <IoMdImages color={PURPLE} /> Property Photos
                   </h3>
-
                   <p className="text-sm mb-4" style={{ color: GRAY }}>
-                    Add clear images to attract more buyers (Maximum 3 images
-                    per category)
+                    Your saved photos are kept. New photos are added to them, and the × on a saved photo removes it when you save.
                   </p>
 
-                  {IMAGE_CATEGORIES.map(({ key, label }) => (
-                    <div key={key} className="mb-8">
-                      <h4 className="font-semibold text-black mb-2">{label}</h4>
-
-                      {/* Upload Box */}
-                      <label className="cursor-pointer block border-2 border-dashed border-[#8A38F5] rounded-xl p-6 text-center bg-[#F7F3FF] sm:bg-[white] hover:bg-[#F7F3FF] transition">
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          onChange={(e) => {
-                            handleImageChange(e, key);
-                          }}
-                          className="hidden"
-                        />
-                        <div className="flex flex-col items-center gap-2 sm:gap-4">
-                          <IoMdImages size={30} color={PURPLE} />
-                          <p className="font-semibold text-black">
-                            Click to upload {label}
-                          </p>
-                          <span className="text-xs" style={{ color: GRAY }}>
-                            JPG, PNG | Max Size 500kb | Max 3 images
-                          </span>
-                        </div>
-                      </label>
-
-                      {/* Preview Grid */}
-                      {imageFiles[key]?.length > 0 && (
-                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                          {imageFiles[key].map((img, index) => (
-                            <div
-                              key={index}
-                              className="relative rounded-lg overflow-hidden border border-[#D9D9D9]"
-                            >
-                              <img loading="lazy" decoding="async"
-                                src={URL.createObjectURL(img)}
-                                alt="property"
-                                className="w-full lg:max-h-[140px] xl:max-h-[180px] object-cover"
-                              />
-
-                              <button
-                                type="button"
-                                onClick={() => removeImage(key, index)}
-                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 shadow"
-                              >
-                                <RxCross2 />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                  <PhotoSections
+                    category={newProperty.propertyCategory}
+                    photos={photos}
+                    onChange={(next) => {
+                      setPhotos(next);
+                      setPhotoError("");
+                    }}
+                    saved={savedPhotos}
+                    removed={removedSaved}
+                    onToggleSaved={toggleSavedPhoto}
+                    disabled={!!submitStatus}
+                    error={photoError}
+                    onError={setPhotoError}
+                  />
+                  {photoError && <p className="text-sm text-red-500 mt-3">{photoError}</p>}
                 </div>
 
                 <PropertyVideoFields

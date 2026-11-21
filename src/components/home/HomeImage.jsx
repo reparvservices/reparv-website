@@ -39,6 +39,12 @@ export default function HomeImage({ trendingProperties = [] }) {
       description: 'Stay or host an event at verified villas, halls and venues.',
       image: '/assets/home/hero/venues.svg',
     },
+    {
+      to: '/sell-properties',
+      title: 'List Your Property',
+      description: 'Sell, rent out or list a venue for free and reach genuine buyers.',
+      image: '/assets/home/hero/list-property.webp',
+    },
   ];
 
   return (
@@ -108,7 +114,7 @@ export default function HomeImage({ trendingProperties = [] }) {
       </section>
 
       {/* ── ACTION CARDS ───────────────────────────────────────────────────── */}
-      <div className="relative z-10 -mt-16 grid grid-cols-2 gap-3 px-2 max-[359px]:grid-cols-1 sm:gap-4 sm:px-4 md:-mt-20 lg:grid-cols-4 lg:px-8">
+      <div className="relative z-10 -mt-16 grid grid-cols-2 gap-3 px-2 max-[359px]:grid-cols-1 sm:gap-4 sm:px-4 md:-mt-20 lg:grid-cols-5 lg:px-8 [&>:last-child:nth-child(odd)]:max-lg:col-span-2 [&>:last-child:nth-child(odd)]:max-[359px]:col-span-1">
         {cards.map((card, index) => (
           <PropertyActionCard
             key={card.title}
